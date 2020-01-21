@@ -46,14 +46,6 @@ class MainActivity : AppCompatActivity() {
                 // result of the request.
             }
         }
-        val ctx: Context = applicationContext
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
-        mMap?.isHorizontalMapRepetitionEnabled = true
-        mMap?.isVerticalMapRepetitionEnabled = false
-        mMap?.setScrollableAreaLimitLatitude(mMap!!.maxZoomLevel,mMap!!.minZoomLevel, 0)
-        setContentView(R.layout.activity_main)
-        mMap = findViewById(R.id.mMap)
-        mMap?.setTileSource(TileSourceFactory.MAPNIK);
     }
 
     override fun onResume() {
