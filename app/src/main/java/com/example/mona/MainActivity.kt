@@ -1,15 +1,14 @@
 package com.example.mona
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.preference.PreferenceManager
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
 
 
@@ -45,6 +44,11 @@ class MainActivity : AppCompatActivity() {
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
+        }else{
+            setContentView(R.layout.activity_main)
+            setupMainActivity()
+            // Note that the Toolbar defined in the layout has the id "my_toolbar"
+            setSupportActionBar(findViewById(R.id.main_toolbar))
         }
     }
 
@@ -73,6 +77,11 @@ class MainActivity : AppCompatActivity() {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
+
+                    setContentView(R.layout.activity_main)
+                    setupMainActivity()
+                    // Note that the Toolbar defined in the layout has the id "my_toolbar"
+                    setSupportActionBar(findViewById(R.id.main_toolbar))
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -87,5 +96,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setupMainActivity(){
+        oeuvre_jour_img_id.setOnClickListener(View.OnClickListener {
+            fragment_map_id.visibility = View.INVISIBLE
+            fragment_collection_id.visibility = View.INVISIBLE
+            fragment_list_id.visibility = View.INVISIBLE
+            fragment_oeuvre_jour_id.visibility = View.VISIBLE
+        })
+        map_img_id.setOnClickListener(View.OnClickListener {
+            fragment_map_id.visibility = View.VISIBLE
+            fragment_collection_id.visibility = View.INVISIBLE
+            fragment_list_id.visibility = View.INVISIBLE
+            fragment_oeuvre_jour_id.visibility = View.INVISIBLE
+        })
+        collection_img_id.setOnClickListener(View.OnClickListener {
+            fragment_map_id.visibility = View.INVISIBLE
+            fragment_collection_id.visibility = View.VISIBLE
+            fragment_list_id.visibility = View.INVISIBLE
+            fragment_oeuvre_jour_id.visibility = View.INVISIBLE
+        })
+        list_img_id.setOnClickListener(View.OnClickListener {
+            fragment_map_id.visibility = View.INVISIBLE
+            fragment_collection_id.visibility = View.INVISIBLE
+            fragment_list_id.visibility = View.VISIBLE
+            fragment_oeuvre_jour_id.visibility = View.INVISIBLE
+        })
+    }
+
 
 }
