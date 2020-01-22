@@ -1,5 +1,6 @@
 package com.example.mona
 
+import MyAdapter
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,8 +9,10 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
+import com.google.android.material.tabs.TabLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                 // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed, we can request the permission.
+                // resquestPersmissions calls onRequestPermissionResult
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL)
@@ -48,8 +52,9 @@ class MainActivity : AppCompatActivity() {
             setContentView(R.layout.activity_main)
             setupMainActivity()
             // Note that the Toolbar defined in the layout has the id "my_toolbar"
-            setSupportActionBar(findViewById(R.id.main_toolbar))
+            setSupportActionBar(findViewById(R.id.toolbar))
         }
+
     }
 
     override fun onResume() {
@@ -81,8 +86,10 @@ class MainActivity : AppCompatActivity() {
                     setContentView(R.layout.activity_main)
                     setupMainActivity()
                     // Note that the Toolbar defined in the layout has the id "my_toolbar"
-                    setSupportActionBar(findViewById(R.id.main_toolbar))
+                    setSupportActionBar(findViewById(R.id.toolbar))
                 } else {
+                    // Add permissions denied layout
+
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -97,31 +104,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // Called when all persmissions are granted
     private fun setupMainActivity(){
-        oeuvre_jour_img_id.setOnClickListener(View.OnClickListener {
-            fragment_map_id.visibility = View.INVISIBLE
-            fragment_collection_id.visibility = View.INVISIBLE
-            fragment_list_id.visibility = View.INVISIBLE
-            fragment_oeuvre_jour_id.visibility = View.VISIBLE
-        })
-        map_img_id.setOnClickListener(View.OnClickListener {
-            fragment_map_id.visibility = View.VISIBLE
-            fragment_collection_id.visibility = View.INVISIBLE
-            fragment_list_id.visibility = View.INVISIBLE
-            fragment_oeuvre_jour_id.visibility = View.INVISIBLE
-        })
-        collection_img_id.setOnClickListener(View.OnClickListener {
-            fragment_map_id.visibility = View.INVISIBLE
-            fragment_collection_id.visibility = View.VISIBLE
-            fragment_list_id.visibility = View.INVISIBLE
-            fragment_oeuvre_jour_id.visibility = View.INVISIBLE
-        })
-        list_img_id.setOnClickListener(View.OnClickListener {
-            fragment_map_id.visibility = View.INVISIBLE
-            fragment_collection_id.visibility = View.INVISIBLE
-            fragment_list_id.visibility = View.VISIBLE
-            fragment_oeuvre_jour_id.visibility = View.INVISIBLE
-        })
+        setSupportActionBar(toolbar)
+
+        val adapter = MyAdapter(supportFragmentManager)
+        adapter.addFragment(OeuvreJourFragment(), "ODJ")
+        adapter.addFragment(MapFragment(), "MAP")
+        adapter.addFragment(ListFragment(), "LIST")
+        adapter.addFragment(CollectionFragment(), "GALLERY")
+        viewPager.adapter = adapter
+        tabs.setupWithViewPager(viewPager)
     }
 
 
