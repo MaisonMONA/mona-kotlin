@@ -4,15 +4,11 @@ import MyAdapter
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
-import com.google.android.material.tabs.TabLayout
 
 
 class MainActivity : AppCompatActivity() {
