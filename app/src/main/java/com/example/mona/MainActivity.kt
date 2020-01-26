@@ -2,56 +2,72 @@ package com.example.mona
 
 import MyAdapter
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.osmdroid.views.MapView
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var mMap : MapView? = null
+    private var mMap: MapView? = null
 
     private companion object {
-        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL : Int = 0
+        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
+        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL: Int = 2
+        private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION: Int = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
+        /*
 
+        We must check that all permissions are granted before using the app
+        1. Write external storage
+        2. Fine location
+
+         */
+
+
+        // One or both of the two required permissions are missing:
+        // Ask for permissions
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+            // Even if we want to show request rationale, we send the user to PermissionsDeniedActivity
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Send to PermissionsDeniedActivity
+                val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
+                    // Optionally add message
+                    // putExtra(EXTRA_MESSAGE, message)
+                }
+                startActivity(intent)
             } else {
-                // No explanation needed, we can request the permission.
-                // resquestPersmissions calls onRequestPermissionResult
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL)
-
-                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                // Request permissions
+                ActivityCompat.requestPermissions(this, arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION)
             }
+
         }else{
+            // Both permissions are granted:
+            //  Setup Main Activity
             setContentView(R.layout.activity_main)
             setupMainActivity()
             // Note that the Toolbar defined in the layout has the id "my_toolbar"
             setSupportActionBar(findViewById(R.id.toolbar))
         }
-
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -73,25 +89,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL -> {
+            MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
                 // If request is cancelled, the result arrays are empty.
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
+                    // Both permissions are granted:
+                    //  Setup Main Activity
                     setContentView(R.layout.activity_main)
                     setupMainActivity()
                     // Note that the Toolbar defined in the layout has the id "my_toolbar"
                     setSupportActionBar(findViewById(R.id.toolbar))
                 } else {
-                    // Add permissions denied layout
+                    // Permissions denied
+                    // Send to PermissionsDeniedActivity
+                    val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
+                        // Optionally add message
+                        // putExtra(EXTRA_MESSAGE, message)
+                    }
+                    startActivity(intent)
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return
             }
-
             // Add other 'when' lines to check for other
             // permissions this app might request.
             else -> {
@@ -101,10 +121,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // Called when all persmissions are granted
-    private fun setupMainActivity(){
+    // Called when all permissions are granted
+    private fun setupMainActivity() {
         setSupportActionBar(toolbar)
-
         val adapter = MyAdapter(supportFragmentManager)
         adapter.addFragment(OeuvreJourFragment(), "ODJ")
         adapter.addFragment(MapFragment(), "MAP")

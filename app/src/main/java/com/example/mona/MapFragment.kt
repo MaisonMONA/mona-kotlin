@@ -34,7 +34,7 @@ class MapFragment : Fragment() {
         //Start Point Montreal
         //TODO: User location is start point
         val mapController: IMapController = mMap!!.controller
-        mapController.setZoom(15)
+        mapController.setZoom(15.0)
         val startPoint = GeoPoint(45.5044372, -73.578502)
         mapController.setCenter(startPoint)
     }

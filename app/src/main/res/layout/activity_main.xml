@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -19,6 +21,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
@@ -39,6 +42,8 @@
         app:tabBackground="@color/colorPrimary"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabTextColor="@android:color/white" />
+        app:tabTextColor="@android:color/white">
+
+    </com.google.android.material.tabs.TabLayout>
 
 </LinearLayout>
