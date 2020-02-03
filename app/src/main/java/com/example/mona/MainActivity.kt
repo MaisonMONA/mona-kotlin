@@ -5,13 +5,17 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
+import org.json.JSONObject
 import org.osmdroid.views.MapView
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -63,8 +67,12 @@ class MainActivity : AppCompatActivity() {
             //  Setup Main Activity
             setContentView(R.layout.activity_main)
             setupMainActivity()
-            // Note that the Toolbar defined in the layout has the id "my_toolbar"
-            setSupportActionBar(findViewById(R.id.toolbar))
+
+            //Collecting Artworks
+            //TODO: permission for internet
+            //TODO: Parse all data and create a DB for it?
+            setupArtworksDB()
+
         }
     }
 
@@ -131,6 +139,26 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(CollectionFragment(), "GALLERY")
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+    }
+
+    private fun setupArtworksDB(){
+
+        //API call to server to get all artworks. We extract solely the artworks
+        val artworksJson = ApiArtworks().execute().get()
+        val objectJson = JSONObject(artworksJson)
+        val data = objectJson.getJSONArray("data").toString()
+
+        //Moshi is a library with built in type adapters to ease data parsing such as our case.
+        //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+        //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
+        //efficiently loops through automatically with its adapter
+        val type = Types.newParameterizedType(List::class.java, Oeuvre::class.java)
+        val adapter: JsonAdapter<List<Oeuvre>?> = moshi.adapter(type)
+        val oeuvreList: List<Oeuvre>? = adapter.fromJson(data)
     }
 
 
