@@ -1,6 +1,6 @@
 package com.example.mona
 
-import MyAdapter
+import MainMenuAdapter
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
     // Called when all permissions are granted
     private fun setupMainActivity() {
         setSupportActionBar(toolbar)
-        val adapter = MyAdapter(supportFragmentManager)
+        val adapter = MainMenuAdapter(supportFragmentManager)
         adapter.addFragment(OeuvreJourFragment(), "ODJ")
         adapter.addFragment(MapFragment(), "MAP")
         adapter.addFragment(ListFragment(), "LIST")

@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".OeuvreJourFragment"
     android:layout_weight="1"
-    android:id="@+id/map_fragment_id">
+    android:id="@+id/oeuvre_jour_id">
 
 </LinearLayout>

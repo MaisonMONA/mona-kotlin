@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    tools:context=".MapFragment">
+    tools:context=".MapFragment"
+    android:id="@+id/map_fragment_id">
 
     <org.osmdroid.views.MapView android:id="@+id/main_map"
         android:layout_width="fill_parent"
