@@ -8,8 +8,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.mona.R
 import kotlinx.android.synthetic.main.activity_permissions_denied.*
-import java.security.Permission
 
 class PermissionsDeniedActivity : AppCompatActivity() {
 

@@ -1,6 +1,7 @@
 package com.example.mona
 
 import MainMenuAdapter
+import AppDatabase
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,19 +9,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import androidx.room.Room
+import com.example.mona.Entity.Oeuvre
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import org.osmdroid.views.MapView
 
 
-
 class MainActivity : AppCompatActivity() {
 
     private var mMap: MapView? = null
+    private var oeuvres : ArrayList<Oeuvre>? = null
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity() {
                     //  Setup Main Activity
                     setContentView(R.layout.activity_main)
                     setupMainActivity()
+                    setupArtworksDB()
                     // Note that the Toolbar defined in the layout has the id "my_toolbar"
                     setSupportActionBar(findViewById(R.id.toolbar))
                 } else {
@@ -150,15 +151,18 @@ class MainActivity : AppCompatActivity() {
 
         //Moshi is a library with built in type adapters to ease data parsing such as our case.
         //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
+        val gson = Gson()
 
         //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
         //efficiently loops through automatically with its adapter
-        val type = Types.newParameterizedType(List::class.java, Oeuvre::class.java)
-        val adapter: JsonAdapter<List<Oeuvre>?> = moshi.adapter(type)
-        val oeuvreList: List<Oeuvre>? = adapter.fromJson(data)
+        System.out.println(gson.toJson(data))
+
+        val db = Room.databaseBuilder(
+            this.applicationContext,
+            AppDatabase::class.java, "database-name"
+        )
+        db.build().oeuvreDao().insertAll(gson.fromJson<List<Oeuvre>>(data,Oeuvre::class.java))
+
     }
 
 
