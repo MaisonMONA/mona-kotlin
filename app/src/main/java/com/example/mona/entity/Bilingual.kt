@@ -1,9 +1,7 @@
-package com.example.mona.Entity
+package com.example.mona.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 @Entity(tableName = "bilingual")
 data class Bilingual(

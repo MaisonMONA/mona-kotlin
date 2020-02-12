@@ -1,7 +1,7 @@
 package com.example.mona
 
 import MainMenuAdapter
-import AppDatabase
+import com.example.mona.database.AppDatabase
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.Room
-import com.example.mona.Entity.Oeuvre
+import com.example.mona.entity.Oeuvre
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject

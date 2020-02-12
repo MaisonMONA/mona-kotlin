@@ -1,9 +1,9 @@
+package com.example.mona.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.mona.Entity.Oeuvre
+import com.example.mona.entity.Oeuvre
 
 @Dao
 interface OeuvreDAO {

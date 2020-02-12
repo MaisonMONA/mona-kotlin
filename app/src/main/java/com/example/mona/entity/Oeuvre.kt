@@ -1,13 +1,8 @@
-package com.example.mona.Entity
+package com.example.mona.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.mona.Entity.Bilingual
-import com.example.mona.Entity.Artist
-import com.example.mona.Entity.Location
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 
 @Entity(tableName = "oeuvre")
