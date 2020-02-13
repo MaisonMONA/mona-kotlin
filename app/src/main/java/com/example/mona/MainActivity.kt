@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
     // Called when all permissions are granted
     private fun setupMainActivity() {
         setSupportActionBar(toolbar)
-        val adapter = MainMenuAdapter(supportFragmentManager)
+        val adapter = MyAdapter(supportFragmentManager)
         adapter.addFragment(OeuvreJourFragment(), "ODJ")
         adapter.addFragment(MapFragment(), "MAP")
         adapter.addFragment(ListFragment(), "LIST")
