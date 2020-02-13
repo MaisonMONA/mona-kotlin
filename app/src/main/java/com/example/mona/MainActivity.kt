@@ -155,14 +155,12 @@ class MainActivity : AppCompatActivity() {
 
         //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
         //efficiently loops through automatically with its adapter
-        System.out.println(gson.toJson(data))
 
         val db = Room.databaseBuilder(
             this.applicationContext,
             AppDatabase::class.java, "database-name"
         )
-        db.build().oeuvreDao().insertAll(gson.fromJson<List<Oeuvre>>(data,Oeuvre::class.java))
-
+        db.build().oeuvreDao().insertAll(gson.fromJson<List<Oeuvre>>(data,List::class.java))
     }
 
 
