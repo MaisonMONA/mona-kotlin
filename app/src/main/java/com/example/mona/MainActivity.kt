@@ -1,7 +1,6 @@
 package com.example.mona
 
 import MainMenuAdapter
-import com.example.mona.database.AppDatabase
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,18 +8,32 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.room.Room
-import com.example.mona.entity.Oeuvre
-import com.google.gson.Gson
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONObject
 import org.osmdroid.views.MapView
+
+/*
+*This application is developped following strict practice and respect of architecture components
+*to efficiently manage a UI's component lifecyle and handling data persistence
+*
+* Find everything you need to know here:
+* https://developer.android.com/topic/libraries/architecture/index.html
+*
+* Initial setup was drive by Google's codelab found at
+* https://codelabs.developers.google.com/codelabs/android-room-with-a-view-kotlin/#0
+*
+*
+*
+*
+ */
+
 
 
 class MainActivity : AppCompatActivity() {
 
     private var mMap: MapView? = null
-    private var oeuvres : ArrayList<Oeuvre>? = null
+    private lateinit var oeuvreViewModel: OeuvreViewModel
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -66,12 +79,12 @@ class MainActivity : AppCompatActivity() {
             // Both permissions are granted:
             //  Setup Main Activity
             setContentView(R.layout.activity_main)
-            setupMainActivity()
 
-            //Collecting Artworks
-            //TODO: permission for internet
-            //TODO: Parse all data and create a DB for it?
-            setupArtworksDB()
+            setupMainActivity()
+            oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+
+
+
 
         }
     }
@@ -84,6 +97,14 @@ class MainActivity : AppCompatActivity() {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
+
+        oeuvreViewModel.oeuvreList?.observe(this, Observer<List<Oeuvre>>{ oeuvrelist ->
+            if ( oeuvrelist.size > 0) {
+                for(oeuvre in oeuvrelist){
+                    println(oeuvre.title)
+                }
+            }
+        })
     }
 
     override fun onPause() {
@@ -94,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         //Configuration.getInstance().save(this, prefs);
         mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
@@ -106,7 +128,12 @@ class MainActivity : AppCompatActivity() {
                     //  Setup Main Activity
                     setContentView(R.layout.activity_main)
                     setupMainActivity()
-                    setupArtworksDB()
+                    oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+
+
+                    //Collecting Artworks
+                    //TODO: permission for internet
+                    //TODO: Parse all data and create a DB for it?
                     // Note that the Toolbar defined in the layout has the id "my_toolbar"
                     setSupportActionBar(findViewById(R.id.toolbar))
                 } else {
@@ -133,34 +160,13 @@ class MainActivity : AppCompatActivity() {
     // Called when all permissions are granted
     private fun setupMainActivity() {
         setSupportActionBar(toolbar)
-        val adapter = MyAdapter(supportFragmentManager)
+        val adapter = MainMenuAdapter(supportFragmentManager)
         adapter.addFragment(OeuvreJourFragment(), "ODJ")
         adapter.addFragment(MapFragment(), "MAP")
         adapter.addFragment(ListFragment(), "LIST")
         adapter.addFragment(CollectionFragment(), "GALLERY")
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
-    }
-
-    private fun setupArtworksDB(){
-
-        //API call to server to get all artworks. We extract solely the artworks
-        val artworksJson = ApiArtworks().execute().get()
-        val objectJson = JSONObject(artworksJson)
-        val data = objectJson.getJSONArray("data").toString()
-
-        //Moshi is a library with built in type adapters to ease data parsing such as our case.
-        //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
-        val gson = Gson()
-
-        //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
-        //efficiently loops through automatically with its adapter
-
-        val db = Room.databaseBuilder(
-            this.applicationContext,
-            AppDatabase::class.java, "database-name"
-        )
-        db.build().oeuvreDao().insertAll(gson.fromJson<List<Oeuvre>>(data,List::class.java))
     }
 
 
