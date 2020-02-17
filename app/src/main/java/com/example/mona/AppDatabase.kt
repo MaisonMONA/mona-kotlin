@@ -6,6 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.mona.converter.*
+import com.example.mona.dao.OeuvreDAO
+import com.example.mona.entity.Oeuvre
+import com.example.mona.task.ArtworksTask
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -49,7 +53,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getOeuvreList(): List<Oeuvre>?{
             //API call to server to get all artworks. We extract solely the artworks
-            val artworksJson = ApiArtworks().execute().get()
+            val artworksJson = ArtworksTask().execute().get()
             val objectJson = JSONObject(artworksJson)
             val dataArray = objectJson.getJSONArray("data").toString()
 

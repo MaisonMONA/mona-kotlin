@@ -1,4 +1,4 @@
-package com.example.mona
+package com.example.mona.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.example.mona.entity.Oeuvre
+import com.example.mona.OeuvreViewModel
+import com.example.mona.R
 
 class ListFragment : Fragment() {
 
@@ -21,7 +24,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        oeuvreViewModel.oeuvreList?.observe(this, Observer<List<Oeuvre>>{ oeuvrelist ->
+        oeuvreViewModel.oeuvreList.observe(this, Observer<List<Oeuvre>>{ oeuvrelist ->
             if ( oeuvrelist.size > 0) {
                 for(oeuvre in oeuvrelist){
                     println(oeuvre.title)

@@ -1,12 +1,13 @@
-package com.example.mona
+package com.example.mona.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.mona.R
 
-class CollectionFragment : Fragment() {
+class OeuvreJourFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,

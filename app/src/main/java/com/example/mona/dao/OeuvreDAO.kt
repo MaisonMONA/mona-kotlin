@@ -1,7 +1,8 @@
-package com.example.mona
+package com.example.mona.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.mona.entity.Oeuvre
 
 @Dao
 interface OeuvreDAO {

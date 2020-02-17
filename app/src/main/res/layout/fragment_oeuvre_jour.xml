@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OeuvreJourFragment"
+    tools:context=".fragment.OeuvreJourFragment"
     android:layout_weight="1"
     android:id="@+id/oeuvre_jour_id">
 

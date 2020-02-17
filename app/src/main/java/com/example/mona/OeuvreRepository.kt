@@ -1,6 +1,8 @@
 package com.example.mona
 
 import androidx.lifecycle.LiveData
+import com.example.mona.dao.OeuvreDAO
+import com.example.mona.entity.Oeuvre
 
 // Declares the DAO as a private property in the constructor. Pass in the DAO
 // instead of the whole database, because you only need access to the DAO

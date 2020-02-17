@@ -1,4 +1,4 @@
-package com.example.mona
+package com.example.mona.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.mona.R
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint

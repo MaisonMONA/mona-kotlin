@@ -1,10 +1,11 @@
-package com.example.mona
+package com.example.mona.entity
 
 // All data properties of an artwork
 // Bult in Moshi Adapter translates them directly into its instance
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.example.mona.converter.*
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.Serializable

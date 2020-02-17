@@ -10,6 +10,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.mona.fragment.CollectionFragment
+import com.example.mona.fragment.ListFragment
+import com.example.mona.fragment.MapFragment
+import com.example.mona.fragment.OeuvreJourFragment
+import com.example.mona.entity.Oeuvre
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
 
@@ -98,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
 
-        oeuvreViewModel.oeuvreList?.observe(this, Observer<List<Oeuvre>>{ oeuvrelist ->
+        oeuvreViewModel.oeuvreList.observe(this, Observer<List<Oeuvre>>{ oeuvrelist ->
             if ( oeuvrelist.size > 0) {
                 for(oeuvre in oeuvrelist){
                     println(oeuvre.title)

@@ -1,6 +1,7 @@
-package com.example.mona
+package com.example.mona.converter
 
 import androidx.room.TypeConverter
+import com.example.mona.entity.Artist
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

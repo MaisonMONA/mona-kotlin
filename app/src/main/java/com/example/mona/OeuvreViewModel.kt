@@ -3,8 +3,8 @@ package com.example.mona
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mona.entity.Oeuvre
 import kotlinx.coroutines.launch
 
 // Class extends AndroidViewModel and requires application as a parameter.

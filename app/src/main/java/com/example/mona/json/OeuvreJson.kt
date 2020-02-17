@@ -1,4 +1,8 @@
-package com.example.mona
+package com.example.mona.json
+
+import com.example.mona.entity.Artist
+import com.example.mona.entity.Bilingual
+import com.example.mona.entity.Location
 
 class OeuvreJson {
     var title: String? = null
