@@ -30,8 +30,8 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mMap = view.findViewById(R.id.main_map);
-        mMap?.setTileSource(TileSourceFactory.MAPNIK);
+        mMap = view.findViewById(R.id.main_map)
+        mMap?.setTileSource(TileSourceFactory.MAPNIK)
 
         //Start Point Montreal
         //TODO: User location is start point

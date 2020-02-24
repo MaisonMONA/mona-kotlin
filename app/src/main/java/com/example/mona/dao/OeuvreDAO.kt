@@ -11,7 +11,7 @@ interface OeuvreDAO {
 
     //In case of booting up the application a second time
     //We dont conflict the primary key by adding twice the same data
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(oeuvres: List<Oeuvre>?)
 
     @Query("DELETE FROM artwork_table")

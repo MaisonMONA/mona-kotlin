@@ -33,5 +33,8 @@ ext {
     androidxArchVersion = '2.1.0'
     coreTestingVersion = "2.1.0"
     coroutines = '1.3.2'
-    materialVersion = "1.0.0"
+    materialVersion = '1.0.0'
+    moshiVersion = '1.9.2'
+    gsonVersion = '2.8.6'
+    okhttpVersion = '2.5.0'
 }

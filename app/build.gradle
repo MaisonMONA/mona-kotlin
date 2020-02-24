@@ -11,7 +11,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.mona"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -53,13 +53,15 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation "androidx.fragment:fragment-ktx:1.2.0"
 
-    implementation 'com.squareup.okhttp:okhttp:2.5.0'
+    //Okhttp components
+    implementation "com.squareup.okhttp:okhttp:$rootProject.okhttpVersion"
 
-    implementation 'com.google.code.gson:gson:2.8.6'
+    //Gson components
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
 
-    implementation 'com.squareup.moshi:moshi-kotlin:1.9.2'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
-
+    //Moshi components
+    implementation "com.squareup.moshi:moshi-kotlin:$rootProject.moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$rootProject.moshiVersion"
 
     // Room components
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
@@ -82,4 +84,3 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.materialVersion"
 
 }
-

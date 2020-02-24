@@ -5,9 +5,11 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mona.fragment.CollectionFragment
@@ -85,8 +87,9 @@ class MainActivity : AppCompatActivity() {
             //  Setup Main Activity
             setContentView(R.layout.activity_main)
 
-            setupMainActivity()
             oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+
+            setupMainActivity()
 
 
 
@@ -102,14 +105,15 @@ class MainActivity : AppCompatActivity() {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
-
-        oeuvreViewModel.oeuvreList.observe(this, Observer<List<Oeuvre>>{ oeuvrelist ->
-            if ( oeuvrelist.size > 0) {
-                for(oeuvre in oeuvrelist){
-                    println(oeuvre.title)
-                }
-            }
+/*
+        oeuvreViewModel.oeuvreList.observe(this, Observer {
+            println(it.size)
         })
+
+ */
+
+
+
     }
 
     override fun onPause() {
@@ -132,9 +136,10 @@ class MainActivity : AppCompatActivity() {
                     // Both permissions are granted:
                     //  Setup Main Activity
                     setContentView(R.layout.activity_main)
-                    setupMainActivity()
+
                     oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
 
+                    setupMainActivity()
 
                     //Collecting Artworks
                     //TODO: permission for internet

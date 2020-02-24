@@ -41,12 +41,9 @@ abstract class AppDatabase : RoomDatabase() {
 
                     var oeuvreDao = database.oeuvreDAO()
 
-                    oeuvreDao.deleteAll()
-
                     var oeuvreList = getOeuvreList()
 
                     oeuvreDao.insertAll(oeuvreList)
-
                 }
             }
         }
