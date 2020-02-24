@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.entity.Oeuvre
 
 class OeuvreListAdapter internal constructor(
-    context: Context
+    context: Context?
 ) : RecyclerView.Adapter<OeuvreListAdapter.OeuvreViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -29,8 +29,8 @@ class OeuvreListAdapter internal constructor(
         holder.oeuvreItemView.text = current.title
     }
 
-    internal fun setTitle(words: List<Oeuvre>) {
-        this.oeuvreList = words
+    internal fun submitList(oeuvres: List<Oeuvre>) {
+        this.oeuvreList = oeuvres
         notifyDataSetChanged()
     }
 

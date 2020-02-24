@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.fragment.CollectionFragment
 import com.example.mona.fragment.ListFragment
 import com.example.mona.fragment.MapFragment
@@ -19,6 +20,7 @@ import com.example.mona.fragment.OeuvreJourFragment
 import com.example.mona.entity.Oeuvre
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
+import kotlinx.android.synthetic.main.fragment_list.*
 
 /*
 *This application is developped following strict practice and respect of architecture components
@@ -177,6 +179,9 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(CollectionFragment(), "GALLERY")
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+
+
+
     }
 
 
