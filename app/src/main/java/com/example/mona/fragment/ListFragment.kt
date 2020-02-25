@@ -43,8 +43,7 @@ class ListFragment : Fragment() {
         //Open LiveData
         oeuvreViewModel.oeuvreList.observe(this, Observer{ oeuvrelist ->
             //Submit the list to the adapter
-            oeuvrelist?.let { adapter.submitList(it)
-                println("HEY MON TABARNAK ON SE REND JUSQU'ICITTE " + it.size)}
+            oeuvrelist?.let { adapter.submitList(it) }
         })
 
         return rootView

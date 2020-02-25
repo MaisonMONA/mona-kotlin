@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.mona.R
 
+//TODO implementation of cardview
+//https://developer.android.com/guide/topics/ui/layout/cardview
+
 class CollectionFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
