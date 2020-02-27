@@ -15,8 +15,21 @@ class OeuvreListAdapter internal constructor(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var oeuvreList = emptyList<Oeuvre>()
 
+    //items are clickable
+    var onItemClick: ((Oeuvre) -> Unit)? = null
+
     inner class OeuvreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val oeuvreItemView: TextView = itemView.findViewById(R.id.textView)
+        val oeuvreTitleItemView: TextView = itemView.findViewById(R.id.titleView)
+        val oeuvreBoroughItemView: TextView = itemView.findViewById(R.id.boroughView)
+
+        //action happens
+        //https://stackoverflow.com/questions/29424944/recyclerview-itemclicklistener-in-kotlin
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(oeuvreList[adapterPosition])
+            }
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OeuvreViewHolder {
@@ -26,11 +39,18 @@ class OeuvreListAdapter internal constructor(
 
     override fun onBindViewHolder(holder: OeuvreViewHolder, position: Int) {
         val current = oeuvreList[position]
-        holder.oeuvreItemView.text = current.title
+        holder.oeuvreTitleItemView.text = current.title
+        holder.oeuvreBoroughItemView.text = current.borough
     }
 
     internal fun submitList(oeuvres: List<Oeuvre>) {
-        this.oeuvreList = oeuvres
+
+        //Initially, sort the list alphabetically
+        //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin
+        val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
+
+        this.oeuvreList = sortedList
+
         notifyDataSetChanged()
     }
 

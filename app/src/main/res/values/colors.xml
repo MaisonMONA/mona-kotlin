@@ -3,4 +3,6 @@
     <color name="colorPrimary">#478ADB</color>
     <color name="colorPrimaryDark">#39579A</color>
     <color name="colorAccent">#FF5733</color>
+
+    <color name="bluePowder">#B4B7DD</color>
 </resources>

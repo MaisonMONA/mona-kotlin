@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bluePowder">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.5">
+
+        <ImageView
+            android:id="@+id/itemImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:src="@drawable/mona_logo_blanc"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.5">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/itemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ItemAlignement"
+                android:textSize="25dp"
+                android:text="TITLE">
+            </TextView>
+
+            <TextView
+                android:id="@+id/itemBorough"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ItemAlignement"
+                android:text="BOROUGH">
+            </TextView>
+
+            <TextView
+                android:id="@+id/itemArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ItemAlignement"
+                android:text="ARTIST">
+            </TextView>
+
+            <TextView
+                android:id="@+id/itemMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ItemAlignement"
+                android:text="MATERIALS">
+            </TextView>
+
+            <TextView
+                android:id="@+id/itemDimensions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ItemAlignement"
+                android:text="DIMENSIONS">
+            </TextView>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

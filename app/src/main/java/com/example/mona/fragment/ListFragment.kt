@@ -1,11 +1,12 @@
 package com.example.mona.fragment
 
+import android.content.ClipData
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,11 +38,22 @@ class ListFragment : Fragment() {
         //Set a adapter
         recyclerView.adapter = adapter
 
+        //Give action to item click in adapter
+        adapter.onItemClick = { oeuvre ->
+            //Setup new fragment Oeuvre
+
+            // parentFragmentManager is the same as activity?.supportFragmentManager
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.recyclerview_container, ItemFragment(oeuvre))
+                .addToBackStack(null) //Makes it possible to comeback to recyclerview
+                .commit()
+        }
+
         //Set a layout manager
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         //Open LiveData
-        oeuvreViewModel.oeuvreList.observe(this, Observer{ oeuvrelist ->
+        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer{ oeuvrelist ->
             //Submit the list to the adapter
             oeuvrelist?.let { adapter.submitList(it) }
         })
