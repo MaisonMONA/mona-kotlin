@@ -17,8 +17,13 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/offWhite"
             tools:listitem="@layout/recyclerview_item"
+
+            android:scrollbars="vertical"
+            android:scrollbarSize="8dp"
+            android:scrollbarThumbVertical="@color/monaYellow"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

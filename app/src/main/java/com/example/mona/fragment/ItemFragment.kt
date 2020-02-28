@@ -30,7 +30,7 @@ class ItemFragment internal constructor(
         var artistString : String? = "par "
 
         for(artistIndex in 0 until oeuvre.artists!!.size){
-            artistString += oeuvre.artists!!.get(artistIndex).name + ", "
+            artistString += oeuvre.artists!!.get(artistIndex).name
         }
         rootView.itemArtist.text = artistString
 

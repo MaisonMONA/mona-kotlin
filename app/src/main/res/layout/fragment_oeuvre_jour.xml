@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragment.OeuvreJourFragment"
     android:layout_weight="1"
+    android:background="@color/bluePowder"
     android:id="@+id/oeuvre_jour_id">
 
 </LinearLayout>

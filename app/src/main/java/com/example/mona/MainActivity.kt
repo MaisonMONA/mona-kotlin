@@ -5,19 +5,22 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.core.view.size
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.example.mona.entity.Oeuvre
-import com.example.mona.fragment.*
+import com.example.mona.fragment.CollectionFragment
+import com.example.mona.fragment.ListFragment
+import com.example.mona.fragment.MapFragment
+import com.example.mona.fragment.OeuvreJourFragment
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
-import kotlinx.android.synthetic.main.fragment_list.*
+
+
 
 /*
 *This application is developped following strict practice and respect of architecture components
@@ -169,14 +172,49 @@ class MainActivity : AppCompatActivity() {
     // Called when all permissions are granted
     private fun setupMainActivity() {
         setSupportActionBar(toolbar)
+
         val adapter = MainMenuAdapter(supportFragmentManager)
         adapter.addFragment(OeuvreJourFragment(), "ODJ")
         adapter.addFragment(MapFragment(), "MAP")
         adapter.addFragment(ListFragment(), "LIST")
         adapter.addFragment(CollectionFragment(), "GALLERY")
 
+
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+
+        //Setup of Tab Icons
+        val selectedIcons = intArrayOf(
+            R.drawable.odj_selected,
+            R.drawable.map_selected,
+            R.drawable.list_selected,
+            R.drawable.collection_selected
+        )
+        val unselectedIcons = intArrayOf(
+            R.drawable.odj_unselected,
+            R.drawable.map_unselected,
+            R.drawable.list_unselected,
+            R.drawable.collection_unselected
+        )
+
+        //Initial Icons
+        tabs.getTabAt(0)!!.icon = getDrawable(selectedIcons[0])
+        for(i in 1..3){
+            tabs.getTabAt(i)!!.icon = getDrawable(unselectedIcons[i])
+        }
+
+        //Listener
+        tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                tab.icon = getDrawable(selectedIcons[tab.position])
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                tab.icon = getDrawable(unselectedIcons[tab.position])
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
 
     }
 

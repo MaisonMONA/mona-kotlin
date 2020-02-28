@@ -7,13 +7,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--Toolbar Theme-->
+    <style name="ToolbarTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="titleTextColor">@color/grey</item>
+        <item name="fontFamily">@font/gotham_rounded_light</item>
+    </style>
+
     <!-- The default font for RecyclerView items is too small.
     The margin is a simple delimiter between the words. -->
     <style name="oeuvre_item">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:paddingLeft">8dp</item>
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">@color/offWhite</item>
     </style>
 
     <!-- Splash Screen theme -->

@@ -8,15 +8,17 @@
     <TextView
         android:id="@+id/titleView"
         android:layout_width="match_parent"
-        android:textSize="20dp"
+        android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:maxLines="1"
-        android:layout_height="wrap_content" />
+        android:textSize="20dp"
+        android:fontFamily="@font/gotham_bold"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/boroughView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:fontFamily="@font/gotham_book"/>
 </LinearLayout>
