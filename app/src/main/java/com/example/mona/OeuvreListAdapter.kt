@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.entity.Oeuvre
+import com.example.mona.fragment.ListFragmentDirections
 
 class OeuvreListAdapter internal constructor(
     context: Context?
@@ -17,6 +21,7 @@ class OeuvreListAdapter internal constructor(
 
     //items are clickable
     var onItemClick: ((Oeuvre) -> Unit)? = null
+
 
     inner class OeuvreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val oeuvreTitleItemView: TextView = itemView.findViewById(R.id.titleView)

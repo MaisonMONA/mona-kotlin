@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">Mona</string>
 
+    <string name="ODJ">Oeuvre du Jour</string>
+    <string name="Map">Carte</string>
+    <string name="List">Liste</string>
+    <string name="Collection">Collection</string>
+
+    <string name="Item">Item</string>
+    <string name="Settings">Paramètre</string>
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="str_icon_oeuvre_du_jour">Oeuvre du jour</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

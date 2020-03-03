@@ -1,24 +1,40 @@
 package com.example.mona
 
-import MainMenuAdapter
+
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.size
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.mona.fragment.CollectionFragment
 import com.example.mona.fragment.ListFragment
 import com.example.mona.fragment.MapFragment
 import com.example.mona.fragment.OeuvreJourFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
+
 
 
 
@@ -43,6 +59,9 @@ class MainActivity : AppCompatActivity() {
 
     private var mMap: MapView? = null
     private lateinit var oeuvreViewModel: OeuvreViewModel
+    private lateinit var appBarConfiguration : AppBarConfiguration
+
+    private lateinit var toggle: ActionBarDrawerToggle
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -147,7 +166,6 @@ class MainActivity : AppCompatActivity() {
                     //TODO: permission for internet
                     //TODO: Parse all data and create a DB for it?
                     // Note that the Toolbar defined in the layout has the id "my_toolbar"
-                    setSupportActionBar(findViewById(R.id.toolbar))
                 } else {
                     // Permissions denied
                     // Send to PermissionsDeniedActivity
@@ -171,51 +189,62 @@ class MainActivity : AppCompatActivity() {
 
     // Called when all permissions are granted
     private fun setupMainActivity() {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val adapter = MainMenuAdapter(supportFragmentManager)
-        adapter.addFragment(OeuvreJourFragment(), "ODJ")
-        adapter.addFragment(MapFragment(), "MAP")
-        adapter.addFragment(ListFragment(), "LIST")
-        adapter.addFragment(CollectionFragment(), "GALLERY")
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
 
+        // Set up Action Bar and Navigation Drawer
+        val navController = host.navController
 
-        viewPager.adapter = adapter
-        tabs.setupWithViewPager(viewPager)
+        var drawer: DrawerLayout? = findViewById(R.id.drawer_layout)
 
-        //Setup of Tab Icons
-        val selectedIcons = intArrayOf(
-            R.drawable.odj_selected,
-            R.drawable.map_selected,
-            R.drawable.list_selected,
-            R.drawable.collection_selected
-        )
-        val unselectedIcons = intArrayOf(
-            R.drawable.odj_unselected,
-            R.drawable.map_unselected,
-            R.drawable.list_unselected,
-            R.drawable.collection_unselected
-        )
+        //Specifiy top level destinations
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.odj_dest, R.id.map_dest, R.id.list_dest, R.id.collection_dest),
+            drawer)
 
-        //Initial Icons
-        tabs.getTabAt(0)!!.icon = getDrawable(selectedIcons[0])
-        for(i in 1..3){
-            tabs.getTabAt(i)!!.icon = getDrawable(unselectedIcons[i])
+        setupActionBar(navController, appBarConfiguration)
+
+        findViewById<NavigationView>(R.id.nav_view)
+            .setupWithNavController(navController)
+
+        //Handle Up navigations
+        onSupportNavigateUp()
+
+        // Setup Bottom Navigation View
+        setupBottomNavMenu(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val dest: String = try {
+                resources.getResourceName(destination.id)
+            } catch (e: Resources.NotFoundException) {
+                Integer.toString(destination.id)
+            }
+
         }
 
-        //Listener
-        tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                tab.icon = getDrawable(selectedIcons[tab.position])
-            }
+    }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.icon = getDrawable(unselectedIcons[tab.position])
-            }
+    private fun setupBottomNavMenu(navController: NavController) {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+        bottomNav?.setupWithNavController(navController)
+        bottomNav?.setItemIconTintList(null);
 
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-        })
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.my_nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
 
+
+    private fun setupActionBar(navController: NavController,
+                               appBarConfig : AppBarConfiguration) {
+        // This allows NavigationUI to decide what label to show in the action bar
+        // By using appBarConfig, it will also determine whether to
+        // show the up arrow or drawer menu icon
+        setupActionBarWithNavController(navController, appBarConfig)
     }
 
 

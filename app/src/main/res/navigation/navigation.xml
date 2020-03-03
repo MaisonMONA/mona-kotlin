@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/odj_dest">
+
+    <fragment
+        android:id="@+id/odj_dest"
+        android:name="com.example.mona.fragment.OeuvreJourFragment"
+        android:label="@string/ODJ"
+        tools:layout="@layout/fragment_oeuvre_jour">
+    </fragment>
+
+    <fragment
+        android:id="@+id/map_dest"
+        android:name="com.example.mona.fragment.MapFragment"
+        android:label="@string/Map"
+        tools:layout="@layout/fragment_map">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/list_dest"
+        android:name="com.example.mona.fragment.ListFragment"
+        android:label="@string/List"
+        tools:layout="@layout/fragment_list">
+
+        <action
+            android:id="@+id/open_item"
+            app:destination="@id/item_dest">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/collection_dest"
+        android:name="com.example.mona.fragment.CollectionFragment"
+        android:label="@string/Collection"
+        tools:layout="@layout/fragment_collection">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/item_dest"
+        android:name="com.example.mona.fragment.ItemFragment"
+        android:label="@string/Item"
+        tools:layout="@layout/fragment_item">
+        <argument
+            android:name="item_selected"
+            app:argType="com.example.mona.entity.Oeuvre"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+
+        android:id="@+id/settings_dest"
+        android:name="com.example.mona.fragment.SettingsFragment"
+        android:label="fragment_settings_dest"
+        tools:layout="@layout/fragment_settings" />
+
+
+</navigation>

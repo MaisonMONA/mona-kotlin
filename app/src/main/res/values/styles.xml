@@ -8,9 +8,10 @@
     </style>
 
     <!--Toolbar Theme-->
-    <style name="ToolbarTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="titleTextColor">@color/grey</item>
-        <item name="fontFamily">@font/gotham_rounded_light</item>
+    <style name="MonaTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="titleTextColor">@color/black</item>
+        <item name="fontFamily">@font/gotham_bold</item>
+        <item name="background">@color/offWhite</item>
     </style>
 
     <!-- The default font for RecyclerView items is too small.
@@ -37,4 +38,10 @@
         <item name="android:fontFamily">@font/gotham_book</item>
         <item name="android:textSize">15dp</item>
     </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

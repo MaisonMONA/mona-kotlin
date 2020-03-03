@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.*
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.OeuvreListAdapter
@@ -41,12 +43,8 @@ class ListFragment : Fragment() {
         //Give action to item click in adapter
         adapter.onItemClick = { oeuvre ->
             //Setup new fragment Oeuvre
-
-            // parentFragmentManager is the same as activity?.supportFragmentManager
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.recyclerview_container, ItemFragment(oeuvre))
-                .addToBackStack(null) //Makes it possible to comeback to recyclerview
-                .commit()
+            val action = ListFragmentDirections.openItem(oeuvre)
+            findNavController().navigate(action)
         }
 
         //Set a layout manager

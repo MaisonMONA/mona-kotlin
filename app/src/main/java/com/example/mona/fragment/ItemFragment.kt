@@ -5,54 +5,56 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.example.mona.R
 import com.example.mona.entity.Oeuvre
 import kotlinx.android.synthetic.main.fragment_item.view.*
 import kotlinx.android.synthetic.main.recyclerview_item.view.*
 
-class ItemFragment internal constructor(
-    oeuvre: Oeuvre
-) : Fragment() {
+class ItemFragment () : Fragment() {
 
-    private var oeuvre: Oeuvre = oeuvre
+    val safeArgs : ItemFragmentArgs by navArgs()
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_item, container, false)
 
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val oeuvre  = safeArgs.itemSelected
+
         //We setup the artowk item in accordance
 
-        rootView.itemTitle.text = oeuvre.title
+        view.itemTitle.text = oeuvre?.title
 
-        rootView.itemBorough.text = oeuvre.borough
+        view.itemBorough.text = oeuvre?.borough
 
         var artistString : String? = "par "
 
-        for(artistIndex in 0 until oeuvre.artists!!.size){
+        for(artistIndex in 0 until oeuvre?.artists!!.size){
             artistString += oeuvre.artists!!.get(artistIndex).name
         }
-        rootView.itemArtist.text = artistString
+        view.itemArtist.text = artistString
 
         var materialString : String? = ""
         for (materialIndex in 0 until oeuvre.materials!!.size){
             materialString += oeuvre.materials!![materialIndex]
             materialString += " "
         }
-        rootView.itemMaterial.text = materialString
+        view.itemMaterial.text = materialString
 
         var dimensionString : String? = ""
         for (dimensionIndex in 0 until oeuvre.dimension!!.size){
             dimensionString += oeuvre.dimension!![dimensionIndex]
             dimensionString += " "
         }
-        rootView.itemDimensions.text = dimensionString
+        view.itemDimensions.text = dimensionString
 
-        return rootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
     }
 
