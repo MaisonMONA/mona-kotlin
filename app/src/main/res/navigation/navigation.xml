@@ -49,12 +49,19 @@
             app:argType="com.example.mona.entity.Oeuvre"
             app:nullable="true" />
     </fragment>
+
     <fragment
 
         android:id="@+id/settings_dest"
         android:name="com.example.mona.fragment.SettingsFragment"
         android:label="fragment_settings_dest"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/badge_dest"
+        android:name="com.example.mona.fragment.badge_dest"
+        android:label="fragment_badge"
+        tools:layout="@layout/fragment_badge" />
 
 
 </navigation>

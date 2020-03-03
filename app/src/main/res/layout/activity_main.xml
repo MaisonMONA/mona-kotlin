@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="right">
+    tools:openDrawer="start">
 
 
     <LinearLayout
@@ -37,7 +37,8 @@
             android:layout_height="wrap_content"
             app:menu="@menu/bottom_nav_menu"
             android:background="@color/offWhite"
-            app:labelVisibilityMode="unlabeled" />
+            app:labelVisibilityMode="unlabeled"
+            app:itemIconSize="35dp"/>
 
     </LinearLayout>
 
@@ -47,8 +48,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/offWhite"
         app:headerLayout="@layout/navigation_drawer"
-        app:menu="@menu/drawer_nav_menu" />
+        app:menu="@menu/drawer_nav_menu"
+        app:itemIconTint="@color/grey"
+        app:itemTextColor="@color/grey"
+        android:background="@color/offWhite"
+        />
 </androidx.drawerlayout.widget.DrawerLayout>
 

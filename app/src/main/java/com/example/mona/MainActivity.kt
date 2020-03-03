@@ -61,8 +61,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var oeuvreViewModel: OeuvreViewModel
     private lateinit var appBarConfiguration : AppBarConfiguration
 
-    private lateinit var toggle: ActionBarDrawerToggle
-
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL: Int = 2

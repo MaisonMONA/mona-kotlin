@@ -7,6 +7,98 @@
     tools:context=".fragment.OeuvreJourFragment"
     android:layout_weight="1"
     android:background="@color/bluePowder"
-    android:id="@+id/oeuvre_jour_id">
+    android:id="@+id/oeuvre_jour_id"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:padding="30dp"
+        android:layout_marginRight="25dp"
+        android:src="@drawable/odj_white">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/odj_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="title"
+        android:paddingHorizontal="20dp"
+        android:maxLines="1"
+        android:textSize="30dp"
+        android:fontFamily="@font/gotham_bold"
+        android:paddingBottom="15dp">
+
+    </TextView>
+
+    <View
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:background="@color/offWhite" />
+
+    <TextView
+        android:id="@+id/odj_artist_and_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Artist, year"
+        android:paddingVertical="15dp"
+        android:theme="@style/odj_text">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/odj_dimensions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10x10"
+        android:theme="@style/odj_text"
+        android:paddingTop="10dp">
+
+    </TextView>
+    <TextView
+        android:id="@+id/odj_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="category"
+        android:theme="@style/odj_text">
+
+    </TextView>
+    <TextView
+        android:id="@+id/odj_subcategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="subcategory"
+        android:theme="@style/odj_text"
+        android:paddingBottom="10dp">
+
+    </TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/button_cam"
+            android:layout_width="96dp"
+            android:layout_height="92dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/odj_camera"
+            android:foregroundGravity="right"
+            android:layout_gravity="center"
+            android:paddingHorizontal="10dp"/>
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="68dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/odj_map"
+            android:foregroundGravity="left"
+            android:paddingVertical="20dp" />
+
+    </LinearLayout>
 
 </LinearLayout>
