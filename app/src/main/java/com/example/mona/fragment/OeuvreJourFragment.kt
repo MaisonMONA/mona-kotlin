@@ -26,10 +26,19 @@ class OeuvreJourFragment : Fragment() {
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer{ oeuvrelist ->
             //Since the database takes a longer moment to load on the back thread
             if(oeuvrelist.size>0){
-                val odj : Oeuvre? = oeuvrelist[Calendar.DAY_OF_YEAR]
+
+                val calendar = Calendar.getInstance()
+                val dayOfYear = calendar[Calendar.DAY_OF_YEAR]
+
+                val odj : Oeuvre? = oeuvrelist[dayOfYear]
 
                 rootView.odj_title.text = odj?.title
-                rootView.odj_artist_and_year.text = odj?.artists?.get(0)?.name + ", "+ odj?.produced_at?.substring(0,4)
+
+                if(odj?.artists?.size == 0){
+                    rootView.odj_artist_and_year.text = odj?.produced_at?.substring(0,4)
+                } else {
+                    rootView.odj_artist_and_year.text = odj?.artists?.get(0)?.name + ", "+ odj?.produced_at?.substring(0,4)
+                }
 
                 var dimensionString : String? = ""
                 for (dimensionIndex in 0 until odj?.dimension!!.size){

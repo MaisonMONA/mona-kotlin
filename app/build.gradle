@@ -74,6 +74,9 @@ dependencies {
     //Okhttp components
     implementation "com.squareup.okhttp:okhttp:$rootProject.okhttpVersion"
 
+    //Okhttp3
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp3Version"
+
     //Gson components
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
 

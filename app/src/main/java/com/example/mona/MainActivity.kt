@@ -7,6 +7,9 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ShareActionProvider
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -69,49 +72,57 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*
 
-        We must check that all permissions are granted before using the app
-        1. Write external storage
-        2. Fine location
+        //Check if user has current session via Shared Prefferences
+        if (SaveSharedPreference.getToken(this).length == 0){
+            val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(myIntent)
+        } else {
+            /*
 
-         */
+            We must check that all permissions are granted before using the app
+            1. Write external storage
+            2. Fine location
+
+            */
 
 
-        // One or both of the two required permissions are missing:
-        // Ask for permissions
+            // One or both of the two required permissions are missing:
+            // Ask for permissions
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            // Even if we want to show request rationale, we send the user to PermissionsDeniedActivity
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Send to PermissionsDeniedActivity
-                val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
-                    // Optionally add message
-                    // putExtra(EXTRA_MESSAGE, message)
-                }
-                startActivity(intent)
-            } else {
-                // Request permissions
-                ActivityCompat.requestPermissions(this, arrayOf(
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted
+                // Even if we want to show request rationale, we send the user to PermissionsDeniedActivity
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Send to PermissionsDeniedActivity
+                    val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
+                        // Optionally add message
+                        // putExtra(EXTRA_MESSAGE, message)
+                    }
+                    startActivity(intent)
+                } else {
+                    // Request permissions
+                    ActivityCompat.requestPermissions(this, arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION)
+                        MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION)
+                }
+
+            }else{
+                // Both permissions are granted:
+                //  Setup Main Activity
+                setContentView(R.layout.activity_main)
+
+                oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+
+                setupMainActivity()
+
+
+
+
             }
-
-        }else{
-            // Both permissions are granted:
-            //  Setup Main Activity
-            setContentView(R.layout.activity_main)
-
-            oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
-
-            setupMainActivity()
-
-
-
 
         }
     }
@@ -196,7 +207,14 @@ class MainActivity : AppCompatActivity() {
         // Set up Action Bar and Navigation Drawer
         val navController = host.navController
 
-        var drawer: DrawerLayout? = findViewById(R.id.drawer_layout)
+        val drawer: DrawerLayout? = findViewById(R.id.drawer_layout)
+
+        //username in the drawer
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
+        val nameView: TextView = headerView.findViewById(R.id.nav_header_textView)
+        val name = SaveSharedPreference.getUsername(this)
+        nameView.text = name
 
         //Specifiy top level destinations
         appBarConfiguration = AppBarConfiguration(
@@ -213,6 +231,7 @@ class MainActivity : AppCompatActivity() {
 
         // Setup Bottom Navigation View
         setupBottomNavMenu(navController)
+
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val dest: String = try {

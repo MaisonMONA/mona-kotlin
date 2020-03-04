@@ -9,4 +9,6 @@
     <color name="offWhite">#F6F6F6</color>
     <color name="black">#000000</color>
     <color name="grey">#7D7D7D</color>
+    <color name="red">#FD0000</color>
+    <color name="androidBlue">#478ADB</color>
 </resources>

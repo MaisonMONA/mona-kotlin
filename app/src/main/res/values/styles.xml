@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
     <!--Toolbar Theme-->
     <style name="MonaTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="titleTextColor">@color/black</item>
