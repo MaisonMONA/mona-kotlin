@@ -3,15 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-    tools:context=".fragment.MapFragment"
-    android:id="@+id/map_fragment_id">
+    tools:context=".fragment.ItemMapFragment"
+    android:id="@+id/item_map_frag_id">
 
     <org.osmdroid.views.MapView
-        android:id="@+id/main_map"
+        android:id="@+id/item_map"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:layout_height="fill_parent" />
 
 </FrameLayout>

@@ -81,7 +81,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/button_cam"
+            android:id="@+id/button_cam_odj"
             android:layout_width="96dp"
             android:layout_height="92dp"
             android:layout_marginRight="10dp"
@@ -91,6 +91,7 @@
             android:paddingHorizontal="10dp"/>
 
         <ImageButton
+            android:id="@+id/button_map_odj"
             android:layout_width="80dp"
             android:layout_height="68dp"
             android:layout_gravity="center"

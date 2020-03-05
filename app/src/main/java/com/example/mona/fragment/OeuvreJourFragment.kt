@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -12,6 +13,7 @@ import com.example.mona.OeuvreViewModel
 import com.example.mona.R
 import com.example.mona.entity.Oeuvre
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_oeuvre_jour.view.*
 import java.util.*
 
@@ -35,7 +37,7 @@ class OeuvreJourFragment : Fragment() {
                 rootView.odj_title.text = odj?.title
 
                 if(odj?.artists?.size == 0){
-                    rootView.odj_artist_and_year.text = odj?.produced_at?.substring(0,4)
+                    rootView.odj_artist_and_year.text = odj.produced_at?.substring(0,4)
                 } else {
                     rootView.odj_artist_and_year.text = odj?.artists?.get(0)?.name + ", "+ odj?.produced_at?.substring(0,4)
                 }
@@ -49,6 +51,11 @@ class OeuvreJourFragment : Fragment() {
 
                 rootView.odj_category.text = odj.category?.fr
                 rootView.odj_subcategory.text = odj.subcategory?.fr
+
+                rootView.findViewById<ImageButton>(R.id.button_map_odj)?.setOnClickListener {
+                    val action = OeuvreJourFragmentDirections.openOdjMap(odj)
+                    findNavController().navigate(action)
+                }
             }
 
         })

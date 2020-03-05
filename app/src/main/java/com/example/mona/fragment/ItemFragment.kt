@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mona.R
 import com.example.mona.entity.Oeuvre
@@ -29,24 +31,16 @@ class ItemFragment () : Fragment() {
         val oeuvre  = safeArgs.itemSelected
 
         //We setup the artowk item in accordance
+        val title_and_year = oeuvre?.title + ", " + oeuvre?.produced_at?.substring(0,4)
 
-        view.itemTitle.text = oeuvre?.title
+        view.itemTitleYear.text = title_and_year
 
-        view.itemBorough.text = oeuvre?.borough
-
-        var artistString : String? = "par "
+        var artistString : String? = ""
 
         for(artistIndex in 0 until oeuvre?.artists!!.size){
             artistString += oeuvre.artists!!.get(artistIndex).name
         }
         view.itemArtist.text = artistString
-
-        var materialString : String? = ""
-        for (materialIndex in 0 until oeuvre.materials!!.size){
-            materialString += oeuvre.materials!![materialIndex]
-            materialString += " "
-        }
-        view.itemMaterial.text = materialString
 
         var dimensionString : String? = ""
         for (dimensionIndex in 0 until oeuvre.dimension!!.size){
@@ -54,6 +48,15 @@ class ItemFragment () : Fragment() {
             dimensionString += " "
         }
         view.itemDimensions.text = dimensionString
+
+        view.itemCategory.text = oeuvre.category?.fr
+        view.itemSubcategory.text = oeuvre.subcategory?.fr
+
+        //Button map
+        view.findViewById<ImageButton>(R.id.button_map)?.setOnClickListener {
+            val action = ItemFragmentDirections.openItemMap(oeuvre)
+            findNavController().navigate(action)
+        }
 
 
     }

@@ -9,6 +9,9 @@
         android:name="com.example.mona.fragment.OeuvreJourFragment"
         android:label="@string/ODJ"
         tools:layout="@layout/fragment_oeuvre_jour">
+        <action
+            android:id="@+id/open_odj_map"
+            app:destination="@id/itemMap_dest" />
     </fragment>
 
     <fragment
@@ -48,6 +51,9 @@
             android:name="item_selected"
             app:argType="com.example.mona.entity.Oeuvre"
             app:nullable="true" />
+        <action
+            android:id="@+id/open_item_map"
+            app:destination="@id/itemMap_dest" />
     </fragment>
 
     <fragment
@@ -62,6 +68,18 @@
         android:name="com.example.mona.fragment.BadgeFragment"
         android:label="@string/Badge"
         tools:layout="@layout/fragment_badge" />
+
+    <fragment
+        android:id="@+id/itemMap_dest"
+        android:name="com.example.mona.fragment.ItemMapFragment"
+        android:label="fragment_item_map"
+        tools:layout="@layout/fragment_item_map">
+        <argument
+            android:name="item_location"
+            app:argType="com.example.mona.entity.Oeuvre"/>
+
+
+    </fragment>
 
 
 </navigation>
