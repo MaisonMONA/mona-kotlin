@@ -38,9 +38,7 @@
         android:id="@+id/collection_dest"
         android:name="com.example.mona.fragment.CollectionFragment"
         android:label="@string/Collection"
-        tools:layout="@layout/fragment_collection">
-
-    </fragment>
+        tools:layout="@layout/fragment_collection"/>
 
     <fragment
         android:id="@+id/item_dest"

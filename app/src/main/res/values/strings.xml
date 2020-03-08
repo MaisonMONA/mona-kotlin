@@ -10,6 +10,8 @@
     <string name="Settings">Paramètre</string>
     <string name="Badge">Badge</string>
 
+    <string name="artworksURL">https://picasso.iro.umontreal.ca/~mona/api/artworks</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

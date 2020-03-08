@@ -9,6 +9,7 @@ import com.example.mona.converter.*
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.Serializable
+import com.example.mona.entity.Artist
 
 
 @Entity(tableName = "artwork_table")
@@ -50,21 +51,3 @@ data class Oeuvre(
     var details: String?
 ) : Serializable
 
-
-data class Bilingual(
-    var fr: String,
-    var en: String
-) : Serializable
-
-data class Location(
-    var lat: Double,
-    var lng: Double
-) : Serializable
-
-data class Artist(
-    var id: Int,
-    var name: String,
-    var alias: String,
-    var collective: Boolean
-
-) : Serializable

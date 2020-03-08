@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.example.mona.LieuViewModel
 import com.example.mona.OeuvreViewModel
 import com.example.mona.R
 import org.osmdroid.api.IMapController
@@ -26,6 +27,7 @@ class MapFragment : Fragment() {
 
     private var mMap : MapView? = null
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
+    private val lieuViewModel : LieuViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -61,7 +63,7 @@ class MapFragment : Fragment() {
                         val item_longitude = oeuvre.location!!.lng
                         val oeuvre_location = GeoPoint(item_latitude, item_longitude)
                         val overlayItem = OverlayItem(oeuvre.title, oeuvre.category?.fr, oeuvre_location)
-                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.ic_location)
+                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.oeuvre_normal_pin)
                         overlayItem.setMarker(markerDrawable)
                         items.add(overlayItem)
                     }
@@ -81,6 +83,36 @@ class MapFragment : Fragment() {
             }
         })
 
+        lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList->
+            if(lieuList.size != 0){
+
+                //See: https://osmdroid.github.io/osmdroid/javadocs/osmdroid-android/debug/index.html?org/osmdroid/views/overlay/ItemizedIconOverlay.html
+                val items = ArrayList<OverlayItem>()
+                context?.let{
+                    for (lieu in lieuList){
+                        val item_latitude = lieu.location!!.lat
+                        val item_longitude = lieu.location!!.lng
+                        val lieu_location = GeoPoint(item_latitude, item_longitude)
+                        val overlayItem = OverlayItem(lieu.title, lieu.category?.fr, lieu_location)
+                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.lieu_normal_pin)
+                        overlayItem.setMarker(markerDrawable)
+                        items.add(overlayItem)
+                    }
+                    val overlayObject = ItemizedIconOverlay(
+                        items,
+                        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                            override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                                return true
+                            }
+
+                            override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                                return false
+                            }
+                        }, it)
+                    mMap?.overlays?.add(overlayObject)
+                }
+            }
+        })
 
 
     }
