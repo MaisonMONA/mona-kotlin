@@ -1,6 +1,10 @@
 package com.example.mona.fragment
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +24,9 @@ import java.util.*
 class OeuvreJourFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
+    private val REQUEST_IMAGE_CAPTURE = 1
+
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -56,6 +63,10 @@ class OeuvreJourFragment : Fragment() {
                     val action = OeuvreJourFragmentDirections.openOdjMap(odj)
                     findNavController().navigate(action)
                 }
+
+                rootView.findViewById<ImageButton>(R.id.button_cam_odj)?.setOnClickListener {
+                    dispatchTakePictureIntent()
+                }
             }
 
         })
@@ -69,4 +80,12 @@ class OeuvreJourFragment : Fragment() {
 
 
     }
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(activity?.packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
 }

@@ -54,6 +54,9 @@
         <action
             android:id="@+id/open_item_map"
             app:destination="@id/itemMap_dest" />
+        <action
+            android:id="@+id/item_to_rating"
+            app:destination="@id/rating_dest" />
     </fragment>
 
     <fragment
@@ -72,13 +75,26 @@
     <fragment
         android:id="@+id/itemMap_dest"
         android:name="com.example.mona.fragment.ItemMapFragment"
-        android:label="fragment_item_map"
+        android:label="@string/ItemMap"
         tools:layout="@layout/fragment_item_map">
         <argument
-            android:name="item_location"
+            android:name="oeuvre"
             app:argType="com.example.mona.entity.Oeuvre"/>
 
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/rating_dest"
+        android:name="com.example.mona.fragment.RatingFragment"
+        android:label="@string/Rating"
+        tools:layout="@layout/fragment_rating">
+        <argument
+            android:name="oeuvre"
+            app:argType="com.example.mona.entity.Oeuvre"/>
+        <action
+            android:id="@+id/rating_to_list"
+            app:destination="@id/list_dest" />
     </fragment>
 
 

@@ -2,6 +2,8 @@ package com.example.mona.entity
 
 // All data properties of an artwork
 // Bult in Moshi Adapter translates them directly into its instance
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
@@ -16,7 +18,7 @@ import java.io.Serializable
 data class Oeuvre(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    val id: Int,
 
     var title: String?,
 
@@ -47,24 +49,20 @@ data class Oeuvre(
 
     var collection: String?,
 
-    var details: String?
+    var details: String?,
+
+    //Collection
+    var state: Int?,
+
+    var rating: Float?,
+
+    var comment: String?,
+
+    var photo_path: String?,
+
+    var date_photo: String?
 ) : Serializable
 
 
-data class Bilingual(
-    var fr: String,
-    var en: String
-) : Serializable
 
-data class Location(
-    var lat: Double,
-    var lng: Double
-) : Serializable
 
-data class Artist(
-    var id: Int,
-    var name: String,
-    var alias: String,
-    var collective: Boolean
-
-) : Serializable

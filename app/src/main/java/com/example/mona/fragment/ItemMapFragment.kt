@@ -38,7 +38,7 @@ class ItemMapFragment : Fragment() {
         val mapController: IMapController = mMap!!.controller
         mapController.setZoom(18.0)
 
-        val oeuvre = safeArgs.itemLocation
+        val oeuvre = safeArgs.oeuvre
 
         val item_latitude = oeuvre.location!!.lat
         val item_longitude = oeuvre.location!!.lng

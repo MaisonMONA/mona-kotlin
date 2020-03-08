@@ -7,6 +7,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/monaYellow</item>
+    </style>
+
 
     <!--Toolbar Theme-->
     <style name="MonaTheme" parent="ThemeOverlay.AppCompat.Light">
@@ -19,7 +24,7 @@
         <item name="fontFamily">@font/gotham_book</item>
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">17dp</item>
     </style>
 
     <!-- The default font for RecyclerView items is too small.
@@ -41,10 +46,10 @@
     <style name="ItemAlignement" parent="Theme.AppCompat.NoActionBar">
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_margin">5dp</item>
-        <item name="android:maxLines">1</item>
         <item name="android:fontFamily">@font/gotham_book</item>
         <item name="android:textSize">15dp</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -29,6 +29,11 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
         repository.insertAll(oeuvreList)
     }
 
+    fun updateArtwork(id: Int, rating: Float?, comment: String?, state: Int?, path: String?, date: String?) = viewModelScope.launch {
+        repository.updateArtwork(id, rating, comment, state, path, date)
+    }
+
+
 
 }
 

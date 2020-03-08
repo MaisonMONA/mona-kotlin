@@ -8,6 +8,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ShareActionProvider
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -36,6 +38,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.navigation_drawer.*
 import org.osmdroid.views.MapView
 
 
@@ -62,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     private var mMap: MapView? = null
     private lateinit var oeuvreViewModel: OeuvreViewModel
+    private lateinit var lieuViewModel: LieuViewModel
     private lateinit var appBarConfiguration : AppBarConfiguration
 
     private companion object {
@@ -116,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                 setContentView(R.layout.activity_main)
 
                 oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+                lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 
                 setupMainActivity()
 
@@ -168,6 +173,7 @@ class MainActivity : AppCompatActivity() {
                     setContentView(R.layout.activity_main)
 
                     oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+                    lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 
                     setupMainActivity()
 
@@ -208,6 +214,7 @@ class MainActivity : AppCompatActivity() {
         val navController = host.navController
 
         val drawer: DrawerLayout? = findViewById(R.id.drawer_layout)
+        drawer?.closeDrawer(GravityCompat.START) //close drawer at start
 
         //username in the drawer
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -215,6 +222,14 @@ class MainActivity : AppCompatActivity() {
         val nameView: TextView = headerView.findViewById(R.id.nav_header_textView)
         val name = SaveSharedPreference.getUsername(this)
         nameView.text = name
+
+        //Sign out button implementation
+        val logoutButton: ImageButton = headerView.findViewById(R.id.logout_button)
+        logoutButton.setOnClickListener {
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
 
         //Specifiy top level destinations
         appBarConfiguration = AppBarConfiguration(

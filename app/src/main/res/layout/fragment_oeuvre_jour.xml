@@ -13,7 +13,7 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:padding="30dp"
+        android:padding="27dp"
         android:layout_marginRight="25dp"
         android:src="@drawable/odj_white">
 
@@ -26,7 +26,7 @@
         android:text="title"
         android:paddingHorizontal="20dp"
         android:maxLines="1"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:fontFamily="@font/gotham_bold"
         android:paddingBottom="15dp">
 

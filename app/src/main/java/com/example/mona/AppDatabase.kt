@@ -49,25 +49,39 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         fun getOeuvreList(): List<Oeuvre>?{
-            //API call to server to get all artworks. We extract solely the artworks
-            val artworksJson = ArtworksTask().execute().get()
-            val objectJson = JSONObject(artworksJson)
-            val dataArray = objectJson.getJSONArray("data").toString()
 
-            //Moshi is a library with built in type adapters to ease data parsing such as our case.
-            //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
-            val moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
+            val finalList : MutableList<Oeuvre> = mutableListOf()
 
-            //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
-            //efficiently loops through automatically with its adapter
-            val type = Types.newParameterizedType(List::class.java, Oeuvre::class.java)
-            val adapter: JsonAdapter<List<Oeuvre>> = moshi.adapter(type)
-            val oeuvreList: List<Oeuvre>? = adapter.fromJson(dataArray)
+            for (index in 1..14){
+                //API call to server to get all artworks. We extract solely the artworks
+                val artworksJson = ArtworksTask(index).execute().get()
+                val objectJson = JSONObject(artworksJson)
+                val dataArray = objectJson.getJSONArray("data").toString()
 
-            return oeuvreList
+                //Moshi is a library with built in type adapters to ease data parsing such as our case.
+                //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
+                val moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+
+                //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
+                //efficiently loops through automatically with its adapter
+                val type = Types.newParameterizedType(List::class.java, Oeuvre::class.java)
+                val adapter: JsonAdapter<List<Oeuvre>> = moshi.adapter(type)
+                val oeuvreList: List<Oeuvre>? = adapter.fromJson(dataArray)
+
+                val changed_list = oeuvreList?.toMutableList()
+
+                finalList?.let{ finalList ->
+                    changed_list?.let(finalList::addAll)
+                }
+            }
+
+            return finalList
         }
+
+
+
     }
 
     //getDatabase returns the singleton. It'll create the database the first
@@ -94,6 +108,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "artwork-database"
                 )
                     .addCallback(WordDatabaseCallback(scope))
+                    .allowMainThreadQueries()
                     .build()
 
                 INSTANCE = instance
