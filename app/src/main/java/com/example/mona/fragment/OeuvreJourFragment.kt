@@ -39,7 +39,7 @@ class OeuvreJourFragment : Fragment() {
                 val calendar = Calendar.getInstance()
                 val dayOfYear = calendar[Calendar.DAY_OF_YEAR]
 
-                val odj : Oeuvre? = oeuvrelist[dayOfYear]
+                val odj : Oeuvre = oeuvrelist[dayOfYear]
 
                 rootView.odj_title.text = odj?.title
 
@@ -48,24 +48,30 @@ class OeuvreJourFragment : Fragment() {
                 } else {
                     rootView.odj_artist_and_year.text = odj?.artists?.get(0)?.name + ", "+ odj?.produced_at?.substring(0,4)
                 }
-
+/*
                 var dimensionString : String? = ""
                 for (dimensionIndex in 0 until odj?.dimension!!.size){
                     dimensionString += odj.dimension!![dimensionIndex]
                     dimensionString += " "
                 }
+
+
                 rootView.odj_dimensions.text = dimensionString
 
-                rootView.odj_category.text = odj.category?.fr
-                rootView.odj_subcategory.text = odj.subcategory?.fr
+ */
+
+                rootView.odj_category.text = odj?.category?.fr
+                rootView.odj_subcategory.text = odj?.subcategory?.fr
 
                 rootView.findViewById<ImageButton>(R.id.button_map_odj)?.setOnClickListener {
                     val action = OeuvreJourFragmentDirections.openOdjMap(odj)
                     findNavController().navigate(action)
+
                 }
 
                 rootView.findViewById<ImageButton>(R.id.button_cam_odj)?.setOnClickListener {
-                    dispatchTakePictureIntent()
+                    val action = OeuvreJourFragmentDirections.odjToRating(odj)
+                    findNavController().navigate(action)
                 }
             }
 
@@ -80,12 +86,6 @@ class OeuvreJourFragment : Fragment() {
 
 
     }
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(activity?.packageManager)?.also {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
-    }
+
 
 }

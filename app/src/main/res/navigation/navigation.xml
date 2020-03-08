@@ -12,6 +12,9 @@
         <action
             android:id="@+id/open_odj_map"
             app:destination="@id/itemMap_dest" />
+        <action
+            android:id="@+id/odj_to_rating"
+            app:destination="@id/rating_dest" />
     </fragment>
 
     <fragment
@@ -20,6 +23,9 @@
         android:label="@string/Map"
         tools:layout="@layout/fragment_map">
 
+        <action
+            android:id="@+id/map_to_item"
+            app:destination="@id/item_dest" />
     </fragment>
 
     <fragment
@@ -38,7 +44,11 @@
         android:id="@+id/collection_dest"
         android:name="com.example.mona.fragment.CollectionFragment"
         android:label="@string/Collection"
-        tools:layout="@layout/fragment_collection"/>
+        tools:layout="@layout/fragment_collection">
+        <action
+            android:id="@+id/collection_to_item"
+            app:destination="@id/item_dest" />
+    </fragment>
 
     <fragment
         android:id="@+id/item_dest"

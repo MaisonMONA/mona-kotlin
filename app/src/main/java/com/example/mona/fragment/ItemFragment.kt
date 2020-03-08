@@ -46,14 +46,15 @@ class ItemFragment () : Fragment() {
             artistString += oeuvre.artists!!.get(artistIndex).name
         }
         view.itemArtist.text = artistString
-
+/*
         var dimensionString : String? = ""
         for (dimensionIndex in 0 until oeuvre.dimension!!.size){
             dimensionString += oeuvre.dimension!![dimensionIndex]
             dimensionString += " "
         }
-        view.itemDimensions.text = dimensionString
 
+        view.itemDimensions.text = dimensionString
+*/
         view.itemCategory.text = oeuvre.category?.fr
         view.itemSubcategory.text = oeuvre.subcategory?.fr
 

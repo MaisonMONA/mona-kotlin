@@ -1,18 +1,23 @@
 package com.example.mona.fragment
 
 import android.content.Context
+import android.location.Location
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.mona.LieuViewModel
 import com.example.mona.OeuvreViewModel
 import com.example.mona.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -28,6 +33,15 @@ class MapFragment : Fragment() {
     private var mMap : MapView? = null
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
     private val lieuViewModel: LieuViewModel by viewModels()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
+        }
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -48,7 +62,21 @@ class MapFragment : Fragment() {
         //TODO: User location is start point
         val mapController: IMapController = mMap!!.controller
         mapController.setZoom(15.0)
-        val startPoint = GeoPoint(45.5044372, -73.578502)
+
+        var latitude = 45.5044372
+        var longitude = -73.578502
+/*
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location : Location? ->
+                // Got last known location. In some rare situations this can be null.
+                latitude = location?.latitude
+                longitude = location?.longitude
+
+            }
+
+ */
+        var startPoint = GeoPoint(latitude,longitude)
+
         mapController.setCenter(startPoint)
 
         //Adding Items
@@ -62,8 +90,8 @@ class MapFragment : Fragment() {
                         val item_latitude = oeuvre.location!!.lat
                         val item_longitude = oeuvre.location!!.lng
                         val oeuvre_location = GeoPoint(item_latitude, item_longitude)
-                        val overlayItem = OverlayItem(oeuvre.title, oeuvre.category?.fr, oeuvre_location)
-                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.oeuvre_normal)
+                        val overlayItem = OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
+                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.ic_oeuvre_normal)
                         overlayItem.setMarker(markerDrawable)
                         items.add(overlayItem)
                     }
@@ -71,10 +99,17 @@ class MapFragment : Fragment() {
                         items,
                         object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
                             override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                                Toast.makeText(it, item.title, Toast.LENGTH_LONG).show()
                                 return true
                             }
 
                             override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                                //open item fragment
+                                val oeuvre = oeuvreList.get(item.snippet.toInt() - 1)
+                                if(findNavController().currentDestination?.id == R.id.map_dest){
+                                    val action = MapFragmentDirections.mapToItem(oeuvre)
+                                    findNavController().navigate(action)
+                                }
                                 return false
                             }
                         }, it)
@@ -92,14 +127,16 @@ class MapFragment : Fragment() {
                         val lieu_longitude = lieu.location!!.lng
                         val lieu_location = GeoPoint(lieu_latitude, lieu_longitude)
                         val overlayItem = OverlayItem(lieu.title, lieu.category?.fr, lieu_location)
-                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.lieu_normal)
+                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.ic_lieu_normal)
                         overlayItem.setMarker(markerDrawable)
                         lieuItems.add(overlayItem)
+
                     }
                     val overlayObject = ItemizedIconOverlay(
                         lieuItems,
                         object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
                             override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                                Toast.makeText(it, item.title, Toast.LENGTH_LONG).show()
                                 return true
                             }
 

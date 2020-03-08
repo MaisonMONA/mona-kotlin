@@ -30,8 +30,8 @@ data class Oeuvre(
     @TypeConverters(BilingualConverter::class)
     @field:Json(name = "subcategory") var subcategory: Bilingual?,
 
-    @TypeConverters(DimensionConverter::class)
-    @field:Json(name = "dimensions") var dimension: List<Any>?,
+    //@TypeConverters(DimensionConverter::class)
+    //@field:Json(name = "dimensions") var dimension: List<Any>?,
 
     @TypeConverters(BilingualListConverter::class)
     @field:Json(name = "materials") var materials: List<Bilingual>?,

@@ -83,13 +83,14 @@
                     android:text="TITLE, YEAR">
                 </TextView>
 
+                <!--
                 <TextView
                     android:id="@+id/itemDimensions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/ItemAlignement"
                     android:text="DIMENSIONS">
-                </TextView>
+                </TextView> -->
 
                 <TextView
                     android:id="@+id/itemCategory"
