@@ -20,7 +20,7 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
     init {
         // Gets reference to WordDao from WordRoomDatabase to construct
         // the correct WordRepository.
-        val oeuvreDao = AppDatabase.getDatabase(application,viewModelScope).oeuvreDAO()
+        val oeuvreDao = OeuvreDatabase.getDatabase(application,viewModelScope).oeuvreDAO()
         repository = OeuvreRepository(oeuvreDao)
         oeuvreList = repository.oeuvreList
     }

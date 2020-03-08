@@ -26,7 +26,7 @@ import org.json.JSONObject
     BilingualListConverter::class,
     DimensionConverter::class,
     LocationConverter::class)
-abstract class AppDatabase : RoomDatabase() {
+abstract class OeuvreDatabase : RoomDatabase() {
 
     abstract fun oeuvreDAO(): OeuvreDAO
 
@@ -90,12 +90,12 @@ abstract class AppDatabase : RoomDatabase() {
     // names it "word_database".
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var INSTANCE: OeuvreDatabase? = null
 
         fun getDatabase(
             context: Context,
             scope: CoroutineScope
-        ): AppDatabase {
+        ): OeuvreDatabase {
 
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
@@ -104,7 +104,7 @@ abstract class AppDatabase : RoomDatabase() {
 
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java,
+                    OeuvreDatabase::class.java,
                     "artwork-database"
                 )
                     .addCallback(WordDatabaseCallback(scope))

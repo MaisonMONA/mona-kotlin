@@ -13,6 +13,8 @@
     <string name="Opinion">Comment trouvé vous cette oeuvre?</string>
     <string name="Rating">Notez cette oeuvre</string>
 
+    <string name="artworksURL">https://picasso.iro.umontreal.ca/~mona/api/artworks</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
