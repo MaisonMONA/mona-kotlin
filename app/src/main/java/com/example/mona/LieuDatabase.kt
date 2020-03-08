@@ -49,24 +49,33 @@ abstract class LieuDatabase : RoomDatabase() {
         }
 
         fun getLieuList(): List<Lieu>?{
-            //API call to server to get all artworks. We extract solely the artworks
-            val artworksJson = PlacesTask().execute().get()
-            val objectJson = JSONObject(artworksJson)
-            val dataArray = objectJson.getJSONArray("data").toString()
+            val finalList : MutableList<Lieu> = mutableListOf()
 
-            //Moshi is a library with built in type adapters to ease data parsing such as our case.
-            //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
-            val moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
+            for (index in 1..9) {
+                //API call to server to get all artworks. We extract solely the artworks
+                val artworksJson = PlacesTask(index).execute().get()
+                val objectJson = JSONObject(artworksJson)
+                val dataArray = objectJson.getJSONArray("data").toString()
 
-            //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
-            //efficiently loops through automatically with its adapter
-            val type = Types.newParameterizedType(List::class.java, Lieu::class.java)
-            val adapter: JsonAdapter<List<Lieu>> = moshi.adapter(type)
-            val lieuList: List<Lieu>? = adapter.fromJson(dataArray)
+                //Moshi is a library with built in type adapters to ease data parsing such as our case.
+                //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
+                val moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
 
-            return lieuList
+                //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
+                //efficiently loops through automatically with its adapter
+                val type = Types.newParameterizedType(List::class.java, Lieu::class.java)
+                val adapter: JsonAdapter<List<Lieu>> = moshi.adapter(type)
+                val lieuList: List<Lieu>? = adapter.fromJson(dataArray)
+
+                val changed_list = lieuList?.toMutableList()
+
+                finalList?.let{ finalList ->
+                    changed_list?.let(finalList::addAll)
+                }
+            }
+            return finalList
         }
     }
 

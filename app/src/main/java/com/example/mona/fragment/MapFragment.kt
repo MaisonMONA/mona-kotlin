@@ -1,8 +1,10 @@
 package com.example.mona.fragment
 
 import android.content.Context
+import android.content.IntentSender
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +18,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.mona.LieuViewModel
 import com.example.mona.OeuvreViewModel
 import com.example.mona.R
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.OverlayItem
 
 
@@ -34,12 +39,12 @@ class MapFragment : Fragment() {
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
     private val lieuViewModel: LieuViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private  var mLatitude : Double = 45.5044372
+    private  var mLongitude : Double = -73.578502
+    private lateinit var mapController : IMapController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        context?.let {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
-        }
 
     }
 
@@ -54,30 +59,31 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        context?.let{
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
+        }
+
         mMap = view.findViewById(R.id.main_map)
         mMap?.setTileSource(TileSourceFactory.MAPNIK)
-        mMap?.setMultiTouchControls(true);
+        mMap?.setMultiTouchControls(true)
 
         //Start Point Montreal
         //TODO: User location is start point
-        val mapController: IMapController = mMap!!.controller
-        mapController.setZoom(15.0)
+        mapController = mMap!!.controller
+        mapController.setZoom(17.0)
 
-        var latitude = 45.5044372
-        var longitude = -73.578502
-/*
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                // Got last known location. In some rare situations this can be null.
-                latitude = location?.latitude
-                longitude = location?.longitude
+        var startPoint = GeoPoint(mLatitude,mLongitude)
 
-            }
+        val startMarker = Marker(mMap)
+        startMarker.position = startPoint
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        mMap?.getOverlays()?.add(startMarker)
 
- */
-        var startPoint = GeoPoint(latitude,longitude)
 
-        mapController.setCenter(startPoint)
+        //TODO: pick a marker
+        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_location));
+        startMarker.setTitle("Start point");
 
         //Adding Items
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList->
@@ -148,11 +154,15 @@ class MapFragment : Fragment() {
                 }
             }
         })
-
+        mapController.setCenter(GeoPoint(mLatitude,mLongitude))
+        mapController.animateTo(GeoPoint(mLatitude,mLongitude))
     }
 
     override fun onResume() {
         super.onResume()
+        fusedLocationClient.lastLocation
+        mapController.setCenter(GeoPoint(mLatitude,mLongitude))
+        mapController.animateTo(GeoPoint(mLatitude,mLongitude))
         mMap?.onResume()
     }
 
