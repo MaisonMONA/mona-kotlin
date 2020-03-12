@@ -61,7 +61,7 @@ class RatingFragment : Fragment() {
 
             val date = getDate()
 
-            oeuvreViewModel.updateOeuvre(oeuvre.id, itemRating, comment, state_collected, currentPhotoPath, date)
+            oeuvreViewModel.updateArtwork(oeuvre.id, itemRating, comment, state_collected, currentPhotoPath, date)
             val action = RatingFragmentDirections.ratingToList()
             findNavController().navigate(action)
         }
