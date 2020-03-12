@@ -1,10 +1,9 @@
 package com.example.mona.fragment
 
+import android.Manifest
+import android.app.Application
 import android.content.Context
-import android.content.IntentSender
-import android.location.Location
 import android.os.Bundle
-import android.os.Looper
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
@@ -18,13 +17,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.mona.LieuViewModel
 import com.example.mona.OeuvreViewModel
 import com.example.mona.R
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import org.osmdroid.api.IMapController
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapController
+import org.osmdroid.util.MapTileIndex
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.Marker
@@ -65,7 +64,26 @@ class MapFragment : Fragment() {
         }
 
         mMap = view.findViewById(R.id.main_map)
-        mMap?.setTileSource(TileSourceFactory.MAPNIK)
+        mMap = MapView(
+            context
+        )
+        mMap?.setTileSource(object : OnlineTileSourceBase(
+            "MapTiler",
+            0,
+            18,
+            256,
+            "",
+            arrayOf("https://api.maptiler.com/maps/basic/key=" + activity?.applicationContext?.applicationInfo?.metaData?.get(resources.getString(R.string.MapTiler)))
+        ) {
+
+            override fun getTileURLString(pMapTileIndex: Long): String? {
+                return ((getBaseUrl()
+                        + MapTileIndex.getZoom(pMapTileIndex)
+                        ).toString() + "/" + MapTileIndex.getY(pMapTileIndex)
+                    .toString() + "/" + MapTileIndex.getX(pMapTileIndex)
+                        + mImageFilenameEnding)
+            }
+        })
         mMap?.setMultiTouchControls(true)
 
         //Start Point Montreal
