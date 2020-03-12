@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
-@Database(entities = arrayOf(Oeuvre::class), version = 1, exportSchema = false)
+@Database(entities = [Oeuvre::class], version = 1, exportSchema = false)
 @TypeConverters(
     ArtistConverter::class,
     BilingualConverter::class,
@@ -89,31 +89,24 @@ abstract class OeuvreDatabase : RoomDatabase() {
     // object in the application context from the WordRoomDatabase class and
     // names it "word_database".
     companion object {
+        // Singleton prevents multiple instances of database opening at the
+        // same time.
         @Volatile
         private var INSTANCE: OeuvreDatabase? = null
 
-        fun getDatabase(
-            context: Context,
-            scope: CoroutineScope
-        ): OeuvreDatabase {
-
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
-
-            return INSTANCE ?: synchronized(this) {
-
+        fun getDatabase(context: Context): OeuvreDatabase {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
+            }
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     OeuvreDatabase::class.java,
-                    "artwork-database"
-                )
-                    .addCallback(WordDatabaseCallback(scope))
-                    .allowMainThreadQueries()
-                    .build()
-
+                    "oeuvre_database"
+                ).build()
                 INSTANCE = instance
-                // return instance
-                instance
+                return instance
             }
         }
     }

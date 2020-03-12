@@ -8,8 +8,6 @@ import com.example.mona.entity.Oeuvre
 import kotlinx.coroutines.launch
 
 // Class extends AndroidViewModel and requires application as a parameter.
-// You can also use a ViewModel to share data between fragments.
-// https://developer.android.com/topic/libraries/architecture/viewmodel
 class OeuvreViewModel(application: Application) : AndroidViewModel(application) {
 
     // The ViewModel maintains a reference to the repository to get data.
@@ -20,23 +18,23 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
     init {
         // Gets reference to WordDao from WordRoomDatabase to construct
         // the correct WordRepository.
-        val oeuvreDao = OeuvreDatabase.getDatabase(application,viewModelScope).oeuvreDAO()
-        repository = OeuvreRepository(oeuvreDao)
+        val wordsDao = OeuvreDatabase.getDatabase(application).oeuvreDAO()
+        repository = OeuvreRepository(wordsDao)
         oeuvreList = repository.oeuvreList
     }
 
-    fun insertAll(oeuvreList: List<Oeuvre>) = viewModelScope.launch {
-        repository.insertAll(oeuvreList)
+    /**
+     * The implementation of insert() in the database is completely hidden from the UI.
+     * Room ensures that you're not doing any long running operations on
+     * the main thread, blocking the UI, so we don't need to handle changing Dispatchers.
+     * ViewModels have a coroutine scope based on their lifecycle called
+     * viewModelScope which we can use here.
+     */
+    fun insert(oeuvre: Oeuvre) = viewModelScope.launch {
+        repository.insert(oeuvre)
     }
 
-    fun updateArtwork(id: Int, rating: Float?, comment: String?, state: Int?, path: String?, date: String?) = viewModelScope.launch {
-        repository.updateArtwork(id, rating, comment, state, path, date)
+    fun updateOeuvre(id: Int, itemRating:Float?, comment:String?, state_collected : Int?, currentPhotoPath:String?, date:String?) = viewModelScope.launch {
+        repository.updateArtwork(id,itemRating,comment,state_collected,currentPhotoPath,date)
     }
-
-
-
 }
-
-//to bind view models in different fragments visit
-//fragment ktx at https://developer.android.com/kotlin/ktx#fragment
-//share data between fragments at https://developer.android.com/topic/libraries/architecture/viewmodel.html

@@ -17,6 +17,9 @@ interface OeuvreDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(oeuvres: List<Oeuvre>?)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(oeuvre: Oeuvre?)
+
     @Query("DELETE FROM artwork_table")
     suspend fun deleteAll()
 
