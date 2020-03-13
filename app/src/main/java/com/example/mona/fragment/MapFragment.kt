@@ -1,8 +1,8 @@
 package com.example.mona.fragment
 
-import android.Manifest
-import android.app.Application
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -17,17 +17,24 @@ import androidx.navigation.fragment.findNavController
 import com.example.mona.LieuViewModel
 import com.example.mona.OeuvreViewModel
 import com.example.mona.R
+import com.example.mona.entity.Lieu
+import com.example.mona.entity.Oeuvre
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.api.IMapController
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import org.osmdroid.tileprovider.tilesource.ITileSource
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.util.MapTileIndex
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
+import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 
 
 // Instances of this class are fragments representing a single
@@ -59,37 +66,12 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        context?.let{
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
-        }
-
         mMap = view.findViewById(R.id.main_map)
-        mMap = MapView(
-            context
-        )
-        mMap?.setTileSource(object : OnlineTileSourceBase(
-            "MapTiler",
-            0,
-            18,
-            256,
-            "",
-            arrayOf("https://api.maptiler.com/maps/basic/key=" + activity?.applicationContext?.applicationInfo?.metaData?.get(resources.getString(R.string.MapTiler)))
-        ) {
-
-            override fun getTileURLString(pMapTileIndex: Long): String? {
-                return ((getBaseUrl()
-                        + MapTileIndex.getZoom(pMapTileIndex)
-                        ).toString() + "/" + MapTileIndex.getY(pMapTileIndex)
-                    .toString() + "/" + MapTileIndex.getX(pMapTileIndex)
-                        + mImageFilenameEnding)
-            }
-        })
         mMap?.setMultiTouchControls(true)
-
         //Start Point Montreal
         //TODO: User location is start point
         mapController = mMap!!.controller
-        mapController.setZoom(17.0)
+        mapController.setZoom(11.0)
 
         var startPoint = GeoPoint(mLatitude,mLongitude)
 
@@ -104,18 +86,18 @@ class MapFragment : Fragment() {
         startMarker.setTitle("Start point");
 
         //Adding Items
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList->
-            if(oeuvreList.size != 0){
+        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer<List<Oeuvre>> { oeuvreList->
+            if(oeuvreList.isNotEmpty()){
 
                 //See: https://osmdroid.github.io/osmdroid/javadocs/osmdroid-android/debug/index.html?org/osmdroid/views/overlay/ItemizedIconOverlay.html
                 val items = ArrayList<OverlayItem>()
-                context?.let{
+
                     for (oeuvre in oeuvreList){
                         val item_latitude = oeuvre.location!!.lat
                         val item_longitude = oeuvre.location!!.lng
                         val oeuvre_location = GeoPoint(item_latitude, item_longitude)
                         val overlayItem = OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
-                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.ic_oeuvre_normal)
+                        val markerDrawable = ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_oeuvre_normal)
                         overlayItem.setMarker(markerDrawable)
                         items.add(overlayItem)
                     }
@@ -123,7 +105,7 @@ class MapFragment : Fragment() {
                         items,
                         object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
                             override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                                Toast.makeText(it, item.title, Toast.LENGTH_LONG).show()
+                                Toast.makeText(context?.applicationContext, item.title, Toast.LENGTH_LONG).show()
                                 return true
                             }
 
@@ -136,14 +118,14 @@ class MapFragment : Fragment() {
                                 }
                                 return false
                             }
-                        }, it)
+                        },this.requireContext())
                     mMap?.overlays?.add(overlayObject)
                 }
-            }
+
         })
 
-        lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList ->
-            if(lieuList.size != 0){
+        lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer<List<Lieu>> { lieuList ->
+            if(lieuList.isNotEmpty()){
                 val lieuItems = ArrayList<OverlayItem>()
                 context?.let{
                     for(lieu in lieuList){
@@ -178,10 +160,9 @@ class MapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        fusedLocationClient.lastLocation
+        mMap?.onResume()
         mapController.setCenter(GeoPoint(mLatitude,mLongitude))
         mapController.animateTo(GeoPoint(mLatitude,mLongitude))
-        mMap?.onResume()
     }
 
     override fun onPause() {

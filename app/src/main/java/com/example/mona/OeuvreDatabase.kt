@@ -30,7 +30,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
     abstract fun oeuvreDAO(): OeuvreDAO
 
-    private class WordDatabaseCallback(
+    private class OeuvreDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
@@ -107,7 +107,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                     OeuvreDatabase::class.java,
                     "artwork-database"
                 )
-                    .addCallback(WordDatabaseCallback(scope))
+                    .addCallback(OeuvreDatabaseCallback(scope))
                     .allowMainThreadQueries()
                     .build()
 
