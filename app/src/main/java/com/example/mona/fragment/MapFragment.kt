@@ -3,6 +3,9 @@ package com.example.mona.fragment
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -21,6 +24,7 @@ import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.OnCompleteListener
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.ITileSource
@@ -39,7 +43,7 @@ import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 
 // Instances of this class are fragments representing a single
 // object in our collection.
-class MapFragment : Fragment() {
+class MapFragment : Fragment(), LocationListener {
 
     private var mMap : MapView? = null
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
@@ -67,6 +71,11 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mMap = view.findViewById(R.id.main_map)
+        fusedLocationClient =  LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
+            mLatitude = location!!.latitude
+            mLongitude = location.longitude
+        }
         mMap?.setMultiTouchControls(true)
         //Start Point Montreal
         //TODO: User location is start point
@@ -133,7 +142,7 @@ class MapFragment : Fragment() {
                         val lieu_longitude = lieu.location!!.lng
                         val lieu_location = GeoPoint(lieu_latitude, lieu_longitude)
                         val overlayItem = OverlayItem(lieu.title, lieu.category?.fr, lieu_location)
-                        val markerDrawable = ContextCompat.getDrawable(it, R.drawable.ic_lieu_normal)
+                        val markerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_lieu_normal)
                         overlayItem.setMarker(markerDrawable)
                         lieuItems.add(overlayItem)
 
@@ -142,14 +151,19 @@ class MapFragment : Fragment() {
                         lieuItems,
                         object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
                             override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                                Toast.makeText(it, item.title, Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireContext(), item.title, Toast.LENGTH_LONG).show()
                                 return true
                             }
 
                             override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                                //open item fragment
+                                val lieu = lieuList.get(item.snippet.toInt() - 1)
+                                if(findNavController().currentDestination?.id == R.id.map_dest){
+
+                                }
                                 return false
                             }
-                        }, it)
+                        }, this.requireContext())
                     mMap?.overlays?.add(overlayObject)
                 }
             }
@@ -168,5 +182,27 @@ class MapFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         mMap?.onPause();
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        fusedLocationClient.lastLocation.result
+        if (fusedLocationClient.lastLocation.isSuccessful) {
+            mapController.setCenter(GeoPoint(mLatitude,mLongitude))
+            mapController.animateTo(GeoPoint(mLatitude,mLongitude))
+        }
+
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        TODO("Not yet implemented")
+    }
+
+    // Location Listener
+    override fun onProviderEnabled(provider: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderDisabled(provider: String?) {
+        TODO("Not yet implemented")
     }
 }
