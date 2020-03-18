@@ -22,8 +22,6 @@ import com.example.mona.OeuvreViewModel
 import com.example.mona.R
 import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.api.IMapController
@@ -48,7 +46,6 @@ class MapFragment : Fragment(), LocationListener {
     private var mMap : MapView? = null
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
     private val lieuViewModel: LieuViewModel by viewModels()
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private  var mLatitude : Double = 45.5044372
     private  var mLongitude : Double = -73.578502
     private lateinit var mapController : IMapController
@@ -71,11 +68,7 @@ class MapFragment : Fragment(), LocationListener {
         super.onViewCreated(view, savedInstanceState)
 
         mMap = view.findViewById(R.id.main_map)
-        fusedLocationClient =  LocationServices.getFusedLocationProviderClient(requireContext())
-        fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
-            mLatitude = location!!.latitude
-            mLongitude = location.longitude
-        }
+
         mMap?.setMultiTouchControls(true)
         //Start Point Montreal
         //TODO: User location is start point
@@ -185,11 +178,7 @@ class MapFragment : Fragment(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location?) {
-        fusedLocationClient.lastLocation.result
-        if (fusedLocationClient.lastLocation.isSuccessful) {
-            mapController.setCenter(GeoPoint(mLatitude,mLongitude))
-            mapController.animateTo(GeoPoint(mLatitude,mLongitude))
-        }
+
 
     }
 
