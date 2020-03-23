@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ShareActionProvider
@@ -32,6 +33,7 @@ import com.example.mona.fragment.CollectionFragment
 import com.example.mona.fragment.ListFragment
 import com.example.mona.fragment.MapFragment
 import com.example.mona.fragment.OeuvreJourFragment
+import com.example.mona.navigation.TabManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
@@ -61,7 +63,7 @@ import org.osmdroid.views.MapView
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var mMap: MapView? = null
     private lateinit var oeuvreViewModel: OeuvreViewModel
@@ -74,14 +76,27 @@ class MainActivity : AppCompatActivity() {
         private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION: Int = 3
     }
 
+    private var mSavedInstanceState: Bundle? = null
+
+
+    private val tabManager: TabManager by lazy { TabManager(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //We set the state
+        mSavedInstanceState = savedInstanceState
+
+        //We start the data base
+        oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+        lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 
         //Check if user has current session via Shared Prefferences
         if (SaveSharedPreference.getToken(this).length == 0){
             val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(myIntent)
         } else {
+
             /*
 
             We must check that all permissions are granted before using the app
@@ -119,48 +134,21 @@ class MainActivity : AppCompatActivity() {
                 //  Setup Main Activity
                 setContentView(R.layout.activity_main)
 
-                oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
-                lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
+                bottom_nav_view.setOnNavigationItemSelectedListener(this)
 
-                setupMainActivity()
+                //So Tab Icons have theyre own color
+                bottom_nav_view.setItemIconTintList(null)
 
 
-
+                if (mSavedInstanceState == null) {
+                    tabManager.currentController = tabManager.navOdjController
+                    setSupportActionBar(findViewById(R.id.toolbar))
+                }
 
             }
 
         }
     }
-
-
-    override fun onResume() {
-        super.onResume()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
-/*
-        oeuvreViewModel.oeuvreList.observe(this, Observer {
-            println(it.size)
-        })
-
- */
-
-
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
-    }
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
@@ -172,10 +160,16 @@ class MainActivity : AppCompatActivity() {
                     //  Setup Main Activity
                     setContentView(R.layout.activity_main)
 
-                    oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
-                    lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 
-                    setupMainActivity()
+                    bottom_nav_view.setOnNavigationItemSelectedListener(this)
+
+                    //So tab icons have theyre own color
+                    bottom_nav_view.setItemIconTintList(null)
+
+                    if (mSavedInstanceState == null) {
+                        tabManager.currentController = tabManager.navOdjController
+                        setSupportActionBar(findViewById(R.id.toolbar))
+                    }
 
                     //Collecting Artworks
                     //TODO: permission for internet
@@ -202,81 +196,47 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // Called when all permissions are granted
-    private fun setupMainActivity() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
-
-        // Set up Action Bar and Navigation Drawer
-        val navController = host.navController
-
-        val drawer: DrawerLayout? = findViewById(R.id.drawer_layout)
-        drawer?.closeDrawer(GravityCompat.START) //close drawer at start
-
-        //username in the drawer
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        val headerView: View = navigationView.getHeaderView(0)
-        val nameView: TextView = headerView.findViewById(R.id.nav_header_textView)
-        val name = SaveSharedPreference.getUsername(this)
-        nameView.text = name
-
-        //Sign out button implementation
-        val logoutButton: ImageButton = headerView.findViewById(R.id.logout_button)
-        logoutButton.setOnClickListener {
-            val intent = Intent(applicationContext, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-
-        //Specifiy top level destinations
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.odj_dest, R.id.map_dest, R.id.list_dest, R.id.collection_dest),
-            drawer)
-
-        setupActionBar(navController, appBarConfiguration)
-
-        findViewById<NavigationView>(R.id.nav_view)
-            .setupWithNavController(navController)
-
-        //Handle Up navigations
-        onSupportNavigateUp()
-
-        // Setup Bottom Navigation View
-        setupBottomNavMenu(navController)
-
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            val dest: String = try {
-                resources.getResourceName(destination.id)
-            } catch (e: Resources.NotFoundException) {
-                Integer.toString(destination.id)
-            }
-
-        }
-
+    override fun onResume() {
+        super.onResume()
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
     }
 
-    private fun setupBottomNavMenu(navController: NavController) {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-        bottomNav?.setupWithNavController(navController)
-        bottomNav?.setItemIconTintList(null);
-
-    }
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.my_nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    override fun onPause() {
+        super.onPause()
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().save(this, prefs);
+        mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
-    private fun setupActionBar(navController: NavController,
-                               appBarConfig : AppBarConfiguration) {
-        // This allows NavigationUI to decide what label to show in the action bar
-        // By using appBarConfig, it will also determine whether to
-        // show the up arrow or drawer menu icon
-        setupActionBarWithNavController(navController, appBarConfig)
+        tabManager.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        tabManager.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        tabManager.supportNavigateUpTo(upIntent)
+    }
+
+    override fun onBackPressed() {
+        tabManager.onBackPressed()
+    }
+
+    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
+        tabManager.switchTab(menuItem.itemId)
+        return true
     }
 
 
