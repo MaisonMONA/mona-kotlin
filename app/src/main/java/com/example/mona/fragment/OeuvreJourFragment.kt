@@ -1,30 +1,40 @@
 package com.example.mona.fragment
 
-import android.app.Activity.RESULT_OK
-import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.mona.OeuvreViewModel
 import com.example.mona.R
 import com.example.mona.entity.Oeuvre
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_oeuvre_jour.view.*
 import java.util.*
+
 
 class OeuvreJourFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
     private lateinit var odj: Oeuvre
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //https://stackoverflow.com/questions/51043428/handling-back-button-in-android-navigation-component
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                //do nothing
+            }
+        }
+        callback.isEnabled = true
+        requireActivity().onBackPressedDispatcher.addCallback(this@OeuvreJourFragment, callback)
+    }
 
 
 
