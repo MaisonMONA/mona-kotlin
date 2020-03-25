@@ -22,7 +22,6 @@ import com.example.mona.OeuvreViewModel
 import com.example.mona.R
 import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
-import com.google.android.gms.tasks.OnCompleteListener
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.ITileSource
@@ -163,18 +162,26 @@ class MapFragment : Fragment(), LocationListener {
         })
         mapController.setCenter(GeoPoint(mLatitude,mLongitude))
         mapController.animateTo(GeoPoint(mLatitude,mLongitude))
+
+
     }
 
     override fun onResume() {
         super.onResume()
+
         mMap?.onResume()
         mapController.setCenter(GeoPoint(mLatitude,mLongitude))
         mapController.animateTo(GeoPoint(mLatitude,mLongitude))
+
+
     }
 
     override fun onPause() {
         super.onPause()
+
         mMap?.onPause();
+
+
     }
 
     override fun onLocationChanged(location: Location?) {

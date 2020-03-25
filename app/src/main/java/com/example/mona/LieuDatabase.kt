@@ -71,7 +71,7 @@ abstract class LieuDatabase : RoomDatabase() {
 
                 val changed_list = lieuList?.toMutableList()
 
-                finalList?.let{ finalList ->
+                finalList.let{
                     changed_list?.let(finalList::addAll)
                 }
             }

@@ -107,6 +107,4 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.materialVersion"
 
     implementation 'org.jetbrains.anko:anko-common:0.9'
-
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
 }

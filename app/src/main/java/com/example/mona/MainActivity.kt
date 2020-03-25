@@ -4,43 +4,18 @@ package com.example.mona
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.ImageButton
-import android.widget.ShareActionProvider
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.mona.fragment.CollectionFragment
-import com.example.mona.fragment.ListFragment
-import com.example.mona.fragment.MapFragment
-import com.example.mona.fragment.OeuvreJourFragment
 import com.example.mona.navigation.TabManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.navigation_drawer.*
 import org.osmdroid.views.MapView
 
 
@@ -66,7 +41,6 @@ import org.osmdroid.views.MapView
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var mMap: MapView? = null
-    private lateinit var oeuvreViewModel: OeuvreViewModel
     private lateinit var lieuViewModel: LieuViewModel
     private lateinit var appBarConfiguration : AppBarConfiguration
 
@@ -87,9 +61,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         //We set the state
         mSavedInstanceState = savedInstanceState
 
-        //We start the data base
-        oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
-        lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 
         //Check if user has current session via Shared Prefferences
         if (SaveSharedPreference.getToken(this).length == 0){
@@ -131,6 +102,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
             }else{
                 // Both permissions are granted:
+
+
                 //  Setup Main Activity
                 setContentView(R.layout.activity_main)
 
@@ -155,6 +128,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
 
                     // Both permissions are granted:
                     //  Setup Main Activity

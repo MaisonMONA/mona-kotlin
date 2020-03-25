@@ -24,7 +24,7 @@ import java.util.*
 class OeuvreJourFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
-    private val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var odj: Oeuvre
 
 
 
@@ -32,52 +32,52 @@ class OeuvreJourFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         var rootView = inflater.inflate(R.layout.fragment_oeuvre_jour, container, false)
+
+
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer{ oeuvrelist ->
-            //Since the database takes a longer moment to load on the back thread
-            if(oeuvrelist.size>0){
+            val calendar = Calendar.getInstance()
+            val dayOfYear = calendar[Calendar.DAY_OF_YEAR]
 
-                val calendar = Calendar.getInstance()
-                val dayOfYear = calendar[Calendar.DAY_OF_YEAR]
+            odj = oeuvrelist[dayOfYear]
 
-                val odj : Oeuvre = oeuvrelist[dayOfYear]
+            rootView.odj_title.text = odj?.title
 
-                rootView.odj_title.text = odj?.title
-
-                if(odj?.artists?.size == 0){
-                    rootView.odj_artist_and_year.text = odj.produced_at?.substring(0,4)
-                } else {
-                    rootView.odj_artist_and_year.text = odj?.artists?.get(0)?.name + ", "+ odj?.produced_at?.substring(0,4)
-                }
-/*
-                var dimensionString : String? = ""
-                for (dimensionIndex in 0 until odj?.dimension!!.size){
-                    dimensionString += odj.dimension!![dimensionIndex]
-                    dimensionString += " "
-                }
-
-
-                rootView.odj_dimensions.text = dimensionString
-
- */
-
-                rootView.odj_category.text = odj?.category?.fr
-                rootView.odj_subcategory.text = odj?.subcategory?.fr
-
-                rootView.findViewById<ImageButton>(R.id.button_map_odj)?.setOnClickListener {
-                    val action = OeuvreJourFragmentDirections.openOdjMap(odj)
-                    findNavController().navigate(action)
-
-                }
-
-                rootView.findViewById<ImageButton>(R.id.button_cam_odj)?.setOnClickListener {
-                    val action = OeuvreJourFragmentDirections.odjToRating(odj)
-                    findNavController().navigate(action)
-                }
+            if(odj?.artists?.size == 0){
+                rootView.odj_artist_and_year.text = odj.produced_at?.substring(0,4)
+            } else {
+                rootView.odj_artist_and_year.text = odj?.artists?.get(0)?.name + ", "+ odj?.produced_at?.substring(0,4)
             }
+            /*
+            var dimensionString : String? = ""
+            for (dimensionIndex in 0 until odj?.dimension!!.size){
+                dimensionString += odj.dimension!![dimensionIndex]
+                dimensionString += " "
+            }
+
+
+            rootView.odj_dimensions.text = dimensionString
+
+            */
+
+            rootView.odj_category.text = odj?.category?.fr
+            rootView.odj_subcategory.text = odj?.subcategory?.fr
+
+            rootView.findViewById<ImageButton>(R.id.button_map_odj)?.setOnClickListener {
+                val action = OeuvreJourFragmentDirections.openOdjMap(odj)
+                findNavController().navigate(action)
+
+            }
+
+            rootView.findViewById<ImageButton>(R.id.button_cam_odj)?.setOnClickListener {
+                val action = OeuvreJourFragmentDirections.odjToRating(odj)
+                findNavController().navigate(action)
+            }
+
 
         })
 
         return rootView
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

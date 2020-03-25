@@ -60,7 +60,7 @@ class ItemFragment () : Fragment() {
 
         //the artwork state is collected
         //display displayed artwork
-        if(oeuvre?.state == 2){
+        if(oeuvre.state == 2){
             val button_layout = view.findViewById<LinearLayout>(R.id.itemButtons)
             button_layout.layoutParams.height = 0
 

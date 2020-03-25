@@ -12,8 +12,8 @@ import android.preference.PreferenceManager
 
 object SaveSharedPreference {
 
-    const val PREF_USER_NAME = "username"
-    const val TOKEN = "token"
+    private const val PREF_USER_NAME:String = "username"
+    private const val TOKEN:String = "token"
 
     fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)

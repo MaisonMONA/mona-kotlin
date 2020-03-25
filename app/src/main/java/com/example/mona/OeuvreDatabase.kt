@@ -72,7 +72,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
                 val changed_list = oeuvreList?.toMutableList()
 
-                finalList?.let{ finalList ->
+                finalList.let{
                     changed_list?.let(finalList::addAll)
                 }
             }
