@@ -205,7 +205,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onBackPressed() {
-        tabManager.onBackPressed()
+        // We are not on the last tab: do backpressed
+        // Otherwise ignore backpressed
+        if (!tabManager.isLastTab()){
+            tabManager.onBackPressed()
+        }
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

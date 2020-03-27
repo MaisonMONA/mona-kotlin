@@ -53,6 +53,14 @@ class TabManager(private val mainActivity: MainActivity) {
         }
     }
 
+    fun isLastTab() : Boolean{
+        var isEmpty = false
+        if (tabHistory.size <= 1){
+            isEmpty =  true
+        }
+        return isEmpty
+    }
+
     private val odjTabContainer: View by lazy { mainActivity.odjTabContainer }
     private val mapTabContainer: View by lazy { mainActivity.mapTabContainer }
     private val listTabContainer: View by lazy { mainActivity.listTabContainer }
