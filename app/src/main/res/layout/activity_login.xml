@@ -11,9 +11,9 @@
 
     <EditText
         android:id="@+id/login_username"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
+        android:layout_margin="20dp"
         android:textColor="@color/black"
         android:hint="username"
         android:textColorHint="@color/grey"
@@ -23,9 +23,9 @@
 
     <EditText
         android:id="@+id/login_password"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
+        android:layout_margin="20dp"
         android:textColor="@color/black"
         android:hint="password"
         android:inputType="textPassword"
@@ -37,8 +37,9 @@
 
     <TextView
         android:id="@+id/login_error_message"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:text="Either username or password is incorrect"
         android:textColor="@color/red"
         android:visibility="invisible">
@@ -48,9 +49,9 @@
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_margin="20dp"
         android:backgroundTint="@color/androidBlue"
         android:backgroundTintMode="multiply"
         android:text="login" />
@@ -58,8 +59,9 @@
     <Button
         android:id="@+id/register_button"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:text="No account? Register here"
         android:textColor="@color/androidBlue"
         android:textAllCaps="false"/>

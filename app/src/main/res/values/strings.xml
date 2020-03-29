@@ -13,6 +13,12 @@
     <string name="Opinion">Comment trouvé vous cette oeuvre?</string>
     <string name="Rating">Notez cette oeuvre</string>
     <string name="MapTiler">MapTiler</string>
+    <string name="PNG">.png</string>
+    <string name="slash">/</string>
+    <string name="interogationMark">\?</string>
+    <string name="key">key</string>
+    <string name="equal">=</string>
+    <string name="MapTilerURL">https://api.maptiler.com/maps/basic/256/</string>
     <string name="artworksURL">https://picasso.iro.umontreal.ca/~mona/api/artworks</string>
 
     <!-- TODO: Remove or change this placeholder text -->
