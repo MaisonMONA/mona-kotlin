@@ -19,24 +19,18 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        //MainActivity does not start before the database has been loaded
-
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
         lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 
-        oeuvreViewModel.oeuvreList.observe(this, Observer{ oeuvrelist ->
-            //Submit the list to the adapter
-            if (!oeuvrelist.isEmpty()){
-
+        oeuvreViewModel.oeuvreList.observe(this, Observer { oeuvreList ->
+            if(!oeuvreList.isEmpty()){
                 lieuViewModel.lieuList.observe(this, Observer {lieuList ->
-                    if(!lieuList.isEmpty()){
-                        startActivity(Intent(this,MainActivity::class.java))
-                    }
+                    startActivity(Intent(this,MainActivity::class.java))
                 })
-
             }
         })
+
+
 
     }
 }

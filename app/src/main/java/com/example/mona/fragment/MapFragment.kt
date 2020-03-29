@@ -113,10 +113,7 @@ class MapFragment : Fragment(), LocationListener {
                             override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
                                 //open item fragment
                                 val oeuvre = oeuvreList.get(item.snippet.toInt() - 1)
-                                if(findNavController().currentDestination?.id == R.id.map_dest){
-                                    val action = MapFragmentDirections.mapToItem(oeuvre)
-                                    findNavController().navigate(action)
-                                }
+
                                 return false
                             }
                         },this.requireContext())
@@ -150,9 +147,7 @@ class MapFragment : Fragment(), LocationListener {
                             override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
                                 //open item fragment
                                 val lieu = lieuList.get(item.snippet.toInt() - 1)
-                                if(findNavController().currentDestination?.id == R.id.map_dest){
 
-                                }
                                 return false
                             }
                         }, this.requireContext())

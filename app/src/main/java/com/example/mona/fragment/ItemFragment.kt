@@ -1,7 +1,12 @@
 package com.example.mona.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +15,28 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.mona.OeuvreViewModel
 import com.example.mona.R
+import com.example.mona.entity.Oeuvre
 import kotlinx.android.synthetic.main.fragment_item.view.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ItemFragment () : Fragment() {
 
     val safeArgs : ItemFragmentArgs by navArgs()
-    private val REQUEST_IMAGE_CAPTURE = 1
+    private val REQUEST_TAKE_PHOTO = 1
+    private lateinit var currentPhotoPath: String
+
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -95,21 +111,60 @@ class ItemFragment () : Fragment() {
             }
 
             view.findViewById<ImageButton>(R.id.button_cam)?.setOnClickListener {
-
-                val action = ItemFragmentDirections.itemToRating(oeuvre)
-                findNavController().navigate(action)
+                dispatchTakePictureIntent(oeuvre)
             }
 
         }
 
-
-
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    context?.let {
+                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.example.android.fileprovider", photoFile)
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
 
+                        onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
+
+                            oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
+
+                            val action = ItemFragmentDirections.itemToRating(oeuvre)
+                            findNavController().navigate(action)
+                        }
+                    }
+
+                }
+            }
+        }
     }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
 
 
 }

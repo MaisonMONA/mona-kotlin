@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,9 +29,7 @@ import java.util.*
 class RatingFragment : Fragment() {
 
     val safeArgs : RatingFragmentArgs by navArgs()
-    private val REQUEST_TAKE_PHOTO = 1
-    lateinit var currentPhotoPath: String
-    private val oeuvreViewModel : OeuvreViewModel by viewModels()
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -39,8 +38,6 @@ class RatingFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_rating, container, false)
-
-        dispatchTakePictureIntent()
 
         return rootView
     }
@@ -51,58 +48,24 @@ class RatingFragment : Fragment() {
         val oeuvre = safeArgs.oeuvre
 
         view.done_rating_button.setOnClickListener {
+
             val ratingBar = view.findViewById<RatingBar>(R.id.rating)
-            val itemRating  = ratingBar.rating.toFloat()
+            val rating  = ratingBar.rating
 
             val itemComment = view.findViewById<TextView>(R.id.comment)
             val comment = itemComment.text.toString()
 
-            val state_collected = 2
+            val state = 2
 
-            val date = getDate()
+            val date = getDate().toString()
 
-            oeuvreViewModel.updateArtwork(oeuvre.id, itemRating, comment, state_collected, currentPhotoPath, date)
-            val action = RatingFragmentDirections.ratingToList()
-            findNavController().navigate(action)
-        }
-    }
 
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(activity?.packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    context?.let {
-                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.example.android.fileprovider", photoFile)
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
-                    }
+            oeuvreViewModel.updateRating(oeuvre.id, rating, comment, state, date)
 
-                }
-            }
-        }
-    }
+            Toast.makeText(requireActivity(), "Oeuvre #"+oeuvre.id+" ajoutée", Toast.LENGTH_LONG).show()
 
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File = activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
+            //Pop everything from the stack that is not the Home Pager
+            findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
         }
     }
 

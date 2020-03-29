@@ -34,8 +34,6 @@ class CollectionFragment : Fragment() {
         recyclerView.adapter = adapter
 
         adapter.onItemClick = {oeuvre ->
-            val action = CollectionFragmentDirections.collectionToItem(oeuvre)
-            findNavController().navigate(action)
         }
 
         recyclerView.layoutManager = LinearLayoutManager(context)

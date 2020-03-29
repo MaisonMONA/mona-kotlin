@@ -1,32 +1,51 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/offWhite</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/offWhite</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorAccent">@color/offWhite</item>
+        <item name="colorSurface">@color/grey</item>
+        <item name="colorSecondary">@color/monaYellow</item>
+        <item name="android:colorBackground">@color/offWhite</item>
     </style>
+
+    <style name="Theme.Mona" parent="AppTheme"/>
+
+    <style name="Theme.Mona.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Mona.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+
+    <style name="TextAppearance.Mona.Toolbar.Text" parent="TextAppearance.MaterialComponents.Headline5" >
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/toolbar_text_size</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Tablayout.Text" parent="TextAppearance.MaterialComponents.Headline5" >
+        <item name="android:textColor">@color/grey</item>
+        <item name="tabSelectedTextColor">?attr/colorOnPrimary</item>
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/tab_text_size</item>
+    </style>
+
+    <style name="Theme.Mona.Tablayout" parent="@style/Widget.MaterialComponents.TabLayout.Colored">
+        <item name="tabTextAppearance">@style/TextAppearance.Mona.Tablayout.Text</item>
+        <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
+        <item name="tabIndicatorColor">@color/monaYellow</item>
+    </style>
+
 
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/monaYellow</item>
     </style>
 
-    <style name="BottomNavigationTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/black</item>
-
-        <item name="android:textColorSecondary">@color/grey</item>
-        <item name="fontFamily">@font/gotham_bold</item>
-    </style>
-
-
-    <!--Toolbar Theme-->
-    <style name="MonaTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="titleTextColor">@color/black</item>
-        <item name="fontFamily">@font/gotham_bold</item>
-        <item name="android:text">MONA</item>
-        <item name="background">@color/offWhite</item>
-    </style>
 
     <style name="odj_text" >
         <item name="fontFamily">@font/gotham_book</item>
@@ -58,10 +77,4 @@
         <item name="android:textSize">15dp</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

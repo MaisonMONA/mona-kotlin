@@ -2,53 +2,35 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/odj_dest">
+    app:startDestination="@id/fragmentViewPager_dest">
 
     <fragment
-        android:id="@+id/odj_dest"
-        android:name="com.example.mona.fragment.OeuvreJourFragment"
-        android:label="@string/ODJ"
-        tools:layout="@layout/fragment_oeuvre_jour">
-        <action
-            android:id="@+id/open_odj_map"
-            app:destination="@id/itemMap_dest" />
+        android:id="@+id/fragmentViewPager_dest"
+        android:name="com.example.mona.fragment.HomeViewPagerFragment"
+        tools:layout="@layout/fragment_view_pager">
         <action
             android:id="@+id/odj_to_rating"
-            app:destination="@id/rating_dest" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/map_dest"
-        android:name="com.example.mona.fragment.MapFragment"
-        android:label="@string/Map"
-        tools:layout="@layout/fragment_map">
-
+            app:destination="@id/itemMap_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/map_to_item"
-            app:destination="@id/item_dest" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/list_dest"
-        android:name="com.example.mona.fragment.ListFragment"
-        android:label="@string/List"
-        tools:layout="@layout/fragment_list">
-
+            android:id="@+id/odj_to_map"
+            app:destination="@id/rating_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/open_item"
-            app:destination="@id/item_dest">
-        </action>
+            android:id="@+id/home_to_item"
+            app:destination="@id/item_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
-    <fragment
-        android:id="@+id/collection_dest"
-        android:name="com.example.mona.fragment.CollectionFragment"
-        android:label="@string/Collection"
-        tools:layout="@layout/fragment_collection">
-        <action
-            android:id="@+id/collection_to_item"
-            app:destination="@id/item_dest" />
-    </fragment>
 
     <fragment
         android:id="@+id/item_dest"
@@ -57,28 +39,22 @@
         tools:layout="@layout/fragment_item">
         <argument
             android:name="item_selected"
-            app:argType="com.example.mona.entity.Oeuvre"
-            app:nullable="true" />
+            app:argType="com.example.mona.entity.Oeuvre" />
         <action
             android:id="@+id/open_item_map"
-            app:destination="@id/itemMap_dest" />
+            app:destination="@id/itemMap_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/item_to_rating"
-            app:destination="@id/rating_dest" />
+            app:destination="@id/rating_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
-
-    <fragment
-
-        android:id="@+id/settings_dest"
-        android:name="com.example.mona.fragment.SettingsFragment"
-        android:label="@string/Settings"
-        tools:layout="@layout/fragment_settings" />
-
-    <fragment
-        android:id="@+id/badge_dest"
-        android:name="com.example.mona.fragment.BadgeFragment"
-        android:label="@string/Badge"
-        tools:layout="@layout/fragment_badge" />
 
     <fragment
         android:id="@+id/itemMap_dest"
@@ -100,9 +76,6 @@
         <argument
             android:name="oeuvre"
             app:argType="com.example.mona.entity.Oeuvre"/>
-        <action
-            android:id="@+id/rating_to_list"
-            app:destination="@id/list_dest" />
     </fragment>
 
 

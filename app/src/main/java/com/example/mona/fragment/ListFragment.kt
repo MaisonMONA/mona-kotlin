@@ -36,8 +36,11 @@ class ListFragment : Fragment() {
         //Give action to item click in adapter
         adapter.onItemClick = { oeuvre ->
             //Setup new fragment Oeuvre
-            val action = ListFragmentDirections.openItem(oeuvre)
+            val action = HomeViewPagerFragmentDirections.homeToItem(oeuvre)
             findNavController().navigate(action)
+
+            println(oeuvre.state)
+
         }
 
         //Set a layout manager

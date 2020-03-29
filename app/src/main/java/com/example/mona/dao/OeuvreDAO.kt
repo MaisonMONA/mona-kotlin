@@ -23,7 +23,9 @@ interface OeuvreDAO {
     @Query("DELETE FROM artwork_table")
     suspend fun deleteAll()
 
-    @Query("UPDATE artwork_table SET state= :state, photo_path=:path, comment=:comment, rating=:rating, date_photo=:date WHERE id = :id")
-    fun updateArtwork(id: Int, rating: Float?, comment: String?, state: Int?, path: String?, date: String?)
+    @Query("UPDATE artwork_table SET state= :state, comment=:comment, rating=:rating, date_photo=:date WHERE id = :id")
+    fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?)
 
+    @Query("UPDATE artwork_table SET photo_path= :path WHERE id = :id")
+    fun updatePath(id: Int, path: String?)
 }

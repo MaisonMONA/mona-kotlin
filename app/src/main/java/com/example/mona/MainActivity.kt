@@ -3,22 +3,15 @@ package com.example.mona
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.AppBarConfiguration
-import com.example.mona.navigation.TabManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.views.MapView
-
-
+import androidx.databinding.DataBindingUtil.setContentView
+import com.example.mona.databinding.ActivityMainBinding
 
 
 /*
@@ -38,11 +31,9 @@ import org.osmdroid.views.MapView
 
 
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private var mMap: MapView? = null
-    private lateinit var lieuViewModel: LieuViewModel
-    private lateinit var appBarConfiguration : AppBarConfiguration
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -50,24 +41,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION: Int = 3
     }
 
-    private var mSavedInstanceState: Bundle? = null
-
-
-    private val tabManager: TabManager by lazy { TabManager(this) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //We set the state
-        mSavedInstanceState = savedInstanceState
-
 
         //Check if user has current session via Shared Prefferences
         if (SaveSharedPreference.getToken(this).length == 0){
             val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(myIntent)
         } else {
-
             /*
 
             We must check that all permissions are granted before using the app
@@ -102,26 +83,44 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
             }else{
                 // Both permissions are granted:
-
-
                 //  Setup Main Activity
-                setContentView(R.layout.activity_main)
+                setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
-                bottom_nav_view.setOnNavigationItemSelectedListener(this)
-
-                //So Tab Icons have theyre own color
-                bottom_nav_view.setItemIconTintList(null)
-
-
-                if (mSavedInstanceState == null) {
-                    tabManager.currentController = tabManager.navOdjController
-                    setSupportActionBar(findViewById(R.id.toolbar))
-                }
 
             }
 
         }
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
+/*
+        oeuvreViewModel.oeuvreList.observe(this, Observer {
+            println(it.size)
+        })
+
+ */
+
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().save(this, prefs);
+        mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
@@ -129,21 +128,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
-
                     // Both permissions are granted:
                     //  Setup Main Activity
-                    setContentView(R.layout.activity_main)
+                    setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
-
-                    bottom_nav_view.setOnNavigationItemSelectedListener(this)
-
-                    //So tab icons have theyre own color
-                    bottom_nav_view.setItemIconTintList(null)
-
-                    if (mSavedInstanceState == null) {
-                        tabManager.currentController = tabManager.navOdjController
-                        setSupportActionBar(findViewById(R.id.toolbar))
-                    }
 
                     //Collecting Artworks
                     //TODO: permission for internet
@@ -168,50 +156,5 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
     }
-
-
-    override fun onResume() {
-        super.onResume()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        tabManager.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        tabManager.onRestoreInstanceState(savedInstanceState)
-    }
-
-    override fun supportNavigateUpTo(upIntent: Intent) {
-        tabManager.supportNavigateUpTo(upIntent)
-    }
-
-    override fun onBackPressed() {
-        tabManager.onBackPressed()
-    }
-
-    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        tabManager.switchTab(menuItem.itemId)
-        return true
-    }
-
 
 }

@@ -21,8 +21,12 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
         oeuvreDao.insert(oeuvre)
     }
 
-    suspend fun updateArtwork(id: Int, rating: Float?, comment: String?, state: Int?, path: String?, date: String?){
-        oeuvreDao.updateArtwork(id, rating, comment, state, path, date)
+    suspend fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
+        oeuvreDao.updateRating(id, rating, comment, state, date)
+    }
+
+    suspend fun updatePath(id: Int, path: String?){
+        oeuvreDao.updatePath(id, path)
     }
 
 

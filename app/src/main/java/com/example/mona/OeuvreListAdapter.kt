@@ -10,7 +10,6 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.entity.Oeuvre
-import com.example.mona.fragment.ListFragmentDirections
 
 class OeuvreListAdapter internal constructor(
     context: Context?
@@ -52,9 +51,9 @@ class OeuvreListAdapter internal constructor(
 
         //Initially, sort the list alphabetically
         //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin
-        val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
+        //val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
 
-        this.oeuvreList = sortedList
+        this.oeuvreList = oeuvres
 
         notifyDataSetChanged()
     }

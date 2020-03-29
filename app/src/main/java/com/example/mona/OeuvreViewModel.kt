@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mona.entity.Oeuvre
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 // Class extends AndroidViewModel and requires application as a parameter.
@@ -14,6 +15,7 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
 
     // The ViewModel maintains a reference to the repository to get data.
     private val repository: OeuvreRepository
+
     // LiveData gives us updated words when they change.
     val oeuvreList: LiveData<List<Oeuvre>>
 
@@ -25,12 +27,16 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
         oeuvreList = repository.oeuvreList
     }
 
-    fun insertAll(oeuvreList: List<Oeuvre>) = viewModelScope.launch {
-        repository.insertAll(oeuvreList)
+    fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateRating(id, rating, comment, state, date)
+        }
     }
 
-    fun updateArtwork(id: Int, rating: Float?, comment: String?, state: Int?, path: String?, date: String?) = viewModelScope.launch {
-        repository.updateArtwork(id, rating, comment, state, path, date)
+    fun updatePath(id: Int, path: String?){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updatePath(id, path)
+        }
     }
 
 

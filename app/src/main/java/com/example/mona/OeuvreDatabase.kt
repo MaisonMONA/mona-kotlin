@@ -108,7 +108,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
                     "artwork-database"
                 )
                     .addCallback(OeuvreDatabaseCallback(scope))
-                    .allowMainThreadQueries()
                     .build()
 
                 INSTANCE = instance
