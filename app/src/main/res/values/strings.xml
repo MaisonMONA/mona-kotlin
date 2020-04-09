@@ -24,4 +24,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="oeuvre_targetted">L\'Oeuvre est ciblé</string>
+    <string name="oeuvre_untargetted">L\'Oeuvre n\'est plus ciblé</string>
+
 </resources>

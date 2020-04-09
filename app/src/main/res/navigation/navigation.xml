@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/item_dest"
-        android:name="com.example.mona.fragment.ItemFragment"
+        android:name="com.example.mona.fragment.OeuvreDetailFragment"
         android:label="@string/Item"
         tools:layout="@layout/fragment_item">
         <argument

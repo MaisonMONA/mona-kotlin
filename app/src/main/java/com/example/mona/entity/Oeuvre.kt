@@ -2,12 +2,13 @@ package com.example.mona.entity
 
 // All data properties of an artwork
 // Bult in Moshi Adapter translates them directly into its instance
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.mona.converter.*
+import com.example.mona.entity.Artist
+import com.example.mona.entity.Bilingual
+import com.example.mona.entity.Location
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.Serializable
@@ -30,8 +31,8 @@ data class Oeuvre(
     @TypeConverters(BilingualConverter::class)
     @field:Json(name = "subcategory") var subcategory: Bilingual?,
 
-    //@TypeConverters(DimensionConverter::class)
-    //@field:Json(name = "dimensions") var dimension: List<Any>?,
+    @TypeConverters(DimensionConverter::class)
+    @field:Json(name = "dimensions") var dimension: List<Any>?,
 
     @TypeConverters(BilingualListConverter::class)
     @field:Json(name = "materials") var materials: List<Bilingual>?,

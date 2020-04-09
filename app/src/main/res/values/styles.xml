@@ -6,10 +6,13 @@
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/offWhite</item>
         <item name="colorOnSurface">@color/black</item>
-        <item name="colorAccent">@color/offWhite</item>
         <item name="colorSurface">@color/grey</item>
         <item name="colorSecondary">@color/monaYellow</item>
+        <item name="colorSecondaryVariant">@color/bluePowder</item>
         <item name="android:colorBackground">@color/offWhite</item>
+
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.Mona" parent="AppTheme"/>
@@ -34,6 +37,33 @@
         <item name="android:textSize">@dimen/tab_text_size</item>
     </style>
 
+
+    <!-- Item Text Styles -->
+    <style name="TextAppearance.Mona.Item.Title.Text" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">@dimen/item_title_size</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Item.Artist.Text" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/item_artist_size</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Item.Attributes.Text" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/item_others_size</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+
+    <style name="TextAppearance.Mona.Item.Opinion.Text" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/item_others_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Theme.Mona.Tablayout" parent="@style/Widget.MaterialComponents.TabLayout.Colored">
         <item name="tabTextAppearance">@style/TextAppearance.Mona.Tablayout.Text</item>
         <item name="tabIndicatorHeight">@dimen/tab_indicator_height</item>
@@ -44,6 +74,8 @@
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/monaYellow</item>
+        <item name="android:rating">0</item>
+        <item name="android:stepSize">0.5</item>
     </style>
 
 
@@ -67,6 +99,9 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:background">@drawable/splash_screen</item>
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <!-- Item Alignement -->

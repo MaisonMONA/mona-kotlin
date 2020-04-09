@@ -3,4 +3,25 @@
     <dimen name="tab_indicator_height">3dp</dimen>
     <dimen name="tab_text_size">12dp</dimen>
     <dimen name="toolbar_text_size">20dp</dimen>
+
+    <dimen name="oeuvre_detail_app_bar_height">500dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
+    <dimen name="fab_bottom_padding">72dp</dimen>
+    <dimen name="oeuvre_comment_min_height">500dp</dimen>
+
+    <dimen name="item_background_logo_height">84dp</dimen>
+    <dimen name="item_background_logo_width">250dp</dimen>
+    <dimen name="item_button_vertical_margin">60dp</dimen>
+    <dimen name="item_button_horizontal_margin">12dp</dimen>
+    <dimen name="item_button_size">60dp</dimen>
+
+    <dimen name="item_title_size">18dp</dimen>
+    <dimen name="item_artist_size">20dp</dimen>
+    <dimen name="item_others_size">14dp</dimen>
+
+    <!-- Per Material Design specs: -->
+    <!-- https://material.io/design/components/buttons-floating-action-button.html#specs -->
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

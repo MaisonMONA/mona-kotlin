@@ -6,12 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
 import com.example.mona.*
+import com.example.mona.adapters.*
 import com.example.mona.databinding.*
-import com.google.android.material.tabs.TabLayout
 
 import com.google.android.material.tabs.TabLayoutMediator
 

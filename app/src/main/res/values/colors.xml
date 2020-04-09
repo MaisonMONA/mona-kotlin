@@ -8,7 +8,13 @@
     <color name="monaYellow">#FAD900</color>
     <color name="offWhite">#F6F6F6</color>
     <color name="black">#000000</color>
+
     <color name="grey">#7D7D7D</color>
     <color name="red">#FD0000</color>
     <color name="androidBlue">#478ADB</color>
+    <color name="white">#FFFFFF</color>
+    <color name="ligh_grey">#D1D1D1</color>
+
+    <color name="target">#000000</color>
+    <color name="none">#D1D1D1</color>
 </resources>

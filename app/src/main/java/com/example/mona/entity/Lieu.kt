@@ -6,10 +6,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.mona.converter.*
+import com.example.mona.entity.Bilingual
+import com.example.mona.entity.Location
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.Serializable
-import java.util.*
 
 
 @Entity(tableName = "place_table")
