@@ -3,11 +3,14 @@
     <dimen name="tab_indicator_height">3dp</dimen>
     <dimen name="tab_text_size">12dp</dimen>
     <dimen name="toolbar_text_size">20dp</dimen>
+    <dimen name="tab_icon_size">28dp</dimen>
 
     <dimen name="oeuvre_detail_app_bar_height">500dp</dimen>
+    <dimen name="margin_large">28dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_extra_small">4dp</dimen>
+
     <dimen name="fab_bottom_padding">72dp</dimen>
     <dimen name="oeuvre_comment_min_height">500dp</dimen>
 
@@ -24,4 +27,13 @@
     <!-- Per Material Design specs: -->
     <!-- https://material.io/design/components/buttons-floating-action-button.html#specs -->
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="margin_odj_horizontal">48dp</dimen>
+    <dimen name="margin_odj_vertical">124dp</dimen>
+    <dimen name="odj_image_size">124dp</dimen>
+    <dimen name="odj_fragment_name_size">28dp</dimen>
+    <dimen name="odj_title_size">20dp</dimen>
+    <dimen name="odj_attributes_size">16dp</dimen>
+    <dimen name="odj_cam_size">90dp</dimen>
+    <dimen name="odj_map_size">70dp</dimen>
 </resources>

@@ -1,6 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.mona.viewmodels.OeuvreDetailViewModel" />
+
+        <variable
+            name="callback"
+            type="com.example.mona.fragment.OeuvreDetailFragment.Callback" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSecondaryVariant">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/margin_odj_horizontal"
+            android:layout_marginVertical="@dimen/margin_odj_vertical">
+
+            <TextView
+                android:id="@+id/odj_name"
+                style="@style/TextAppearance.Mona.Odj.Fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="Oeuvre du jour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/odj_image"
+                android:layout_width="@dimen/odj_image_size"
+                android:layout_height="@dimen/odj_image_size"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:src="@drawable/odj_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_name"
+                tools:text="Hans Schleeh" />
+
+            <TextView
+                android:id="@+id/odj_title"
+                style="@style/TextAppearance.Mona.Odj.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@{viewModel.oeuvre.title}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_image"
+                tools:text="Summer Camp 67" />
+
+            <View
+                android:id="@+id/odj_seperator"
+                android:layout_width="100dp"
+                android:layout_height="3dp"
+                android:background="?attr/colorPrimary"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginEnd="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_title"/>
+
+            <TextView
+                android:id="@+id/odj_artist"
+                style="@style/TextAppearance.Mona.Odj.Attributes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@{viewModel.artists}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_seperator"
+                tools:text="Laurent Gascon, 1989"/>
+
+            <TextView
+                android:id="@+id/odj_dimensions"
+                style="@style/TextAppearance.Mona.Odj.Attributes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@{viewModel.dimensions}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_artist"
+                tools:text="10 x 10 m"/>
+
+            <TextView
+                android:id="@+id/odj_category"
+                style="@style/TextAppearance.Mona.Odj.Attributes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@{viewModel.oeuvre.category.fr}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_dimensions"
+                tools:text="Sculpture"/>
+
+            <TextView
+                android:id="@+id/odj_subcategory"
+                style="@style/TextAppearance.Mona.Odj.Attributes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@{viewModel.oeuvre.subcategory.fr}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_category"
+                tools:text="Installation, Murales"/>
+
+            <!--Adjusting approximately same image button size by different marginTop -->
+            <ImageButton
+                android:id="@+id/button_cam_odj"
+                android:layout_width="@dimen/odj_cam_size"
+                android:layout_height="@dimen/odj_cam_size"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginHorizontal="@dimen/margin_extra_small"
+                android:background="@drawable/odj_camera"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintEnd_toStartOf="@+id/button_map_odj"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/odj_subcategory" />
+
+            <ImageButton
+                android:id="@+id/button_map_odj"
+                android:layout_width="@dimen/odj_map_size"
+                android:layout_height="@dimen/odj_map_size"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginHorizontal="@dimen/margin_extra_small"
+                android:background="@drawable/odj_map"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_cam_odj"
+                app:layout_constraintTop_toBottomOf="@id/odj_subcategory" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+</layout>

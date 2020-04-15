@@ -34,12 +34,14 @@ import java.util.*
 
 class OeuvreDetailFragment () : Fragment() {
 
-    val safeArgs : OeuvreDetailFragmentArgs by navArgs()
-    private val REQUEST_TAKE_PHOTO = 1
-    private lateinit var currentPhotoPath: String
-
+    //View Models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
     private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
+    val safeArgs : OeuvreDetailFragmentArgs by navArgs()
+
+    //Photo Attributes
+    private val REQUEST_TAKE_PHOTO = 1
+    private lateinit var currentPhotoPath: String
 
 
     override fun onCreateView(inflater: LayoutInflater,

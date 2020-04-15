@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil.setContentView
 import com.example.mona.R
 import com.example.mona.data.SaveSharedPreference
 import com.example.mona.databinding.ActivityMainBinding
+import com.example.mona.fragment.HomeViewPagerFragment
 import org.osmdroid.views.MapView
 
 
@@ -38,8 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     private var mMap: MapView? = null
 
-    //length of navigation bar presence change in onWindowFocusChanged()
-    private val FOCUS_LENGHT = 5000.toLong()
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -111,10 +110,8 @@ class MainActivity : AppCompatActivity() {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
-
-
-
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -125,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
 
-
+/*
     //Hide Navigation Bar after 3 seconds
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -158,6 +155,8 @@ class MainActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
+
+ */
 
 
 
