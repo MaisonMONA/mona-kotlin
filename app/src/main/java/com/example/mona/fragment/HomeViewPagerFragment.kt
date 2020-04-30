@@ -8,7 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.mona.R
-import com.example.mona.adapters.PagerAdapter
+import com.example.mona.adapters.*
 import com.example.mona.databinding.FragmentViewPagerBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -43,6 +43,9 @@ class HomeViewPagerFragment(): Fragment() {
 
         viewPager.adapter = PagerAdapter(this)
 
+        //Save states of four fragments
+        viewPager.offscreenPageLimit = 4
+
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         val bottomNavigation = binding.bottomNavView
@@ -50,10 +53,10 @@ class HomeViewPagerFragment(): Fragment() {
         bottomNavigation.setOnNavigationItemSelectedListener(
             BottomNavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
-                    R.id.odj_dest -> viewPager.currentItem = 0
-                    R.id.map_dest -> viewPager.currentItem = 1
-                    R.id.list_dest -> viewPager.currentItem = 2
-                    R.id.collection_dest -> viewPager.currentItem = 3
+                    R.id.odj_dest -> viewPager.currentItem = ODJ_PAGE_INDEX
+                    R.id.map_dest -> viewPager.currentItem = MAP_PAGE_INDEX
+                    R.id.list_dest -> viewPager.currentItem = LIST_PAGE_INDEX
+                    R.id.collection_dest -> viewPager.currentItem = COLLECTION_PAGE_INDEX
                 }
                 true
             })

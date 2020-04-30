@@ -124,6 +124,9 @@ dependencies {
 
     // UI
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+
+    //Google Play Services Location
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 }
 kapt {
     generateStubs = true

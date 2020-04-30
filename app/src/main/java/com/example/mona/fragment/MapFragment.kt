@@ -1,8 +1,10 @@
 package com.example.mona.fragment
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.location.Location
-import android.location.LocationListener
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -13,175 +15,172 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.example.mona.R
+import com.example.mona.databinding.FragmentMapBinding
+import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
-import com.example.mona.R
-import com.example.mona.entity.Lieu
-import com.example.mona.entity.Oeuvre
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import org.osmdroid.api.IMapController
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
 import org.osmdroid.views.overlay.OverlayItem
 
 
 // Instances of this class are fragments representing a single
 // object in our collection.
-class MapFragment : Fragment(), LocationListener {
+class MapFragment : Fragment() {
 
-    private var mMap : MapView? = null
-    private val oeuvreViewModel : OeuvreViewModel by viewModels()
+    private lateinit var map : MapView
+    private lateinit var mapController: IMapController
+    private val ZOOM_LEVEL = 17.0
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
     private val lieuViewModel: LieuViewModel by viewModels()
-    private  var mLatitude : Double = 45.5044372
-    private  var mLongitude : Double = -73.578502
-    private lateinit var mapController : IMapController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val ctx: Context? = context
+        org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val ctx: Context? = context
-        org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
 
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        val binding = FragmentMapBinding.inflate(inflater, container, false)
+
+        map = binding.mainMap
+        map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setMultiTouchControls(true)
+
+        mapController = map.controller
+        mapController.setZoom(ZOOM_LEVEL)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location : Location? ->
+                //val point = GeoPoint(location!!.latitude, location!!.longitude)
+                val point = GeoPoint(45.5044372,-73.578502)
+
+                mapController.setCenter(point)
+
+                //your items
+                val userItems = ArrayList<OverlayItem>()
+
+                val userOverlay = OverlayItem(
+                    "You",
+                    "Your position",
+                    point
+                )
+
+                val userOverlayMarker = resize(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user_navigation), 26)
+                userOverlay.setMarker(userOverlayMarker)
+                userItems.add(userOverlay)
+
+                val overlayObject = ItemizedIconOverlay(
+                    userItems,
+                    object : OnItemGestureListener<OverlayItem> {
+                        override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                            Toast.makeText(requireActivity(), item.title, Toast.LENGTH_LONG).show()
+                            return true
+                        }
+
+                        override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                            //open item fragment
+
+                            return false
+                        }
+                    },
+                    this.requireContext())
+
+                map.overlays.add(overlayObject)
+            }
+
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mMap = view.findViewById(R.id.main_map)
+        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer {oeuvreList ->
 
-        mMap?.setMultiTouchControls(true)
-        //Start Point Montreal
-        //TODO: User location is start point
-        mapController = mMap!!.controller
-        mapController.setZoom(11.0)
+            lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList ->
 
-        var startPoint = GeoPoint(mLatitude,mLongitude)
-
-        val startMarker = Marker(mMap)
-        startMarker.position = startPoint
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        mMap?.getOverlays()?.add(startMarker)
-
-
-        //TODO: pick a marker
-        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_location));
-        startMarker.setTitle("Start point");
-
-        //Adding Items
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer<List<Oeuvre>> { oeuvreList->
-            if(oeuvreList.isNotEmpty()){
-
-                //See: https://osmdroid.github.io/osmdroid/javadocs/osmdroid-android/debug/index.html?org/osmdroid/views/overlay/ItemizedIconOverlay.html
                 val items = ArrayList<OverlayItem>()
 
-                    for (oeuvre in oeuvreList){
-                        val item_latitude = oeuvre.location!!.lat
-                        val item_longitude = oeuvre.location!!.lng
-                        val oeuvre_location = GeoPoint(item_latitude, item_longitude)
-                        val overlayItem = OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
-                        val markerDrawable = ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_oeuvre_normal)
-                        overlayItem.setMarker(markerDrawable)
-                        items.add(overlayItem)
-                    }
-                    val overlayObject = ItemizedIconOverlay(
-                        items,
-                        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
-                            override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                                Toast.makeText(context?.applicationContext, item.title, Toast.LENGTH_LONG).show()
-                                return true
-                            }
+                for (oeuvre in oeuvreList) {
+                    val item_latitude = oeuvre.location!!.lat
+                    val item_longitude = oeuvre.location!!.lng
+                    val oeuvre_location = GeoPoint(item_latitude, item_longitude)
+                    val overlayItem = OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
+                    val markerDrawable = resize(ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_oeuvre_normal), 125)
 
-                            override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
-                                //open item fragment
-                                val oeuvre = oeuvreList.get(item.snippet.toInt() - 1)
-
-                                return false
-                            }
-                        },this.requireContext())
-                    mMap?.overlays?.add(overlayObject)
+                    overlayItem.setMarker(markerDrawable)
+                    items.add(overlayItem)
                 }
 
-        })
+                for (lieu in lieuList) {
+                    val item_latitude = lieu.location!!.lat
+                    val item_longitude = lieu.location!!.lng
+                    val lieu_location = GeoPoint(item_latitude, item_longitude)
+                    val overlayItem = OverlayItem(lieu.title, lieu.id.toString(), lieu_location)
+                    val markerDrawable = resize(ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_lieu_normal), 125)
 
-        lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer<List<Lieu>> { lieuList ->
-            if(lieuList.isNotEmpty()){
-                val lieuItems = ArrayList<OverlayItem>()
-                context?.let{
-                    for(lieu in lieuList){
-                        val lieu_latitude = lieu.location!!.lat
-                        val lieu_longitude = lieu.location!!.lng
-                        val lieu_location = GeoPoint(lieu_latitude, lieu_longitude)
-                        val overlayItem = OverlayItem(lieu.title, lieu.category?.fr, lieu_location)
-                        val markerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_lieu_normal)
-                        overlayItem.setMarker(markerDrawable)
-                        lieuItems.add(overlayItem)
-
-                    }
-                    val overlayObject = ItemizedIconOverlay(
-                        lieuItems,
-                        object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
-                            override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                                Toast.makeText(requireContext(), item.title, Toast.LENGTH_LONG).show()
-                                return true
-                            }
-
-                            override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
-                                //open item fragment
-                                val lieu = lieuList.get(item.snippet.toInt() - 1)
-
-                                return false
-                            }
-                        }, this.requireContext())
-                    mMap?.overlays?.add(overlayObject)
+                    overlayItem.setMarker(markerDrawable)
+                    items.add(overlayItem)
                 }
-            }
+
+                val overlayObject = ItemizedIconOverlay(
+                    items,
+                    object : OnItemGestureListener<OverlayItem> {
+                        override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                            Toast.makeText(requireActivity(), item.title, Toast.LENGTH_LONG).show()
+                            return true
+                        }
+
+                        override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                            //open item fragment
+
+                            return false
+                        }
+                    },
+                    this.requireContext())
+
+                map.overlays.add(overlayObject)
+
+            })
+
         })
-        mapController.setCenter(GeoPoint(mLatitude,mLongitude))
-        mapController.animateTo(GeoPoint(mLatitude,mLongitude))
 
 
     }
 
     override fun onResume() {
         super.onResume()
-
-        mMap?.onResume()
-        mapController.setCenter(GeoPoint(mLatitude,mLongitude))
-        mapController.animateTo(GeoPoint(mLatitude,mLongitude))
-
-
+        map.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-
-        mMap?.onPause();
-
-
+        map.onPause()
     }
 
-    override fun onLocationChanged(location: Location?) {
-
-
+    private fun resize(image: Drawable?, dimension: Int): Drawable {
+        val b = (image as BitmapDrawable).bitmap
+        val bitmapResized = Bitmap.createScaledBitmap(b, dimension, dimension, false)
+        return BitmapDrawable(resources, bitmapResized)
     }
 
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        TODO("Not yet implemented")
-    }
 
-    // Location Listener
-    override fun onProviderEnabled(provider: String?) {
-        TODO("Not yet implemented")
-    }
 
-    override fun onProviderDisabled(provider: String?) {
-        TODO("Not yet implemented")
-    }
+
 }
