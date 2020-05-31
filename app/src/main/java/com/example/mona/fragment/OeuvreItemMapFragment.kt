@@ -16,10 +16,10 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 
-class ItemMapFragment : Fragment() {
+class OeuvreItemMapFragment : Fragment() {
 
     private var mMap: MapView? = null
-    val safeArgs : ItemMapFragmentArgs by navArgs()
+    val safeArgs : OeuvreItemMapFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

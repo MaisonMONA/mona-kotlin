@@ -5,18 +5,23 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/monaYellow">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collection_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/offWhite"
-        tools:listitem="@layout/recyclerview_item"
-
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        tools:listitem="@layout/recyclerview_collection_oeuvre"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:spanCount="2"
         android:scrollbars="vertical"
         android:scrollbarSize="8dp"
+        android:clipToPadding="false"
         android:scrollbarThumbVertical="@color/monaYellow"
+        tools:context="com.example.mona.activities.MainActivity"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

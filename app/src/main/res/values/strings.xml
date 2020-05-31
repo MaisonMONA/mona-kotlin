@@ -12,6 +12,9 @@
     <string name="ItemMap">Map of Item</string>
     <string name="Opinion">Comment trouvé vous cette oeuvre?</string>
     <string name="Rating">Notez cette oeuvre</string>
+    <string name="LieuRating">Notez cette place</string>
+
+
     <string name="MapTiler">MapTiler</string>
     <string name="PNG">.png</string>
     <string name="slash">/</string>
@@ -26,5 +29,28 @@
 
     <string name="oeuvre_targetted">L\'Oeuvre est ciblé</string>
     <string name="oeuvre_untargetted">L\'Oeuvre n\'est plus ciblé</string>
+
+    <string name="target_oeuvre_button">Target the artwork</string>
+
+
+    <!-- Map sorting options -->
+    <string name="sort_menu">Menu de triage</string>
+    <string name="oeuvre_sort">Triage des oeuvres</string>
+    <string name="lieu_sort">Triage des lieux</string>
+    <string name="sort_oeuvre_noncollected">Trier par oeuvre non collectionné</string>
+    <string name="sort_oeuvre_target">Trier par oeuvre ciblé</string>
+    <string name="sort_oeuvre_collected">Trier par oeuvre collectionné</string>
+    <string name="sort_lieu_noncollected">Trier par lieu non collectionné</string>
+    <string name="sort_lieu_target">Trier par lieu ciblé</string>
+    <string name="sort_lieu_collected">Trier par lieu collectionné</string>
+
+    <!-- List sorting options -->
+    <string name="sort_all_items">Afficher tout</string>
+    <string name="display_oeuvre">Afficher les oeuvres</string>
+    <string name="display_lieu">Afficher les lieux</string>
+    <string name="sort_alphabetical">Ordre alphabetique</string>
+    <string name="sort_borough">Ordre de quartier</string>
+    <string name="featured_list">En vedette cette semaine</string>
+
 
 </resources>

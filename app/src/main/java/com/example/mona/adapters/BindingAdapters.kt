@@ -1,12 +1,11 @@
 package com.example.mona.adapters
 
-import android.content.Context
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.databinding.Bindable
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.example.mona.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -33,6 +32,13 @@ fun bindIsTarget(view: View, isTarget: Boolean) {
     } else {
         View.GONE
     }
+}
+
+@BindingAdapter("imagePath")
+fun loadImage(view: ImageView, photo_path: String?) {
+    Glide.with(view.context)
+        .load(photo_path)
+        .into(view)
 }
 
 /*

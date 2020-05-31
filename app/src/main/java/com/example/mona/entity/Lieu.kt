@@ -18,7 +18,7 @@ import java.io.Serializable
 data class Lieu(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    val id: Int,
 
     var title: String?,
 
@@ -28,7 +28,16 @@ data class Lieu(
     var borough: String?,
 
     @TypeConverters(LocationConverter::class)
-    @field:Json(name = "location") var location: Location?
+    @field:Json(name = "location") var location: Location?,
 
+    //Collection
+    var state: Int?,
 
+    var rating: Float?,
+
+    var comment: String?,
+
+    var photo_path: String?,
+
+    var date_photo: String?
 ) : Serializable

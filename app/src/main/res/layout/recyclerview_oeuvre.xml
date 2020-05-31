@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="oeuvre"
+            type="com.example.mona.entity.Oeuvre" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener}"
+        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="@dimen/card_elevation_size"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/card_circle_size"
+                android:layout_height="@dimen/card_circle_size"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/monaYellow" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_extra_small"
+                    android:text="@{oeuvre.title}"
+                    style="@style/TextAppearance.Mona.List.Title"
+                    android:maxLines="1"
+                    tools:text="Summer Camp 69" />
+
+                <TextView
+                    android:id="@+id/boroughView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_extra_small"
+                    android:text="@{oeuvre.borough}"
+                    style="@style/TextAppearance.Mona.List.Borough"
+                    tools:text="Plateau Mont Royal" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

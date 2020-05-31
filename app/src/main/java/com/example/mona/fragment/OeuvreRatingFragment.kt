@@ -13,15 +13,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.example.mona.R
-import kotlinx.android.synthetic.main.fragment_rating.view.*
+import kotlinx.android.synthetic.main.fragment_item_rating.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RatingFragment : Fragment() {
+class OeuvreRatingFragment : Fragment() {
 
-    val safeArgs : RatingFragmentArgs by navArgs()
+    val safeArgs : OeuvreRatingFragmentArgs by navArgs()
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
 
@@ -30,7 +30,7 @@ class RatingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_rating, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_item_rating, container, false)
 
         return rootView
     }
@@ -38,7 +38,7 @@ class RatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val oeuvre = safeArgs.oeuvre
+        val oeuvreId = safeArgs.oeuvre.id
 
         view.done_rating_button.setOnClickListener {
 
@@ -53,9 +53,9 @@ class RatingFragment : Fragment() {
             val date = getDate().toString()
 
 
-            oeuvreViewModel.updateRating(oeuvre.id, rating, comment, state, date)
+            oeuvreViewModel.updateRating(oeuvreId, rating, comment, state, date)
 
-            Toast.makeText(requireActivity(), "Oeuvre #"+oeuvre.id+" ajoutée", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), "Oeuvre #"+oeuvreId+" ajoutée", Toast.LENGTH_LONG).show()
 
             //Pop everything from the stack that is not the Home Pager
             findNavController().popBackStack(R.id.fragmentViewPager_dest,false)

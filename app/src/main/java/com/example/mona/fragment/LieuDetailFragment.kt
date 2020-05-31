@@ -20,95 +20,88 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mona.R
-import com.example.mona.databinding.FragmentOeuvreItemBinding
+import com.example.mona.databinding.FragmentLieuItemBinding
+import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
-import com.example.mona.viewmodels.OeuvreDetailViewModel
-import com.example.mona.viewmodels.OeuvreDetailViewModelFactory
-import com.example.mona.viewmodels.OeuvreViewModel
-import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
-import okhttp3.internal.notify
+import com.example.mona.viewmodels.LieuDetailViewModel
+import com.example.mona.viewmodels.LieuDetailViewModelFactory
+import com.example.mona.viewmodels.LieuViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-class OeuvreDetailFragment () : Fragment() {
+class LieuDetailFragment () : Fragment() {
 
     //View Models
-    private val oeuvreViewModel: OeuvreViewModel by viewModels()
-    private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
-    private val safeArgs : OeuvreDetailFragmentArgs by navArgs()
+    private val lieuViewModel: LieuViewModel by viewModels()
+    private lateinit var lieuDetailViewModel: LieuDetailViewModel
+    private val safeArgs : LieuDetailFragmentArgs by navArgs()
 
     //Photo Attributes
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        lieuDetailViewModel = ViewModelProviders.of(this, LieuDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
+        ).get(LieuDetailViewModel::class.java)
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-
-        oeuvreDetailViewModel = ViewModelProviders.of(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
-        ).get(OeuvreDetailViewModel::class.java)
-
-        val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
-            inflater, R.layout.fragment_oeuvre_item, container, false
+        val binding = DataBindingUtil.inflate<FragmentLieuItemBinding>(
+            inflater, R.layout.fragment_lieu_item, container, false
         ).apply {
-            viewModel = oeuvreDetailViewModel
+            viewModel = lieuDetailViewModel
             lifecycleOwner = viewLifecycleOwner
 
-            callback = object : Callback {
-                override fun updateTarget(oeuvre: Oeuvre) {
-                    oeuvre?.let {
-                        //Set state depending on current state of artwork
-                        //from non target to target
-                        if(oeuvre.state == null){
+            callback = object : Callback{
+                override fun updateTarget(lieu: Lieu) {
+                    lieu?.let {
+                        if (lieu.state == null){
 
                             fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
 
                             findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
 
-                            oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
+                            lieuDetailViewModel.updateTarget(lieu.id,1)
 
-                            Toast.makeText(requireActivity(), "Oeuvre "+oeuvre.title+" ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), "Oeuvre "+lieu.title+" ciblé", Toast.LENGTH_LONG).show()
+
                         }
-                        //from target to non target
-                        if(oeuvre.state == 1){ //from target to non target
 
+                        if(lieu.state == 1){
                             fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
 
                             findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
 
-                            oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
-                            
-                            Toast.makeText(requireActivity(), "Oeuvre "+oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                            lieuDetailViewModel.updateTarget(lieu.id, null)
+
+                            Toast.makeText(requireActivity(), "Oeuvre "+lieu.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
 
-                override fun captureOeuvre(oeuvre: Oeuvre) {
-                    dispatchTakePictureIntent(oeuvre)
+                override fun captureLieu(lieu: Lieu) {
+                    dispatchTakePictureIntent(lieu)
                 }
 
-                override fun openMap(oeuvre: Oeuvre) {
-                    val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
+                override fun openMap(lieu: Lieu) {
+                    val action = LieuDetailFragmentDirections.openLieuMap(lieu)
                     findNavController().navigate(action)
                 }
-
             }
 
             toolbar.setNavigationOnClickListener { view ->
                 view.findNavController().navigateUp()
             }
+
         }
-
-
-
         return binding.root
     }
 
-    private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
+    private fun dispatchTakePictureIntent(lieu: Lieu) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
@@ -128,9 +121,9 @@ class OeuvreDetailFragment () : Fragment() {
 
                         onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
 
-                            oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
+                            lieuViewModel.updatePath(lieu.id, currentPhotoPath)
 
-                            val action = OeuvreDetailFragmentDirections.itemToRating(oeuvre)
+                            val action = LieuDetailFragmentDirections.itemToRating(lieu)
                             findNavController().navigate(action)
                         }
                     }
@@ -156,13 +149,11 @@ class OeuvreDetailFragment () : Fragment() {
     }
 
     interface Callback {
-        fun updateTarget(oeuvre:Oeuvre)
+        fun updateTarget(lieu:Lieu)
 
-        fun openMap(oeuvre:Oeuvre)
+        fun openMap(lieu:Lieu)
 
-        fun captureOeuvre(oeuvre: Oeuvre)
+        fun captureLieu(lieu: Lieu)
     }
-
-
 
 }

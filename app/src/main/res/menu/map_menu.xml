@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/map_sort"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="always"
+        android:title="@string/sort_menu">
+
+        <menu>
+            <item
+                android:id="@+id/oeuvre_sort"
+                android:title="@string/oeuvre_sort"
+                android:orderInCategory="100">
+                <menu>
+                    <item
+                        android:id="@+id/oeuvre_noncollected"
+                        android:title="@string/sort_oeuvre_noncollected"
+                        android:icon="@drawable/pin_oeuvre_normal"
+                        android:orderInCategory="200"/>
+                    <item
+                        android:id="@+id/oeuvre_targetted"
+                        android:title="@string/sort_oeuvre_target"
+                        android:icon="@drawable/pin_oeuvre_target"
+                        android:orderInCategory="200"/>
+
+                    <item
+                        android:id="@+id/oeuvre_collected"
+                        android:title="@string/sort_oeuvre_collected"
+                        android:icon="@drawable/pin_oeuvre_collected"
+                        android:orderInCategory="200"/>
+                </menu>
+            </item>
+
+            <item
+                android:id="@+id/lieu_sort"
+                android:title="@string/lieu_sort"
+                android:orderInCategory="100">
+                <menu>
+                    <item
+                        android:id="@+id/lieu_noncollected"
+                        android:title="@string/sort_lieu_noncollected"
+                        android:icon="@drawable/pin_lieu_normal"
+                        android:orderInCategory="200"/>
+
+                    <item
+                        android:id="@+id/lieu_targetted"
+                        android:title="@string/sort_lieu_target"
+                        android:icon="@drawable/pin_lieu_target"
+                        android:orderInCategory="200"/>
+
+                    <item
+                        android:id="@+id/lieu_collected"
+                        android:title="@string/sort_lieu_collected"
+                        android:icon="@drawable/pin_lieu_collected"
+                        android:orderInCategory="200"/>
+                </menu>
+            </item>
+
+        </menu>
+    </item>
+
+</menu>

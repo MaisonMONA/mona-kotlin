@@ -28,12 +28,27 @@
     <!-- https://material.io/design/components/buttons-floating-action-button.html#specs -->
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="margin_odj_horizontal">48dp</dimen>
-    <dimen name="margin_odj_vertical">124dp</dimen>
+    <dimen name="layout_odj_width">250dp</dimen>
+    <dimen name="layout_odj_height">500dp</dimen>
     <dimen name="odj_image_size">124dp</dimen>
     <dimen name="odj_fragment_name_size">28dp</dimen>
     <dimen name="odj_title_size">20dp</dimen>
     <dimen name="odj_attributes_size">16dp</dimen>
     <dimen name="odj_cam_size">90dp</dimen>
     <dimen name="odj_map_size">70dp</dimen>
+
+    <dimen name="type_list_marker_size">24dp</dimen>
+
+    <dimen name="featured_message_text_size">20dp</dimen>
+    <dimen name="featured_message_margin_size">25dp</dimen>
+
+    <!-- Card dimensions -->
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="card_title_size">20dp</dimen>
+    <dimen name="card_borough_size">15dp</dimen>
+    <dimen name="card_circle_size">24dp</dimen>
+    <dimen name="card_elevation_size">4dp</dimen>
+
+    <dimen name="card_collection_height">192dp</dimen>
+    <dimen name="card_collection_title_size">15dp</dimen>
 </resources>

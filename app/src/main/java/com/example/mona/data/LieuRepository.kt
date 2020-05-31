@@ -12,8 +12,29 @@ class LieuRepository(private val lieuDAO: LieuDAO) {
     // Observed LiveData will notify the observer when the data has changed.
     val lieuList: LiveData<List<Lieu>> = lieuDAO.getAll()
 
-    suspend fun insertAll(lieuList: List<Lieu>){
-        lieuDAO.insertAll(lieuList)
+   fun getLieu(lieuId: Int) = lieuDAO.getLieu(lieuId)
+
+    suspend fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
+        lieuDAO.updateRating(id, rating, comment, state, date)
+    }
+
+    suspend fun updatePath(id: Int, path: String?){
+        lieuDAO.updatePath(id, path)
+    }
+
+    suspend fun updateTarget(oeuvreId: Int, target: Int?){
+        lieuDAO.updateTarget(oeuvreId, target)
+    }
+
+    companion object {
+
+        // For Singleton instantiation
+        @Volatile private var instance: LieuRepository? = null
+
+        fun getInstance(lieuDAO: LieuDAO) =
+            instance ?: synchronized(this) {
+                instance ?: LieuRepository(lieuDAO).also { instance = it }
+            }
     }
 
 }

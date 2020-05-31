@@ -9,22 +9,30 @@
         android:name="com.example.mona.fragment.HomeViewPagerFragment"
         tools:layout="@layout/fragment_view_pager">
         <action
-            android:id="@+id/odj_to_rating"
-            app:destination="@id/itemMap_dest"
+            android:id="@+id/odj_to_map"
+            app:destination="@id/oeuvreItemMap_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/odj_to_map"
-            app:destination="@id/rating_dest"
+            android:id="@+id/odj_to_rating"
+            app:destination="@id/oeuvreRating_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/home_to_item"
-            app:destination="@id/item_dest"
+            android:id="@+id/home_to_oeuvre"
+            app:destination="@id/oeuvreItem_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/home_to_lieu"
+            app:destination="@id/lieu_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -33,23 +41,22 @@
 
 
     <fragment
-        android:id="@+id/item_dest"
+        android:id="@+id/oeuvreItem_dest"
         android:name="com.example.mona.fragment.OeuvreDetailFragment"
-        android:label="@string/Item"
-        tools:layout="@layout/fragment_item">
+        android:label="@string/Item">
         <argument
             android:name="item_selected"
             app:argType="com.example.mona.entity.Oeuvre" />
         <action
-            android:id="@+id/open_item_map"
-            app:destination="@id/itemMap_dest"
+            android:id="@+id/open_oeuvre_map"
+            app:destination="@id/oeuvreItemMap_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/item_to_rating"
-            app:destination="@id/rating_dest"
+            app:destination="@id/oeuvreRating_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -57,25 +64,67 @@
     </fragment>
 
     <fragment
-        android:id="@+id/itemMap_dest"
-        android:name="com.example.mona.fragment.ItemMapFragment"
+        android:id="@+id/oeuvreItemMap_dest"
+        android:name="com.example.mona.fragment.OeuvreItemMapFragment"
         android:label="@string/ItemMap"
         tools:layout="@layout/fragment_item_map">
         <argument
             android:name="oeuvre"
             app:argType="com.example.mona.entity.Oeuvre"/>
-
-
     </fragment>
 
     <fragment
-        android:id="@+id/rating_dest"
-        android:name="com.example.mona.fragment.RatingFragment"
+        android:id="@+id/oeuvreRating_dest"
+        android:name="com.example.mona.fragment.OeuvreRatingFragment"
         android:label="@string/Rating"
-        tools:layout="@layout/fragment_rating">
+        tools:layout="@layout/fragment_item_rating">
         <argument
             android:name="oeuvre"
             app:argType="com.example.mona.entity.Oeuvre"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/lieu_dest"
+        android:name="com.example.mona.fragment.LieuDetailFragment"
+        android:label="@string/Item">
+        <argument
+            android:name="item_selected"
+            app:argType="com.example.mona.entity.Lieu" />
+        <action
+            android:id="@+id/open_lieu_map"
+            app:destination="@id/lieuItemMap_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/item_to_rating"
+            app:destination="@id/lieuRating_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/lieuRating_dest"
+        android:name="com.example.mona.fragment.LieuRatingFragment"
+        android:label="@string/LieuRating"
+        tools:layout="@layout/fragment_lieu_rating">
+        <argument
+            android:name="lieu"
+            app:argType="com.example.mona.entity.Lieu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lieuItemMap_dest"
+        android:name="com.example.mona.fragment.LieuItemMapFragment"
+        android:label="@string/LieuRating"
+        tools:layout="@layout/fragment_lieu_rating">
+        <argument
+            android:name="lieu"
+            app:argType="com.example.mona.entity.Lieu" />
     </fragment>
 
 

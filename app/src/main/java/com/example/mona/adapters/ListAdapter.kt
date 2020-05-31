@@ -1,28 +1,24 @@
 package com.example.mona.adapters
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.mona.R
-import com.example.mona.databinding.RecyclerviewCollectionLieuBinding
-import com.example.mona.databinding.RecyclerviewCollectionOeuvreBinding
+import com.example.mona.databinding.RecyclerviewHeaderBinding
+import com.example.mona.databinding.RecyclerviewLieuBinding
+import com.example.mona.databinding.RecyclerviewOeuvreBinding
 import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
 
-class CollectionAdapter internal constructor(
+class ListAdapter internal constructor(
     context: Context?,
     navController: NavController
-) : RecyclerView.Adapter<CollectionAdapter.BaseViewHolder<*>>() {
+) : RecyclerView.Adapter<ListAdapter.BaseViewHolder<*>>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var itemList = emptyList<Any>()
@@ -31,11 +27,11 @@ class CollectionAdapter internal constructor(
     companion object {
         private var TYPE_OEUVRE = 0
         private var TYPE_LIEU = 1
+        private var TYPE_HEADER = 2
     }
 
-
     inner class OeuvreViewHolder(
-        private val binding: RecyclerviewCollectionOeuvreBinding
+        private val binding: RecyclerviewOeuvreBinding
     ) : BaseViewHolder<Oeuvre>(binding.root) {
         init {
             binding.setClickListener {
@@ -54,10 +50,8 @@ class CollectionAdapter internal constructor(
         }
     }
 
-
-
     inner class LieuViewHolder(
-        private val binding: RecyclerviewCollectionLieuBinding
+        private val binding: RecyclerviewLieuBinding
     ) : BaseViewHolder<Lieu>(binding.root) {
         init {
             binding.setClickListener {
@@ -74,20 +68,31 @@ class CollectionAdapter internal constructor(
                 executePendingBindings()
             }
         }
-
-
     }
 
+    inner class HeaderViewHolder(
+        private val binding : RecyclerviewHeaderBinding
+    ) : BaseViewHolder<String>(binding.root) {
+        override fun bind(item: String) {
+            val featuredView: TextView = binding.featuredMessage
+            val message = "En vedette cette semaine " + getEmojiByUnicode(0x1F525)
+            featuredView.text = message
+        }
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.BaseViewHolder<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.BaseViewHolder<*> {
         return when (viewType) {
             TYPE_OEUVRE -> {
-                val itemBinding = RecyclerviewCollectionOeuvreBinding.inflate(inflater, parent, false)
+                val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
                 OeuvreViewHolder(itemBinding)
             }
             TYPE_LIEU -> {
-                val itemBinding = RecyclerviewCollectionLieuBinding.inflate(inflater, parent, false)
+                val itemBinding = RecyclerviewLieuBinding.inflate(inflater, parent, false)
                 LieuViewHolder(itemBinding)
+            }
+            TYPE_HEADER ->{
+                val itemBinding = RecyclerviewHeaderBinding.inflate(inflater, parent, false)
+                HeaderViewHolder(itemBinding)
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
@@ -98,6 +103,7 @@ class CollectionAdapter internal constructor(
         when (holder) {
             is OeuvreViewHolder -> holder.bind(element as Oeuvre)
             is LieuViewHolder -> holder.bind(element as Lieu)
+            is HeaderViewHolder -> holder.bind(element as String)
             else -> throw IllegalArgumentException()
         }
     }
@@ -120,6 +126,7 @@ class CollectionAdapter internal constructor(
         return when (comparable) {
             is Oeuvre -> TYPE_OEUVRE
             is Lieu -> TYPE_LIEU
+            is String -> TYPE_HEADER
             else -> throw IllegalArgumentException("Invalid type of data " + position)
         }
     }
@@ -129,5 +136,9 @@ class CollectionAdapter internal constructor(
 
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(item: T)
+    }
+
+    fun getEmojiByUnicode(unicode: Int): String? {
+        return String(Character.toChars(unicode))
     }
 }

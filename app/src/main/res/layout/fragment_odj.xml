@@ -13,7 +13,7 @@
 
         <variable
             name="callback"
-            type="com.example.mona.fragment.OeuvreDetailFragment.Callback" />
+            type="com.example.mona.fragment.OeuvreJourFragment.Callback" />
 
     </data>
 
@@ -23,10 +23,9 @@
         android:background="?attr/colorSecondaryVariant">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/margin_odj_horizontal"
-            android:layout_marginVertical="@dimen/margin_odj_vertical">
+            android:layout_width="@dimen/layout_odj_width"
+            android:layout_height="@dimen/layout_odj_height"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/odj_name"
@@ -63,6 +62,7 @@
                 android:layout_marginTop="@dimen/margin_large"
                 android:layout_marginEnd="@dimen/margin_small"
                 android:gravity="center"
+                android:maxLines="1"
                 android:text="@{viewModel.oeuvre.title}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -152,7 +152,9 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintEnd_toStartOf="@+id/button_map_odj"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/odj_subcategory" />
+                app:layout_constraintTop_toBottomOf="@id/odj_subcategory"
+                android:onClick="@{()-> callback.captureOeuvre(viewModel.oeuvre)}"
+                app:isGone="@{viewModel.isCollected}"/>
 
             <ImageButton
                 android:id="@+id/button_map_odj"
@@ -163,7 +165,24 @@
                 android:background="@drawable/odj_map"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/button_cam_odj"
-                app:layout_constraintTop_toBottomOf="@id/odj_subcategory" />
+                app:layout_constraintTop_toBottomOf="@id/odj_subcategory"
+                android:onClick="@{()-> callback.openMap(viewModel.oeuvre)}"
+                app:isGone="@{viewModel.isCollected}"/>
+
+            <TextView
+                android:id="@+id/odj_collected"
+                style="@style/TextAppearance.Mona.Odj.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:gravity="center"
+                android:text="Félicitation! Cette oeuvre est collectionné"
+                app:isVisible="@{viewModel.isCollected}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/odj_subcategory" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

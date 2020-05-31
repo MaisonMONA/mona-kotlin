@@ -9,11 +9,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.mona.viewmodels.OeuvreDetailViewModel" />
+            type="com.example.mona.viewmodels.LieuDetailViewModel" />
 
         <variable
             name="callback"
-            type="com.example.mona.fragment.OeuvreDetailFragment.Callback" />
+            type="com.example.mona.fragment.LieuDetailFragment.Callback" />
 
     </data>
 
@@ -52,7 +52,7 @@
                         android:background="@drawable/item_background"
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
-                        app:imagePath="@{viewModel.oeuvre.photo_path}"
+                        android:src="@{viewModel.lieu.photo_path}"
                         app:layout_collapseMode="parallax" />
 
                     <LinearLayout
@@ -70,7 +70,7 @@
                             android:layout_marginHorizontal="@dimen/item_button_horizontal_margin"
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
                             android:background="@drawable/odj_camera"
-                            android:onClick="@{() -> callback.captureOeuvre(viewModel.oeuvre)}"
+                            android:onClick="@{() -> callback.captureLieu(viewModel.lieu)}"
                             app:isGone="@{viewModel.isCollected}" />
 
                         <ImageButton
@@ -80,7 +80,7 @@
                             android:layout_marginHorizontal="@dimen/item_button_horizontal_margin"
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
                             android:background="@drawable/odj_map"
-                            android:onClick="@{() -> callback.openMap(viewModel.oeuvre)}"
+                            android:onClick="@{() -> callback.openMap(viewModel.lieu)}"
                             app:isGone="@{viewModel.isCollected}" />
 
                     </LinearLayout>
@@ -114,116 +114,46 @@
                 android:layout_margin="@dimen/margin_normal">
 
                 <TextView
-                    android:id="@+id/oeuvre_name"
-                    style="@style/TextAppearance.Mona.Item.Title.Text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.oeuvre.title}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Affinités" />
-
-                <TextView
-                    android:id="@+id/oeuvre_artist"
+                    android:id="@+id/lieu_title"
                     style="@style/TextAppearance.Mona.Item.Artist.Text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_small"
-                    android:text='@{viewModel.artists}'
+                    android:text='@{viewModel.lieu.title}'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_name"
-                    tools:text="Hans Schleeh" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Biliotheque municipale" />
 
                 <TextView
-                    android:id="@+id/oeuvre_date"
+                    android:id="@+id/lieu_borough"
                     style="@style/TextAppearance.Mona.Item.Attributes.Text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.oeuvre.produced_at}"
+                    android:text="@{viewModel.lieu.borough}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_artist"
-                    tools:text="1967" />
+                    app:layout_constraintTop_toBottomOf="@id/lieu_title"
+                    tools:text="Plateau Mont-Royale" />
 
                 <TextView
-                    android:id="@+id/oeuvre_dimensions"
+                    android:id="@+id/lieu_category"
                     style="@style/TextAppearance.Mona.Item.Attributes.Text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.dimensions}"
+                    android:text="@{viewModel.lieu.category.fr}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_date"
-                    tools:text="268 x 160 x 150 cm" />
-
-                <TextView
-                    android:id="@+id/oeuvre_category"
-                    style="@style/TextAppearance.Mona.Item.Attributes.Text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.oeuvre.category.fr}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_dimensions"
-                    tools:text="Beaux-Arts" />
-
-                <TextView
-                    android:id="@+id/oeuvre_subcategory"
-                    style="@style/TextAppearance.Mona.Item.Attributes.Text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.oeuvre.subcategory.fr}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_category"
-                    tools:text="Sculpture" />
-
-                <TextView
-                    android:id="@+id/oeuvre_materials"
-                    style="@style/TextAppearance.Mona.Item.Attributes.Text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.materials}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_subcategory"
-                    tools:text="Granit, Cuivre" />
-
-                <TextView
-                    android:id="@+id/oeuvre_techniques"
-                    style="@style/TextAppearance.Mona.Item.Attributes.Text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.techniques}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_materials"
-                    tools:text="Assemblé, Martelé, Découpé, Patiné, Soudé" />
-
+                    app:layout_constraintTop_toBottomOf="@id/lieu_borough"
+                    tools:text="Grosse categorie" />
 
                 <TextView
                     android:id="@+id/oeuvre_capture_date"
@@ -237,7 +167,7 @@
                     app:isVisible="@{viewModel.isCollected}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_techniques"
+                    app:layout_constraintTop_toBottomOf="@id/lieu_category"
                     tools:text="Cette oeuvre a été capturé le 23-09-2019" />
 
                 <RatingBar
@@ -249,7 +179,7 @@
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:isIndicator="true"
-                    android:rating="@{viewModel.oeuvre.rating}"
+                    android:rating="@{viewModel.lieu.rating}"
                     app:isVisible="@{viewModel.isCollected}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -265,7 +195,7 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:minHeight="@dimen/oeuvre_comment_min_height"
-                    android:text="@{viewModel.oeuvre.comment}"
+                    android:text="@{viewModel.lieu.comment}"
                     android:textIsSelectable="true"
                     app:isVisible="@{viewModel.isCollected}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -282,7 +212,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            android:onClick="@{()-> callback.updateTarget(viewModel.oeuvre)}"
+            android:onClick="@{()-> callback.updateTarget(viewModel.lieu)}"
             android:tint="@{viewModel.isTarget ? @color/target : @color/white}"
             app:isGone="@{viewModel.isCollected}"
             app:layout_anchor="@id/appbar"

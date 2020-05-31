@@ -13,6 +13,7 @@
 
         <item name="android:windowLightStatusBar">true</item>
         <item name="isLightTheme">true</item>
+
     </style>
 
     <style name="Theme.Mona" parent="AppTheme"/>
@@ -88,6 +89,30 @@
     <style name="TextAppearance.Mona.Item.Opinion.Text" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="fontFamily">@font/gotham_book</item>
         <item name="android:textSize">@dimen/item_others_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Mona.List.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_bold</item>
+        <item name="android:textSize">@dimen/card_title_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Mona.List.Borough" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/card_borough_size</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Collection.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/card_collection_title_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Featured" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/featured_message_text_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
 

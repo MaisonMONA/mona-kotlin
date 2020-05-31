@@ -5,12 +5,15 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
 import com.example.mona.R
 import com.example.mona.data.OeuvreDatabase
 import com.example.mona.data.OeuvreRepository
+import com.example.mona.databinding.FragmentOeuvreItemBinding
 import com.example.mona.entity.Bilingual
 import com.example.mona.entity.Oeuvre
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +28,6 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
     private val repository: OeuvreRepository
     var oeuvre: Oeuvre? = null
-
     init {
         // Gets reference to OeuvreDao from OeuvreDatabase to construct
         // the correct OeuvreRepository.
@@ -33,9 +35,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
             application,
             viewModelScope
         ).oeuvreDAO()
-
         repository = OeuvreRepository.getInstance(oeuvreDao)
-
         getOeuvre()
     }
 
@@ -44,6 +44,8 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
             oeuvre = repository.getOeuvre(oeuvreId)
         }
     }
+
+
 
     fun updateTarget(oeuvreId: Int, target: Int?){
         viewModelScope.launch(Dispatchers.IO) {

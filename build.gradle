@@ -50,4 +50,6 @@ ext {
     fragmentVersion = '1.2.0'
     viewPagerVersion = '1.0.0'
     supportDesign = '23.2.0'
+    glideVersion = '4.11.0'
+    cardviewVersion = '1.0.0'
 }
