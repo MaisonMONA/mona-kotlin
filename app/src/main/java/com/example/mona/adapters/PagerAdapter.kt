@@ -2,16 +2,14 @@ package com.example.mona.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.mona.fragment.CollectionFragment
-import com.example.mona.fragment.ListFragment
-import com.example.mona.fragment.MapFragment
-import com.example.mona.fragment.OeuvreJourFragment
+import com.example.mona.fragment.*
 
 
 const val ODJ_PAGE_INDEX = 0
 const val MAP_PAGE_INDEX = 1
 const val LIST_PAGE_INDEX = 2
 const val COLLECTION_PAGE_INDEX = 3
+const val MORE_PAGE_INDEX = 4
 
 class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
@@ -22,7 +20,8 @@ class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         ODJ_PAGE_INDEX to { OeuvreJourFragment() },
         MAP_PAGE_INDEX to { MapFragment() },
         LIST_PAGE_INDEX to { ListFragment() },
-        COLLECTION_PAGE_INDEX to { CollectionFragment() }
+        COLLECTION_PAGE_INDEX to { CollectionFragment() },
+        MORE_PAGE_INDEX to { MoreFragment() }
     )
 
     override fun getItemCount() = tabFragmentsCreators.size

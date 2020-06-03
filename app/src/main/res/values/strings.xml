@@ -5,14 +5,21 @@
     <string name="Map">Carte</string>
     <string name="List">Liste</string>
     <string name="Collection">Collection</string>
+    <string name="More">Plus</string>
 
     <string name="Item">Item</string>
     <string name="Settings">Paramètre</string>
-    <string name="Badge">Badge</string>
+    <string name="Badge">Badges</string>
     <string name="ItemMap">Map of Item</string>
     <string name="Opinion">Comment trouvé vous cette oeuvre?</string>
     <string name="Rating">Notez cette oeuvre</string>
     <string name="LieuRating">Notez cette place</string>
+
+    <string name="about">À propos</string>
+    <string name="sign_out">Se déconnecté</string>
+    <string name="how_it_works">Comment ça marche?</string>
+    <string name="who_are_we">Qui sommes nous?</string>
+    <string name="conditions">Conditions d\'utilisation</string>
 
 
     <string name="MapTiler">MapTiler</string>
@@ -27,16 +34,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="oeuvre_targetted">L\'Oeuvre est ciblé</string>
-    <string name="oeuvre_untargetted">L\'Oeuvre n\'est plus ciblé</string>
+    <string name="oeuvre_targetted">L\'oeuvre est maintenant ciblé</string>
+    <string name="oeuvre_untargetted">L\'oeuvre n\'est plus ciblé</string>
 
     <string name="target_oeuvre_button">Target the artwork</string>
 
 
     <!-- Map sorting options -->
     <string name="sort_menu">Menu de triage</string>
-    <string name="oeuvre_sort">Triage des oeuvres</string>
-    <string name="lieu_sort">Triage des lieux</string>
+    <string name="oeuvre_sort">Trier les oeuvres</string>
+    <string name="lieu_sort">Trier les lieux</string>
+
     <string name="sort_oeuvre_noncollected">Trier par oeuvre non collectionné</string>
     <string name="sort_oeuvre_target">Trier par oeuvre ciblé</string>
     <string name="sort_oeuvre_collected">Trier par oeuvre collectionné</string>
@@ -45,12 +53,23 @@
     <string name="sort_lieu_collected">Trier par lieu collectionné</string>
 
     <!-- List sorting options -->
-    <string name="sort_all_items">Afficher tout</string>
-    <string name="display_oeuvre">Afficher les oeuvres</string>
-    <string name="display_lieu">Afficher les lieux</string>
-    <string name="sort_alphabetical">Ordre alphabetique</string>
-    <string name="sort_borough">Ordre de quartier</string>
-    <string name="featured_list">En vedette cette semaine</string>
+    <string name="featured_list">En vedette</string>
+
+    <string name="sort_id">Par ID</string>
+    <string name="sort_alphabetical">Par ordre alphabetique</string>
+    <string name="sort_borough">Par quartier</string>
+    <string name="sort_distance">Par distance</string>
+
+    <!-- authentification -->
+    <string name="username">nom d\'usager</string>
+    <string name="password">mot de passe</string>
+    <string name="confirm_password">confirmez votre mot de passe</string>
+    <string name="login_error_message">Soit le nom d\'usager ou le mot de passe est incorrect</string>
+    <string name="register_error_message">Soit le nom d\'usager est pris ou le mot de passe \n n\'est pas acceptable</string>
+    <string name="no_account_message">Pas de compte? Enregistrez vous içi</string>
+    <string name="login_button">s\'identifier</string>
+    <string name="register_button">Créer mon compte</string>
+
 
 
 </resources>

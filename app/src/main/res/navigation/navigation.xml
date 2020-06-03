@@ -37,6 +37,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/home_to_text"
+            app:destination="@id/moreText_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
 
@@ -125,6 +133,18 @@
         <argument
             android:name="lieu"
             app:argType="com.example.mona.entity.Lieu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/moreText_dest"
+        android:name="com.example.mona.fragment.MoreTextFragment"
+        android:label="@string/More"
+        tools:layout="@layout/fragment_more_text">
+
+
+        <argument
+            android:name="file_name"
+            app:argType="string" />
     </fragment>
 
 

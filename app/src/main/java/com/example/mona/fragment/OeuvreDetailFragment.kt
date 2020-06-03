@@ -71,7 +71,7 @@ class OeuvreDetailFragment () : Fragment() {
 
                             oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
 
-                            Toast.makeText(requireActivity(), "Oeuvre "+oeuvre.title+" ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), oeuvre.title+" ciblé", Toast.LENGTH_LONG).show()
                         }
                         //from target to non target
                         if(oeuvre.state == 1){ //from target to non target
@@ -82,7 +82,7 @@ class OeuvreDetailFragment () : Fragment() {
 
                             oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
                             
-                            Toast.makeText(requireActivity(), "Oeuvre "+oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
                         }
                     }
                 }

@@ -78,6 +78,9 @@ class OeuvreJourFragment : Fragment() {
         return binding.root
     }
 
+
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         with(oeuvreDetailViewModel){
             if (!isCollected()){
@@ -86,7 +89,6 @@ class OeuvreJourFragment : Fragment() {
                 //do not inflate menu
             }
         }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

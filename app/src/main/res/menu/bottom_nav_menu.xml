@@ -17,4 +17,8 @@
         android:id="@+id/collection_dest"
         android:icon="@drawable/collection"
         android:title="@string/Collection" />
+    <item
+        android:id="@+id/more_dest"
+        android:icon="@drawable/more"
+        android:title="@string/More"/>
 </menu>

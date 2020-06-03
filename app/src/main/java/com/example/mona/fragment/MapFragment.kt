@@ -13,22 +13,19 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.example.mona.R
 import com.example.mona.databinding.FragmentMapBinding
-import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
 import org.osmdroid.views.overlay.OverlayItem
 
 
@@ -36,24 +33,42 @@ import org.osmdroid.views.overlay.OverlayItem
 // object in our collection.
 class MapFragment : Fragment() {
 
-    private lateinit var map : MapView
+    //Map attribute
+    private lateinit var map: MapView
     private lateinit var mapController: IMapController
     private val ZOOM_LEVEL = 17.0
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var userOverlay: OverlayItem
 
+
+    private lateinit var userOverlay: OverlayItem
+    private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
+    private var first = true
+
+    //view models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
     private val lieuViewModel: LieuViewModel by viewModels()
+
+    //Location tools
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val ctx: Context? = context
-        org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+        org.osmdroid.config.Configuration.getInstance()
+            .load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+
+        //initialization of location agent
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        getLocationUpdates()
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         val binding = FragmentMapBinding.inflate(inflater, container, false)
         context ?: return binding.root
@@ -66,50 +81,9 @@ class MapFragment : Fragment() {
         mapController = map.controller
         mapController.setZoom(ZOOM_LEVEL)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        //Updates his or her location
+        startLocationUpdates()
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                //val point = GeoPoint(location!!.latitude, location!!.longitude)
-
-                //Montreal random geo point start for testing
-                val point = GeoPoint(45.5044372,-73.578502)
-
-                mapController.setCenter(point)
-
-                //your items
-                val userItems = ArrayList<OverlayItem>()
-
-                userOverlay = OverlayItem(
-                    "You",
-                    "Your position",
-                    point
-                )
-
-                val userOverlayMarker = resize(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user_navigation), 26)
-                userOverlay.setMarker(userOverlayMarker)
-                userItems.add(userOverlay)
-
-                val overlayObject = ItemizedIconOverlay(
-                    userItems,
-                    object : OnItemGestureListener<OverlayItem> {
-                        override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                            Toast.makeText(requireActivity(), item.title, Toast.LENGTH_LONG).show()
-                            return true
-                        }
-
-                        override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
-                            //open item fragment
-
-                            return false
-                        }
-                    },
-                    this.requireContext())
-
-                map.overlays.add(overlayObject)
-            }
-
-        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -125,16 +99,23 @@ class MapFragment : Fragment() {
         addLieu(1, R.drawable.pin_lieu_target)
         addLieu(2, R.drawable.pin_lieu_collected)
 
-
     }
 
     override fun onResume() {
         super.onResume()
+
+        setHasOptionsMenu(true)
+
+        startLocationUpdates()
+
         map.onResume()
     }
 
     override fun onPause() {
         super.onPause()
+
+        stopLocationUpdates()
+
         map.onPause()
     }
 
@@ -148,6 +129,7 @@ class MapFragment : Fragment() {
         inflater.inflate(R.menu.map_menu, menu)
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.oeuvre_noncollected -> {
@@ -160,7 +142,7 @@ class MapFragment : Fragment() {
                 addOeuvre(1, R.drawable.pin_oeuvre_target)
                 true
             }
-            R.id.oeuvre_collected ->{
+            R.id.oeuvre_collected -> {
                 map.overlays.clear()
                 addOeuvre(2, R.drawable.pin_oeuvre_collected)
                 true
@@ -175,7 +157,7 @@ class MapFragment : Fragment() {
                 addLieu(1, R.drawable.pin_lieu_target)
                 true
             }
-            R.id.lieu_collected ->{
+            R.id.lieu_collected -> {
                 map.overlays.clear()
                 addLieu(2, R.drawable.pin_lieu_collected)
                 true
@@ -183,24 +165,23 @@ class MapFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    
+
     fun addOeuvre(state: Int?, pinIconId: Int) {
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
             val items = ArrayList<OverlayItem>()
             for (oeuvre in oeuvreList) {
-                if(oeuvre.state ==  state){
+                if (oeuvre.state == state) {
                     val item_latitude = oeuvre.location!!.lat
                     val item_longitude = oeuvre.location!!.lng
                     val oeuvre_location = GeoPoint(item_latitude, item_longitude)
-                    val overlayItem = OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
+                    val overlayItem =
+                        OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
                     val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
 
                     overlayItem.setMarker(markerDrawable)
                     items.add(overlayItem)
                 }
             }
-
-            items.add(userOverlay)
 
             val overlayObject = ItemizedIconOverlay(
                 items,
@@ -212,14 +193,15 @@ class MapFragment : Fragment() {
 
                     override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
                         val oeuvreId = item.snippet.toInt()
-                        val arrayId =  oeuvreId - 1
+                        val arrayId = oeuvreId - 1
                         val oeuvre = oeuvreList[arrayId]
                         val action = HomeViewPagerFragmentDirections.homeToOeuvre(oeuvre)
                         findNavController().navigate(action)
                         return true
                     }
                 },
-                this.requireContext())
+                this.requireContext()
+            )
 
             map.overlays.add(overlayObject)
 
@@ -231,7 +213,7 @@ class MapFragment : Fragment() {
         lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList ->
             val items = ArrayList<OverlayItem>()
             for (lieu in lieuList) {
-                if(lieu.state ==  state){
+                if (lieu.state == state) {
                     val item_latitude = lieu.location!!.lat
                     val item_longitude = lieu.location!!.lng
                     val lieu_location = GeoPoint(item_latitude, item_longitude)
@@ -242,8 +224,6 @@ class MapFragment : Fragment() {
                     items.add(overlayItem)
                 }
             }
-
-            items.add(userOverlay)
 
             val overlayObject = ItemizedIconOverlay(
                 items,
@@ -262,7 +242,8 @@ class MapFragment : Fragment() {
                         return true
                     }
                 },
-                this.requireContext())
+                this.requireContext()
+            )
 
             map.overlays.add(overlayObject)
 
@@ -270,9 +251,95 @@ class MapFragment : Fragment() {
 
     }
 
+    fun addUser(location: Location, first: Boolean) {
+
+        if(!first){
+            map.overlays.remove(userObject)
+        }
+
+        val point = GeoPoint(location!!.latitude, location!!.longitude)
+
+        //Montreal random geo point start for testing
+        //val point = GeoPoint(45.5044372, -73.578502)
+
+        mapController.setCenter(point)
+
+        //your items
+        val userItems = ArrayList<OverlayItem>()
+
+        var userOverlay = OverlayItem(
+            "You",
+            "Your position",
+            point
+        )
+
+        val userOverlayMarker =
+            ContextCompat.getDrawable(requireContext(), R.drawable.pin_user)
+        userOverlay.setMarker(userOverlayMarker)
+        userItems.add(userOverlay)
+
+        userObject = ItemizedIconOverlay(
+            userItems,
+            object : OnItemGestureListener<OverlayItem> {
+                override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                    Toast.makeText(requireActivity(), item.title, Toast.LENGTH_LONG).show()
+                    return true
+                }
+
+                override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                    //open item fragment
+
+                    return false
+                }
+            },
+            this.requireContext()
+        )
+
+        map.overlays.add(userObject)
+
+    }
+
+    /**
+     * call this method in onCreate
+     * onLocationResult call when location is changed
+     */
+    private fun getLocationUpdates() {
+        locationRequest = LocationRequest()
+        locationRequest.interval = 3000
+        locationRequest.fastestInterval = 3000
+        locationRequest.smallestDisplacement = 100f // 100m
+        locationRequest.priority =
+            LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult ?: return
+
+                if (locationResult.locations.isNotEmpty()) {
+                    // get latest location
+                    val location = locationResult.lastLocation
+
+                    addUser(location, first)
+                    first = false
+                }
 
 
+            }
+        }
+    }
 
+    //start location updates
+    private fun startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            null /* Looper */
+        )
+    }
+
+    // stop location updates
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
 
 
 }

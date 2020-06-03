@@ -34,4 +34,5 @@ interface OeuvreDAO {
 
     @Query("UPDATE artwork_table SET state= :target WHERE id = :id")
     fun updateTarget(id: Int, target: Int?)
+
 }

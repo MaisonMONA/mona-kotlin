@@ -135,6 +135,8 @@ dependencies {
 
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
+    implementation "com.github.mukeshsolanki:MarkdownView-Android:$rootProject.mdVersion"
 }
 kapt {
     generateStubs = true

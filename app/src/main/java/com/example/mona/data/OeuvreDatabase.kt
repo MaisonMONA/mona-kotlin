@@ -51,7 +51,8 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             val finalList : MutableList<Oeuvre> = mutableListOf()
 
-            for (index in 1..13){
+            //Manually fill in the maximum number of pages
+            for (index in 1..14){
                 //API call to server to get all artworks. We extract solely the artworks
                 val artworksJson = ArtworksTask(index).execute().get()
                 val objectJson = JSONObject(artworksJson)

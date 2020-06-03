@@ -11,6 +11,7 @@ import com.example.mona.entity.Bilingual
 import com.example.mona.entity.Location
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.osmdroid.util.Distance
 import java.io.Serializable
 
 

@@ -47,8 +47,16 @@
     <dimen name="card_title_size">20dp</dimen>
     <dimen name="card_borough_size">15dp</dimen>
     <dimen name="card_circle_size">24dp</dimen>
-    <dimen name="card_elevation_size">4dp</dimen>
+    <dimen name="card_elevation_size">2dp</dimen>
 
     <dimen name="card_collection_height">192dp</dimen>
     <dimen name="card_collection_title_size">15dp</dimen>
+
+    <dimen name="menu_text_size">18dp</dimen>
+    <dimen name="username_text_size">32dp</dimen>
+    <dimen name="options_text_size">20dp</dimen>
+    <dimen name="username_padding">12dp</dimen>
+    <dimen name="options_padding">12dp</dimen>
+
+    <dimen name="authentification_margin">20dp</dimen>
 </resources>

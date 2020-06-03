@@ -67,7 +67,7 @@ class LieuDetailFragment () : Fragment() {
 
                             lieuDetailViewModel.updateTarget(lieu.id,1)
 
-                            Toast.makeText(requireActivity(), "Oeuvre "+lieu.title+" ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), lieu.title+" ciblé", Toast.LENGTH_LONG).show()
 
                         }
 
@@ -78,7 +78,7 @@ class LieuDetailFragment () : Fragment() {
 
                             lieuDetailViewModel.updateTarget(lieu.id, null)
 
-                            Toast.makeText(requireActivity(), "Oeuvre "+lieu.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), lieu.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
                         }
                     }
                 }

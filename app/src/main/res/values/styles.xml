@@ -6,10 +6,13 @@
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/offWhite</item>
         <item name="colorOnSurface">@color/black</item>
-        <item name="colorSurface">@color/grey</item>
+        <item name="colorSurface">@color/offWhite</item>
         <item name="colorSecondary">@color/monaYellow</item>
         <item name="colorSecondaryVariant">@color/bluePowder</item>
         <item name="android:colorBackground">@color/offWhite</item>
+
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textColor">@color/black</item>
 
         <item name="android:windowLightStatusBar">true</item>
         <item name="isLightTheme">true</item>
@@ -92,6 +95,8 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <!--List item styles-->
+
     <style name="TextAppearance.Mona.List.Title" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="fontFamily">@font/gotham_bold</item>
         <item name="android:textSize">@dimen/card_title_size</item>
@@ -113,6 +118,25 @@
     <style name="TextAppearance.Mona.Featured" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="fontFamily">@font/gotham_book</item>
         <item name="android:textSize">@dimen/featured_message_text_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Username" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/username_text_size</item>
+        <item name="android:textColor">@color/offWhite</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Settings" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/options_text_size</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <!-- Menu style -->
+    <style name="menu_style">
+        <item name="fontFamily">@font/gotham_rounded_light</item>
+        <item name="android:textSize">@dimen/menu_text_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
@@ -146,8 +170,8 @@
         <item name="android:background">@drawable/splash_screen</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimaryDark">@color/white</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="isLightTheme">true</item>
     </style>
 
     <!-- Item Alignement -->
