@@ -133,6 +133,18 @@
         <item name="android:textColor">@color/grey</item>
     </style>
 
+    <style name="TextAppearance.Mona.Badge" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/badge_cards_text_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Mona.Badge.Detail" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:textSize">@dimen/badge_detail_text_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <!-- Menu style -->
     <style name="menu_style">
         <item name="fontFamily">@font/gotham_rounded_light</item>

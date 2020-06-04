@@ -6,6 +6,7 @@
     <dimen name="tab_icon_size">28dp</dimen>
 
     <dimen name="oeuvre_detail_app_bar_height">500dp</dimen>
+    <dimen name="margin_extra_large">42dp</dimen>
     <dimen name="margin_large">28dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
@@ -59,4 +60,11 @@
     <dimen name="options_padding">12dp</dimen>
 
     <dimen name="authentification_margin">20dp</dimen>
+
+    <dimen name="badge_cards_size">108dp</dimen>
+    <dimen name="badge_cards_text_size">15dp</dimen>
+    <dimen name="badge_detail_text_size">20dp</dimen>
+    <dimen name="badge_horizontal_margin">24dp</dimen>
+    <dimen name="badge_completion_message_size">15dp</dimen>
+
 </resources>
