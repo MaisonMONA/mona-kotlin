@@ -45,6 +45,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/home_to_badge"
+            app:destination="@id/badge_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+
     </fragment>
 
 
@@ -140,11 +150,36 @@
         android:name="com.example.mona.fragment.MoreTextFragment"
         android:label="@string/More"
         tools:layout="@layout/fragment_more_text">
-
-
         <argument
             android:name="file_name"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/badge_dest"
+        android:name="com.example.mona.fragment.BadgeFragment"
+        android:label="@string/Badge"
+        tools:layout="@layout/fragment_badge">
+
+        <action
+            android:id="@+id/badge_to_detail"
+            app:destination="@id/badgeDetail_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/badgeDetail_dest"
+        android:name="com.example.mona.fragment.BadgeDetailFragment"
+        android:label="@string/Badge"
+        tools:layout="@layout/fragment_badge_item">
+
+        <argument
+            android:name="badge"
+            app:argType="com.example.mona.entity.Badge"/>
     </fragment>
 
 

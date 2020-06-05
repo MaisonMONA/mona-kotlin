@@ -128,28 +128,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_conditions"
-                android:backgroundTint="@color/grey"/>
-
-            <TextView
-                android:id="@+id/conditions_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/conditions"
-                android:clickable="true"
-                android:layout_marginHorizontal="@dimen/options_padding"
-                style="@style/TextAppearance.Mona.Settings"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/options_padding"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:background="@drawable/ic_sign_out"
                 android:backgroundTint="@color/grey"/>
 

@@ -10,6 +10,7 @@
     <string name="Item">Item</string>
     <string name="Settings">Paramètre</string>
     <string name="Badge">Badges</string>
+    <string name="BadgeItem">Badge Item</string>
     <string name="ItemMap">Map of Item</string>
     <string name="Opinion">Comment trouvé vous cette oeuvre?</string>
     <string name="Rating">Notez cette oeuvre</string>

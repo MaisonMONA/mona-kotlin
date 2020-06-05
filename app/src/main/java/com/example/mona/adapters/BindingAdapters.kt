@@ -2,9 +2,13 @@ package com.example.mona.adapters
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.mona.R
+import com.example.mona.entity.Badge
 
 
 @BindingAdapter("isGone")
@@ -39,6 +43,36 @@ fun loadImage(view: ImageView, photo_path: String?) {
     Glide.with(view.context)
         .load(photo_path)
         .into(view)
+}
+
+@BindingAdapter("badgeCompletion")
+fun loadBadge(view: ImageView, badge:Badge) {
+    //verify which badge to display
+    badge.apply {
+        view.background = if(collected >= collected_goal){
+            ContextCompat.getDrawable(view.context, complete_picture_id)
+        } else {
+            ContextCompat.getDrawable(view.context, uncomplete_picture_id)
+        }
+    }
+}
+
+@BindingAdapter("badgeProgress")
+fun loadProgress(view: TextView, badge:Badge) {
+    badge.apply {
+        view.text = ""+collected+"/"+collected_goal
+    }
+}
+
+@BindingAdapter("isBadgeVisible")
+fun loadVisibility(view: TextView, badge:Badge) {
+    badge.apply {
+        view.visibility = if(collected >= collected_goal){
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
+        }
+    }
 }
 
 /*

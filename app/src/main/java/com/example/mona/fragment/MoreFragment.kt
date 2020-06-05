@@ -28,6 +28,8 @@ class MoreFragment : Fragment(){
             username.text = SaveSharedPreference.getUsername(context)
 
             badgeButton.setOnClickListener {
+                val action = HomeViewPagerFragmentDirections.homeToBadge()
+                findNavController().navigate(action)
 
             }
             howItWorksButton.setOnClickListener{
@@ -42,11 +44,6 @@ class MoreFragment : Fragment(){
 
             whoAreWeButton.setOnClickListener {
                 val action = HomeViewPagerFragmentDirections.homeToText("QuiSommesNous.md")
-                findNavController().navigate(action)
-            }
-
-            conditionsButton.setOnClickListener {
-                val action = HomeViewPagerFragmentDirections.homeToText("ConditionsUtilisation.md")
                 findNavController().navigate(action)
             }
 

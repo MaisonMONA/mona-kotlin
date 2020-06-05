@@ -80,7 +80,7 @@ class ListAdapter internal constructor(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.BaseViewHolder<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return when (viewType) {
             TYPE_OEUVRE -> {
                 val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
