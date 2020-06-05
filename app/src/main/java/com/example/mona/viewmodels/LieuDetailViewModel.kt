@@ -66,7 +66,7 @@ class LieuDetailViewModel(application: Application, private var lieuId: Int): An
 
 
     fun getCaptureDateMessage(): String{
-        return "Cette oeuvre a été capturé le " + lieu?.date_photo
+        return "Cette oeuvre a été capturée le " + lieu?.date_photo
     }
 
     fun getComment(): String{

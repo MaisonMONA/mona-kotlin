@@ -196,7 +196,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun getCaptureDateMessage(): String{
-        return "Cette oeuvre a été capturé le " + oeuvre?.date_photo
+        return "Cette oeuvre a été capturée le " + oeuvre?.date_photo
     }
 
     fun getComment(): String{
