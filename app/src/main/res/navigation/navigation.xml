@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- The nav graph is where we setup all the navigation routes (back stack)
+     that takes care of all the OG fragment transaction.
+     Setup of the HomeViewPager fragment being the starting destination of the
+     Main Activity-->
+
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

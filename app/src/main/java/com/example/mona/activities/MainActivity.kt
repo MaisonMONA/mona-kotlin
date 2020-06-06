@@ -28,15 +28,11 @@ import org.osmdroid.views.MapView
 * Initial setup was drive by Google's codelab found at
 * https://codelabs.developers.google.com/codelabs/android-room-with-a-view-kotlin/#0
 *
-*
-*
-*
  */
-
-
 
 class MainActivity : AppCompatActivity() {
 
+    //For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
 
 
@@ -95,8 +91,6 @@ class MainActivity : AppCompatActivity() {
                 setContentView<ActivityMainBinding>(this,
                     R.layout.activity_main
                 )
-
-
             }
 
         }
@@ -123,6 +117,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 /*
+    //If ever we desire to implement this feature
+
     //Hide Navigation Bar after 3 seconds
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)

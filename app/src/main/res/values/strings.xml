@@ -8,11 +8,11 @@
     <string name="More">Plus</string>
 
     <string name="Item">Item</string>
-    <string name="Settings">Paramètre</string>
+    <string name="Settings">Paramètres</string>
     <string name="Badge">Badges</string>
     <string name="BadgeItem">Badge Item</string>
     <string name="ItemMap">Map of Item</string>
-    <string name="Opinion">Comment trouvé vous cette oeuvre?</string>
+    <string name="Opinion">Comment trouvez-vous cette oeuvre?</string>
     <string name="Rating">Notez cette oeuvre</string>
     <string name="LieuRating">Notez cette place</string>
 
@@ -20,7 +20,6 @@
     <string name="sign_out">Se déconnecter</string>
     <string name="how_it_works">Comment ça marche?</string>
     <string name="who_are_we">Qui sommes-nous?</string>
-    <string name="conditions">Conditions d\'utilisation</string>
 
 
     <string name="MapTiler">MapTiler</string>
@@ -42,7 +41,7 @@
 
 
     <!-- Map sorting options -->
-    <string name="sort_menu">Menu de triage</string>
+    <string name="sort_menu">Options de tri</string>
     <string name="oeuvre_sort">Trier les oeuvres</string>
     <string name="lieu_sort">Trier les lieux</string>
 
@@ -67,9 +66,11 @@
     <string name="confirm_password">confirmez votre mot de passe</string>
     <string name="login_error_message">Soit le nom d\'usager ou le mot de passe est incorrect</string>
     <string name="register_error_message">Soit le nom d\'usager est pris ou le mot de passe \n n\'est pas valide</string>
-    <string name="no_account_message">Pas de compte? Enregistrez-vous içi</string>
+    <string name="no_account_message">Pas de compte? Enregistrez-vous ici</string>
     <string name="login_button">s\'identifier</string>
     <string name="register_button">Créer mon compte</string>
+
+    <string name="odj_collected_message">Félicitations! Cette oeuvre est collectionnée</string>
 
 
 

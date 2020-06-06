@@ -22,7 +22,6 @@ class BadgeFragment : Fragment() {
 
     private lateinit var adapter: BadgeAdapter
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
