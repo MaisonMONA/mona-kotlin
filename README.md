@@ -1,14 +1,18 @@
-# mona
+# Latest MONA 1.0 ALPHA Version:
 
-TODO POST HACKATON
+Initial internal app launch for testing within a specific range of people. Mona is a Kotlin 
+native application used to locate, search and explore artworks and cultural places in Montreal.
+The basic app features are:
+ - Navigating through a MapView via OpenStreetMap
+ - Sorting and filtering through the list of data in terms of attributes and calculations such as distance from user
+ - Capturing pictures of items such as artworks and cultural places
+ - Collect merit badges based upon captured items
 
-1) EACH TAB HAS HIS OWN BACKSTACK - DONE
-2) UPDATE ARTWORK ON BACK THREAD -> DURING HACKATHON THIS WAS BYPASSED BY ADDING .allowMainThreadQueries()
-3) FOR EACH COMMIT MAIN ON HACKATHON -> PASS THROUGH AND CLEAN
-4) CHANGE MAP TILES + ADD GEOLOCALIZATION
-5) BACKGROUND LISTENER FOR CONECTIVITY
-6) CIBLER LES OEUVRE -> via updateArtworks()
-7) LISTE AND FICHE POUR LES LIEUX
-8) SORT LIST
-9) SORT MAP AND MAP LEGEND
-10) BADGE AND COLLECTION
+This code uses:
+1) [Android Jetpack Navigation](https://developer.android.com/guide/navigation)
+2) [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
+3) [Data Binding](https://developer.android.com/topic/libraries/data-binding)
+
+What has to be worked on:
+1) Data population -> Many skipped frames at SplashActivity launch when populating database at app launch. See Terminal
+2) Navigation -> Implement such that each tab has its very own Navigation graph. [Example here](https://android.jlelse.eu/instagram-style-navigation-using-navigation-component-854037cf1389)
