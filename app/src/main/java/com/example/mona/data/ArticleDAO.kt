@@ -1,30 +1,22 @@
 package com.example.mona.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.example.mona.entity.Oeuvre
+import androidx.room.*
+import com.example.mona.entity.Article
 
 @Dao
-interface OeuvreDAO {
+interface ArticleDAO {
+    //@Query("SELECT * FROM artwork_table UNION ALL SELECT id,title,NULL,category,NULL,NULL,NULL,NULL,NULL,borough,location,NULL,NULL,state,rating,comment,photo_path,date_photo FROM place_table")
     @Query("SELECT * FROM artwork_table")
-    fun getAll(): LiveData<List<Oeuvre>>
+    fun getAll(): LiveData<List<Article>>
 
-    @Query("SELECT * FROM artwork_table WHERE id= :oeuvreId")
-    fun getOeuvre(oeuvreId: Int) : Oeuvre
-
-    @Query("SELECT * FROM artwork_table WHERE type= :typeS")
-    fun getType(typeS: String) : Oeuvre
+    @Query("SELECT * FROM artwork_table WHERE id= :articleId")
+    fun getArticle(articleId: Int) : Article
 
     //In case of booting up the application a second time
     //We dont conflict the primary key by adding twice the same data
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(oeuvres: List<Oeuvre>?)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(oeuvre: Oeuvre?)
+    suspend fun insertAll(articles: List<Article>?)
 
     @Query("DELETE FROM artwork_table")
     suspend fun deleteAll()
@@ -37,5 +29,4 @@ interface OeuvreDAO {
 
     @Query("UPDATE artwork_table SET state= :target WHERE id = :id")
     fun updateTarget(id: Int, target: Int?)
-
 }

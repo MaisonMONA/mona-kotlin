@@ -17,10 +17,10 @@ import java.io.Serializable
 
 @Entity(tableName = "artwork_table")
 @JsonClass(generateAdapter = true)
-data class Oeuvre(
+data class Article(
 
-    @PrimaryKey(autoGenerate = false)
-    var id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
 
     var title: String?,
 
@@ -46,14 +46,12 @@ data class Oeuvre(
 
     var borough: String?,
 
-    @TypeConverters(LocationConverter::class)
+    //@TypeConverters(LocationConverter::class)
     @field:Json(name = "location") var location: Location?,
 
     var collection: String?,
 
     var details: String?,
-
-    var type: String?,
 
     //Collection
     var state: Int?,
@@ -65,7 +63,6 @@ data class Oeuvre(
     var photo_path: String?,
 
     var date_photo: String?
-
 ) : Serializable
 
 

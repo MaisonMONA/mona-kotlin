@@ -14,6 +14,8 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
 
     fun getOeuvre(oeuvreId: Int) = oeuvreDao.getOeuvre(oeuvreId)
 
+    fun getType(type: String) = oeuvreDao.getType(type)
+
     suspend fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
         oeuvreDao.updateRating(id, rating, comment, state, date)
     }

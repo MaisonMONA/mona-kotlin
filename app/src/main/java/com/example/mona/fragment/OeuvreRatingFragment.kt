@@ -13,11 +13,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.example.mona.R
+import com.example.mona.task.SaveOeuvre
 import kotlinx.android.synthetic.main.fragment_item_rating.view.*
+import org.json.JSONObject
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class OeuvreRatingFragment : Fragment() {
 
@@ -52,11 +53,34 @@ class OeuvreRatingFragment : Fragment() {
 
             val date = getDate().toString()
 
-
             oeuvreViewModel.updateRating(oeuvreId, rating, comment, state, date)
 
             Toast.makeText(requireActivity(), "Oeuvre #"+oeuvreId+" ajoutée", Toast.LENGTH_LONG).show()
+            /*
+            try {
+                val sendOeuvre = SaveOeuvre()
 
+                //id
+                //rating
+                //comment
+                //photo
+
+                sendOeuvre.execute(
+                    oeuvreId.toString(),
+                    "id",//TODO a determiner
+                    rating.toString(),//integer
+                    comment,//strong
+                    date,
+                    date
+                )
+
+                val response = sendOeuvre.get()
+                val reader = JSONObject(response)
+                if (reader.has("errors")) {
+                    //TODO
+                }
+            }
+             */
             //Pop everything from the stack that is not the Home Pager
             findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
         }

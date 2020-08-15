@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_item_rating.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.mona.task.SaveLieu
 
 /**
  * A simple [Fragment] subclass.
@@ -55,7 +56,31 @@ class LieuRatingFragment : Fragment() {
             lieuViewModel.updateRating(lieuId, rating, comment, state, date)
 
             Toast.makeText(requireActivity(), "Oeuvre #"+lieuId+" ajoutée", Toast.LENGTH_LONG).show()
+            /*
+            try {
+                val sendLieu = SaveLieu()
 
+                //id
+                //rating
+                //comment
+                //photo
+
+                sendLieu.execute(
+                    lieuId.toString(),
+                    "id",//TODO a determiner
+                    rating.toString(),//integer
+                    comment,//strong
+                    date,
+                    date
+                )
+
+                val response = sendLieu.get()
+                val reader = JSONObject(response)
+                if (reader.has("errors")) {
+                    //TODO
+                }
+            }
+            */
             //Pop everything from the stack that is not the Home Pager
             findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
         }

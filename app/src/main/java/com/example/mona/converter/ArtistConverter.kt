@@ -9,13 +9,13 @@ import com.google.gson.reflect.TypeToken
 class ArtistConverter {
 
     @TypeConverter
-    fun toArtists(json: String): List<Artist> {
+    fun toArtists(json: String? = "[]"): List<Artist>? {
         val type = object : TypeToken<List<Artist>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toJson(artistList: List<Artist>): String {
+    fun toJson(artistList: List<Artist>?): String? {
         val type = object: TypeToken<List<Artist>>() {}.type
         return Gson().toJson(artistList, type)
     }

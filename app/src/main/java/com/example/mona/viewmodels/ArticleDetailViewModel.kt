@@ -4,8 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mona.data.ArticleDatabase
+import com.example.mona.data.ArticleRepository
 import com.example.mona.data.LieuDatabase
 import com.example.mona.data.LieuRepository
+import com.example.mona.entity.Article
 import com.example.mona.entity.Lieu
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,25 +16,25 @@ import kotlinx.coroutines.launch
 
 
 //View Model for the single artwork displayed on the UI to bind properly
-class LieuDetailViewModel(application: Application, private var lieuId: Int): AndroidViewModel(application){
+class ArticleDetailViewModel(application: Application, private var articleId: Int): AndroidViewModel(application){
 
-    private val repository: LieuRepository
-    var lieu: Lieu? = null
+    private val repository: ArticleRepository
+    var article: Article? = null
     init {
         Log.d("LIEU","DETAIL VIEW")
         // Gets reference to OeuvreDao from OeuvreDatabase to construct
         // the correct OeuvreRepository.
-        val lieuDao = LieuDatabase.getDatabase(
+        val articleDao = ArticleDatabase.getDatabase(
             application,
             viewModelScope
-        ).lieuDAO()
-        repository = LieuRepository.getInstance(lieuDao)
-        getLieu()
+        ).articleDAO()
+        repository = ArticleRepository.getInstance(articleDao)
+        getArticle()
     }
 
-    fun getLieu(){
+    fun getArticle(){
         viewModelScope.launch(Dispatchers.IO) {
-            lieu = repository.getLieu(lieuId)
+            article = repository.getArticle(articleId)
         }
     }
 
@@ -47,7 +50,7 @@ class LieuDetailViewModel(application: Application, private var lieuId: Int): An
         var place_collected = false
 
         //State checuk to see if artwork is collected
-        if(lieu?.state == 2){
+        if(article?.state == 2){
             place_collected = true
         }
 
@@ -59,7 +62,7 @@ class LieuDetailViewModel(application: Application, private var lieuId: Int): An
         var place_target = false
 
         //State checuk to see if artwork is collected
-        if(lieu?.state == 1){
+        if(article?.state == 1){
             place_target = true
         }
 
@@ -68,11 +71,11 @@ class LieuDetailViewModel(application: Application, private var lieuId: Int): An
 
 
     fun getCaptureDateMessage(): String{
-        return "Cette oeuvre a été capturée le " + lieu?.date_photo
+        return "Cette oeuvre a été capturée le " + article?.date_photo
     }
 
     fun getComment(): String{
-        return "Commentaire: "+ lieu?.comment
+        return "Commentaire: "+ article?.comment
     }
 
 

@@ -75,7 +75,7 @@ class ListAdapter internal constructor(
     ) : BaseViewHolder<String>(binding.root) {
         override fun bind(item: String) {
             val featuredView: TextView = binding.featuredMessage
-            val message = "En vedette cette semaine " + getEmojiByUnicode(0x1F525)
+            val message =  "En vedette cette semaine " + getEmojiByUnicode(0x1F525)
             featuredView.text = message
         }
     }

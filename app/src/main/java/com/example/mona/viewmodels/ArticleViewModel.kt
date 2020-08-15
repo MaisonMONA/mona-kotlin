@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mona.data.ArticleDatabase
+import com.example.mona.data.ArticleRepository
 import com.example.mona.data.LieuDatabase
 import com.example.mona.data.LieuRepository
+import com.example.mona.entity.Article
 import com.example.mona.entity.Lieu
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,25 +17,22 @@ import kotlinx.coroutines.launch
 // Class extends AndroidViewModel and requires application as a parameter.
 // You can also use a ViewModel to share data between fragments.
 // https://developer.android.com/topic/libraries/architecture/viewmodel
-class LieuViewModel(application: Application) : AndroidViewModel(application) {
+class ArticleViewModel(application: Application) : AndroidViewModel(application) {
 
     // The ViewModel maintains a reference to the repository to get data.
-    private val repository: LieuRepository
+    private val repository: ArticleRepository
     // LiveData gives us updated words when they change.
-    val lieuList: LiveData<List<Lieu>>
+    val articleList: LiveData<List<Article>>
 
     init {
-        Log.d("LIEU","DEBUT INIT LIEU VIEW")
         // Gets reference to WordDao from WordRoomDatabase to construct
         // the correct WordRepository.
-        val lieuDAO = LieuDatabase.getDatabase(
+        val articleDAO = ArticleDatabase.getDatabase(
             application,
             viewModelScope
-        ).lieuDAO()
-        repository = LieuRepository(lieuDAO)
-        lieuList = repository.lieuList
-        Log.d("LIEU","FIN INIT LIEU VIEW")
-        Log.d("LIEU", lieuList.value?.size.toString())
+        ).articleDAO()
+        repository = ArticleRepository(articleDAO)
+        articleList = repository.articleList
     }
 
     fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){

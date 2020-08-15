@@ -1,10 +1,12 @@
 package com.example.mona.activities
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.mona.viewmodels.ArticleViewModel
 import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
 
@@ -16,25 +18,24 @@ class SplashActivity : AppCompatActivity() {
     //to display to the user while the MainActivity sets up to load
 
     private lateinit var oeuvreViewModel: OeuvreViewModel
-    private lateinit var lieuViewModel: LieuViewModel
+    //private lateinit var lieuViewModel: LieuViewModel
+    //private lateinit var articleViewModel: ArticleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        Log.d("LIEU","Splash")
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
-        lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
-
+        //lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
+        //articleViewModel = ViewModelProvider(this).get(ArticleViewModel::class.java)
+        Log.d("LIEU","FIN LOAD MODEL")
         oeuvreViewModel.oeuvreList.observe(this, Observer { oeuvreList ->
             if(!oeuvreList.isEmpty()){
-                lieuViewModel.lieuList.observe(this, Observer {lieuList ->
+                oeuvreViewModel.oeuvreList.observe(this, Observer {oeuvreList ->
                     startActivity(Intent(this,
                         MainActivity::class.java))
                 })
             }
         })
-
-
-
     }
 }
