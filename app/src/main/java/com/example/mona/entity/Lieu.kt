@@ -1,5 +1,5 @@
 package com.example.mona.entity
-
+/*
 // All data properties of an artwork
 // Bult in Moshi Adapter translates them directly into its instance
 import androidx.room.Entity
@@ -41,3 +41,4 @@ data class Lieu(
 
     var date_photo: String?
 ) : Serializable
+ */

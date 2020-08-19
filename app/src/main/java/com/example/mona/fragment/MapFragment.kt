@@ -16,7 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.mona.R
 import com.example.mona.databinding.FragmentMapBinding
-import com.example.mona.viewmodels.LieuViewModel
+//import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.*
 import org.osmdroid.api.IGeoPoint
@@ -45,7 +45,7 @@ class MapFragment : Fragment() {
 
     //view models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
-    private val lieuViewModel: LieuViewModel by viewModels()
+    //private val lieuViewModel: LieuViewModel by viewModels()
 
     //Location tools
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -95,9 +95,9 @@ class MapFragment : Fragment() {
         addOeuvre(1, R.drawable.pin_oeuvre_target)
         addOeuvre(2, R.drawable.pin_oeuvre_collected)
 
-        addLieu(null, R.drawable.pin_lieu_normal)
-        addLieu(1, R.drawable.pin_lieu_target)
-        addLieu(2, R.drawable.pin_lieu_collected)
+        //addLieu(null, R.drawable.pin_lieu_normal)
+        //addLieu(1, R.drawable.pin_lieu_target)
+        //addLieu(2, R.drawable.pin_lieu_collected)
 
     }
 
@@ -147,21 +147,6 @@ class MapFragment : Fragment() {
                 addOeuvre(2, R.drawable.pin_oeuvre_collected)
                 true
             }
-            R.id.lieu_noncollected -> {
-                map.overlays.clear()
-                addLieu(null, R.drawable.pin_lieu_normal)
-                true
-            }
-            R.id.lieu_targetted -> {
-                map.overlays.clear()
-                addLieu(1, R.drawable.pin_lieu_target)
-                true
-            }
-            R.id.lieu_collected -> {
-                map.overlays.clear()
-                addLieu(2, R.drawable.pin_lieu_collected)
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -208,7 +193,7 @@ class MapFragment : Fragment() {
         })
 
     }
-
+    /*
     fun addLieu(state: Int?, pinIconId: Int) {
         lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList ->
             val items = ArrayList<OverlayItem>()
@@ -250,7 +235,7 @@ class MapFragment : Fragment() {
         })
 
     }
-
+    */
     fun addUser(location: Location, first: Boolean) {
 
         if(!first){

@@ -1,5 +1,5 @@
 package com.example.mona.data
-
+/*
 import android.content.Context
 import android.util.Log
 import androidx.room.Database
@@ -111,3 +111,4 @@ abstract class LieuDatabase : RoomDatabase() {
     }
 
 }
+ */

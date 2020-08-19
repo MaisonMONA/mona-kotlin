@@ -1,5 +1,6 @@
 package com.example.mona.fragment
 
+/*
 import android.content.Context
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -77,3 +78,4 @@ class LieuItemMapFragment : Fragment() {
     }
 
 }
+*/

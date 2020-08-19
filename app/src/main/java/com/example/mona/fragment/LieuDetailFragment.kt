@@ -1,5 +1,5 @@
 package com.example.mona.fragment
-
+/*
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -157,3 +157,4 @@ class LieuDetailFragment () : Fragment() {
     }
 
 }
+ */

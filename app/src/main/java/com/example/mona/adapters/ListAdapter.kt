@@ -9,9 +9,7 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.R
 import com.example.mona.databinding.RecyclerviewHeaderBinding
-import com.example.mona.databinding.RecyclerviewLieuBinding
 import com.example.mona.databinding.RecyclerviewOeuvreBinding
-import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
 
@@ -49,7 +47,7 @@ class ListAdapter internal constructor(
             }
         }
     }
-
+    /*
     inner class LieuViewHolder(
         private val binding: RecyclerviewLieuBinding
     ) : BaseViewHolder<Lieu>(binding.root) {
@@ -69,7 +67,7 @@ class ListAdapter internal constructor(
             }
         }
     }
-
+    */
     inner class HeaderViewHolder(
         private val binding : RecyclerviewHeaderBinding
     ) : BaseViewHolder<String>(binding.root) {
@@ -86,10 +84,6 @@ class ListAdapter internal constructor(
                 val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
                 OeuvreViewHolder(itemBinding)
             }
-            TYPE_LIEU -> {
-                val itemBinding = RecyclerviewLieuBinding.inflate(inflater, parent, false)
-                LieuViewHolder(itemBinding)
-            }
             TYPE_HEADER ->{
                 val itemBinding = RecyclerviewHeaderBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(itemBinding)
@@ -102,7 +96,6 @@ class ListAdapter internal constructor(
         val element = itemList[position]
         when (holder) {
             is OeuvreViewHolder -> holder.bind(element as Oeuvre)
-            is LieuViewHolder -> holder.bind(element as Lieu)
             is HeaderViewHolder -> holder.bind(element as String)
             else -> throw IllegalArgumentException()
         }
@@ -125,7 +118,6 @@ class ListAdapter internal constructor(
         val comparable = itemList[position]
         return when (comparable) {
             is Oeuvre -> TYPE_OEUVRE
-            is Lieu -> TYPE_LIEU
             is String -> TYPE_HEADER
             else -> throw IllegalArgumentException("Invalid type of data " + position)
         }

@@ -1,5 +1,5 @@
 package com.example.mona.fragment
-
+/*
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -95,3 +95,4 @@ class LieuRatingFragment : Fragment() {
     }
 
 }
+*/

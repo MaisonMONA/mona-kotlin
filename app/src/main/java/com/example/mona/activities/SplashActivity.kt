@@ -6,8 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.mona.viewmodels.ArticleViewModel
-import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
 
 class SplashActivity : AppCompatActivity() {
@@ -19,7 +17,6 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var oeuvreViewModel: OeuvreViewModel
     //private lateinit var lieuViewModel: LieuViewModel
-    //private lateinit var articleViewModel: ArticleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +24,6 @@ class SplashActivity : AppCompatActivity() {
         Log.d("LIEU","Splash")
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
         //lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
-        //articleViewModel = ViewModelProvider(this).get(ArticleViewModel::class.java)
         Log.d("LIEU","FIN LOAD MODEL")
         oeuvreViewModel.oeuvreList.observe(this, Observer { oeuvreList ->
             if(!oeuvreList.isEmpty()){

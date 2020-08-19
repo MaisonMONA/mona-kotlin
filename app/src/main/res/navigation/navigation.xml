@@ -37,14 +37,6 @@
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
-            android:id="@+id/home_to_lieu"
-            app:destination="@id/lieu_dest"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
-
-        <action
             android:id="@+id/home_to_text"
             app:destination="@id/moreText_dest"
             app:enterAnim="@anim/slide_in_right"
@@ -107,49 +99,6 @@
             app:argType="com.example.mona.entity.Oeuvre"/>
     </fragment>
 
-
-    <fragment
-        android:id="@+id/lieu_dest"
-        android:name="com.example.mona.fragment.LieuDetailFragment"
-        android:label="@string/Item">
-        <argument
-            android:name="item_selected"
-            app:argType="com.example.mona.entity.Lieu" />
-        <action
-            android:id="@+id/open_lieu_map"
-            app:destination="@id/lieuItemMap_dest"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
-        <action
-            android:id="@+id/item_to_rating"
-            app:destination="@id/lieuRating_dest"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/lieuRating_dest"
-        android:name="com.example.mona.fragment.LieuRatingFragment"
-        android:label="@string/LieuRating"
-        tools:layout="@layout/fragment_lieu_rating">
-        <argument
-            android:name="lieu"
-            app:argType="com.example.mona.entity.Lieu" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/lieuItemMap_dest"
-        android:name="com.example.mona.fragment.LieuItemMapFragment"
-        android:label="@string/LieuRating"
-        tools:layout="@layout/fragment_lieu_rating">
-        <argument
-            android:name="lieu"
-            app:argType="com.example.mona.entity.Lieu" />
-    </fragment>
 
     <fragment
         android:id="@+id/moreText_dest"
