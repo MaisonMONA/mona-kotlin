@@ -1,8 +1,15 @@
 package com.example.mona.fragment
 
+import android.content.Context
+import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,6 +25,8 @@ import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.android.synthetic.main.recyclerview_badge.view.*
+import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
 import java.util.*
 import kotlin.random.Random
 
@@ -40,7 +49,6 @@ class ListFragment : Fragment() {
         //Initialize location agent
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +80,10 @@ class ListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
@@ -98,7 +110,7 @@ class ListFragment : Fragment() {
                 oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
                     val sortedList =
                         oeuvrelist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
-                    sortedList?.let { adapter.submitList(it) }
+                    sortedList.let { adapter.submitList(it) }
                 })
                 true
             }
@@ -106,7 +118,30 @@ class ListFragment : Fragment() {
                 oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
                     val sortedList =
                         oeuvrelist.sortedWith(compareBy(Oeuvre::borough, Oeuvre::title))
-                    sortedList?.let { adapter.submitList(it) }
+                    sortedList.let { adapter.submitList(it) }
+                })
+                true
+            }
+            R.id.lieu_id -> {
+                oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
+                    lieulist?.let { adapter.submitList(it) }
+                })
+
+                true
+            }
+            R.id.lieu_alphabetical -> {
+                oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
+                    val sortedList =
+                        lieulist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
+                    sortedList.let { adapter.submitList(it) }
+                })
+                true
+            }
+            R.id.lieu_borough -> {
+                oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
+                    val sortedList =
+                        lieulist.sortedWith(compareBy(Oeuvre::borough, Oeuvre::title))
+                    sortedList.let { adapter.submitList(it) }
                 })
                 true
             }
@@ -138,7 +173,7 @@ class ListFragment : Fragment() {
                                     sortedOeuvres.add(data.item as Oeuvre)
                                 }
 
-                                sortedOeuvres?.let { adapter.submitList(it) }
+                                sortedOeuvres.let { adapter.submitList(it) }
                             }
 
                         }
@@ -172,7 +207,6 @@ class ListFragment : Fragment() {
         })
 
     }
-
 
     fun distance(
         fromLat: Double,

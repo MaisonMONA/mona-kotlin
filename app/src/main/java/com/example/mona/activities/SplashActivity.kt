@@ -21,10 +21,9 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("LIEU","Splash")
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
         //lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
-        Log.d("LIEU","FIN LOAD MODEL")
+
         oeuvreViewModel.oeuvreList.observe(this, Observer { oeuvreList ->
             if(!oeuvreList.isEmpty()){
                 oeuvreViewModel.oeuvreList.observe(this, Observer {oeuvreList ->

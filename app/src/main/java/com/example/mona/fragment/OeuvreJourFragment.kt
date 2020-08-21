@@ -82,8 +82,6 @@ class OeuvreJourFragment : Fragment() {
     }
 
 
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         with(oeuvreDetailViewModel){
             if (!isCollected()){

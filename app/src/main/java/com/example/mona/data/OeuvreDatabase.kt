@@ -40,23 +40,9 @@ abstract class OeuvreDatabase : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    Log.d("OEUVRE","DATABASE CALLBACK")
                     var oeuvreDao = database.oeuvreDAO()
 
                     var oeuvreList = getOeuvreList()
-                    if (oeuvreList != null) {
-                        Log.d("LIST", oeuvreList.size.toString())
-                        for(oeuvre in oeuvreList){
-                            val a = oeuvre.id
-                            val b = oeuvre.title
-                            val c = oeuvre.category
-                            val d = oeuvre.dimension
-                            val e = oeuvre.materials
-                            val f = oeuvre.techniques
-                            val g = oeuvre.artists
-                            val h = oeuvre.borough
-                        }
-                    }
                     oeuvreDao.insertAll(oeuvreList)
                 }
             }
@@ -66,7 +52,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             val finalList : MutableList<Oeuvre> = mutableListOf()
             var id = 1
-            Log.d("OEUVRE", "getLIST")
             //Manually fill in the maximum number of pages
             for (index in 1..20){
                 //API call to server to get all artworks. We extract solely the artworks
@@ -76,7 +61,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
                 val dataArray = oeuvreArray.toString()
                 val length = dataArray.length
                 val nbArtworks = oeuvreArray.length()
-                Log.d("OEUVRE TYPE", nbArtworks.toString())
                 var data2Array = "[]"
 
                 var placeArray = JSONArray("[]")
@@ -117,7 +101,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
                         if(index++ <= nbArtworks){
                             oeuvre.type = "artwork"
                         }else{
-                            Log.d("OEUVRE TYPE",index.toString())
                             oeuvre.type = "place"
                         }
                         oeuvre.id = id++
@@ -127,7 +110,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
                     changed_list?.let(finalList::addAll)
                 }
             }
-            Log.d("ARTICLE","FIN BOUCLE")
             return finalList
         }
 
@@ -156,7 +138,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
-            Log.d("OEUVRE","FICHIER")
             return INSTANCE ?: synchronized(this) {
 
                 val instance = Room.databaseBuilder(

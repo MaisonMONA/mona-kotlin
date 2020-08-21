@@ -2,6 +2,8 @@ package com.example.mona.fragment
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
@@ -91,9 +93,9 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addOeuvre(null, R.drawable.pin_oeuvre_normal)
-        addOeuvre(1, R.drawable.pin_oeuvre_target)
-        addOeuvre(2, R.drawable.pin_oeuvre_collected)
+        addOeuvre(null)
+        addOeuvre(1)
+        addOeuvre(2)
 
         //addLieu(null, R.drawable.pin_lieu_normal)
         //addLieu(1, R.drawable.pin_lieu_target)
@@ -134,24 +136,43 @@ class MapFragment : Fragment() {
         return when (item.itemId) {
             R.id.oeuvre_noncollected -> {
                 map.overlays.clear()
-                addOeuvre(null, R.drawable.pin_oeuvre_normal)
+                addOeuvre(null)
                 true
             }
             R.id.oeuvre_targetted -> {
                 map.overlays.clear()
-                addOeuvre(1, R.drawable.pin_oeuvre_target)
+                addOeuvre(1)
                 true
             }
             R.id.oeuvre_collected -> {
                 map.overlays.clear()
-                addOeuvre(2, R.drawable.pin_oeuvre_collected)
+                addOeuvre(2)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun addOeuvre(state: Int?, pinIconId: Int) {
+    fun getDrawable(state: Int?,type: String?): Int{
+        if(type == "artwork"){
+            return when(state){
+                null -> R.drawable.pin_oeuvre_normal
+                   1 -> R.drawable.pin_oeuvre_target
+                   2 -> R.drawable.pin_oeuvre_collected
+                else -> R.drawable.pin_oeuvre_normal
+            }
+        }else if(type == "place"){
+            return when(state){
+                null -> R.drawable.pin_lieu_normal
+                1 -> R.drawable.pin_lieu_target
+                2 -> R.drawable.pin_lieu_collected
+                else -> R.drawable.pin_lieu_normal
+            }
+        }
+        return  R.drawable.pin_lieu_normal
+    }
+
+    fun addOeuvre(state: Int?) {
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
             val items = ArrayList<OverlayItem>()
             for (oeuvre in oeuvreList) {
@@ -161,6 +182,8 @@ class MapFragment : Fragment() {
                     val oeuvre_location = GeoPoint(item_latitude, item_longitude)
                     val overlayItem =
                         OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
+
+                    val pinIconId = getDrawable(state,oeuvre.type)
                     val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
 
                     overlayItem.setMarker(markerDrawable)

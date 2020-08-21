@@ -1,6 +1,9 @@
 package com.example.mona.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,8 @@ import com.example.mona.databinding.RecyclerviewHeaderBinding
 import com.example.mona.databinding.RecyclerviewOeuvreBinding
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
+import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import java.security.AccessController.getContext
 
 class ListAdapter internal constructor(
     context: Context?,
@@ -21,13 +26,11 @@ class ListAdapter internal constructor(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var itemList = emptyList<Any>()
     private val navController = navController
-
     companion object {
         private var TYPE_OEUVRE = 0
         private var TYPE_LIEU = 1
         private var TYPE_HEADER = 2
     }
-
     inner class OeuvreViewHolder(
         private val binding: RecyclerviewOeuvreBinding
     ) : BaseViewHolder<Oeuvre>(binding.root) {
@@ -83,6 +86,7 @@ class ListAdapter internal constructor(
             TYPE_OEUVRE -> {
                 val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
                 OeuvreViewHolder(itemBinding)
+
             }
             TYPE_HEADER ->{
                 val itemBinding = RecyclerviewHeaderBinding.inflate(inflater, parent, false)
@@ -94,10 +98,22 @@ class ListAdapter internal constructor(
     }
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = itemList[position]
-        when (holder) {
-            is OeuvreViewHolder -> holder.bind(element as Oeuvre)
-            is HeaderViewHolder -> holder.bind(element as String)
-            else -> throw IllegalArgumentException()
+        if(holder is OeuvreViewHolder){
+            holder.bind(element as Oeuvre)
+            if(holder.itemView.circleImage != null){
+                //select the color for the articles
+                if(element.type == "artwork"){
+                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
+                }else if(element.type == "place"){
+                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
+                }
+            }else{
+                Log.d("imageColor","Pas d'image")
+            }
+        }else if(holder is HeaderViewHolder){
+            holder.bind(element as String)
+        }else{
+            throw java.lang.IllegalArgumentException()
         }
     }
 
