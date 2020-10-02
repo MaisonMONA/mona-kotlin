@@ -6,12 +6,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -50,6 +54,7 @@ class OeuvreDetailFragment () : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         oeuvreDetailViewModel = ViewModelProviders.of(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
+
         ).get(OeuvreDetailViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
@@ -108,6 +113,43 @@ class OeuvreDetailFragment () : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?){
+        //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
+
+        val arrayParameters = arrayOf(
+            oeuvreDetailViewModel.oeuvre?.title,
+            oeuvreDetailViewModel.getArtists(),
+            oeuvreDetailViewModel.oeuvre?.produced_at,
+            oeuvreDetailViewModel.getDimensions(),
+            oeuvreDetailViewModel.oeuvre?.category?.fr,
+            oeuvreDetailViewModel.oeuvre?.subcategory?.fr,
+            oeuvreDetailViewModel.getMaterials(),
+            oeuvreDetailViewModel.getTechniques()
+        );
+        val arrayViews = arrayOf(
+            view.findViewById<TextView>(R.id.oeuvre_name),
+            view.findViewById<TextView>(R.id.oeuvre_artist),
+            view.findViewById<TextView>(R.id.oeuvre_date),
+            view.findViewById<TextView>(R.id.oeuvre_dimensions),
+            view.findViewById<TextView>(R.id.oeuvre_category),
+            view.findViewById<TextView>(R.id.oeuvre_subcategory),
+            view.findViewById<TextView>(R.id.oeuvre_materials),
+            view.findViewById<TextView>(R.id.oeuvre_techniques)
+        );
+
+        var i=0;
+        for(param in arrayParameters){
+            if(param == null || param == ""){
+                Log.d("Param ", "Paran vide: " + i.toString())
+                arrayViews[i].visibility = View.GONE
+            }else{
+                Log.d("Param", "Parametre non vide:$param")
+                arrayViews[i].visibility = View.VISIBLE
+            }
+            i++
+        }
+    }
+
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
@@ -139,6 +181,8 @@ class OeuvreDetailFragment () : Fragment() {
             }
         }
     }
+
+
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
