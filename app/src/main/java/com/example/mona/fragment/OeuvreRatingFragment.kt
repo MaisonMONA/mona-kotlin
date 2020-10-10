@@ -1,6 +1,7 @@
 package com.example.mona.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.example.mona.R
 import com.example.mona.task.SaveOeuvre
 import kotlinx.android.synthetic.main.fragment_item_rating.view.*
 import org.json.JSONObject
+import java.io.IOException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,33 +58,32 @@ class OeuvreRatingFragment : Fragment() {
             oeuvreViewModel.updateRating(oeuvreId, rating, comment, state, date)
 
             Toast.makeText(requireActivity(), "Oeuvre #"+oeuvreId+" ajoutée", Toast.LENGTH_LONG).show()
-            /*
-            try {
-                val sendOeuvre = SaveOeuvre()
 
+            try {
+                Log.d("Save", "Commence Save")
+                val sendOeuvre = SaveOeuvre()
                 //id
                 //rating
                 //comment
                 //photo
-
                 sendOeuvre.execute(
                     oeuvreId.toString(),
-                    "id",//TODO a determiner
-                    rating.toString(),//integer
-                    comment,//strong
-                    date,
-                    date
+                    rating.toString(),
+                    comment,
+                    "test"//string
                 )
 
                 val response = sendOeuvre.get()
                 val reader = JSONObject(response)
                 if (reader.has("errors")) {
-                    //TODO
+                    Log.d("Save","Erreur Save");
                 }
+            }catch (e: IOException) {
+                e.printStackTrace()
+                Log.d("Save","Erreur Save");
             }
-             */
             //Pop everything from the stack that is not the Home Pager
-            findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+            //findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
         }
     }
 

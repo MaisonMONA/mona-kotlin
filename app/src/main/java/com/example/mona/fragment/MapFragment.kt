@@ -82,10 +82,8 @@ class MapFragment : Fragment() {
 
         mapController = map.controller
         mapController.setZoom(ZOOM_LEVEL)
-
         //Updates his or her location
         startLocationUpdates()
-
 
         return binding.root
     }

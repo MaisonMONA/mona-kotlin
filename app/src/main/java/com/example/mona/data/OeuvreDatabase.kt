@@ -54,7 +54,8 @@ abstract class OeuvreDatabase : RoomDatabase() {
             var id = 1
             //Manually fill in the maximum number of pages
             for (index in 1..20){
-                //API call to server to get all artworks. We extract solely the artworks
+                //API call to server to get all artworks and places
+                //We combine the 2 in one lists
                 val artworksJson = ArtworksTask(index).execute().get()
                 val objectJson = JSONObject(artworksJson)
                 val oeuvreArray = objectJson.getJSONArray("data")
