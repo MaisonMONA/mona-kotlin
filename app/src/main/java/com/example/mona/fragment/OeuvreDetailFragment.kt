@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.isVisible
+import androidx.core.net.toFile
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,8 +29,6 @@ import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.OeuvreDetailViewModel
 import com.example.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.example.mona.viewmodels.OeuvreViewModel
-import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
-import okhttp3.internal.notify
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -62,10 +60,9 @@ class OeuvreDetailFragment () : Fragment() {
         ).apply {
             viewModel = oeuvreDetailViewModel
             lifecycleOwner = viewLifecycleOwner
-
             callback = object : Callback {
                 override fun updateTarget(oeuvre: Oeuvre) {
-                    oeuvre?.let {
+                    oeuvre.let {
                         //Set state depending on current state of artwork
                         //from non target to target
                         if(oeuvre.state == null){
@@ -86,7 +83,7 @@ class OeuvreDetailFragment () : Fragment() {
                             findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
 
                             oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
-                            
+
                             Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
                         }
                     }
@@ -115,7 +112,7 @@ class OeuvreDetailFragment () : Fragment() {
 
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?){
         //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
-
+        Log.d("Save","Photo path: " +  oeuvreDetailViewModel.oeuvre?.photo_path)
         val arrayParameters = arrayOf(
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
@@ -169,10 +166,9 @@ class OeuvreDetailFragment () : Fragment() {
                         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
 
                         onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
-
                             oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-
-                            val action = OeuvreDetailFragmentDirections.itemToRating(oeuvre)
+                            Log.d("Save","Current: " + currentPhotoPath)
+                            val action = OeuvreDetailFragmentDirections.itemToRating(oeuvre,currentPhotoPath)
                             findNavController().navigate(action)
                         }
                     }
@@ -189,12 +185,17 @@ class OeuvreDetailFragment () : Fragment() {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
+        /*return File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
             ".jpg", /* suffix */
             storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }*/
+        return File(storageDir,
+            "JPEG_${timeStamp}_.jpg"
+        ).apply{
             currentPhotoPath = absolutePath
         }
     }

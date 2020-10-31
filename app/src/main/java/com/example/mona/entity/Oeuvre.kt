@@ -21,7 +21,7 @@ data class Oeuvre(
 
     @PrimaryKey(autoGenerate = false)
     var id: Int,
-
+    var idServer: Int?,
     var title: String?,
 
     var produced_at: String?,

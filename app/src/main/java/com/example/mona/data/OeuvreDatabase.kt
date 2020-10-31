@@ -41,7 +41,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
             INSTANCE?.let { database ->
                 scope.launch {
                     var oeuvreDao = database.oeuvreDAO()
-
                     var oeuvreList = getOeuvreList()
                     oeuvreDao.insertAll(oeuvreList)
                 }
@@ -52,6 +51,9 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             val finalList : MutableList<Oeuvre> = mutableListOf()
             var id = 1
+            var idOeuvre = 1
+            var idPlace  = 1
+
             //Manually fill in the maximum number of pages
             for (index in 1..20){
                 //API call to server to get all artworks and places
@@ -101,8 +103,10 @@ abstract class OeuvreDatabase : RoomDatabase() {
                     for(oeuvre: Oeuvre in changed_list) {
                         if(index++ <= nbArtworks){
                             oeuvre.type = "artwork"
+                            oeuvre.idServer = idOeuvre++
                         }else{
                             oeuvre.type = "place"
+                            oeuvre.idServer = idPlace++
                         }
                         oeuvre.id = id++
                     }
