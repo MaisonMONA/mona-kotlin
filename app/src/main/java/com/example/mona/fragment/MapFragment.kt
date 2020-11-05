@@ -214,49 +214,7 @@ class MapFragment : Fragment() {
         })
 
     }
-    /*
-    fun addLieu(state: Int?, pinIconId: Int) {
-        lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList ->
-            val items = ArrayList<OverlayItem>()
-            for (lieu in lieuList) {
-                if (lieu.state == state) {
-                    val item_latitude = lieu.location!!.lat
-                    val item_longitude = lieu.location!!.lng
-                    val lieu_location = GeoPoint(item_latitude, item_longitude)
-                    val overlayItem = OverlayItem(lieu.title, lieu.id.toString(), lieu_location)
-                    val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
 
-                    overlayItem.setMarker(markerDrawable)
-                    items.add(overlayItem)
-                }
-            }
-
-            val overlayObject = ItemizedIconOverlay(
-                items,
-                object : OnItemGestureListener<OverlayItem> {
-                    override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                        Toast.makeText(requireActivity(), item.title, Toast.LENGTH_LONG).show()
-                        return true
-                    }
-
-                    override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
-                        val itemId = item.snippet.toInt()
-                        val arrayId = itemId - 1
-                        val lieu = lieuList[arrayId]
-                        val action = HomeViewPagerFragmentDirections.homeToLieu(lieu)
-                        findNavController().navigate(action)
-                        return true
-                    }
-                },
-                this.requireContext()
-            )
-
-            map.overlays.add(overlayObject)
-
-        })
-
-    }
-    */
     fun addUser(location: Location, first: Boolean) {
 
         if(!first){

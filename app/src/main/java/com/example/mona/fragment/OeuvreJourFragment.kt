@@ -136,7 +136,7 @@ class OeuvreJourFragment : Fragment() {
 
                             oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
 
-                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre)
+                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
                             findNavController().navigate(action)
                         }
                     }

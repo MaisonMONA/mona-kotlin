@@ -26,6 +26,7 @@ import com.example.mona.viewmodels.OeuvreViewModel
 import java.util.*
 import com.example.mona.databinding.RecyclerviewHeaderBinding
 import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import kotlin.math.sign
 
 
 class ExpandableListAdapter(
@@ -56,7 +57,7 @@ class ExpandableListAdapter(
         val element = getChild(groupPosition,childPosition)
         //if(convertView == null){
             val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
-            itemBinding.oeuvre = element
+        itemBinding.oeuvre = element
             itemBinding.setClickListener {
                 Log.d("Liste", "$groupPosition $childPosition")
                 Log.d("Liste",element.toString())
@@ -78,6 +79,11 @@ class ExpandableListAdapter(
             } else if (element.type == "place") {
                 convertView.circleImage.backgroundTintList =
                     ColorStateList.valueOf(convertView.context.resources.getColor(R.color.lieu))
+            }
+            if(element.state == 1){
+                convertView.circleImage.setImageResource(R.drawable.ic_target_black)
+            }else if(element.state == 2){
+                convertView.circleImage.setImageResource(R.drawable.ic_collected)
             }
         }
         return convertView
@@ -125,6 +131,9 @@ class ExpandableListAdapter(
             3,4 -> {
                 color = R.color.lieu
             }
+            5 -> {
+                color = R.color.grey
+            }
         }
         //set image
         var image: Int = R.drawable.circle
@@ -132,6 +141,7 @@ class ExpandableListAdapter(
             0   -> image = R.drawable.ic_featured
             1,3 -> image = R.drawable.ic_alphabetical
             2,4 -> image = R.drawable.ic_borough
+            5   -> image = R.drawable.ic_collected
         }
         if (convertView != null) {
             convertView.backgroundTintList =
@@ -141,6 +151,9 @@ class ExpandableListAdapter(
         val lblListHeader = convertView!!.findViewById<View>(R.id.lblListHeader) as TextView
         lblListHeader.setTypeface(null, Typeface.BOLD)
         lblListHeader.text = headerTitle
+        val numberContent = convertView.findViewById<View>(R.id.numberContent) as TextView
+        val numberChildren = getChildrenCount(groupPosition).toString()
+        numberContent.setText(numberChildren)
         return convertView
     }
 

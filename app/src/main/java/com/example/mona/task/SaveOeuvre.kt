@@ -67,7 +67,6 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         }else{
             Log.d("Save", "Probleme connexion");
         }
-        //val contentPart = InputStreamRequestBody(mtjpeg!!, context.contentResolver, imageUri)
         Log.d("Save","Type: " + params[4])
         var url = "";
         when(params[4]){
@@ -105,23 +104,5 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
         return isConnected
-    }
-
-    class InputStreamRequestBody(
-        private val contentType: MediaType,
-        private val contentResolver: ContentResolver,
-        private val uri: Uri
-    ) : RequestBody() {
-        override fun contentType() = contentType
-
-        override fun contentLength(): Long = -1
-
-        @Throws(IOException::class)
-        override fun writeTo(sink: BufferedSink) {
-            val input = contentResolver.openInputStream(uri)
-
-            input?.use { sink.writeAll(it.source()) }
-                ?: throw IOException("Could not open $uri")
-        }
     }
 }

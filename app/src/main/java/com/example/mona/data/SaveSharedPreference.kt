@@ -14,7 +14,7 @@ object SaveSharedPreference {
 
     private const val PREF_USER_NAME:String = "username"
     private const val TOKEN:String = "token"
-
+    private var ONLINE:String = "true"
     fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
     }
@@ -48,4 +48,19 @@ object SaveSharedPreference {
         editor.putString(TOKEN, token)
         editor.commit()
     }
+    fun isOnline(ctx: Context?): Boolean{
+        val value = getSharedPreferences(ctx)
+            .getString(ONLINE, "true")
+        return value.toBoolean()}
+
+    fun setOnline(ctx: Context?, value: Boolean){
+        val editor: SharedPreferences.Editor = getSharedPreferences(
+            ctx
+        ).edit()
+        var stringValue = value.toString()
+        editor.putString(ONLINE, stringValue)
+        editor.commit()
+    }
+
+
 }

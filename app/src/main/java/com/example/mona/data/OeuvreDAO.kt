@@ -21,6 +21,9 @@ interface OeuvreDAO {
     @Query("SELECT * FROM artwork_table WHERE artwork_table.type = :typeS AND artwork_table.state IS NULL")
     fun getNotCollected(typeS: String) : LiveData<List<Oeuvre>>
 
+    @Query("SELECT * FROM artwork_table WHERE artwork_table.state = :state")
+    fun getCollected(state: Int) : LiveData<List<Oeuvre>>
+
     //In case of booting up the application a second time
     //We dont conflict the primary key by adding twice the same data
     @Insert(onConflict = OnConflictStrategy.IGNORE)

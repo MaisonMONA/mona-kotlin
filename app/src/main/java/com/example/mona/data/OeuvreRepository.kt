@@ -21,6 +21,10 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
 
     }
 
+    fun getAllCollected(state:Int): LiveData<List<Oeuvre>>{
+        return oeuvreDao.getCollected(state)
+    }
+
     fun getArticleById(articleId: Int): Oeuvre {
         return oeuvreDao.getOeuvre(articleId)
     }
@@ -48,6 +52,5 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
                 instance ?: OeuvreRepository(oeuvreDao).also { instance = it }
             }
     }
-
 
 }

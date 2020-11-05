@@ -97,6 +97,10 @@
         <argument
             android:name="oeuvre"
             app:argType="com.example.mona.entity.Oeuvre"/>
+        <argument
+            android:name="imagePath"
+            app:argType="string"
+            />
     </fragment>
 
 
