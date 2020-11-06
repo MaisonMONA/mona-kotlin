@@ -1,11 +1,15 @@
 package com.example.mona.activities
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.mona.data.SaveSharedPreference
 import com.example.mona.viewmodels.OeuvreViewModel
 
 class SplashActivity : AppCompatActivity() {
@@ -20,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //Set the internet Mode
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
         //lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
 

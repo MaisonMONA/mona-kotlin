@@ -142,7 +142,7 @@ class ListAdapter internal constructor(
     override fun getItemCount() = itemList.size
 
 
-    abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder (itemView) {
         abstract fun bind(item: T)
     }
 

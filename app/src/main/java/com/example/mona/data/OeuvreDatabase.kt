@@ -1,5 +1,6 @@
 package com.example.mona.data
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.room.Database
@@ -12,6 +13,7 @@ import com.example.mona.converter.*
 import com.example.mona.entity.Oeuvre
 import com.example.mona.task.ArtworksTask
 import com.example.mona.task.PlacesTask
+import com.example.mona.task.SaveOeuvre
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -53,6 +55,8 @@ abstract class OeuvreDatabase : RoomDatabase() {
                             Log.d("Save","accede database")
                             val oeuvreList = getOeuvreList()
                             oeuvreDao.insertAll(oeuvreList)
+                            val collectedItems = oeuvreList!!.filter{it.state == 2}
+                            //updateInfoOnline(collectedItems,)
                         }catch (e: IOException){
                             Log.d("Save","erreur database")
                         }
@@ -134,7 +138,29 @@ fun getOeuvreList(): List<Oeuvre>?{
    return finalList
 }
 
-
+fun updateInfoOnline(itemList: List<Oeuvre>,activity: Activity){
+    for(item in itemList){
+            Log.d("Save", "Commence Save")
+            val sendOeuvre = SaveOeuvre(activity)
+            sendOeuvre.execute(
+                item.idServer.toString(),
+                item.rating.toString(),
+                item.comment,
+                item.photo_path,
+                item.type
+            )
+            val response = sendOeuvre.get()
+            if (response != "" && response != null) {
+                Log.d("Save", "reponse: " + response)
+                val reader = JSONObject(response)
+                if (reader.has("errors")) {
+                    Log.d("Save", "Erreur Save reader");
+                    val errors = reader.getJSONObject("errors")
+                    Log.d("Save", errors.toString())
+                }
+            }
+    }
+}
 
 }
 
@@ -175,5 +201,4 @@ fun getDatabase(
    }
 }
 }
-
 }

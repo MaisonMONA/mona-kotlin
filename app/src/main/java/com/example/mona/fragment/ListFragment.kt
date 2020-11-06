@@ -55,7 +55,7 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        Log.d("Liste", "View 1 $view")
         val binding = FragmentListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
@@ -145,6 +145,7 @@ class ListFragment : Fragment() {
                 })
                 true
             }
+
             R.id.oeuvre_distance -> {
 
                 oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
