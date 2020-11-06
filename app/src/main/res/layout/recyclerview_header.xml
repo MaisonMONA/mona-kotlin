@@ -15,6 +15,6 @@
         style="@style/TextAppearance.Mona.Featured"
         android:paddingTop="@dimen/margin_large"
         android:paddingBottom="@dimen/margin_large"
-        tools:text="En vedette cette semaine."/>
+        tools:text="@string/featured_list"/>
 
 </LinearLayout>

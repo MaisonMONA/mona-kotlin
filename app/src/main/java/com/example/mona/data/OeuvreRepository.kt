@@ -10,9 +10,24 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
+    //Get all articles
     val oeuvreList: LiveData<List<Oeuvre>> = oeuvreDao.getAll()
+    //Get all of one type
+    fun getType(type: String) = oeuvreDao.getType(type)
 
-    fun getOeuvre(oeuvreId: Int) = oeuvreDao.getOeuvre(oeuvreId)
+    fun getRandomUncollected(type:String){
+        val listUncollected = oeuvreDao.getNotCollected("artwork")
+        val randNumber = (0..(listUncollected.value?.size!!))
+
+    }
+
+    fun getAllCollected(state:Int): LiveData<List<Oeuvre>>{
+        return oeuvreDao.getCollected(state)
+    }
+
+    fun getArticleById(articleId: Int): Oeuvre {
+        return oeuvreDao.getOeuvre(articleId)
+    }
 
     suspend fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
         oeuvreDao.updateRating(id, rating, comment, state, date)
@@ -37,6 +52,5 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
                 instance ?: OeuvreRepository(oeuvreDao).also { instance = it }
             }
     }
-
 
 }

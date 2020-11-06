@@ -2,6 +2,8 @@ package com.example.mona.fragment
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
@@ -16,7 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.mona.R
 import com.example.mona.databinding.FragmentMapBinding
-import com.example.mona.viewmodels.LieuViewModel
+//import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.*
 import org.osmdroid.api.IGeoPoint
@@ -45,7 +47,7 @@ class MapFragment : Fragment() {
 
     //view models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
-    private val lieuViewModel: LieuViewModel by viewModels()
+    //private val lieuViewModel: LieuViewModel by viewModels()
 
     //Location tools
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -80,10 +82,8 @@ class MapFragment : Fragment() {
 
         mapController = map.controller
         mapController.setZoom(ZOOM_LEVEL)
-
         //Updates his or her location
         startLocationUpdates()
-
 
         return binding.root
     }
@@ -91,13 +91,13 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addOeuvre(null, R.drawable.pin_oeuvre_normal)
-        addOeuvre(1, R.drawable.pin_oeuvre_target)
-        addOeuvre(2, R.drawable.pin_oeuvre_collected)
+        addOeuvre(null)
+        addOeuvre(1)
+        addOeuvre(2)
 
-        addLieu(null, R.drawable.pin_lieu_normal)
-        addLieu(1, R.drawable.pin_lieu_target)
-        addLieu(2, R.drawable.pin_lieu_collected)
+        //addLieu(null, R.drawable.pin_lieu_normal)
+        //addLieu(1, R.drawable.pin_lieu_target)
+        //addLieu(2, R.drawable.pin_lieu_collected)
 
     }
 
@@ -134,39 +134,43 @@ class MapFragment : Fragment() {
         return when (item.itemId) {
             R.id.oeuvre_noncollected -> {
                 map.overlays.clear()
-                addOeuvre(null, R.drawable.pin_oeuvre_normal)
+                addOeuvre(null)
                 true
             }
             R.id.oeuvre_targetted -> {
                 map.overlays.clear()
-                addOeuvre(1, R.drawable.pin_oeuvre_target)
+                addOeuvre(1)
                 true
             }
             R.id.oeuvre_collected -> {
                 map.overlays.clear()
-                addOeuvre(2, R.drawable.pin_oeuvre_collected)
-                true
-            }
-            R.id.lieu_noncollected -> {
-                map.overlays.clear()
-                addLieu(null, R.drawable.pin_lieu_normal)
-                true
-            }
-            R.id.lieu_targetted -> {
-                map.overlays.clear()
-                addLieu(1, R.drawable.pin_lieu_target)
-                true
-            }
-            R.id.lieu_collected -> {
-                map.overlays.clear()
-                addLieu(2, R.drawable.pin_lieu_collected)
+                addOeuvre(2)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun addOeuvre(state: Int?, pinIconId: Int) {
+    fun getDrawable(state: Int?,type: String?): Int{
+        if(type == "artwork"){
+            return when(state){
+                null -> R.drawable.pin_oeuvre_normal
+                   1 -> R.drawable.pin_oeuvre_target
+                   2 -> R.drawable.pin_oeuvre_collected
+                else -> R.drawable.pin_oeuvre_normal
+            }
+        }else if(type == "place"){
+            return when(state){
+                null -> R.drawable.pin_lieu_normal
+                1 -> R.drawable.pin_lieu_target
+                2 -> R.drawable.pin_lieu_collected
+                else -> R.drawable.pin_lieu_normal
+            }
+        }
+        return  R.drawable.pin_lieu_normal
+    }
+
+    fun addOeuvre(state: Int?) {
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
             val items = ArrayList<OverlayItem>()
             for (oeuvre in oeuvreList) {
@@ -176,6 +180,8 @@ class MapFragment : Fragment() {
                     val oeuvre_location = GeoPoint(item_latitude, item_longitude)
                     val overlayItem =
                         OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
+
+                    val pinIconId = getDrawable(state,oeuvre.type)
                     val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
 
                     overlayItem.setMarker(markerDrawable)
@@ -196,48 +202,6 @@ class MapFragment : Fragment() {
                         val arrayId = oeuvreId - 1
                         val oeuvre = oeuvreList[arrayId]
                         val action = HomeViewPagerFragmentDirections.homeToOeuvre(oeuvre)
-                        findNavController().navigate(action)
-                        return true
-                    }
-                },
-                this.requireContext()
-            )
-
-            map.overlays.add(overlayObject)
-
-        })
-
-    }
-
-    fun addLieu(state: Int?, pinIconId: Int) {
-        lieuViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieuList ->
-            val items = ArrayList<OverlayItem>()
-            for (lieu in lieuList) {
-                if (lieu.state == state) {
-                    val item_latitude = lieu.location!!.lat
-                    val item_longitude = lieu.location!!.lng
-                    val lieu_location = GeoPoint(item_latitude, item_longitude)
-                    val overlayItem = OverlayItem(lieu.title, lieu.id.toString(), lieu_location)
-                    val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
-
-                    overlayItem.setMarker(markerDrawable)
-                    items.add(overlayItem)
-                }
-            }
-
-            val overlayObject = ItemizedIconOverlay(
-                items,
-                object : OnItemGestureListener<OverlayItem> {
-                    override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                        Toast.makeText(requireActivity(), item.title, Toast.LENGTH_LONG).show()
-                        return true
-                    }
-
-                    override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
-                        val itemId = item.snippet.toInt()
-                        val arrayId = itemId - 1
-                        val lieu = lieuList[arrayId]
-                        val action = HomeViewPagerFragmentDirections.homeToLieu(lieu)
                         findNavController().navigate(action)
                         return true
                     }

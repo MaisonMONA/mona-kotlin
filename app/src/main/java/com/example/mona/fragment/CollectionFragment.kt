@@ -15,7 +15,7 @@ import com.example.mona.adapters.CollectionAdapter
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.example.mona.R
 import com.example.mona.databinding.FragmentCollectionBinding
-import com.example.mona.viewmodels.LieuViewModel
+//import com.example.mona.viewmodels.LieuViewModel
 import kotlinx.android.synthetic.main.fragment_collection.view.*
 
 //TODO implementation of cardview
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_collection.view.*
 class CollectionFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
-    private val lieuViewModel : LieuViewModel by viewModels()
+    //private val lieuViewModel : LieuViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,

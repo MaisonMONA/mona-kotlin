@@ -1,6 +1,9 @@
 package com.example.mona.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -20,16 +23,23 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
 
     // LiveData gives us updated words when they change.
     val oeuvreList: LiveData<List<Oeuvre>>
+    //List of Oeuvres
+    val oeuvreTList: LiveData<List<Oeuvre>>
+    //List of Lieu
+    val lieuList: LiveData<List<Oeuvre>>
 
     init {
         // Gets reference to OeuvreDao from OeuvreDatabase to construct
         // the correct OeuvreRepository.
-        val oeuvreDao = OeuvreDatabase.getDatabase(
+        var database = OeuvreDatabase
+        val oeuvreDao = database.getDatabase(
             application,
             viewModelScope
         ).oeuvreDAO()
         repository = OeuvreRepository(oeuvreDao)
         oeuvreList = repository.oeuvreList
+        oeuvreTList = repository.getType("artwork")
+        lieuList = repository.getType("place")
     }
 
     fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
@@ -44,7 +54,12 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
+    private fun isNetworkConnected(): Boolean {
+        val cm = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+        return isConnected
+    }
 
 }
 

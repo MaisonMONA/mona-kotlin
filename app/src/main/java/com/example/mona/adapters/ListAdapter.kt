@@ -1,6 +1,9 @@
 package com.example.mona.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +12,11 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.R
 import com.example.mona.databinding.RecyclerviewHeaderBinding
-import com.example.mona.databinding.RecyclerviewLieuBinding
 import com.example.mona.databinding.RecyclerviewOeuvreBinding
-import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
+import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import java.security.AccessController.getContext
 
 class ListAdapter internal constructor(
     context: Context?,
@@ -23,13 +26,11 @@ class ListAdapter internal constructor(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var itemList = emptyList<Any>()
     private val navController = navController
-
     companion object {
         private var TYPE_OEUVRE = 0
         private var TYPE_LIEU = 1
         private var TYPE_HEADER = 2
     }
-
     inner class OeuvreViewHolder(
         private val binding: RecyclerviewOeuvreBinding
     ) : BaseViewHolder<Oeuvre>(binding.root) {
@@ -49,7 +50,7 @@ class ListAdapter internal constructor(
             }
         }
     }
-
+    /*
     inner class LieuViewHolder(
         private val binding: RecyclerviewLieuBinding
     ) : BaseViewHolder<Lieu>(binding.root) {
@@ -69,13 +70,13 @@ class ListAdapter internal constructor(
             }
         }
     }
-
+    */
     inner class HeaderViewHolder(
         private val binding : RecyclerviewHeaderBinding
     ) : BaseViewHolder<String>(binding.root) {
         override fun bind(item: String) {
             val featuredView: TextView = binding.featuredMessage
-            val message = "En vedette cette semaine " + getEmojiByUnicode(0x1F525)
+            val message =  "En vedette cette semaine " + getEmojiByUnicode(0x1F525)
             featuredView.text = message
         }
     }
@@ -85,10 +86,7 @@ class ListAdapter internal constructor(
             TYPE_OEUVRE -> {
                 val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
                 OeuvreViewHolder(itemBinding)
-            }
-            TYPE_LIEU -> {
-                val itemBinding = RecyclerviewLieuBinding.inflate(inflater, parent, false)
-                LieuViewHolder(itemBinding)
+
             }
             TYPE_HEADER ->{
                 val itemBinding = RecyclerviewHeaderBinding.inflate(inflater, parent, false)
@@ -100,11 +98,22 @@ class ListAdapter internal constructor(
     }
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = itemList[position]
-        when (holder) {
-            is OeuvreViewHolder -> holder.bind(element as Oeuvre)
-            is LieuViewHolder -> holder.bind(element as Lieu)
-            is HeaderViewHolder -> holder.bind(element as String)
-            else -> throw IllegalArgumentException()
+        if(holder is OeuvreViewHolder){
+            holder.bind(element as Oeuvre)
+            if(holder.itemView.circleImage != null){
+                //select the color for the articles
+                if(element.type == "artwork"){
+                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
+                }else if(element.type == "place"){
+                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
+                }
+            }else{
+                Log.d("imageColor","Pas d'image")
+            }
+        }else if(holder is HeaderViewHolder){
+            holder.bind(element as String)
+        }else{
+            throw java.lang.IllegalArgumentException()
         }
     }
 
@@ -125,7 +134,6 @@ class ListAdapter internal constructor(
         val comparable = itemList[position]
         return when (comparable) {
             is Oeuvre -> TYPE_OEUVRE
-            is Lieu -> TYPE_LIEU
             is String -> TYPE_HEADER
             else -> throw IllegalArgumentException("Invalid type of data " + position)
         }
@@ -134,7 +142,7 @@ class ListAdapter internal constructor(
     override fun getItemCount() = itemList.size
 
 
-    abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder (itemView) {
         abstract fun bind(item: T)
     }
 

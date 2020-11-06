@@ -41,11 +41,9 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
     fun getOeuvre(){
         viewModelScope.launch(Dispatchers.IO) {
-            oeuvre = repository.getOeuvre(oeuvreId)
+            oeuvre = repository.getArticleById(oeuvreId)
         }
     }
-
-
 
     fun updateTarget(oeuvreId: Int, target: Int?){
         viewModelScope.launch(Dispatchers.IO) {

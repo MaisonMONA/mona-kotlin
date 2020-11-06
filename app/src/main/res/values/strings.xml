@@ -20,6 +20,7 @@
     <string name="sign_out">Se déconnecter</string>
     <string name="how_it_works">Comment ça marche?</string>
     <string name="who_are_we">Qui sommes-nous?</string>
+    <string name="offline_mode">Mode hors-ligne</string>
 
 
     <string name="MapTiler">MapTiler</string>
@@ -71,7 +72,10 @@
     <string name="register_button">Créer mon compte</string>
 
     <string name="odj_collected_message">Félicitations! Cette oeuvre est collectionnée</string>
-
-
-
+    <!--Online-->
+    <string name="offline_message">Vous êtes hors-ligne</string>
+    <string name="online_message">Vous êtes connecté à l\'internet</string>
+    <string name="online_requirement_message">Vous devez êtres connecté à l\'internet pour aller en mode en ligne</string>
+    <string name="go_online">Aller en mode Online(présentement hors-ligne)</string>
+    <string name="go_offline">Aller en mode Hors-ligne(présentement online)</string>
 </resources>

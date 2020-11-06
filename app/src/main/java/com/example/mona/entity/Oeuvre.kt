@@ -19,9 +19,9 @@ import java.io.Serializable
 @JsonClass(generateAdapter = true)
 data class Oeuvre(
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-
+    @PrimaryKey(autoGenerate = false)
+    var id: Int,
+    var idServer: Int?,
     var title: String?,
 
     var produced_at: String?,
@@ -53,6 +53,8 @@ data class Oeuvre(
 
     var details: String?,
 
+    var type: String?,
+
     //Collection
     var state: Int?,
 
@@ -63,6 +65,7 @@ data class Oeuvre(
     var photo_path: String?,
 
     var date_photo: String?
+
 ) : Serializable
 
 

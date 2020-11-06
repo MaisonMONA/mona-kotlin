@@ -42,11 +42,14 @@ class OeuvreJourFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
+        //TODO a enlever
         //Artwork of the way is represented by the id of the artwork that
         //represents the the current day of the year
         val calendar = Calendar.getInstance()
         oeuvreId = calendar[Calendar.DAY_OF_YEAR]
+
+        //Select a random artwork from those the user didn't collect yet
+
 
         oeuvreDetailViewModel = ViewModelProviders.of(
             this,
@@ -77,8 +80,6 @@ class OeuvreJourFragment : Fragment() {
 
         return binding.root
     }
-
-
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -135,7 +136,7 @@ class OeuvreJourFragment : Fragment() {
 
                             oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
 
-                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre)
+                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
                             findNavController().navigate(action)
                         }
                     }

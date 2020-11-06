@@ -13,9 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mona.R
-import com.example.mona.databinding.RecyclerviewCollectionLieuBinding
 import com.example.mona.databinding.RecyclerviewCollectionOeuvreBinding
-import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
 
@@ -30,7 +28,7 @@ class CollectionAdapter internal constructor(
 
     companion object {
         private var TYPE_OEUVRE = 0
-        private var TYPE_LIEU = 1
+        //private var TYPE_LIEU = 1
     }
 
 
@@ -55,7 +53,7 @@ class CollectionAdapter internal constructor(
     }
 
 
-
+    /*
     inner class LieuViewHolder(
         private val binding: RecyclerviewCollectionLieuBinding
     ) : BaseViewHolder<Lieu>(binding.root) {
@@ -77,17 +75,12 @@ class CollectionAdapter internal constructor(
 
 
     }
-
-
+    */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.BaseViewHolder<*> {
         return when (viewType) {
             TYPE_OEUVRE -> {
                 val itemBinding = RecyclerviewCollectionOeuvreBinding.inflate(inflater, parent, false)
                 OeuvreViewHolder(itemBinding)
-            }
-            TYPE_LIEU -> {
-                val itemBinding = RecyclerviewCollectionLieuBinding.inflate(inflater, parent, false)
-                LieuViewHolder(itemBinding)
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
@@ -97,7 +90,6 @@ class CollectionAdapter internal constructor(
         val element = itemList[position]
         when (holder) {
             is OeuvreViewHolder -> holder.bind(element as Oeuvre)
-            is LieuViewHolder -> holder.bind(element as Lieu)
             else -> throw IllegalArgumentException()
         }
     }
@@ -119,7 +111,6 @@ class CollectionAdapter internal constructor(
         val comparable = itemList[position]
         return when (comparable) {
             is Oeuvre -> TYPE_OEUVRE
-            is Lieu -> TYPE_LIEU
             else -> throw IllegalArgumentException("Invalid type of data " + position)
         }
     }
