@@ -38,7 +38,12 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         Log.d("Save", "Rating: " + params[1])
         Log.d("Save", "comment: " + params[2])
         Log.d("Save", "Path: " + params[3])
-
+        //We must check if the comment is empty
+        var comment = params[2]
+        if(params[2] == ""){
+            Log.d("Save","Comment empty")
+            comment = "-";
+        }
         var imageFile = File(context.cacheDir,"temp.jpg")
         var imageBitMap = BitmapFactory.decodeFile(params[3])
         var outStream = FileOutputStream(imageFile)
@@ -79,7 +84,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
                 .addFormDataPart("api_token", SaveSharedPreference.getToken(context))//Get user token
                 .addFormDataPart("id", params[0])
                 .addFormDataPart("rating", params[1])
-                .addFormDataPart("comment", params[2])
+                .addFormDataPart("comment", comment)
                 .addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
                 .build()
         val request = Request.Builder()

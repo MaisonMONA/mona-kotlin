@@ -5,16 +5,13 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
 import com.example.mona.R
 import com.example.mona.data.SaveSharedPreference
-import com.example.mona.databinding.ActivityMainBinding
-import com.example.mona.fragment.HomeViewPagerFragment
 import org.osmdroid.views.MapView
 
 
@@ -86,13 +83,21 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }else{
+                //TODO a enlever
+                if(SaveSharedPreference.firstTime(this)){
+                    Log.d("TUTORIAL","FIRST TIME")
+                    val intent = Intent(this, OnboardingActivity::class.java)
+                    startActivity(intent)
+                }else{
                 // Both permissions are granted:
                 //  Setup Main Activity
-                setContentView<ActivityMainBinding>(this,
-                    R.layout.activity_main
-                )
+                //Or if its the first time, set up the tutorial
+                    setContentView(
+                        this,
+                        R.layout.activity_main
+                    )
+                }
             }
-
         }
     }
 
@@ -166,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
                     // Both permissions are granted:
                     //  Setup Main Activity
-                    setContentView<ActivityMainBinding>(this,
+                    setContentView(this,
                         R.layout.activity_main
                     )
 

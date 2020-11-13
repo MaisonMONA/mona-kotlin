@@ -27,7 +27,6 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-
         mUsername = findViewById(R.id.register_username)
         mPassword = findViewById(R.id.register_password)
         mPassword_confirmation = findViewById(R.id.register_password_confirmation)

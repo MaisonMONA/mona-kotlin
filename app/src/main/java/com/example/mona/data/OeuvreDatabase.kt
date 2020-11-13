@@ -55,8 +55,6 @@ abstract class OeuvreDatabase : RoomDatabase() {
                             Log.d("Save","accede database")
                             val oeuvreList = getOeuvreList()
                             oeuvreDao.insertAll(oeuvreList)
-                            val collectedItems = oeuvreList!!.filter{it.state == 2}
-                            //updateInfoOnline(collectedItems,)
                         }catch (e: IOException){
                             Log.d("Save","erreur database")
                         }
@@ -137,31 +135,6 @@ fun getOeuvreList(): List<Oeuvre>?{
    }
    return finalList
 }
-
-fun updateInfoOnline(itemList: List<Oeuvre>,activity: Activity){
-    for(item in itemList){
-            Log.d("Save", "Commence Save")
-            val sendOeuvre = SaveOeuvre(activity)
-            sendOeuvre.execute(
-                item.idServer.toString(),
-                item.rating.toString(),
-                item.comment,
-                item.photo_path,
-                item.type
-            )
-            val response = sendOeuvre.get()
-            if (response != "" && response != null) {
-                Log.d("Save", "reponse: " + response)
-                val reader = JSONObject(response)
-                if (reader.has("errors")) {
-                    Log.d("Save", "Erreur Save reader");
-                    val errors = reader.getJSONObject("errors")
-                    Log.d("Save", errors.toString())
-                }
-            }
-    }
-}
-
 }
 
 //getDatabase returns the singleton. It'll create the database the first
