@@ -14,21 +14,20 @@ class MyGlobals(var mContext: Context) {
     fun setOnlineMode():Boolean{
         Log.d("Save", "Set Online mode")
         //online = isNetworkConnected()
-        var ss = SaveSharedPreference
-        var online = ss.isOnline(mContext)
+        var online = SaveSharedPreference.isOnline(mContext)
         if(online){
-            ss.setOnline(mContext,false)
+            SaveSharedPreference.setOnline(mContext,false)
             //Toast.makeText(activity, R.string.offline_message, Toast.LENGTH_LONG).show()
         }else{
             if(!isNetworkConnected()){
                 //Toast.makeText(activity, R.string.online_requirement_message, Toast.LENGTH_LONG).show()
-                ss.setOnline(mContext,false)
+                SaveSharedPreference.setOnline(mContext,false)
             }else{
                 //Toast.makeText(activity, R.string.online_message, Toast.LENGTH_LONG).show()
-                ss.setOnline(mContext,true)
+                SaveSharedPreference.setOnline(mContext,true)
             }
         }
-        return ss.isOnline(mContext)
+        return SaveSharedPreference.isOnline(mContext)
     }
 
     // There are no active networks.

@@ -14,8 +14,8 @@ object SaveSharedPreference {
 
     private const val PREF_USER_NAME:String = "username"
     private const val TOKEN:String = "token"
-    private var ONLINE:String = "true"
-    private var FIRSTTIME:String = "true"
+    private var ONLINE:String = "online"
+    private var FIRSTTIME:String = "firsttime"
 
     fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
@@ -56,6 +56,7 @@ object SaveSharedPreference {
         val value = getSharedPreferences(ctx)
             .getString(ONLINE, "true")
         return value.toBoolean()}
+
     //Set the online mode to true or false
     fun setOnline(ctx: Context?, value: Boolean){
         val editor: SharedPreferences.Editor = getSharedPreferences(
@@ -63,13 +64,14 @@ object SaveSharedPreference {
         ).edit()
         val stringValue = value.toString()
         editor.putString(ONLINE, stringValue)
-        editor.commit()
+        editor.apply()
     }
+
     //First time tutorial
     fun firstTime(ctx: Context?):Boolean{
         val value = getSharedPreferences(ctx)
             .getString(FIRSTTIME, "true")
-        return value!!.toBoolean()
+        return value.toBoolean()
     }
 
     //Toggle off after the first time for the first time tutorial
@@ -78,7 +80,7 @@ object SaveSharedPreference {
             ctx
         ).edit()
         editor.putString(FIRSTTIME,"false")
-        editor.commit()
+        editor.apply()
     }
     //Set first time manually, mostly for tests can remove in the final version
     fun setFirstTime(ctx: Context?, status:Boolean){
@@ -86,7 +88,7 @@ object SaveSharedPreference {
             ctx
         ).edit()
         editor.putString(FIRSTTIME,status.toString())
-        editor.commit()
+        editor.apply()
     }
 
 }

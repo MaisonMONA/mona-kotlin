@@ -62,10 +62,10 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun finishOnboarding() {
-        SaveSharedPreference.toggleFirstTime(this)
         // Launch the main Activity, called MainActivity
-        val main = Intent(this, MainActivity::class.java)
-        startActivity(main)
+        //val main = Intent(applicationContext, MainActivity::class.java)
+        //startActivity(main)
+        SaveSharedPreference.setFirstTime(this,false)
         // Close the com.example.mona.activities.OnboardingActivity
         finish()
     }
