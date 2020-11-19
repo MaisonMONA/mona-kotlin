@@ -63,9 +63,9 @@ class MoreFragment : Fragment(){
             offlineButton.setOnClickListener {
                 online.setOnlineMode()
                 setOnlineMessage(offlineButton,SaveSharedPreference.isOnline(requireContext()))
-                if(SaveSharedPreference.isOnline(requireContext())){
-                    updateInfoOnline()
-                }
+                //if(SaveSharedPreference.isOnline(requireContext())){
+                //    updateInfoOnline()
+                //}
 
             }
 

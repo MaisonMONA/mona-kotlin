@@ -1,15 +1,9 @@
 package com.example.mona.fragment
 
-import android.content.Context
-import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -25,9 +19,8 @@ import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.recyclerview_badge.view.*
-import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class ListFragment : Fragment() {
@@ -55,13 +48,12 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("Liste", "View 1 $view")
         val binding = FragmentListBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
         //Get a refference to the recyclerView and featured message
         val recyclerView = binding.recyclerview
-
+        recyclerView.setIndexBarVisibility(true)
         //Create adapter
         adapter = ListAdapter(
             context,
@@ -70,12 +62,12 @@ class ListFragment : Fragment() {
 
         //Set a adapter
         recyclerView.adapter = adapter
-
         //Set a layout manager
         recyclerView.layoutManager = LinearLayoutManager(context)
-
+        //recyclerView.setIndexTextSize(12)
         //Featured items of the week
-        itemsOfTheWeek()
+        //itemsOfTheWeek()
+        masterList()
 
         return binding.root
     }
@@ -206,7 +198,43 @@ class ListFragment : Fragment() {
             adapter.submitList(featured_list)
 
         })
+    }
+    fun masterList(){
+        val rootList = listOf<String>("Oeuvres", "Lieux")
 
+        val lists = mutableMapOf<String,List<Any>>(
+            "Oeuvres" to listOf<String>(
+                "Titres", "Artistes","Categorie","Arrondissements","Materiaux","Techiques"
+            ),
+            "Titres" to emptyList(),
+            "Artistes" to emptyList(),
+            "Categorie" to emptyList(),
+            "Arrondissements" to emptyList(),
+            "Materiaux" to emptyList(),
+            "Techniques" to emptyList()
+        )
+        adapter.submitMasterList(lists)
+        adapter.submitRootList(rootList)
+        adapter.submitList(rootList)
+
+        oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
+            var sortedList =
+                oeuvrelist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
+            var headerList = addAlphabeticHeaders(sortedList as MutableList<Oeuvre>)
+            oeuvrelist?.let { adapter.submitSubList("Titres",headerList) }
+        })
+
+    }
+    //Adds the header at the right position in the list
+    fun addAlphabeticHeaders(list: MutableList<Oeuvre>): List<Any>{
+        var alphabetMap = list.groupBy { it.title!!.first().toUpperCase()}
+        var listAlphabet = mutableListOf<Any>()
+
+       alphabetMap.forEach { t, u ->
+           listAlphabet.add(t.toString())
+           listAlphabet.addAll(u)
+        }
+        return listAlphabet
     }
 
     fun distance(

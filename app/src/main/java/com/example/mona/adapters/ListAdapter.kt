@@ -2,11 +2,11 @@ package com.example.mona.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SectionIndexer
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
@@ -16,19 +16,22 @@ import com.example.mona.databinding.RecyclerviewOeuvreBinding
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
 import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
-import java.security.AccessController.getContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ListAdapter internal constructor(
     context: Context?,
     navController: NavController
-) : RecyclerView.Adapter<ListAdapter.BaseViewHolder<*>>() {
+) : RecyclerView.Adapter<ListAdapter.BaseViewHolder<*>>(), SectionIndexer {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var masterList = mutableMapOf<String,List<Any>>()
     private var itemList = emptyList<Any>()
     private val navController = navController
+    private var rootList = emptyList<String>();
+    var mSectionPositions: MutableList<Int?> = mutableListOf()
     companion object {
         private var TYPE_OEUVRE = 0
-        private var TYPE_LIEU = 1
         private var TYPE_HEADER = 2
     }
     inner class OeuvreViewHolder(
@@ -50,34 +53,24 @@ class ListAdapter internal constructor(
             }
         }
     }
-    /*
-    inner class LieuViewHolder(
-        private val binding: RecyclerviewLieuBinding
-    ) : BaseViewHolder<Lieu>(binding.root) {
-        init {
-            binding.setClickListener {
-                val lieu = binding.lieu
-                lieu?.let {
-                    val action = HomeViewPagerFragmentDirections.homeToLieu(it)
-                    navController.navigate(action)
-                }
-            }
-        }
-        override fun bind(item: Lieu) {
-            binding.apply {
-                lieu = item
-                executePendingBindings()
-            }
-        }
-    }
-    */
+
     inner class HeaderViewHolder(
         private val binding : RecyclerviewHeaderBinding
     ) : BaseViewHolder<String>(binding.root) {
+        init{
+                binding.setClickListener {
+                    if(binding.featuredMessage.text in this@ListAdapter.masterList.keys) {
+                        Log.d("Liste", "Liste courante " + binding.featuredMessage.text)
+                        Log.d("Liste", "Liste keys " + this@ListAdapter.masterList.keys)
+                        val subList = this@ListAdapter.masterList[binding.featuredMessage.text]
+                        Log.d("Liste", "Liste " + subList.toString())
+                        submitList(subList as List<Any>)
+                    }
+                }
+        }
         override fun bind(item: String) {
             val featuredView: TextView = binding.featuredMessage
-            val message =  "En vedette cette semaine " + getEmojiByUnicode(0x1F525)
-            featuredView.text = message
+            featuredView.text = item
         }
     }
 
@@ -117,17 +110,27 @@ class ListAdapter internal constructor(
         }
     }
 
-
-
     internal fun submitList(items: List<Any>) {
 
         //Initially, sort the list alphabetically
         //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin
         //val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
-
         this.itemList = items
 
         notifyDataSetChanged()
+    }
+
+    internal fun submitMasterList(items: MutableMap<String,List<Any>>) {
+        this.masterList = items
+        notifyDataSetChanged()
+    }
+
+    internal fun submitRootList(items: List<String>) {
+        this.rootList = items
+    }
+
+    internal fun submitSubList(child :String, items: List<Any>) {
+        this.masterList[child] = items
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -148,5 +151,31 @@ class ListAdapter internal constructor(
 
     fun getEmojiByUnicode(unicode: Int): String? {
         return String(Character.toChars(unicode))
+    }
+    //These functions are for the fast scroller
+    override fun getSectionForPosition(position: Int): Int {
+        return 0
+    }
+
+    override fun getSections(): Array<out Any>? {
+        val sections: MutableList<String> = ArrayList(26)
+        mSectionPositions = ArrayList(26)
+        var i = 0
+        val size: Int = this.itemList.size
+        while (i < size) {
+            if(itemList.get(i) is String) {
+                val section: String = java.lang.String.valueOf((itemList.get(i) as String).first()).toUpperCase(Locale.ROOT)
+                if (!sections.contains(section)) {
+                    sections.add(section)
+                    mSectionPositions.add(i)
+                }
+            }
+            i++
+        }
+        return sections.toTypedArray()
+    }
+
+    override fun getPositionForSection(sectionIndex: Int): Int {
+        return mSectionPositions.get(sectionIndex)!!
     }
 }

@@ -19,8 +19,8 @@ class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         ODJ_PAGE_INDEX to { OeuvreJourFragment() },
         MAP_PAGE_INDEX to { MapFragment() },
-        //LIST_PAGE_INDEX to { ListFragment() },
-        LIST_PAGE_INDEX to { ExpListFragment() },
+        LIST_PAGE_INDEX to { ListFragment() },
+        //LIST_PAGE_INDEX to { ExpListFragment() },
         COLLECTION_PAGE_INDEX to { CollectionFragment() },
         MORE_PAGE_INDEX to { MoreFragment() }
     )

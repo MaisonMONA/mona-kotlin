@@ -160,6 +160,9 @@ dependencies {
     //implementation "com.github.navasmdc:MaterialDesign:1.5@aar$rootProject.materialDVersion"
 
     implementation 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
+    //Fast scroll
+    implementation 'com.github.myinnos:AlphabetIndex-Fast-Scroll-RecyclerView:1.0.95'
+
 }
 kapt {
     generateStubs = true
