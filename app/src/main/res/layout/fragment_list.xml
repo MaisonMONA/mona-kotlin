@@ -18,6 +18,7 @@
             android:layout_height="match_parent"
             android:background="@color/offWhite"
             android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginBottom="?attr/actionBarSize"
             tools:listitem="@layout/recyclerview_oeuvre"
 
             app:layout_constraintBottom_toBottomOf="parent"

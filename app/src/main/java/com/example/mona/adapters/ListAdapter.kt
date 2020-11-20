@@ -16,6 +16,7 @@ import com.example.mona.databinding.RecyclerviewOeuvreBinding
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
 import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import java.text.Normalizer
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -152,6 +153,7 @@ class ListAdapter internal constructor(
     fun getEmojiByUnicode(unicode: Int): String? {
         return String(Character.toChars(unicode))
     }
+
     //These functions are for the fast scroller
     override fun getSectionForPosition(position: Int): Int {
         return 0
@@ -164,7 +166,7 @@ class ListAdapter internal constructor(
         val size: Int = this.itemList.size
         while (i < size) {
             if(itemList.get(i) is String) {
-                val section: String = java.lang.String.valueOf((itemList.get(i) as String).first()).toUpperCase(Locale.ROOT)
+                val section: String =  java.lang.String.valueOf((itemList.get(i) as String).first()).toUpperCase(Locale.ROOT)
                 if (!sections.contains(section)) {
                     sections.add(section)
                     mSectionPositions.add(i)

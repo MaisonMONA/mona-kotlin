@@ -1,5 +1,7 @@
 package com.example.mona.fragment
 
+//import com.example.mona.entity.Lieu
+//import com.example.mona.viewmodels.LieuViewModel
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -13,14 +15,12 @@ import com.example.mona.R
 import com.example.mona.adapters.ListAdapter
 import com.example.mona.databinding.FragmentListBinding
 import com.example.mona.entity.Interval
-//import com.example.mona.entity.Lieu
 import com.example.mona.entity.Oeuvre
-//import com.example.mona.viewmodels.LieuViewModel
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.text.Normalizer
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class ListFragment : Fragment() {
@@ -147,17 +147,23 @@ class ListFragment : Fragment() {
                     var distanceList = mutableListOf<Interval>()
 
                     fusedLocationClient.lastLocation
-                        .addOnSuccessListener { location->
+                        .addOnSuccessListener { location ->
                             if (location != null) {
                                 userLocation = location
 
                                 for (oeuvre in oeuvreList) {
-                                    val distance = distance(userLocation.latitude, userLocation.longitude, oeuvre.location!!.lat, oeuvre.location!!.lng)
+                                    val distance = distance(
+                                        userLocation.latitude,
+                                        userLocation.longitude,
+                                        oeuvre.location!!.lat,
+                                        oeuvre.location!!.lng
+                                    )
                                     distanceList.add(Interval(distance, oeuvre))
                                 }
 
                                 //Sort objects depending on their distance attribute
-                                val sortedList = distanceList.sortedWith(compareBy(Interval::distance))
+                                val sortedList =
+                                    distanceList.sortedWith(compareBy(Interval::distance))
 
                                 //adding the item to their respectable list sequentially
                                 var sortedOeuvres = mutableListOf<Oeuvre>()
@@ -202,9 +208,9 @@ class ListFragment : Fragment() {
     fun masterList(){
         val rootList = listOf<String>("Oeuvres", "Lieux")
 
-        val lists = mutableMapOf<String,List<Any>>(
+        val lists = mutableMapOf<String, List<Any>>(
             "Oeuvres" to listOf<String>(
-                "Titres", "Artistes","Categorie","Arrondissements","Materiaux","Techiques"
+                "Titres", "Artistes", "Categorie", "Arrondissements", "Materiaux", "Techiques"
             ),
             "Titres" to emptyList(),
             "Artistes" to emptyList(),
@@ -221,21 +227,32 @@ class ListFragment : Fragment() {
             var sortedList =
                 oeuvrelist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
             var headerList = addAlphabeticHeaders(sortedList as MutableList<Oeuvre>)
-            oeuvrelist?.let { adapter.submitSubList("Titres",headerList) }
+            oeuvrelist?.let { adapter.submitSubList("Titres", headerList) }
         })
 
     }
     //Adds the header at the right position in the list
     fun addAlphabeticHeaders(list: MutableList<Oeuvre>): List<Any>{
-        var alphabetMap = list.groupBy { it.title!!.first().toUpperCase()}
-        var listAlphabet = mutableListOf<Any>()
+        var normalList = list.filter{ it.title!!.first().isLetter()}
+        var specialList = list.filter{ !(it.title!!.first().isLetter()) }
 
-       alphabetMap.forEach { t, u ->
+        var alphabetMap = normalList.groupBy { unaccent(it.title!!).first().toUpperCase()}
+        var listAlphabet = mutableListOf<Any>()
+       alphabetMap.forEach { (t, u) ->
            listAlphabet.add(t.toString())
            listAlphabet.addAll(u)
         }
+        listAlphabet.add("*")
+        listAlphabet.addAll(specialList)
         return listAlphabet
     }
+
+    fun unaccent(src: String): String {
+        return Normalizer
+            .normalize(src, Normalizer.Form.NFD)
+            .replace("[^\\p{ASCII}]".toRegex(), "")
+    }
+
 
     fun distance(
         fromLat: Double,
