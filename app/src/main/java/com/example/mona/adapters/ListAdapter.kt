@@ -61,10 +61,7 @@ class ListAdapter internal constructor(
         init{
                 binding.setClickListener {
                     if(binding.featuredMessage.text in this@ListAdapter.masterList.keys) {
-                        Log.d("Liste", "Liste courante " + binding.featuredMessage.text)
-                        Log.d("Liste", "Liste keys " + this@ListAdapter.masterList.keys)
                         val subList = this@ListAdapter.masterList[binding.featuredMessage.text]
-                        Log.d("Liste", "Liste " + subList.toString())
                         submitList(subList as List<Any>)
                     }
                 }
@@ -100,6 +97,11 @@ class ListAdapter internal constructor(
                     holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
                 }else if(element.type == "place"){
                     holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
+                }
+                if(element.state == 1){
+                    holder.itemView.circleImage.setImageResource(R.drawable.ic_target_black)
+                }else if(element.state == 2){
+                    holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
                 }
             }else{
                 Log.d("imageColor","Pas d'image")

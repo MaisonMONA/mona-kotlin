@@ -18,6 +18,7 @@ import com.example.mona.databinding.FragmentViewPagerBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_view_pager.*
+import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
 
 
 class HomeViewPagerFragment(): Fragment() {
@@ -56,7 +57,7 @@ class HomeViewPagerFragment(): Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         val bottomNavigation = binding.bottomNavView
-
+        //bottomNavigation.background.setTint(resources.getColor(R.color.black))
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
 
             when (item.itemId) {

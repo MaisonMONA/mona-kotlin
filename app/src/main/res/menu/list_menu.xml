@@ -1,80 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:yourapp="http://schemas.android.com/tools">
 
     <item
+        app:showAsAction="ifRoom"
         android:id="@+id/list_sort"
         android:icon="@drawable/ic_sort"
-        app:showAsAction="ifRoom"
-        android:title="@string/sort_menu">
-
-        <menu>
-            <item
-                android:id="@+id/featured"
-                android:title="@string/featured_list"
-                android:icon="@drawable/ic_featured"
-                android:orderInCategory="100"/>
-
-            <item
-                android:id="@+id/oeuvre_sort"
-                android:title="@string/oeuvre_sort"
-                android:orderInCategory="100">
-
-                <menu>
-                    <item
-                        android:id="@+id/oeuvre_id"
-                        android:title="@string/sort_id"
-                        android:icon="@drawable/ic_id"
-                        android:orderInCategory="200"/>
-                    <item
-                        android:id="@+id/oeuvre_alphabetical"
-                        android:title="@string/sort_alphabetical"
-                        android:icon="@drawable/ic_alphabetical"
-                        android:orderInCategory="200"/>
-                    <item
-                        android:id="@+id/oeuvre_borough"
-                        android:title="@string/sort_borough"
-                        android:icon="@drawable/ic_borough"
-                        android:orderInCategory="200"/>
-                    <item
-                        android:id="@+id/oeuvre_distance"
-                        android:title="@string/sort_distance"
-                        android:icon="@drawable/ic_distance"
-                        android:orderInCategory="200"/>
-
-                </menu>
-            </item>
-
-            <item
-                android:id="@+id/lieu_sort"
-                android:title="@string/lieu_sort"
-                android:orderInCategory="100">
-                <menu>
-                    <item
-                        android:id="@+id/lieu_id"
-                        android:title="@string/sort_id"
-                        android:icon="@drawable/ic_id"
-                        android:orderInCategory="200"/>
-                    <item
-                        android:id="@+id/lieu_alphabetical"
-                        android:icon="@drawable/ic_alphabetical"
-                        android:title="@string/sort_alphabetical"
-                        android:orderInCategory="200"/>
-                    <item
-                        android:id="@+id/lieu_borough"
-                        android:title="@string/sort_borough"
-                        android:icon="@drawable/ic_borough"
-                        android:orderInCategory="200"/>
-                    <item
-                        android:id="@+id/lieu_distance"
-                        android:title="@string/sort_distance"
-                        android:icon="@drawable/ic_distance"
-                        android:orderInCategory="200"/>
-                </menu>
-            </item>
-
-        </menu>
+        android:title="Filter">
     </item>
-
 </menu>
