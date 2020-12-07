@@ -17,10 +17,15 @@ class ScreenSlidePageFragment : Fragment() {
         val bundle = arguments
         var position = bundle?.get("position")
         Log.d("TUTORIAL", position.toString())
-        when(position){
-            0 -> view = inflater.inflate(R.layout.fragmentscreenslidepage, container, false)
-            1 -> view = inflater.inflate(R.layout.fragmentscreenslidepage2, container, false)
-            else -> view = inflater.inflate(R.layout.fragmentscreenslidepage, container, false)
+        view = when(position){
+            0 -> inflater.inflate(R.layout.fragmentscreenslidepage, container, false)
+            1 -> inflater.inflate(R.layout.fragmentscreenslidepage2, container, false)
+            2 -> inflater.inflate(R.layout.fragmentscreenslidepage3, container, false)
+            3 -> inflater.inflate(R.layout.fragmentscreenslidepage4, container, false)
+            4 -> inflater.inflate(R.layout.fragmentscreenslidepage5, container, false)
+            5 -> inflater.inflate(R.layout.fragmentscreenslidepage6, container, false)
+            6 -> inflater.inflate(R.layout.fragmentscreenslidepage7, container, false)
+            else -> inflater.inflate(R.layout.fragmentscreenslidepage, container, false)
         }
         return view
     }

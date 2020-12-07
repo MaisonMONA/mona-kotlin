@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                 //If its the first time, set up the tutorial
                 Log.d("TUTORIAL", "Online: " + SaveSharedPreference.isOnline(this).toString())
                 Log.d("TUTORIAL", "First time: " + SaveSharedPreference.firstTime(this).toString())
+                //if(true){
                 if(SaveSharedPreference.firstTime(applicationContext)) {
                     Log.d("TUTORIAL", "FIRST TIME")
                     val intent = Intent(applicationContext, OnboardingActivity::class.java)

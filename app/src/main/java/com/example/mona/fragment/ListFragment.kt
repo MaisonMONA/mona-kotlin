@@ -1,12 +1,9 @@
-package com.example.mona.fragment
+package com.example .mona.fragment
 
 //import com.example.mona.entity.Lieu
 //import com.example.mona.viewmodels.LieuViewModel
 
-import android.content.res.ColorStateList
-import android.graphics.PorterDuff
 import android.location.Location
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -39,8 +36,10 @@ class ListFragment : Fragment() {
     //user location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var userLocation : Location
-    private var iconsStates = arrayListOf( arrayListOf(true,true,true),//Oeuvre
-                                           arrayListOf(true,true,true))//Lieu
+    private var iconsStates = arrayListOf(
+        arrayListOf(true, true, true),//Oeuvre
+        arrayListOf(true, true, true)
+    )//Lieu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -214,7 +213,7 @@ class ListFragment : Fragment() {
 
         })
     }
-    fun masterList(){
+    fun masterList() {
         val rootList = listOf<String>("Oeuvres", "Lieux")
 
         val lists = mutableMapOf<String, List<Any>>(
@@ -240,38 +239,104 @@ class ListFragment : Fragment() {
         })
 
     }
+    //Set the main list that will be displayed on screen
     fun setList(category: String, filter: String){
+        var filteredList = listOf<Oeuvre>()
+        var sortedList: List<Any>
         if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
             && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
-            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner,Observer{oeuvrelist ->
-                var sortedList = filterList(oeuvrelist,category,filter)
+            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
+                filteredList = filterStateList(oeuvrelist)
+                sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList)
             })
         }else if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])){//Only oeuvre
-            oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner,Observer{oeuvrelist ->
-                var sortedList = filterList(oeuvrelist,category,filter)
+            oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
+                filteredList = filterStateList(oeuvrelist)
+                sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList)
             })
         } else if((iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {//Only lieu
-            oeuvreViewModel.lieuList.observe(viewLifecycleOwner,Observer{lieulist ->
-                var sortedList = filterList(lieulist,category,filter)
+            oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
+                filteredList = filterStateList(lieulist)
+                sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList)
             })
         }
     }
-    fun filterList(list:List<Oeuvre>,category: String,filter: String): List<Any>{
+
+    fun filterStateList(list: List<Oeuvre>): List<Oeuvre>{
+        var filteredList = list
+        Log.d("Liste", iconsStates.toString())
+        Log.d("Liste","Avant: " + filteredList.size.toString())
+        if(!(iconsStates[0][0]) && !(iconsStates[1][0])){//if we remove the non collected/non targeted
+            Log.d("Liste", "remove 0")
+            filteredList = filteredList.filter { (it.state != null)}
+        }
+        if(!(iconsStates[0][1]) && !(iconsStates[1][1])){//if we remove the targeted items
+            Log.d("Liste", "remove 1")
+            filteredList = filteredList.filter{it.state != 1}
+        }
+        if(!(iconsStates[0][2]) && !(iconsStates[1][2])){//if we remove the collected items
+            Log.d("Liste", "remove 2")
+            filteredList = filteredList.filter{it.state != 2}
+        }
+        Log.d("Liste","Apres: " + filteredList.size.toString())
+        return filteredList
+    }
+
+    //Filter the list of items
+    fun filterList(list: List<Oeuvre>, category: String, filter: String): List<Any>{
         var currentList = list
         var sortedList = listOf<Any>()
         //Check for the category
+        when(category){
+            "Titres" -> {
+                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
+            }
+            "Artistes" -> {
+                currentList = currentList.sortedWith(compareBy {
+                    if (it.artists != null && it.artists?.size!! > 0) {
+                        it.artists!!.first().name
+                    } else {
+                        ""
+                    }
+                })
+            }
+            "Categorie" -> {
+                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
+            }
+            "Arrondissements" -> {
+                currentList = currentList.sortedWith(compareBy(Oeuvre::borough))
+            }
+            "Materiaux" -> {
+                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
+            }
+            "Techniques" -> {
+                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
+            }
+            else             ->{currentList = currentList.sortedWith(compareBy(Oeuvre::title))}
+        }
+        Log.d("Popup", "Liste lenght: " + currentList.size)
+        //currentList = currentList.sortedWith(compareBy(Oeuvre::title))
+        //currentList = currentList.filter{ it.category?.fr == category }
         //Check for the filter
         if(filter == "A-Z"){
-            currentList = list.sortedWith(compareBy(Oeuvre::title,Oeuvre::borough))
-            sortedList = addAlphabeticHeaders(currentList as MutableList<Oeuvre>)
+            when(category){
+                "Titres" -> {
+                    sortedList = addAlphabeticHeaders(currentList as MutableList<Oeuvre>)
+                }
+                "Artistes" -> {
+                    sortedList = addCategoriesHeaders(currentList as MutableList<Oeuvre>)
+                }
+                else ->{}
+            }
         }else if(filter == "Distance"){
-            sortedList = list.sortedWith( compareBy(Oeuvre::borough))
+            sortedList = currentList.sortedWith(compareBy(Oeuvre::borough))
         }else{
             sortedList = currentList
         }
+        Log.d("Popup", "Liste lenght: " + currentList.size)
         return sortedList
     }
     //Adds the header at the right position in the list
@@ -284,6 +349,40 @@ class ListFragment : Fragment() {
        alphabetMap.forEach { (t, u) ->
            listAlphabet.add(t.toString())
            listAlphabet.addAll(u)
+        }
+        listAlphabet.add("*")
+        listAlphabet.addAll(specialList)
+        return listAlphabet
+    }
+    //Adds the header at the right position in the list
+    fun addCategoriesHeaders(list: MutableList<Oeuvre>): List<Any>{
+        var normalList = list.filter{
+            if(it.artists != null && it.artists?.size!! > 0) {
+                if(it.artists!!.first().name.isNotEmpty()){
+                    it.artists?.first()?.name?.first()?.isLetter()?: false
+                }else{
+                    false
+                }
+            }else{
+                false
+            }
+        }
+        var specialList = list.filter{
+            if(it.artists != null && it.artists?.size!! > 0) {
+                if(it.artists!!.first().name.isNotEmpty()) {
+                    !(it.artists?.first()?.name?.first()?.isLetter() ?: false)
+                }else{
+                    true
+                }
+            }else{
+                true
+            }
+        }
+        var alphabetMap = normalList.groupBy { unaccent(it.artists!!.first().name).first().toUpperCase()}
+        var listAlphabet = mutableListOf<Any>()
+        alphabetMap.forEach { (t, u) ->
+            listAlphabet.add(t.toString())
+            listAlphabet.addAll(u)
         }
         listAlphabet.add("*")
         listAlphabet.addAll(specialList)
@@ -327,10 +426,10 @@ class ListFragment : Fragment() {
             }
 
     }
-
+    //Manages the filter popup display
     fun popupDisplay(view: View) {
         if(popupWindow == null){
-            Log.d("Popup","Create Popup")
+            Log.d("Popup", "Create Popup")
             val list_drawer = layoutInflater.inflate(R.layout.list_menu_drawer, null)
             popupWindow = PopupWindow(
                 list_drawer,
@@ -356,12 +455,12 @@ class ListFragment : Fragment() {
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             category_spinner.setAdapter(spinnerAdapter);
             //Set the icons
-            setIconToggle(list_drawer.findViewById(R.id.oeuvre_normal),0,0)
-            setIconToggle(list_drawer.findViewById(R.id.oeuvre_targetted),0,1)
-            setIconToggle(list_drawer.findViewById(R.id.oeuvre_collected),0,2)
-            setIconToggle(list_drawer.findViewById(R.id.lieu_normal),1,0)
-            setIconToggle(list_drawer.findViewById(R.id.lieu_targetted),1,1)
-            setIconToggle(list_drawer.findViewById(R.id.lieu_collected),1,2)
+            setIconToggle(list_drawer.findViewById(R.id.oeuvre_normal), 0, 0)
+            setIconToggle(list_drawer.findViewById(R.id.oeuvre_targetted), 0, 1)
+            setIconToggle(list_drawer.findViewById(R.id.oeuvre_collected), 0, 2)
+            setIconToggle(list_drawer.findViewById(R.id.lieu_normal), 1, 0)
+            setIconToggle(list_drawer.findViewById(R.id.lieu_targetted), 1, 1)
+            setIconToggle(list_drawer.findViewById(R.id.lieu_collected), 1, 2)
             //Send the information from the filters when we close the popup
             popupWindow!!.setOnDismissListener {
                 //Get info from the radio buttons
@@ -376,12 +475,12 @@ class ListFragment : Fragment() {
                 //Get Spinner value
                 var spinnerValue = category_spinner.selectedItem.toString()
                 Log.d("Popup", spinnerValue)
-                setList(spinnerValue,radioValue)
+                setList(spinnerValue, radioValue)
             }
         }
-        popupWindow!!.showAtLocation(layout, Gravity.TOP or Gravity.END , 0, 0);
+        popupWindow!!.showAtLocation(layout, Gravity.TOP or Gravity.END, 0, 0);
     }
-    fun setIconToggle(view: ImageView,i:Int,j:Int) {
+    fun setIconToggle(view: ImageView, i: Int, j: Int) {
         view.setOnClickListener {
             if (iconsStates[i][j]) {
                 view.setColorFilter(R.color.black)
