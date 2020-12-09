@@ -29,8 +29,10 @@ class ListAdapter internal constructor(
     private var masterList = mutableMapOf<String,List<Any>>()
     private var itemList = emptyList<Any>()
     private val navController = navController
-    private var rootList = emptyList<String>();
+    //private var rootList = emptyList<String>();
     var mSectionPositions: MutableList<Int?> = mutableListOf()
+    private var category:String = "Titres";
+
     companion object {
         private var TYPE_OEUVRE = 0
         private var TYPE_HEADER = 2
@@ -58,14 +60,7 @@ class ListAdapter internal constructor(
     inner class HeaderViewHolder(
         private val binding : RecyclerviewHeaderBinding
     ) : BaseViewHolder<String>(binding.root) {
-        init{
-                binding.setClickListener {
-                    if(binding.featuredMessage.text in this@ListAdapter.masterList.keys) {
-                        val subList = this@ListAdapter.masterList[binding.featuredMessage.text]
-                        submitList(subList as List<Any>)
-                    }
-                }
-        }
+
         override fun bind(item: String) {
             val featuredView: TextView = binding.featuredMessage
             featuredView.text = item
@@ -92,19 +87,35 @@ class ListAdapter internal constructor(
         if(holder is OeuvreViewHolder){
             holder.bind(element as Oeuvre)
             if(holder.itemView.circleImage != null){
+                //Set the texts
+                var titleText  = holder.itemView.titleView;
+                var detailText = holder.itemView.boroughView;
+                when(this.category){
+                    "Titres"->{
+                        titleText.text = element.title
+                        detailText.text = element.borough
+                    }
+                    "Artistes"->{
+                       titleText.text   = element.title
+                        detailText.text = getArtistsList(element)
+                    }
+                    else ->{
+                        titleText.text = element.title
+                        detailText.text = element.borough
+                    }
+                }
                 //select the color for the articles
                 if(element.type == "artwork"){
                     holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
                 }else if(element.type == "place"){
                     holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
                 }
+                //Set the image icon
                 if(element.state == 1){
-                    holder.itemView.circleImage.setImageResource(R.drawable.ic_target_black)
+                    holder.itemView.circleImage.setImageResource(R.drawable.targeted)
                 }else if(element.state == 2){
                     holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
                 }
-            }else{
-                Log.d("imageColor","Pas d'image")
             }
         }else if(holder is HeaderViewHolder){
             holder.bind(element as String)
@@ -113,16 +124,12 @@ class ListAdapter internal constructor(
         }
     }
 
-    internal fun submitList(items: List<Any>) {
-
-        //Initially, sort the list alphabetically
-        //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin
-        //val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
+    internal fun submitList(items: List<Any>,category: String) {
+        this.category = category;
         this.itemList = items
-
         notifyDataSetChanged()
     }
-
+    /*
     internal fun submitMasterList(items: MutableMap<String,List<Any>>) {
         this.masterList = items
         notifyDataSetChanged()
@@ -135,7 +142,7 @@ class ListAdapter internal constructor(
     internal fun submitSubList(child :String, items: List<Any>) {
         this.masterList[child] = items
     }
-
+    */
     override fun getItemViewType(position: Int): Int {
         val comparable = itemList[position]
         return when (comparable) {
@@ -181,5 +188,18 @@ class ListAdapter internal constructor(
 
     override fun getPositionForSection(sectionIndex: Int): Int {
         return mSectionPositions.get(sectionIndex)!!
+    }
+
+    fun getArtistsList(item:Oeuvre):String{
+        var artistsList = ""
+        var counter = 1;
+        if(!item.artists.isNullOrEmpty()) {
+            for (artist in item.artists!!) {
+                if(!artist.name.isBlank()) artistsList += artist.name
+                if(counter != item.artists!!.size) artistsList += ", "
+                counter++
+            }
+        }
+        return artistsList
     }
 }

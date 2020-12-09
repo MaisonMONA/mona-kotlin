@@ -84,24 +84,19 @@ class MainActivity : AppCompatActivity() {
 
             }else {
                 //If its the first time, set up the tutorial
-                Log.d("TUTORIAL", "Online: " + SaveSharedPreference.isOnline(this).toString())
-                Log.d("TUTORIAL", "First time: " + SaveSharedPreference.firstTime(this).toString())
-                //if(true){
+                //if(true){//To test the tutorial
                 if(SaveSharedPreference.firstTime(applicationContext)) {
-                    Log.d("TUTORIAL", "FIRST TIME")
                     val intent = Intent(applicationContext, OnboardingActivity::class.java)
                     startActivity(intent)
-                }
-                Log.d("TUTORIAL", "Online: " + SaveSharedPreference.isOnline(this).toString())
-                Log.d("TUTORIAL", "First time: " + SaveSharedPreference.firstTime(this).toString())
-                //}else{
+
+                }else{
                 // Both permissions are granted:
                 //  Setup Main Activity
                     setContentView(
                         this,
                         R.layout.activity_main
                     )
-                //}
+                }
             }
         }
     }

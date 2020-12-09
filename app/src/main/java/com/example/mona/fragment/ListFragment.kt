@@ -3,11 +3,14 @@ package com.example .mona.fragment
 //import com.example.mona.entity.Lieu
 //import com.example.mona.viewmodels.LieuViewModel
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mona.R
 import com.example.mona.adapters.ListAdapter
 import com.example.mona.databinding.FragmentListBinding
+import com.example.mona.entity.Interval
 import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -68,7 +72,7 @@ class ListFragment : Fragment() {
         //Set a layout manager
         recyclerView.layoutManager = LinearLayoutManager(context)
         //Create the lists for the headers and the sub lists
-        masterList()
+        setList("Titres","A-Z");
         return binding.root
     }
 
@@ -190,7 +194,8 @@ class ListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
+    //Creates a list of items in the spotlight if we want to implement this feature
+    /*
     fun itemsOfTheWeek() {
 
         val weeklyIndex = Calendar.WEEK_OF_YEAR
@@ -212,7 +217,9 @@ class ListFragment : Fragment() {
             adapter.submitList(featured_list)
 
         })
-    }
+    }*/
+    //Creates menus with sub menues, if we wan to implement this feature
+    /*
     fun masterList() {
         val rootList = listOf<String>("Oeuvres", "Lieux")
 
@@ -239,49 +246,47 @@ class ListFragment : Fragment() {
         })
 
     }
+     */
     //Set the main list that will be displayed on screen
     fun setList(category: String, filter: String){
         var filteredList = listOf<Oeuvre>()
-        var sortedList: List<Any>
+        var sortedList: List<Any> = listOf()
         if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
             && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
             oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
-                adapter.submitList(sortedList)
+                adapter.submitList(sortedList,category)
             })
         }else if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])){//Only oeuvre
             oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
-                adapter.submitList(sortedList)
+                adapter.submitList(sortedList,category)
             })
         } else if((iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {//Only lieu
             oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
                 filteredList = filterStateList(lieulist)
                 sortedList = filterList(filteredList, category, filter)
-                adapter.submitList(sortedList)
+                adapter.submitList(sortedList,category)
             })
+        } else{//Empty
+            filteredList = listOf()
+            adapter.submitList(sortedList,category)
         }
     }
 
     fun filterStateList(list: List<Oeuvre>): List<Oeuvre>{
         var filteredList = list
-        Log.d("Liste", iconsStates.toString())
-        Log.d("Liste","Avant: " + filteredList.size.toString())
-        if(!(iconsStates[0][0]) && !(iconsStates[1][0])){//if we remove the non collected/non targeted
-            Log.d("Liste", "remove 0")
+        if(!(iconsStates[0][0]) && !(iconsStates[1][0])){//if we remove the non collected/non targete
             filteredList = filteredList.filter { (it.state != null)}
         }
         if(!(iconsStates[0][1]) && !(iconsStates[1][1])){//if we remove the targeted items
-            Log.d("Liste", "remove 1")
             filteredList = filteredList.filter{it.state != 1}
         }
         if(!(iconsStates[0][2]) && !(iconsStates[1][2])){//if we remove the collected items
-            Log.d("Liste", "remove 2")
             filteredList = filteredList.filter{it.state != 2}
         }
-        Log.d("Liste","Apres: " + filteredList.size.toString())
         return filteredList
     }
 
@@ -304,7 +309,13 @@ class ListFragment : Fragment() {
                 })
             }
             "Categorie" -> {
-                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
+                currentList = currentList.sortedWith(compareBy {
+                    if (it.category != null && it.category?.fr?.length ?: 0 > 0) {
+                        it.category!!.fr
+                    } else {
+                        ""
+                    }
+                })
             }
             "Arrondissements" -> {
                 currentList = currentList.sortedWith(compareBy(Oeuvre::borough))
@@ -315,11 +326,8 @@ class ListFragment : Fragment() {
             "Techniques" -> {
                 currentList = currentList.sortedWith(compareBy(Oeuvre::title))
             }
-            else             ->{currentList = currentList.sortedWith(compareBy(Oeuvre::title))}
+            else ->{currentList = currentList.sortedWith(compareBy(Oeuvre::title))}
         }
-        Log.d("Popup", "Liste lenght: " + currentList.size)
-        //currentList = currentList.sortedWith(compareBy(Oeuvre::title))
-        //currentList = currentList.filter{ it.category?.fr == category }
         //Check for the filter
         if(filter == "A-Z"){
             when(category){
@@ -327,18 +335,84 @@ class ListFragment : Fragment() {
                     sortedList = addAlphabeticHeaders(currentList as MutableList<Oeuvre>)
                 }
                 "Artistes" -> {
-                    sortedList = addCategoriesHeaders(currentList as MutableList<Oeuvre>)
+                    sortedList = addArtistsHeaders(currentList as MutableList<Oeuvre>)
                 }
                 else ->{}
             }
         }else if(filter == "Distance"){
-            sortedList = currentList.sortedWith(compareBy(Oeuvre::borough))
-        }else{
+            addDistanceHeaders(currentList as MutableList<Oeuvre>,adapter)
+        }else{//Not needed, but keeping it just in case
             sortedList = currentList
         }
         Log.d("Popup", "Liste lenght: " + currentList.size)
         return sortedList
     }
+
+    //Adds the header at the right position in the list
+    fun addDistanceHeaders(list: MutableList<Oeuvre>,adapter:ListAdapter){
+        //Creation of mutable list of Interval object where the item and
+        // their distance from the user are stored
+        var distanceList = mutableListOf<Interval>()
+        Log.d("Liste", "Wait for location")
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //Do not have permission
+        }else{
+             // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    userLocation = location
+                    Log.d("Liste", userLocation.latitude.toString() + " " + userLocation.longitude)
+                    for (oeuvre in list) {
+                        val distance = distance(
+                            userLocation.latitude,
+                            userLocation.longitude,
+                            oeuvre.location!!.lat,
+                            oeuvre.location!!.lng
+                        )
+                        distanceList.add(Interval(distance, oeuvre))
+                    }
+
+                    //Sort objects depending on their distance attribute
+                    val sortedList =
+                        distanceList.sortedWith(compareBy(Interval::distance))
+
+                    //adding the item to their respectable list sequentially
+                    var sortedOeuvres = mutableListOf<Any>()
+                    //Set the distance headers as items at a lesser distance than X
+                    var distanceCounter = 0;//initial
+                    var distJump = 1//Jump between each header
+                    var max = 10//last header(all items after more than)
+                    for (data in sortedList) {
+                        var item = data.item as Oeuvre
+                        var distKm = data.distance//Km to meters
+                        if (distKm != null) {
+                            if(distKm <= max && distKm >= distanceCounter){
+                                sortedOeuvres.add(distanceCounter.toString() + " km")
+                                distanceCounter += distJump
+                            }
+                        }
+                        sortedOeuvres.add(item)
+                    }
+                    adapter.submitList(sortedOeuvres,"distance")
+                }
+            }
+        }
+    }
+
     //Adds the header at the right position in the list
     fun addAlphabeticHeaders(list: MutableList<Oeuvre>): List<Any>{
         var normalList = list.filter{ it.title!!.first().isLetter()}
@@ -355,38 +429,40 @@ class ListFragment : Fragment() {
         return listAlphabet
     }
     //Adds the header at the right position in the list
-    fun addCategoriesHeaders(list: MutableList<Oeuvre>): List<Any>{
-        var normalList = list.filter{
-            if(it.artists != null && it.artists?.size!! > 0) {
-                if(it.artists!!.first().name.isNotEmpty()){
-                    it.artists?.first()?.name?.first()?.isLetter()?: false
-                }else{
-                    false
+    fun addArtistsHeaders(list: MutableList<Oeuvre>): List<Any> {
+        //Find the list of all categories(names, borought ...)
+        var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
+        categoryMap.put("*", mutableListOf())
+        for(item in list){
+            if(item.artists.isNullOrEmpty()){
+                categoryMap["*"]!!.add(item)
+            }else {
+                for(artist in item.artists!!){
+                    //Because we might have a name == ""
+                    if(!artist.name.isBlank()) {
+                        if (!categoryMap.contains(artist.name)) {
+                            categoryMap.put(artist.name, mutableListOf())
+                        }
+                        categoryMap[artist.name]?.add(item)
+                    }
                 }
-            }else{
-                false
             }
         }
-        var specialList = list.filter{
-            if(it.artists != null && it.artists?.size!! > 0) {
-                if(it.artists!!.first().name.isNotEmpty()) {
-                    !(it.artists?.first()?.name?.first()?.isLetter() ?: false)
-                }else{
-                    true
-                }
-            }else{
-                true
+       // val sortedCategoryMap = categoryMap.toSortedMap(compareBy<String>{unaccent(it).first().toUpperCase()});
+        val sortedCategoryMap = categoryMap.toSortedMap()
+        //Create the list of items
+        val sortedList = mutableListOf<Any>()
+        for((k,v) in sortedCategoryMap){
+            if(k != "*"){
+                sortedList.add(k)
+                sortedList.addAll(v)
             }
         }
-        var alphabetMap = normalList.groupBy { unaccent(it.artists!!.first().name).first().toUpperCase()}
-        var listAlphabet = mutableListOf<Any>()
-        alphabetMap.forEach { (t, u) ->
-            listAlphabet.add(t.toString())
-            listAlphabet.addAll(u)
+        if(sortedCategoryMap["*"]?.isNotEmpty()!!){
+            sortedList.add("* Pas d'artiste *")
+            sortedCategoryMap["*"]?.let { sortedList.addAll(it) }
         }
-        listAlphabet.add("*")
-        listAlphabet.addAll(specialList)
-        return listAlphabet
+        return sortedList
     }
 
     fun unaccent(src: String): String {
@@ -402,25 +478,37 @@ class ListFragment : Fragment() {
         toLat: Double,
         toLon: Double
     ): Double {
-        val radius = 6378137.0 // approximate Earth radius, *in meters*
-        val deltaLat = toLat - fromLat
-        val deltaLon = toLon - fromLon
-        val angle = 2 * Math.asin(
-            Math.sqrt(
-                Math.pow(Math.sin(deltaLat / 2), 2.0) +
-                        Math.cos(fromLat) * Math.cos(toLat) *
-                        Math.pow(Math.sin(deltaLon / 2), 2.0)
-            )
-        )
-        return radius * angle
+        var p = 0.017453292519943295;    // Math.PI / 180
+        var a = 0.5 - Math.cos((toLat - fromLat) * p)/2 +
+                Math.cos(fromLat * p) * Math.cos(toLat * p) *
+                (1 - Math.cos((toLon - fromLon) * p))/2;
+
+        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     }
 
     fun getLastKnownLocation() {
 
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location->
                 if (location != null) {
-                    userLocation = location
+                    this.userLocation = location
                 }
 
             }
