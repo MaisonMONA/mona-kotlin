@@ -2,6 +2,7 @@ package com.example.mona.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.location.Location
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.mona.databinding.RecyclerviewOeuvreBinding
 import com.example.mona.entity.Oeuvre
 import com.example.mona.fragment.HomeViewPagerFragmentDirections
 import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import java.text.DecimalFormat
 import java.text.Normalizer
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +34,7 @@ class ListAdapter internal constructor(
     //private var rootList = emptyList<String>();
     var mSectionPositions: MutableList<Int?> = mutableListOf()
     private var category:String = "Titres";
+    private var currentLocation: Location = Location("")
 
     companion object {
         private var TYPE_OEUVRE = 0
@@ -96,7 +99,7 @@ class ListAdapter internal constructor(
                         detailText.text = element.borough
                     }
                     "Artistes"->{
-                       titleText.text   = element.title
+                        titleText.text   = element.title
                         detailText.text = getArtistsList(element)
                     }
                     else ->{
@@ -116,6 +119,24 @@ class ListAdapter internal constructor(
                 }else if(element.state == 2){
                     holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
                 }
+                //Set the location if we have the permission to do so
+                if(this.currentLocation.provider != ""){
+                    val distance = distance(
+                        this.currentLocation.latitude,
+                        this.currentLocation.longitude,
+                        element.location!!.lat,
+                        element.location!!.lng
+                    )
+                    var format = DecimalFormat("###.##")
+                    var text = ""
+                    if(distance < 1){
+                        text +=  format.format(Math.round(distance * 1000)).toString() + "\nm"
+                    }else{
+                        text +=  format.format(distance).toString() + "\nkm"
+                    }
+                    holder.itemView.distance.text = text
+                }
+
             }
         }else if(holder is HeaderViewHolder){
             holder.bind(element as String)
@@ -124,9 +145,10 @@ class ListAdapter internal constructor(
         }
     }
 
-    internal fun submitList(items: List<Any>,category: String) {
+    internal fun submitList(items: List<Any>,category: String,location: Location) {
         this.category = category;
         this.itemList = items
+        this.currentLocation = location
         notifyDataSetChanged()
     }
     /*
@@ -201,5 +223,20 @@ class ListAdapter internal constructor(
             }
         }
         return artistsList
+    }
+
+
+    fun distance(
+        fromLat: Double,
+        fromLon: Double,
+        toLat: Double,
+        toLon: Double
+    ): Double {
+        var p = 0.017453292519943295;    // Math.PI / 180
+        var a = 0.5 - Math.cos((toLat - fromLat) * p)/2 +
+                Math.cos(fromLat * p) * Math.cos(toLat * p) *
+                (1 - Math.cos((toLon - fromLon) * p))/2;
+
+        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     }
 }

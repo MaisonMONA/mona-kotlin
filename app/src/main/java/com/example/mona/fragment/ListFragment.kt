@@ -26,6 +26,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.text.Normalizer
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
@@ -35,15 +36,24 @@ class ListFragment : Fragment() {
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
     //adapter refference
     private lateinit var adapter: ListAdapter
-    private lateinit var layout: View
+    private var layout: View? = null
     var popupWindow: PopupWindow? = null
     //user location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var userLocation : Location
+    private var userLocation = Location("")
     private var iconsStates = arrayListOf(
         arrayListOf(true, true, true),//Oeuvre
-        arrayListOf(true, true, true)
-    )//Lieu
+        arrayListOf(true, true, true) //Lieu
+    )
+    private var iconsStatesBack = arrayListOf(
+        arrayListOf(true, true, true),//Oeuvre
+        arrayListOf(true, true, true) //Lieu
+    )
+    private var category: Int = 0
+    private var filter: Int = 0
+
+    private var fromButton = false;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,24 +66,28 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentListBinding.inflate(inflater, container, false)
-        context ?: return binding.root
+        if(this.layout == null){
+            val binding = FragmentListBinding.inflate(inflater, container, false)
+            context ?: return binding.root
 
-        //Get a refference to the recyclerView and featured message
-        val recyclerView = binding.recyclerview
-        recyclerView.setIndexBarVisibility(true)
-        //Create adapter
-        adapter = ListAdapter(
-            context,
-            findNavController()
-        )
-        //Set a adapter
-        recyclerView.adapter = adapter
-        //Set a layout manager
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        //Create the lists for the headers and the sub lists
-        setList("Titres","A-Z");
-        return binding.root
+            //Get a refference to the recyclerView and featured message
+            val recyclerView = binding.recyclerview
+            recyclerView.setIndexBarVisibility(true)
+            //Create adapter
+            adapter = ListAdapter(
+                context,
+                findNavController()
+            )
+            //Set a adapter
+            recyclerView.adapter = adapter
+            //Set a layout manager
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            //Create the lists for the headers and the sub lists
+            setList("Titres","A-Z");
+            return binding.root
+        }else{
+            return this.layout!!
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,105 +108,7 @@ class ListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d("Popup", item.toString())
         popupDisplay(layout)
-        return when (item.itemId) {
-            /*
-            R.id.featured -> {
-                itemsOfTheWeek()
-                true
-            }
-
-            R.id.oeuvre_id -> {
-                oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
-                    oeuvrelist?.let { adapter.submitList(it) }
-                })
-
-                true
-            }
-            R.id.oeuvre_alphabetical -> {
-                oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
-                    val sortedList =
-                        oeuvrelist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
-                    sortedList.let { adapter.submitList(it) }
-                })
-                true
-            }
-            R.id.oeuvre_borough -> {
-                oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
-                    val sortedList =
-                        oeuvrelist.sortedWith(compareBy(Oeuvre::borough, Oeuvre::title))
-                    sortedList.let { adapter.submitList(it) }
-                })
-                true
-            }
-            R.id.lieu_id -> {
-                oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
-                    lieulist?.let { adapter.submitList(it) }
-                })
-
-                true
-            }
-            R.id.lieu_alphabetical -> {
-                oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
-                    val sortedList =
-                        lieulist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
-                    sortedList.let { adapter.submitList(it) }
-                })
-                true
-            }
-            R.id.lieu_borough -> {
-                oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
-                    val sortedList =
-                        lieulist.sortedWith(compareBy(Oeuvre::borough, Oeuvre::title))
-                    sortedList.let { adapter.submitList(it) }
-                })
-                true
-            }
-
-            R.id.oeuvre_distance -> {
-
-                oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
-
-                    //Creation of mutable list of Interval object where the item and
-                    // their distance from the user are stored
-                    var distanceList = mutableListOf<Interval>()
-
-                    fusedLocationClient.lastLocation
-                        .addOnSuccessListener { location ->
-                            if (location != null) {
-                                userLocation = location
-
-                                for (oeuvre in oeuvreList) {
-                                    val distance = distance(
-                                        userLocation.latitude,
-                                        userLocation.longitude,
-                                        oeuvre.location!!.lat,
-                                        oeuvre.location!!.lng
-                                    )
-                                    distanceList.add(Interval(distance, oeuvre))
-                                }
-
-                                //Sort objects depending on their distance attribute
-                                val sortedList =
-                                    distanceList.sortedWith(compareBy(Interval::distance))
-
-                                //adding the item to their respectable list sequentially
-                                var sortedOeuvres = mutableListOf<Oeuvre>()
-
-                                for (data in sortedList) {
-                                    sortedOeuvres.add(data.item as Oeuvre)
-                                }
-
-                                sortedOeuvres.let { adapter.submitList(it) }
-                            }
-
-                        }
-                })
-                true
-            }
-
-             */
-            else -> super.onOptionsItemSelected(item)
-        }
+        return super.onOptionsItemSelected(item)
     }
     //Creates a list of items in the spotlight if we want to implement this feature
     /*
@@ -251,28 +167,30 @@ class ListFragment : Fragment() {
     fun setList(category: String, filter: String){
         var filteredList = listOf<Oeuvre>()
         var sortedList: List<Any> = listOf()
+        //Gets the location of the user
+        getUserLocation()
         if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
             && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
             oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
-                adapter.submitList(sortedList,category)
+                adapter.submitList(sortedList,category,userLocation)
             })
         }else if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])){//Only oeuvre
             oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
-                adapter.submitList(sortedList,category)
+                adapter.submitList(sortedList,category,userLocation)
             })
         } else if((iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {//Only lieu
             oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
                 filteredList = filterStateList(lieulist)
                 sortedList = filterList(filteredList, category, filter)
-                adapter.submitList(sortedList,category)
+                adapter.submitList(sortedList,category,userLocation)
             })
         } else{//Empty
             filteredList = listOf()
-            adapter.submitList(sortedList,category)
+            adapter.submitList(sortedList,category,userLocation)
         }
     }
 
@@ -320,12 +238,6 @@ class ListFragment : Fragment() {
             "Arrondissements" -> {
                 currentList = currentList.sortedWith(compareBy(Oeuvre::borough))
             }
-            "Materiaux" -> {
-                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
-            }
-            "Techniques" -> {
-                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
-            }
             else ->{currentList = currentList.sortedWith(compareBy(Oeuvre::title))}
         }
         //Check for the filter
@@ -337,6 +249,9 @@ class ListFragment : Fragment() {
                 "Artistes" -> {
                     sortedList = addArtistsHeaders(currentList as MutableList<Oeuvre>)
                 }
+                "Arrondissements" ->{
+                    sortedList = addBoroughtHeaders(currentList as MutableList<Oeuvre>)
+                }
                 else ->{}
             }
         }else if(filter == "Distance"){
@@ -346,6 +261,32 @@ class ListFragment : Fragment() {
         }
         Log.d("Popup", "Liste lenght: " + currentList.size)
         return sortedList
+    }
+
+    fun getUserLocation(){
+         if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //Do not have permission
+        }else{
+             // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                userLocation = location
+            }
+         }
+
     }
 
     //Adds the header at the right position in the list
@@ -383,6 +324,7 @@ class ListFragment : Fragment() {
                             oeuvre.location!!.lat,
                             oeuvre.location!!.lng
                         )
+                        if(distance > 500) Log.d("Popup", oeuvre.location!!.lat.toString() + " " + oeuvre.location!!.lng.toString())
                         distanceList.add(Interval(distance, oeuvre))
                     }
 
@@ -393,21 +335,24 @@ class ListFragment : Fragment() {
                     //adding the item to their respectable list sequentially
                     var sortedOeuvres = mutableListOf<Any>()
                     //Set the distance headers as items at a lesser distance than X
-                    var distanceCounter = 0;//initial
-                    var distJump = 1//Jump between each header
-                    var max = 10//last header(all items after more than)
+                    //var distanceCounter = 0;//initial
+                    //var distJump = 1//Jump between each header
+                    var current = -1
+                    var min = 0
+                    var max = 9//last header(all items after more than)
                     for (data in sortedList) {
                         var item = data.item as Oeuvre
-                        var distKm = data.distance//Km to meters
+                        var distKm = data.distance//Km
                         if (distKm != null) {
-                            if(distKm <= max && distKm >= distanceCounter){
-                                sortedOeuvres.add(distanceCounter.toString() + " km")
-                                distanceCounter += distJump
+                            var roundDist = distKm.toInt()
+                            if(roundDist <= max && roundDist > current){
+                                current = roundDist
+                                sortedOeuvres.add(current.toString() + "Km")
                             }
                         }
                         sortedOeuvres.add(item)
                     }
-                    adapter.submitList(sortedOeuvres,"distance")
+                    adapter.submitList(sortedOeuvres,"distance",userLocation)
                 }
             }
         }
@@ -465,6 +410,38 @@ class ListFragment : Fragment() {
         return sortedList
     }
 
+    //Adds the header at the right position in the list
+    fun addBoroughtHeaders(list: MutableList<Oeuvre>): List<Any>{
+        //Find the list of all categories(names, borought ...)
+        var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
+        categoryMap.put("*", mutableListOf())
+        for(item in list){
+            if(item.borough.isNullOrEmpty()){
+                categoryMap["*"]!!.add(item)
+            }else {
+                if (!categoryMap.contains(item.borough)) {
+                    categoryMap.put(item.borough!!, mutableListOf())
+                }
+                categoryMap[item.borough]?.add(item)
+            }
+
+            }
+        val sortedCategoryMap = categoryMap.toSortedMap()
+        //Create the list of items
+        val sortedList = mutableListOf<Any>()
+        for((k,v) in sortedCategoryMap){
+            if(k != "*"){
+                sortedList.add(k)
+                sortedList.addAll(v)
+            }
+        }
+        if(sortedCategoryMap["*"]?.isNotEmpty()!!){
+            sortedList.add("* Pas d'arrondissement *")
+            sortedCategoryMap["*"]?.let { sortedList.addAll(it) }
+        }
+        return sortedList
+    }
+
     fun unaccent(src: String): String {
         return Normalizer
             .normalize(src, Normalizer.Form.NFD)
@@ -486,36 +463,9 @@ class ListFragment : Fragment() {
         return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     }
 
-    fun getLastKnownLocation() {
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location->
-                if (location != null) {
-                    this.userLocation = location
-                }
-
-            }
-
-    }
     //Manages the filter popup display
-    fun popupDisplay(view: View) {
+    fun popupDisplay(view: View?) {
+        //Sets the popup the first time, or return the current one
         if(popupWindow == null){
             Log.d("Popup", "Create Popup")
             val list_drawer = layoutInflater.inflate(R.layout.list_menu_drawer, null)
@@ -531,9 +481,7 @@ class ListFragment : Fragment() {
                 "Titres",
                 "Artistes",
                 "Categorie",
-                "Arrondissements",
-                "Materiaux",
-                "Techiques"
+                "Arrondissements"
             )
             var spinnerAdapter = ArrayAdapter(
                 requireContext(),
@@ -543,27 +491,61 @@ class ListFragment : Fragment() {
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             category_spinner.setAdapter(spinnerAdapter);
             //Set the icons
-            setIconToggle(list_drawer.findViewById(R.id.oeuvre_normal), 0, 0)
-            setIconToggle(list_drawer.findViewById(R.id.oeuvre_targetted), 0, 1)
-            setIconToggle(list_drawer.findViewById(R.id.oeuvre_collected), 0, 2)
-            setIconToggle(list_drawer.findViewById(R.id.lieu_normal), 1, 0)
-            setIconToggle(list_drawer.findViewById(R.id.lieu_targetted), 1, 1)
-            setIconToggle(list_drawer.findViewById(R.id.lieu_collected), 1, 2)
+            var icons = listOf(
+                listOf<ImageView>(  list_drawer.findViewById(R.id.oeuvre_normal),
+                                    list_drawer.findViewById(R.id.oeuvre_targetted),
+                                    list_drawer.findViewById(R.id.oeuvre_collected)),
+                listOf<ImageView>(  list_drawer.findViewById(R.id.lieu_normal),
+                                    list_drawer.findViewById(R.id.lieu_targetted),
+                                    list_drawer.findViewById(R.id.lieu_collected))
+            )
+            icons.forEachIndexed{i,row ->
+                row.forEachIndexed{j,icon ->
+                    setIconToggle(icons[i][j],i,j)
+                }
+            }
             //Send the information from the filters when we close the popup
-            popupWindow!!.setOnDismissListener {
+            var filterButton = list_drawer.findViewById<Button>(R.id.filterButton)
+            var radioGroup = list_drawer.findViewById<RadioGroup>(R.id.radio_group)
+            radioGroup.check(R.id.radio_alphabet)
+            this.filter = R.id.radio_alphabet
+            //When we click the filter button
+            filterButton.setOnClickListener {
                 //Get info from the radio buttons
-                var radioGroup = list_drawer.findViewById<RadioGroup>(R.id.radio_group)
                 var idCurrent  = radioGroup.checkedRadioButtonId
+                this.filter = idCurrent
                 var radioValue = "None"
-                if(idCurrent != -1){
+                if(idCurrent != -1){//Not needed, just in case
                     var radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
                     radioValue = radioButton.getText().toString()
                     Log.d("Popup", radioValue)
                 }
                 //Get Spinner value
                 var spinnerValue = category_spinner.selectedItem.toString()
-                Log.d("Popup", spinnerValue)
+                this.category = category_spinner.selectedItemPosition
                 setList(spinnerValue, radioValue)
+                this.fromButton = true
+                 popupWindow!!.dismiss()
+                this.iconsStatesBack[0] = ArrayList(this.iconsStates[0])
+                this.iconsStatesBack[1] = ArrayList(this.iconsStates[1])
+            }
+            //When the popup closes
+            popupWindow!!.setOnDismissListener {
+                //If the user clicked outside, reset the values
+                if (!this.fromButton) {
+                    radioGroup.check(this.filter)
+                    category_spinner.setSelection(this.category)
+                    this.iconsStates[0] = ArrayList(this.iconsStatesBack[0])
+                    this.iconsStates[1] = ArrayList(this.iconsStatesBack[1])
+
+                    icons.forEachIndexed { i, row ->
+                        icons.forEachIndexed { j, icon ->
+                            setIcon(icons[i][j], i, j)
+                        }
+                    }
+
+                }
+                this.fromButton = false
             }
         }
         popupWindow!!.showAtLocation(layout, Gravity.TOP or Gravity.END, 0, 0);
@@ -579,4 +561,12 @@ class ListFragment : Fragment() {
             }
         }
     }
+    fun setIcon(view: ImageView, i: Int, j: Int) {
+        if (!iconsStates[i][j]) {
+            view.setColorFilter(R.color.black)
+        } else {
+            view.colorFilter = null
+        }
+    }
+
 }
