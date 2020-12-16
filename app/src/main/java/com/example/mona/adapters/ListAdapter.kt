@@ -121,18 +121,12 @@ class ListAdapter internal constructor(
                 }
                 //Set the location if we have the permission to do so
                 if(this.currentLocation.provider != ""){
-                    val distance = distance(
-                        this.currentLocation.latitude,
-                        this.currentLocation.longitude,
-                        element.location!!.lat,
-                        element.location!!.lng
-                    )
                     var format = DecimalFormat("###.##")
                     var text = ""
-                    if(distance < 1){
-                        text +=  format.format(Math.round(distance * 1000)).toString() + "\nm"
+                    if(element.distance!! < 1){
+                        text +=  format.format(Math.round(element.distance!! * 1000)).toString() + "\nm"
                     }else{
-                        text +=  format.format(distance).toString() + "\nkm"
+                        text +=  format.format(element.distance).toString() + "\nkm"
                     }
                     holder.itemView.distance.text = text
                 }
@@ -223,20 +217,5 @@ class ListAdapter internal constructor(
             }
         }
         return artistsList
-    }
-
-
-    fun distance(
-        fromLat: Double,
-        fromLon: Double,
-        toLat: Double,
-        toLon: Double
-    ): Double {
-        var p = 0.017453292519943295;    // Math.PI / 180
-        var a = 0.5 - Math.cos((toLat - fromLat) * p)/2 +
-                Math.cos(fromLat * p) * Math.cos(toLat * p) *
-                (1 - Math.cos((toLon - fromLon) * p))/2;
-
-        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     }
 }

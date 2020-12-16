@@ -24,6 +24,7 @@ import com.example.mona.entity.Oeuvre
 import com.example.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
 import java.text.Normalizer
 import java.util.*
 import kotlin.collections.ArrayList
@@ -212,54 +213,31 @@ class ListFragment : Fragment() {
     fun filterList(list: List<Oeuvre>, category: String, filter: String): List<Any>{
         var currentList = list
         var sortedList = listOf<Any>()
+        setDistances(list)
         //Check for the category
         when(category){
-            "Titres" -> {
-                currentList = currentList.sortedWith(compareBy(Oeuvre::title))
-            }
-            "Artistes" -> {
-                currentList = currentList.sortedWith(compareBy {
-                    if (it.artists != null && it.artists?.size!! > 0) {
-                        it.artists!!.first().name
-                    } else {
-                        ""
-                    }
-                })
-            }
-            "Categorie" -> {
-                currentList = currentList.sortedWith(compareBy {
-                    if (it.category != null && it.category?.fr?.length ?: 0 > 0) {
-                        it.category!!.fr
-                    } else {
-                        ""
-                    }
-                })
-            }
-            "Arrondissements" -> {
-                currentList = currentList.sortedWith(compareBy(Oeuvre::borough))
-            }
-            else ->{currentList = currentList.sortedWith(compareBy(Oeuvre::title))}
-        }
-        //Check for the filter
-        if(filter == "A-Z"){
-            when(category){
-                "Titres" -> {
+            "Titres" ->{
+                if(filter == "A-Z"){
+                    currentList = currentList.sortedWith(compareBy(Oeuvre::title))
                     sortedList = addAlphabeticHeaders(currentList as MutableList<Oeuvre>)
+                }else{
+                    sortedList = addDistanceHeaders(currentList as MutableList<Oeuvre>)
                 }
-                "Artistes" -> {
-                    sortedList = addArtistsHeaders(currentList as MutableList<Oeuvre>)
-                }
-                "Arrondissements" ->{
-                    sortedList = addBoroughtHeaders(currentList as MutableList<Oeuvre>)
-                }
-                else ->{}
             }
-        }else if(filter == "Distance"){
-            addDistanceHeaders(currentList as MutableList<Oeuvre>,adapter)
-        }else{//Not needed, but keeping it just in case
-            sortedList = currentList
+            "Artistes" ->{
+                sortedList = addArtistsHeaders(currentList as MutableList<Oeuvre>,filter)
+            }
+            "Categorie" ->{
+                sortedList = addCategoriesHeaders(currentList as MutableList<Oeuvre>,filter)
+            }
+            "Arrondissements" ->{
+                sortedList = addBoroughtHeaders(currentList as MutableList<Oeuvre>,filter)
+            }
+            else -> {
+                sortedList = currentList
+            }
         }
-        Log.d("Popup", "Liste lenght: " + currentList.size)
+        Log.d("Popup", "Liste lenght: " + sortedList.size)
         return sortedList
     }
 
@@ -289,73 +267,45 @@ class ListFragment : Fragment() {
 
     }
 
+    fun setDistances(list:List<Oeuvre>){
+        getUserLocation()
+        for(oeuvre in list) {
+            val distance = distance(
+                userLocation.latitude,
+                userLocation.longitude,
+                oeuvre.location!!.lat,
+                oeuvre.location!!.lng
+            )
+            oeuvre.distance = distance
+        }
+    }
+
     //Adds the header at the right position in the list
-    fun addDistanceHeaders(list: MutableList<Oeuvre>,adapter:ListAdapter){
+    fun addDistanceHeaders(list: MutableList<Oeuvre>): List<Any>{
         //Creation of mutable list of Interval object where the item and
         // their distance from the user are stored
-        var distanceList = mutableListOf<Interval>()
-        Log.d("Liste", "Wait for location")
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            //Do not have permission
-        }else{
-             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                if (location != null) {
-                    userLocation = location
-                    Log.d("Liste", userLocation.latitude.toString() + " " + userLocation.longitude)
-                    for (oeuvre in list) {
-                        val distance = distance(
-                            userLocation.latitude,
-                            userLocation.longitude,
-                            oeuvre.location!!.lat,
-                            oeuvre.location!!.lng
-                        )
-                        if(distance > 500) Log.d("Popup", oeuvre.location!!.lat.toString() + " " + oeuvre.location!!.lng.toString())
-                        distanceList.add(Interval(distance, oeuvre))
-                    }
-
-                    //Sort objects depending on their distance attribute
-                    val sortedList =
-                        distanceList.sortedWith(compareBy(Interval::distance))
-
-                    //adding the item to their respectable list sequentially
-                    var sortedOeuvres = mutableListOf<Any>()
-                    //Set the distance headers as items at a lesser distance than X
-                    //var distanceCounter = 0;//initial
-                    //var distJump = 1//Jump between each header
-                    var current = -1
-                    var min = 0
-                    var max = 9//last header(all items after more than)
-                    for (data in sortedList) {
-                        var item = data.item as Oeuvre
-                        var distKm = data.distance//Km
-                        if (distKm != null) {
-                            var roundDist = distKm.toInt()
-                            if(roundDist <= max && roundDist > current){
-                                current = roundDist
-                                sortedOeuvres.add(current.toString() + "Km")
-                            }
-                        }
-                        sortedOeuvres.add(item)
-                    }
-                    adapter.submitList(sortedOeuvres,"distance",userLocation)
+        Log.d("Liste",list[0].distance.toString())
+        val sortedList = list.sortedWith(compareBy(Oeuvre::distance))
+        //adding the item to their respectable list sequentially
+        var sortedOeuvres = mutableListOf<Any>()
+        //Set the distance headers as items at a lesser distance than X
+        //var distanceCounter = 0;//initial
+        //var distJump = 1//Jump between each header
+        var current = -1
+        var min = 0
+        var max = 9//last header(all items after more than)
+        for (oeuvre in sortedList) {
+            var distKm = oeuvre.distance//Km
+            if (distKm != null) {
+                var roundDist = distKm.toInt()
+                if(roundDist in (current + 1)..max){
+                    current = roundDist
+                    sortedOeuvres.add(current.toString() + "Km")
                 }
             }
+            sortedOeuvres.add(oeuvre)
         }
+        return sortedOeuvres
     }
 
     //Adds the header at the right position in the list
@@ -374,7 +324,7 @@ class ListFragment : Fragment() {
         return listAlphabet
     }
     //Adds the header at the right position in the list
-    fun addArtistsHeaders(list: MutableList<Oeuvre>): List<Any> {
+    fun addArtistsHeaders(list: MutableList<Oeuvre>,filter: String): List<Any> {
         //Find the list of all categories(names, borought ...)
         var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
         categoryMap.put("*", mutableListOf())
@@ -400,7 +350,13 @@ class ListFragment : Fragment() {
         for((k,v) in sortedCategoryMap){
             if(k != "*"){
                 sortedList.add(k)
-                sortedList.addAll(v)
+                var vSort = listOf<Oeuvre>()
+                if(filter == "A-Z"){
+                    vSort = v.sortedWith(compareBy(Oeuvre::title))
+                }else{
+                    vSort = v.sortedWith(compareBy(Oeuvre::distance))
+                }
+                sortedList.addAll(vSort)
             }
         }
         if(sortedCategoryMap["*"]?.isNotEmpty()!!){
@@ -411,7 +367,7 @@ class ListFragment : Fragment() {
     }
 
     //Adds the header at the right position in the list
-    fun addBoroughtHeaders(list: MutableList<Oeuvre>): List<Any>{
+    fun addBoroughtHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
         //Find the list of all categories(names, borought ...)
         var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
         categoryMap.put("*", mutableListOf())
@@ -432,11 +388,55 @@ class ListFragment : Fragment() {
         for((k,v) in sortedCategoryMap){
             if(k != "*"){
                 sortedList.add(k)
-                sortedList.addAll(v)
+                var vSort = listOf<Oeuvre>()
+                if(filter == "A-Z"){
+                    vSort = v.sortedWith(compareBy(Oeuvre::title))
+                }else{
+                    vSort = v.sortedWith(compareBy(Oeuvre::distance))
+                }
+                sortedList.addAll(vSort)
             }
         }
         if(sortedCategoryMap["*"]?.isNotEmpty()!!){
             sortedList.add("* Pas d'arrondissement *")
+            sortedCategoryMap["*"]?.let { sortedList.addAll(it) }
+        }
+        return sortedList
+    }
+
+    //Adds the header at the right position in the list
+    fun addCategoriesHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
+        //Find the list of all categories(names, borought ...)
+        var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
+        categoryMap.put("*", mutableListOf())
+        for(item in list){
+            if(item.category == null || item.category!!.fr.isNullOrEmpty()){
+                categoryMap["*"]!!.add(item)
+            }else {
+                if (!categoryMap.contains(item.category!!.fr)) {
+                    categoryMap.put(item.category!!.fr, mutableListOf())
+                }
+                categoryMap[item.category!!.fr]?.add(item)
+            }
+
+        }
+        val sortedCategoryMap = categoryMap.toSortedMap()
+        //Create the list of items
+        val sortedList = mutableListOf<Any>()
+        for((k,v) in sortedCategoryMap){
+            if(k != "*"){
+                sortedList.add(k)
+                var vSort = listOf<Oeuvre>()
+                if(filter == "A-Z"){
+                    vSort = v.sortedWith(compareBy(Oeuvre::title))
+                }else{
+                    vSort = v.sortedWith(compareBy(Oeuvre::distance))
+                }
+                sortedList.addAll(vSort)
+            }
+        }
+        if(sortedCategoryMap["*"]?.isNotEmpty()!!){
+            sortedList.add("* Pas de catégorie *")
             sortedCategoryMap["*"]?.let { sortedList.addAll(it) }
         }
         return sortedList

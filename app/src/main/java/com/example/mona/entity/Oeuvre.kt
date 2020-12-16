@@ -3,6 +3,7 @@ package com.example.mona.entity
 // All data properties of an artwork
 // Bult in Moshi Adapter translates them directly into its instance
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.mona.converter.*
@@ -13,7 +14,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.osmdroid.util.Distance
 import java.io.Serializable
-
 
 @Entity(tableName = "artwork_table")
 @JsonClass(generateAdapter = true)
@@ -64,9 +64,12 @@ data class Oeuvre(
 
     var photo_path: String?,
 
-    var date_photo: String?
+    var date_photo: String?,
 
-) : Serializable
+) : Serializable{
+    @Transient
+    var distance: Double? = null
+}
 
 
 
