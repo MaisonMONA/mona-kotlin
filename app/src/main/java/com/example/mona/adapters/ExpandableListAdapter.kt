@@ -82,7 +82,7 @@ class ExpandableListAdapter(
             }
             if(element.state == 1){
                 convertView.circleImage.setImageResource(R.drawable.ic_target_black)
-            }else if(element.state == 2){
+            }else if(element.state == 2 || element.state == 3){
                 convertView.circleImage.setImageResource(R.drawable.ic_collected)
             }
         }

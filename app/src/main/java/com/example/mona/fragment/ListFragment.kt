@@ -3,10 +3,12 @@ package com.example .mona.fragment
 //import com.example.mona.entity.Lieu
 //import com.example.mona.viewmodels.LieuViewModel
 
+import `in`.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -16,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mona.R
 import com.example.mona.adapters.ListAdapter
 import com.example.mona.databinding.FragmentListBinding
@@ -38,6 +41,8 @@ class ListFragment : Fragment() {
     //adapter refference
     private lateinit var adapter: ListAdapter
     private var layout: View? = null
+    private var position: Parcelable? = null
+    private lateinit var recyclerView: IndexFastScrollRecyclerView
     var popupWindow: PopupWindow? = null
     //user location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -67,12 +72,12 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if(this.layout == null){
+        //if(this.layout == null){
             val binding = FragmentListBinding.inflate(inflater, container, false)
             context ?: return binding.root
 
             //Get a refference to the recyclerView and featured message
-            val recyclerView = binding.recyclerview
+            recyclerView = binding.recyclerview
             recyclerView.setIndexBarVisibility(true)
             //Create adapter
             adapter = ListAdapter(
@@ -86,9 +91,9 @@ class ListFragment : Fragment() {
             //Create the lists for the headers and the sub lists
             setList("Titres","A-Z");
             return binding.root
-        }else{
-            return this.layout!!
-        }
+        //}else{
+        //    return this.layout!!
+        //}
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,6 +104,13 @@ class ListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
+        Log.d("Liste","Resume")
+        recyclerView.layoutManager?.onRestoreInstanceState(position)
+    }
+
+    override fun onPause() {
+        super.onPause()
+       position = recyclerView.layoutManager?.onSaveInstanceState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

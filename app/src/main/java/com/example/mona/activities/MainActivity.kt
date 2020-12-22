@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         //Check if user has current session via Shared Prefferences
         if (SaveSharedPreference.getToken(this).length == 0){
+            Log.d("Mode","Login")
             val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(myIntent)
         } else {

@@ -1,11 +1,10 @@
 package com.example.mona.activities
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.util.Log
-import android.widget.Toast
-import com.example.mona.R
 import com.example.mona.data.SaveSharedPreference
 
 

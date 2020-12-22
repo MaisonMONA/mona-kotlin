@@ -116,7 +116,7 @@ class ListAdapter internal constructor(
                 //Set the image icon
                 if(element.state == 1){
                     holder.itemView.circleImage.setImageResource(R.drawable.targeted)
-                }else if(element.state == 2){
+                }else if(element.state == 2 || element.state == 3){
                     holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
                 }
                 //Set the location if we have the permission to do so

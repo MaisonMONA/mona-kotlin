@@ -55,7 +55,13 @@ class OeuvreRatingFragment : Fragment() {
             val itemComment = view.findViewById<TextView>(R.id.comment)
             val comment = itemComment.text.toString()
 
-            val state = 2
+            var state: Int?
+
+            if(SaveSharedPreference.isOnline(requireContext())){
+                state = 2
+            }else{
+                state = 3
+            }
 
             val date = getDate().toString()
 

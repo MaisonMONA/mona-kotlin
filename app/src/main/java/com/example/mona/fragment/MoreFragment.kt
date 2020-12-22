@@ -11,12 +11,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.mona.R
 import com.example.mona.activities.LoginActivity
 import com.example.mona.activities.MyGlobals
+import com.example.mona.activities.OnboardingActivity
 import com.example.mona.activities.RegisterActivity
 import com.example.mona.data.OeuvreDatabase
+import com.example.mona.data.OeuvreRepository
 import com.example.mona.data.SaveSharedPreference
 import com.example.mona.databinding.FragmentMoreBinding
 import com.example.mona.entity.Oeuvre
@@ -24,6 +28,11 @@ import com.example.mona.task.SaveOeuvre
 import com.example.mona.viewmodels.OeuvreViewModel
 import kotlinx.android.synthetic.main.fragment_more.*
 import org.json.JSONObject
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 class MoreFragment : Fragment(){
 
@@ -46,8 +55,10 @@ class MoreFragment : Fragment(){
 
             }
             howItWorksButton.setOnClickListener{
-                val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
-                findNavController().navigate(action)
+                //val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
+                //findNavController().navigate(action)
+                val intent = Intent(context, OnboardingActivity::class.java)
+                startActivity(intent)
             }
 
             aboutButton.setOnClickListener {
@@ -63,9 +74,9 @@ class MoreFragment : Fragment(){
             offlineButton.setOnClickListener {
                 online.setOnlineMode()
                 setOnlineMessage(offlineButton,SaveSharedPreference.isOnline(requireContext()))
-                //if(SaveSharedPreference.isOnline(requireContext())){
-                //    updateInfoOnline()
-                //}
+                if(SaveSharedPreference.isOnline(requireContext())){
+                    updateInfoOnline()
+                }
 
             }
 
@@ -88,14 +99,20 @@ class MoreFragment : Fragment(){
         val oeuvreViewModel: OeuvreViewModel by viewModels()
 
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { itemlist ->
-            val sortedList = itemlist.filter{it.state == 2}
+            val sortedList = itemlist.filter{it.state == 3}
             update(sortedList);
         })
     }
 
     fun update(list: List<Oeuvre>){
+        val repository: OeuvreRepository
+        val oeuvreDao = OeuvreDatabase.getDatabase(
+            requireContext(),
+            lifecycleScope
+        ).oeuvreDAO()
+        repository = OeuvreRepository.getInstance(oeuvreDao)
+
         for(item in list){
-            Log.d("Save", "Commence Save")
             val sendOeuvre = SaveOeuvre(requireContext())
             sendOeuvre.execute(
                 item.idServer.toString(),
@@ -112,6 +129,10 @@ class MoreFragment : Fragment(){
                     Log.d("Save", "Erreur Save reader");
                     val errors = reader.getJSONObject("errors")
                     Log.d("Save", errors.toString())
+                }else{
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        repository.updateTarget(item.id,2)
+                    }
                 }
             }
         }

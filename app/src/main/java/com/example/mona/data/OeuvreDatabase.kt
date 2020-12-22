@@ -23,6 +23,8 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import java.lang.Exception
+import java.sql.Timestamp
 
 
 @Database(entities = arrayOf(Oeuvre::class), version = 1, exportSchema = false)
@@ -64,7 +66,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                 }
             }
         }
-
+/*
 fun getOeuvreList(): List<Oeuvre>?{
 
    val finalList : MutableList<Oeuvre> = mutableListOf()
@@ -134,6 +136,76 @@ fun getOeuvreList(): List<Oeuvre>?{
        }
    }
    return finalList
+}
+*/
+
+fun getOeuvreList(): List<Oeuvre>?{
+
+    val finalList : MutableList<Oeuvre> = mutableListOf()
+    var id = 1
+    var idOeuvre = 1
+    var idPlace  = 1
+    //localhost:8000/api/lastUpdatedPlaces?date=2015-12-19 17:36:22.444
+    var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
+    Log.d("Database: ", "Last update: $lastUpdate")
+    //Manually fill in the maximum number of pages
+    //API call to server to get all artworks and places
+    //We combine the 2 in one lists
+
+    val artworksJson = ArtworksTask(lastUpdate).execute().get()
+    var oeuvreArray = JSONArray(artworksJson)
+    //val oeuvreArray = objectJson.getJSONArray("data")
+    var nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
+    //var nbArtworks = 0
+    Log.d("Database", "Nb Artworks: $nbArtworks")
+
+    val placeJson = PlacesTask(lastUpdate).execute().get()
+    //Log.d("Database", "Liste Places:\n$placeJson")
+   // val placeObjectJson = JSONObject(placeJson)
+    //var placeArray = placeObjectJson.getJSONArray("data")
+    var placeArray = JSONArray(placeJson)
+    var articleArray = JSONArray()
+    Log.d("Database", "Nb Lieu: ${placeArray.length()}")
+    for(i in 0 until nbArtworks){
+        articleArray.put(oeuvreArray.get(i))
+    }
+    for(i in 0 until placeArray.length()){
+        articleArray.put(placeArray.get(i))
+    }
+    Log.d("Database", "Total: ${articleArray.length()}")
+    //Moshi is a library with built in type adapters to ease data parsing such as our case.
+    //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
+    val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
+    //efficiently loops through automatically with its adapter
+    val type = Types.newParameterizedType(List::class.java, Oeuvre::class.java)
+    val adapter: JsonAdapter<List<Oeuvre>> = moshi.adapter(type)
+    val oeuvreList: List<Oeuvre>? = adapter.fromJson(articleArray.toString())
+
+    val changed_list = oeuvreList?.toMutableList()
+    if (changed_list != null) {
+        var index = 1
+        for(oeuvre: Oeuvre in changed_list) {
+            if(index++ <= nbArtworks){
+                oeuvre.type = "artwork"
+                oeuvre.idServer = idOeuvre++
+            }else{
+                oeuvre.type = "place"
+                oeuvre.idServer = idPlace++
+            }
+            oeuvre.id = id++
+        }
+    }
+    finalList.let{
+        changed_list?.let(finalList::addAll)
+    }
+    var currentTime = Timestamp(System.currentTimeMillis())
+    Log.d("Database",currentTime.toString())
+    SaveSharedPreference.setLastUpdate(mContext, currentTime.toString())
+    return finalList
 }
 }
 

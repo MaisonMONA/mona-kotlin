@@ -1,6 +1,7 @@
 package com.example.mona.activities
 
 import ScreenSlidePageFragment
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -107,8 +108,8 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun finishOnboarding() {
         // Launch the main Activity, called MainActivity
-        //val main = Intent(applicationContext, MainActivity::class.java)
-        //startActivity(main)
+        val main = Intent(applicationContext, MainActivity::class.java)
+        startActivity(main)
         SaveSharedPreference.setFirstTime(this, false)
         // Close the com.example.mona.activities.OnboardingActivity
         finish()

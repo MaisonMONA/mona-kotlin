@@ -94,6 +94,7 @@ class MapFragment : Fragment() {
         addOeuvre(null)
         addOeuvre(1)
         addOeuvre(2)
+        addOeuvre(3)
 
         //addLieu(null, R.drawable.pin_lieu_normal)
         //addLieu(1, R.drawable.pin_lieu_target)
@@ -156,14 +157,14 @@ class MapFragment : Fragment() {
             return when(state){
                 null -> R.drawable.pin_oeuvre_normal
                    1 -> R.drawable.pin_oeuvre_target
-                   2 -> R.drawable.pin_oeuvre_collected
+                   2,3 -> R.drawable.pin_oeuvre_collected
                 else -> R.drawable.pin_oeuvre_normal
             }
         }else if(type == "place"){
             return when(state){
                 null -> R.drawable.pin_lieu_normal
                 1 -> R.drawable.pin_lieu_target
-                2 -> R.drawable.pin_lieu_collected
+                2,3 -> R.drawable.pin_lieu_collected
                 else -> R.drawable.pin_lieu_normal
             }
         }

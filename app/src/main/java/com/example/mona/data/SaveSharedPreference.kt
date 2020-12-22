@@ -16,6 +16,7 @@ object SaveSharedPreference {
     private const val TOKEN:String = "token"
     private var ONLINE:String = "online"
     private var FIRSTTIME:String = "firsttime"
+    private var LASTUPDATE:String = "00-00-0000"
 
     fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
@@ -91,4 +92,16 @@ object SaveSharedPreference {
         editor.apply()
     }
 
+    fun getLastUpdate(ctx: Context?): String {
+        return getSharedPreferences(ctx)
+            .getString(LASTUPDATE, "0000-00-00 12:00:00.000")
+    }
+
+    fun setLastUpdate(ctx: Context?, time: String) {
+        val editor: SharedPreferences.Editor = getSharedPreferences(
+            ctx
+        ).edit()
+        editor.putString(LASTUPDATE, time)
+        editor.apply()
+    }
 }
