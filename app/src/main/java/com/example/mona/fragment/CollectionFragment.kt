@@ -42,7 +42,7 @@ class CollectionFragment : Fragment() {
         recyclerView.adapter = adapter
 
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList->
-            val sortedOeuvres = oeuvreList.filter { oeuvre -> oeuvre.state == 2 }
+            val sortedOeuvres = oeuvreList.filter { (it.state == 2 || it.state == 3) }
 
             adapter.submitList(sortedOeuvres)
 
