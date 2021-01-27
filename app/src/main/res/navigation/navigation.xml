@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/fragmentViewPager_dest"
-        android:name="com.example.mona.fragment.HomeViewPagerFragment"
+        android:name="com.maison.mona.fragment.HomeViewPagerFragment"
         tools:layout="@layout/fragment_view_pager">
         <action
             android:id="@+id/odj_to_map"
@@ -58,11 +58,11 @@
 
     <fragment
         android:id="@+id/oeuvreItem_dest"
-        android:name="com.example.mona.fragment.OeuvreDetailFragment"
+        android:name="com.maison.mona.fragment.OeuvreDetailFragment"
         android:label="@string/Item">
         <argument
             android:name="item_selected"
-            app:argType="com.example.mona.entity.Oeuvre" />
+            app:argType="com.maison.mona.entity.Oeuvre" />
         <action
             android:id="@+id/open_oeuvre_map"
             app:destination="@id/oeuvreItemMap_dest"
@@ -81,22 +81,22 @@
 
     <fragment
         android:id="@+id/oeuvreItemMap_dest"
-        android:name="com.example.mona.fragment.OeuvreItemMapFragment"
+        android:name="com.maison.mona.fragment.OeuvreItemMapFragment"
         android:label="@string/ItemMap"
         tools:layout="@layout/fragment_item_map">
         <argument
             android:name="oeuvre"
-            app:argType="com.example.mona.entity.Oeuvre"/>
+            app:argType="com.maison.mona.entity.Oeuvre"/>
     </fragment>
 
     <fragment
         android:id="@+id/oeuvreRating_dest"
-        android:name="com.example.mona.fragment.OeuvreRatingFragment"
+        android:name="com.maison.mona.fragment.OeuvreRatingFragment"
         android:label="@string/Rating"
         tools:layout="@layout/fragment_item_rating">
         <argument
             android:name="oeuvre"
-            app:argType="com.example.mona.entity.Oeuvre"/>
+            app:argType="com.maison.mona.entity.Oeuvre"/>
         <argument
             android:name="imagePath"
             app:argType="string"
@@ -106,7 +106,7 @@
 
     <fragment
         android:id="@+id/moreText_dest"
-        android:name="com.example.mona.fragment.MoreTextFragment"
+        android:name="com.maison.mona.fragment.MoreTextFragment"
         android:label="@string/More"
         tools:layout="@layout/fragment_more_text">
         <argument
@@ -116,7 +116,7 @@
 
     <fragment
         android:id="@+id/badge_dest"
-        android:name="com.example.mona.fragment.BadgeFragment"
+        android:name="com.maison.mona.fragment.BadgeFragment"
         android:label="@string/Badge"
         tools:layout="@layout/fragment_badge">
 
@@ -132,13 +132,13 @@
 
     <fragment
         android:id="@+id/badgeDetail_dest"
-        android:name="com.example.mona.fragment.BadgeDetailFragment"
+        android:name="com.maison.mona.fragment.BadgeDetailFragment"
         android:label="@string/Badge"
         tools:layout="@layout/fragment_badge_item">
 
         <argument
             android:name="badge"
-            app:argType="com.example.mona.entity.Badge"/>
+            app:argType="com.maison.mona.entity.Badge"/>
     </fragment>
 
 

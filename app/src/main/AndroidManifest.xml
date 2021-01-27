@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.mona"
+    package="com.maison.mona"
     tools:ignore="MissingLeanbackLauncher" >
 
     <uses-feature
@@ -13,13 +13,15 @@
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -28,15 +30,16 @@
         android:icon="@mipmap/ic_launcher_mona"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".activities.OnboardingActivity"
+            android:name="com.maison.mona.activities.OnboardingActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_onboarding"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.maison.mona.activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme" >
             <intent-filter>
@@ -46,15 +49,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.maison.mona.activities.LoginActivity"
             android:screenOrientation="portrait" >
         </activity> <!-- Force Portrait mode although not recommended -->
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.maison.mona.activities.MainActivity"
+            android:foregroundServiceType="location"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.PermissionsDeniedActivity" />
+        <activity android:name="com.maison.mona.activities.PermissionsDeniedActivity" />
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name="com.maison.mona.activities.RegisterActivity"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -63,7 +67,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.android.fileprovider"
+            android:authorities="com.maison.android.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data

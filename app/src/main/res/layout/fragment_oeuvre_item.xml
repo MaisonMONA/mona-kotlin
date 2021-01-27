@@ -9,11 +9,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.mona.viewmodels.OeuvreDetailViewModel" />
+            type="com.maison.mona.viewmodels.OeuvreDetailViewModel" />
 
         <variable
             name="callback"
-            type="com.example.mona.fragment.OeuvreDetailFragment.Callback" />
+            type="com.maison.mona.fragment.OeuvreDetailFragment.Callback" />
 
     </data>
 

@@ -10,7 +10,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="oeuvre"
-            type="com.example.mona.entity.Oeuvre" />
+            type="com.maison.mona.entity.Oeuvre" />
     </data>
 
     <androidx.cardview.widget.CardView

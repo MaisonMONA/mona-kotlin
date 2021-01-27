@@ -7,7 +7,7 @@
     <data>
         <variable
             name="badge"
-            type="com.example.mona.entity.Badge" />
+            type="com.maison.mona.entity.Badge" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
