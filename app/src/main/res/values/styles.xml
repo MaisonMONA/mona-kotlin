@@ -194,4 +194,9 @@
         <item name="android:textSize">15dp</item>
     </style>
 
+    <!-- Location Pin Theme -->
+    <style name="locationPinTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimaryDark">@color/androidBlue</item>
+    </style>
+
 </resources>

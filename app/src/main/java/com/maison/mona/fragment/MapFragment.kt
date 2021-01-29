@@ -2,7 +2,9 @@ package com.maison.mona.fragment
 
 //import com.example.mona.viewmodels.LieuViewModel
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -35,7 +37,6 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
 
-
 // Instances of this class are fragments representing a single
 // object in our collection.
 class MapFragment : Fragment() {
@@ -43,8 +44,8 @@ class MapFragment : Fragment() {
     //Map attribute
     private lateinit var map: MapView
     private lateinit var mapController: IMapController
+    private var pinLocation: Location? = null
     private val ZOOM_LEVEL = 17.0
-
 
     private lateinit var userOverlay: OverlayItem
     private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
@@ -69,7 +70,11 @@ class MapFragment : Fragment() {
         //initialization of location agent
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         //getLocationUpdates()
-        getLastLocation()
+
+        if (pinLocation == null){
+            Log.d("PIN", "getting getLastLocation()")
+            getLastLocation()
+        }
     }
 
     override fun onCreateView(
@@ -98,6 +103,27 @@ class MapFragment : Fragment() {
                 val geoPoint = proj.fromPixels(e.x.toInt(), e.y.toInt()) as GeoPoint
 
                 Log.d("Pin", geoPoint.latitude.toString() + " " + geoPoint.longitude.toString())
+
+                val pinConfirm = AlertDialog.Builder(context, R.style.locationPinTheme)
+                pinConfirm.setTitle(R.string.pinDialogAlertTitle)
+                pinConfirm.setMessage(R.string.pinDialogAlertMessage)
+
+                pinConfirm.setPositiveButton(R.string.Yes) { dialog, which ->
+                    location.latitude = geoPoint.latitude
+                    location.longitude = geoPoint.longitude
+                    pinLocation = location
+                    addUser(location, false)
+                }
+
+                pinConfirm.setNeutralButton(R.string.pinDialogAlertRelocate) {dialog, which ->
+                    getLastLocation()
+                }
+
+                pinConfirm.setNegativeButton(R.string.No) {dialog, which -> null}
+
+                val alert = pinConfirm.create()
+                alert.show()
+
                 return super.onLongPress(e, mapView)
             }
         }
@@ -125,7 +151,6 @@ class MapFragment : Fragment() {
         setHasOptionsMenu(true)
 
         //startLocationUpdates()
-        getLastLocation()
 
         map.onResume()
     }
