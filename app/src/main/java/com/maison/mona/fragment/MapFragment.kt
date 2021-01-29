@@ -1,5 +1,6 @@
 package com.maison.mona.fragment
 
+//import com.example.mona.viewmodels.LieuViewModel
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -9,7 +10,6 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import androidx.preference.PreferenceManager
 import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -18,19 +18,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.maison.mona.R
 import com.maison.mona.databinding.FragmentMapBinding
-//import com.example.mona.viewmodels.LieuViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
-import com.google.android.gms.location.*
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
-import java.security.Permission
 
 
 // Instances of this class are fragments representing a single
@@ -87,7 +90,18 @@ class MapFragment : Fragment() {
         mapController.setZoom(ZOOM_LEVEL)
         //Updates his or her location
         //startLocationUpdates()
+        val touchOverlay = object: Overlay(){
+            override fun onLongPress(e: MotionEvent?, mapView: MapView?): Boolean {
+                val location = Location("")
+                val proj = mapView!!.projection
+                proj.fromPixels(e!!.x.toInt(), e.y.toInt()) as GeoPoint
+                val geoPoint = proj.fromPixels(e.x.toInt(), e.y.toInt()) as GeoPoint
 
+                Log.d("Pin", geoPoint.latitude.toString() + " " + geoPoint.longitude.toString())
+                return super.onLongPress(e, mapView)
+            }
+        }
+        map.overlays.add(touchOverlay)
         return binding.root
     }
 
@@ -134,7 +148,6 @@ class MapFragment : Fragment() {
         inflater.inflate(R.menu.map_menu, menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.oeuvre_noncollected -> {
@@ -156,19 +169,19 @@ class MapFragment : Fragment() {
         }
     }
 
-    fun getDrawable(state: Int?,type: String?): Int{
+    fun getDrawable(state: Int?, type: String?): Int{
         if(type == "artwork"){
             return when(state){
                 null -> R.drawable.pin_oeuvre_normal
-                   1 -> R.drawable.pin_oeuvre_target
-                   2,3 -> R.drawable.pin_oeuvre_collected
+                1 -> R.drawable.pin_oeuvre_target
+                2, 3 -> R.drawable.pin_oeuvre_collected
                 else -> R.drawable.pin_oeuvre_normal
             }
         }else if(type == "place"){
             return when(state){
                 null -> R.drawable.pin_lieu_normal
                 1 -> R.drawable.pin_lieu_target
-                2,3 -> R.drawable.pin_lieu_collected
+                2, 3 -> R.drawable.pin_lieu_collected
                 else -> R.drawable.pin_lieu_normal
             }
         }
@@ -186,7 +199,7 @@ class MapFragment : Fragment() {
                     val overlayItem =
                         OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
 
-                    val pinIconId = getDrawable(state,oeuvre.type)
+                    val pinIconId = getDrawable(state, oeuvre.type)
                     val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
 
                     overlayItem.setMarker(markerDrawable)
@@ -226,7 +239,7 @@ class MapFragment : Fragment() {
             map.overlays.remove(userObject)
         }
 
-        val point = GeoPoint(location!!.latitude, location!!.longitude)
+        val point = GeoPoint(location.latitude, location.longitude)
 
         //Montreal random geo point start for testing
         //val point = GeoPoint(45.5044372, -73.578502)
@@ -287,7 +300,7 @@ class MapFragment : Fragment() {
             return
         }
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
+            .addOnSuccessListener { location: Location? ->
                 // Got last known location. In some rare situations this can be null.
                 if (location != null) {
                     // get latest location

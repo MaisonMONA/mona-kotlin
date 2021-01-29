@@ -27,7 +27,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         getOeuvre()
     }
 
-    fun getOeuvre(){
+    private fun getOeuvre(){
         viewModelScope.launch(Dispatchers.IO) {
             oeuvre = repository.getArticleById(oeuvreId)
         }

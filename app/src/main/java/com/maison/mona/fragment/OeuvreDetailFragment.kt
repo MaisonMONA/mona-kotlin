@@ -160,7 +160,7 @@ class OeuvreDetailFragment () : Fragment() {
                 // Continue only if the File was successfully created
                 photoFile?.also {
                     context?.let {
-                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.example.android.fileprovider", photoFile)
+                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
 
