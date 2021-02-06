@@ -26,6 +26,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.maison.mona.R
+import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentMapBinding
 import com.maison.mona.viewmodels.OeuvreViewModel
 import org.osmdroid.api.IMapController
@@ -44,7 +45,7 @@ class MapFragment : Fragment() {
     //Map attribute
     private lateinit var map: MapView
     private lateinit var mapController: IMapController
-    private var pinLocation: Location? = null
+    private var pinLocation: GeoPoint = GeoPoint(45.5044372, -73.578502)
     private val ZOOM_LEVEL = 17.0
 
     private lateinit var userOverlay: OverlayItem
@@ -71,10 +72,10 @@ class MapFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         //getLocationUpdates()
 
-        if (pinLocation == null){
+        /*if (pinLocation == null) {
             Log.d("PIN", "getting getLastLocation()")
             getLastLocation()
-        }
+        }*/
     }
 
     override fun onCreateView(
@@ -95,6 +96,12 @@ class MapFragment : Fragment() {
         mapController.setZoom(ZOOM_LEVEL)
         //Updates his or her location
         //startLocationUpdates()
+
+        val coord = SaveSharedPreference.getGeoLoc(context)
+        Log.d("COORD", coord.toString())
+        addUser(coord, true)
+        first = false
+
         val touchOverlay = object: Overlay(){
             override fun onLongPress(e: MotionEvent?, mapView: MapView?): Boolean {
                 val location = Location("")
@@ -109,14 +116,10 @@ class MapFragment : Fragment() {
                 pinConfirm.setMessage(R.string.pinDialogAlertMessage)
 
                 pinConfirm.setPositiveButton(R.string.Yes) { dialog, which ->
-                    location.latitude = geoPoint.latitude
-                    location.longitude = geoPoint.longitude
-                    pinLocation = location
-                    addUser(location, false)
-                }
+                    pinLocation = geoPoint
+                    SaveSharedPreference.setGeoLoc(context, geoPoint)
 
-                pinConfirm.setNeutralButton(R.string.pinDialogAlertRelocate) {dialog, which ->
-                    getLastLocation()
+                    addUser(geoPoint, false)
                 }
 
                 pinConfirm.setNegativeButton(R.string.No) {dialog, which -> null}
@@ -150,7 +153,8 @@ class MapFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        //startLocationUpdates()
+        pinLocation = SaveSharedPreference.getGeoLoc(context)
+        addUser(pinLocation, false)
 
         map.onResume()
     }
@@ -188,6 +192,10 @@ class MapFragment : Fragment() {
             R.id.oeuvre_collected -> {
                 map.overlays.clear()
                 addOeuvre(2)
+                true
+            }
+            R.id.map_geo -> {
+                getLastLocation()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -258,18 +266,18 @@ class MapFragment : Fragment() {
 
     }
 
-    fun addUser(location: Location, first: Boolean) {
+    fun addUser(location: GeoPoint, first: Boolean) {
 
         if(!first){
             map.overlays.remove(userObject)
         }
 
-        val point = GeoPoint(location.latitude, location.longitude)
+        //val point = GeoPoint(location.latitude, location.longitude)
 
         //Montreal random geo point start for testing
         //val point = GeoPoint(45.5044372, -73.578502)
 
-        mapController.setCenter(point)
+        mapController.setCenter(location)
 
         //your items
         val userItems = ArrayList<OverlayItem>()
@@ -277,7 +285,7 @@ class MapFragment : Fragment() {
         var userOverlay = OverlayItem(
             "You",
             "Your position",
-            point
+            location
         )
 
         val userOverlayMarker =
@@ -329,7 +337,9 @@ class MapFragment : Fragment() {
                 // Got last known location. In some rare situations this can be null.
                 if (location != null) {
                     // get latest location
-                    addUser(location, first)
+                    val geoP = GeoPoint(location.latitude, location.longitude)
+                    SaveSharedPreference.setGeoLoc(context, geoP)
+                    addUser(geoP, first)
                     first = false
                 }
             }

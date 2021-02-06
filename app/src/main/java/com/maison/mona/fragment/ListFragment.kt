@@ -25,7 +25,9 @@ import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.maison.mona.data.SaveSharedPreference
 import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
 import java.util.*
 import kotlin.collections.ArrayList
@@ -43,7 +45,7 @@ class ListFragment : Fragment() {
     var popupWindow: PopupWindow? = null
     //user location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var userLocation = Location("")
+    private var userLocation = GeoPoint(45.5044372, -73.578502)
     private var iconsStates = arrayListOf(
         arrayListOf(true, true, true),//Oeuvre
         arrayListOf(true, true, true) //Lieu
@@ -102,6 +104,8 @@ class ListFragment : Fragment() {
         super.onResume()
         setHasOptionsMenu(true)
         Log.d("Liste","Resume")
+        //TO-DO
+        setList("Titres","A-Z")
         recyclerView.layoutManager?.onRestoreInstanceState(position)
     }
 
@@ -112,13 +116,23 @@ class ListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_menu, menu)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("Popup", item.toString())
-        popupDisplay(layout)
-        return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.list_sort -> {
+                Log.d("Popup", item.toString())
+                popupDisplay(layout)
+                true
+            }
+            R.id.list_geo -> {
+                //TO-DO
+                getUserLocation()
+                setList("Titres", "A-Z")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
     //Creates a list of items in the spotlight if we want to implement this feature
     /*
@@ -178,7 +192,7 @@ class ListFragment : Fragment() {
         var filteredList = listOf<Oeuvre>()
         var sortedList: List<Any> = listOf()
         //Gets the location of the user
-        getUserLocation()
+        userLocation = SaveSharedPreference.getGeoLoc(context)
         if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
             && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
             oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
@@ -201,6 +215,33 @@ class ListFragment : Fragment() {
         } else{//Empty
             filteredList = listOf()
             adapter.submitList(sortedList,category,userLocation)
+        }
+    }
+
+    fun getUserLocation(){
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //Do not have permission
+        }else{
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    val geoP = GeoPoint(location.latitude, location.longitude)
+                    userLocation = geoP
+                    SaveSharedPreference.setGeoLoc(context, geoP)
+                }
         }
     }
 
@@ -250,34 +291,8 @@ class ListFragment : Fragment() {
         return sortedList
     }
 
-    fun getUserLocation(){
-         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            //Do not have permission
-        }else{
-             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                userLocation = location
-            }
-         }
-
-    }
-
     fun setDistances(list:List<Oeuvre>){
-        getUserLocation()
+        userLocation = SaveSharedPreference.getGeoLoc(context)
         for(oeuvre in list) {
             val distance = distance(
                 userLocation.latitude,
@@ -457,7 +472,6 @@ class ListFragment : Fragment() {
             .replace("[^\\p{ASCII}]".toRegex(), "")
     }
 
-
     fun distance(
         fromLat: Double,
         fromLon: Double,
@@ -559,6 +573,7 @@ class ListFragment : Fragment() {
         }
         popupWindow!!.showAtLocation(layout, Gravity.TOP or Gravity.END, 0, 0);
     }
+
     fun setIconToggle(view: ImageView, i: Int, j: Int) {
         view.setOnClickListener {
             if (iconsStates[i][j]) {
@@ -570,6 +585,7 @@ class ListFragment : Fragment() {
             }
         }
     }
+
     fun setIcon(view: ImageView, i: Int, j: Int) {
         if (!iconsStates[i][j]) {
             view.setColorFilter(R.color.black)
@@ -577,6 +593,4 @@ class ListFragment : Fragment() {
             view.colorFilter = null
         }
     }
-
-
 }
