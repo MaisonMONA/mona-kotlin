@@ -4,10 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.maison.mona.fragment.*
 
-
+//SET THE ORDER OF THE FRAGMENT
 const val ODJ_PAGE_INDEX = 0
-const val MAP_PAGE_INDEX = 1
-const val LIST_PAGE_INDEX = 2
+const val MAP_PAGE_INDEX = 2
+const val LIST_PAGE_INDEX = 1
 const val COLLECTION_PAGE_INDEX = 3
 const val MORE_PAGE_INDEX = 4
 
