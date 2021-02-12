@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">MONA</string>
 
+    <!-- BASIC -->
+    <string name="Yes">Oui</string>
+    <string name="No">Non</string>
+
     <string name="ODJ">Aujourd\'hui</string>
     <string name="Map">Carte</string>
     <string name="List">Liste</string>
@@ -22,7 +26,6 @@
     <string name="who_are_we">Qui sommes-nous?</string>
     <string name="offline_mode">Mode hors-ligne</string>
 
-
     <string name="MapTiler">MapTiler</string>
     <string name="PNG">.png</string>
     <string name="slash">/</string>
@@ -31,6 +34,11 @@
     <string name="equal">=</string>
     <string name="MapTilerURL">https://api.maptiler.com/maps/basic/256/</string>
     <string name="artworksURL">https://picasso.iro.umontreal.ca/~mona/api/artworks</string>
+
+    <!-- PIN -->
+    <string name="pinDialogAlertTitle">Confirmation</string>
+    <string name="pinDialogAlertMessage">Voulez-vous changer la position du pin ?</string>
+    <string name="pinDialogAlertRelocate">Relocaliser</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

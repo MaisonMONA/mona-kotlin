@@ -4,6 +4,13 @@
     xmlns:yourapp="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/list_geo"
+        android:icon="@drawable/ic_geo"
+        app:showAsAction="ifRoom"
+        android:title="@string/sort_menu">
+    </item>
+
+    <item
         app:showAsAction="ifRoom"
         android:id="@+id/list_sort"
         android:icon="@drawable/ic_sort"

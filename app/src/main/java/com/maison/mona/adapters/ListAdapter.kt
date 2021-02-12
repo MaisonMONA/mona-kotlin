@@ -16,6 +16,7 @@ import com.maison.mona.databinding.RecyclerviewOeuvreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.fragment.HomeViewPagerFragmentDirections
 import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
+import org.osmdroid.util.GeoPoint
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,7 +33,7 @@ class ListAdapter internal constructor(
     //private var rootList = emptyList<String>();
     var mSectionPositions: MutableList<Int?> = mutableListOf()
     private var category:String = "Titres";
-    private var currentLocation: Location = Location("")
+    private var currentLocation: GeoPoint = GeoPoint(45.5044372, -73.578502)
 
     companion object {
         private var TYPE_OEUVRE = 0
@@ -118,16 +119,14 @@ class ListAdapter internal constructor(
                     holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
                 }
                 //Set the location if we have the permission to do so
-                if(this.currentLocation.provider != ""){
-                    var format = DecimalFormat("###.##")
-                    var text = ""
-                    if(element.distance!! < 1){
-                        text +=  format.format(Math.round(element.distance!! * 1000)).toString() + "\nm"
-                    }else{
-                        text +=  format.format(element.distance).toString() + "\nkm"
-                    }
-                    holder.itemView.distance.text = text
+                var format = DecimalFormat("###.##")
+                var text = ""
+                if(element.distance!! < 1){
+                    text +=  format.format(Math.round(element.distance!! * 1000)).toString() + "\nm"
+                }else{
+                    text +=  format.format(element.distance).toString() + "\nkm"
                 }
+                holder.itemView.distance.text = text
 
             }
         }else if(holder is HeaderViewHolder){
@@ -137,7 +136,7 @@ class ListAdapter internal constructor(
         }
     }
 
-    internal fun submitList(items: List<Any>,category: String,location: Location) {
+    internal fun submitList(items: List<Any>,category: String,location: GeoPoint) {
         this.category = category;
         this.itemList = items
         this.currentLocation = location

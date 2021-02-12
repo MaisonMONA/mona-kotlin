@@ -1,7 +1,10 @@
 package com.maison.mona.fragment
 
+//import com.example.mona.viewmodels.LieuViewModel
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -9,7 +12,6 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import androidx.preference.PreferenceManager
 import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -18,20 +20,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.maison.mona.R
+import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentMapBinding
-//import com.example.mona.viewmodels.LieuViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
-import com.google.android.gms.location.*
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
+import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
-import java.security.Permission
-
 
 // Instances of this class are fragments representing a single
 // object in our collection.
@@ -40,8 +45,8 @@ class MapFragment : Fragment() {
     //Map attribute
     private lateinit var map: MapView
     private lateinit var mapController: IMapController
+    private var pinLocation: GeoPoint = GeoPoint(45.5044372, -73.578502)
     private val ZOOM_LEVEL = 17.0
-
 
     private lateinit var userOverlay: OverlayItem
     private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
@@ -66,7 +71,11 @@ class MapFragment : Fragment() {
         //initialization of location agent
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         //getLocationUpdates()
-        getLastLocation()
+
+        /*if (pinLocation == null) {
+            Log.d("PIN", "getting getLastLocation()")
+            getLastLocation()
+        }*/
     }
 
     override fun onCreateView(
@@ -88,6 +97,40 @@ class MapFragment : Fragment() {
         //Updates his or her location
         //startLocationUpdates()
 
+        val coord = SaveSharedPreference.getGeoLoc(context)
+        Log.d("COORD", coord.toString())
+        addUser(coord, true)
+        first = false
+
+        val touchOverlay = object: Overlay(){
+            override fun onLongPress(e: MotionEvent?, mapView: MapView?): Boolean {
+                val location = Location("")
+                val proj = mapView!!.projection
+                proj.fromPixels(e!!.x.toInt(), e.y.toInt()) as GeoPoint
+                val geoPoint = proj.fromPixels(e.x.toInt(), e.y.toInt()) as GeoPoint
+
+                Log.d("Pin", geoPoint.latitude.toString() + " " + geoPoint.longitude.toString())
+
+                val pinConfirm = AlertDialog.Builder(context, R.style.locationPinTheme)
+                pinConfirm.setTitle(R.string.pinDialogAlertTitle)
+                pinConfirm.setMessage(R.string.pinDialogAlertMessage)
+
+                pinConfirm.setPositiveButton(R.string.Yes) { dialog, which ->
+                    pinLocation = geoPoint
+                    SaveSharedPreference.setGeoLoc(context, geoPoint)
+
+                    addUser(geoPoint, false)
+                }
+
+                pinConfirm.setNegativeButton(R.string.No) {dialog, which -> null}
+
+                val alert = pinConfirm.create()
+                alert.show()
+
+                return super.onLongPress(e, mapView)
+            }
+        }
+        map.overlays.add(touchOverlay)
         return binding.root
     }
 
@@ -110,8 +153,8 @@ class MapFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        //startLocationUpdates()
-        getLastLocation()
+        pinLocation = SaveSharedPreference.getGeoLoc(context)
+        addUser(pinLocation, false)
 
         map.onResume()
     }
@@ -134,7 +177,6 @@ class MapFragment : Fragment() {
         inflater.inflate(R.menu.map_menu, menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.oeuvre_noncollected -> {
@@ -152,23 +194,27 @@ class MapFragment : Fragment() {
                 addOeuvre(2)
                 true
             }
+            R.id.map_geo -> {
+                getLastLocation()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun getDrawable(state: Int?,type: String?): Int{
+    fun getDrawable(state: Int?, type: String?): Int{
         if(type == "artwork"){
             return when(state){
                 null -> R.drawable.pin_oeuvre_normal
-                   1 -> R.drawable.pin_oeuvre_target
-                   2,3 -> R.drawable.pin_oeuvre_collected
+                1 -> R.drawable.pin_oeuvre_target
+                2, 3 -> R.drawable.pin_oeuvre_collected
                 else -> R.drawable.pin_oeuvre_normal
             }
         }else if(type == "place"){
             return when(state){
                 null -> R.drawable.pin_lieu_normal
                 1 -> R.drawable.pin_lieu_target
-                2,3 -> R.drawable.pin_lieu_collected
+                2, 3 -> R.drawable.pin_lieu_collected
                 else -> R.drawable.pin_lieu_normal
             }
         }
@@ -186,7 +232,7 @@ class MapFragment : Fragment() {
                     val overlayItem =
                         OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvre_location)
 
-                    val pinIconId = getDrawable(state,oeuvre.type)
+                    val pinIconId = getDrawable(state, oeuvre.type)
                     val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
 
                     overlayItem.setMarker(markerDrawable)
@@ -220,18 +266,18 @@ class MapFragment : Fragment() {
 
     }
 
-    fun addUser(location: Location, first: Boolean) {
+    fun addUser(location: GeoPoint, first: Boolean) {
 
         if(!first){
             map.overlays.remove(userObject)
         }
 
-        val point = GeoPoint(location!!.latitude, location!!.longitude)
+        //val point = GeoPoint(location.latitude, location.longitude)
 
         //Montreal random geo point start for testing
         //val point = GeoPoint(45.5044372, -73.578502)
 
-        mapController.setCenter(point)
+        mapController.setCenter(location)
 
         //your items
         val userItems = ArrayList<OverlayItem>()
@@ -239,7 +285,7 @@ class MapFragment : Fragment() {
         var userOverlay = OverlayItem(
             "You",
             "Your position",
-            point
+            location
         )
 
         val userOverlayMarker =
@@ -287,11 +333,13 @@ class MapFragment : Fragment() {
             return
         }
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
+            .addOnSuccessListener { location: Location? ->
                 // Got last known location. In some rare situations this can be null.
                 if (location != null) {
                     // get latest location
-                    addUser(location, first)
+                    val geoP = GeoPoint(location.latitude, location.longitude)
+                    SaveSharedPreference.setGeoLoc(context, geoP)
+                    addUser(geoP, first)
                     first = false
                 }
             }

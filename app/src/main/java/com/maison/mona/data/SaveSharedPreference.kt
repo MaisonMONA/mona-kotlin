@@ -2,7 +2,9 @@ package com.maison.mona.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Location
 import android.preference.PreferenceManager
+import org.osmdroid.util.GeoPoint
 
 //Based off: https://stackoverflow.com/questions/12744337/how-to-keep-android-applications-always-be-logged-in-state
 //If you have a relatively small collection of key-values that you'd like to save, you should use the
@@ -17,6 +19,9 @@ object SaveSharedPreference {
     private var ONLINE:String = "online"
     private var FIRSTTIME:String = "firsttime"
     private var LASTUPDATE:String = "00-00-0000"
+
+    private var GEOLOC:String = "45.5044372_-73.578502"
+    //val point = GeoPoint(45.5044372, -73.578502)
 
     fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
@@ -102,6 +107,19 @@ object SaveSharedPreference {
             ctx
         ).edit()
         editor.putString(LASTUPDATE, time)
+        editor.apply()
+    }
+
+    fun getGeoLoc(ctx: Context?): GeoPoint{
+        val coord = getSharedPreferences(ctx).getString(GEOLOC, "" + 45.5044372 + "_" + -73.578502)!!.split('_')
+        return GeoPoint(coord[0].toDouble(), coord[1].toDouble())
+    }
+
+    fun setGeoLoc(ctx: Context?, geo: GeoPoint){
+        val editor: SharedPreferences.Editor = getSharedPreferences(
+            ctx
+        ).edit()
+        editor.putString(GEOLOC, "" + geo.latitude + '_' + geo.longitude)
         editor.apply()
     }
 }
