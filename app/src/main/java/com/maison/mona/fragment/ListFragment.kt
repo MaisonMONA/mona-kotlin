@@ -54,8 +54,11 @@ class ListFragment : Fragment() {
         arrayListOf(true, true, true),//Oeuvre
         arrayListOf(true, true, true) //Lieu
     )
-    private var category: Int = 0
-    private var filter: Int = 0
+    private var category_index: Int = 0
+    private var filter_index: Int = 0
+
+    private var category: String = "Titres"
+    private var filter: String = "A-Z"
 
     private var fromButton = false;
 
@@ -71,7 +74,8 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //if(this.layout == null){
+        Log.d("Liste", "On Create")
+        if(this.layout == null){
             val binding = FragmentListBinding.inflate(inflater, container, false)
             context ?: return binding.root
 
@@ -87,12 +91,11 @@ class ListFragment : Fragment() {
             recyclerView.adapter = adapter
             //Set a layout manager
             recyclerView.layoutManager = LinearLayoutManager(context)
-            //Create the lists for the headers and the sub lists
-            setList("Titres","A-Z");
+            setList(this.category,this.filter)
             return binding.root
-        //}else{
-        //    return this.layout!!
-        //}
+        }else{
+            return this.layout!!
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,10 +106,12 @@ class ListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
-        Log.d("Liste","Resume")
-        //TO-DO
-        setList("Titres","A-Z")
+        setList(this.category,this.filter)
         recyclerView.layoutManager?.onRestoreInstanceState(position)
+    }
+
+    fun reloadPage() {
+
     }
 
     override fun onPause() {
@@ -531,12 +536,12 @@ class ListFragment : Fragment() {
             var filterButton = list_drawer.findViewById<Button>(R.id.filterButton)
             var radioGroup = list_drawer.findViewById<RadioGroup>(R.id.radio_group)
             radioGroup.check(R.id.radio_alphabet)
-            this.filter = R.id.radio_alphabet
+            this.filter_index = R.id.radio_alphabet
             //When we click the filter button
             filterButton.setOnClickListener {
                 //Get info from the radio buttons
                 var idCurrent  = radioGroup.checkedRadioButtonId
-                this.filter = idCurrent
+                this.filter_index = idCurrent
                 var radioValue = "None"
                 if(idCurrent != -1){//Not needed, just in case
                     var radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
@@ -545,8 +550,12 @@ class ListFragment : Fragment() {
                 }
                 //Get Spinner value
                 var spinnerValue = category_spinner.selectedItem.toString()
-                this.category = category_spinner.selectedItemPosition
-                setList(spinnerValue, radioValue)
+                this.category_index = category_spinner.selectedItemPosition
+
+                this.filter = radioValue
+                this.category = spinnerValue
+                setList(this.category, this.filter)
+
                 this.fromButton = true
                  popupWindow!!.dismiss()
                 this.iconsStatesBack[0] = ArrayList(this.iconsStates[0])
@@ -556,8 +565,8 @@ class ListFragment : Fragment() {
             popupWindow!!.setOnDismissListener {
                 //If the user clicked outside, reset the values
                 if (!this.fromButton) {
-                    radioGroup.check(this.filter)
-                    category_spinner.setSelection(this.category)
+                    radioGroup.check(this.filter_index)
+                    category_spinner.setSelection(this.category_index)
                     this.iconsStates[0] = ArrayList(this.iconsStatesBack[0])
                     this.iconsStates[1] = ArrayList(this.iconsStatesBack[1])
 

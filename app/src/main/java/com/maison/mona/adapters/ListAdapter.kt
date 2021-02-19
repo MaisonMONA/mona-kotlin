@@ -117,6 +117,8 @@ class ListAdapter internal constructor(
                     holder.itemView.circleImage.setImageResource(R.drawable.targeted)
                 }else if(element.state == 2 || element.state == 3){
                     holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
+                }else{
+                    holder.itemView.circleImage.setImageResource(android.R.color.transparent)
                 }
                 //Set the location if we have the permission to do so
                 var format = DecimalFormat("###.##")

@@ -17,7 +17,7 @@ object SaveSharedPreference {
     private const val PREF_USER_NAME:String = "username"
     private const val TOKEN:String = "token"
     private var ONLINE:String = "online"
-    private var FIRSTTIME:String = "firsttime"
+    private var FIRSTTIME:String = "false"
     private var LASTUPDATE:String = "00-00-0000"
 
     private var GEOLOC:String = "45.5044372_-73.578502"

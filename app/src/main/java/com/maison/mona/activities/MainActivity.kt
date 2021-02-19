@@ -47,9 +47,10 @@ class MainActivity : AppCompatActivity() {
             Log.d("Mode","Login")
             val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(myIntent)
-        } else {
-
-
+        } else if(SaveSharedPreference.firstTime(applicationContext)) {
+            val intent = Intent(applicationContext, OnboardingActivity::class.java)
+            startActivity(intent)
+        }else {
             /*
 
             We must check that all permissions are granted before using the app
@@ -81,24 +82,16 @@ class MainActivity : AppCompatActivity() {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION
                     )
+
                 }
 
             }else {
-                //If its the first time, set up the tutorial
-                //if(true){//To test the tutorial
-                    Log.d("Main","Premier?")
-                if(SaveSharedPreference.firstTime(applicationContext)) {
-                    val intent = Intent(applicationContext, OnboardingActivity::class.java)
-                    startActivity(intent)
-
-                }else{
                 // Both permissions are granted:
                 //  Setup Main Activity
-                    setContentView(
-                        this,
-                        R.layout.activity_main
-                    )
-                }
+                setContentView(
+                    this,
+                    R.layout.activity_main
+                )
             }
         }
     }
