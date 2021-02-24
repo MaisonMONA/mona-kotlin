@@ -182,20 +182,25 @@ class MapFragment : Fragment() {
             R.id.oeuvre_noncollected -> {
                 map.overlays.clear()
                 addOeuvre(null)
+                addUser(SaveSharedPreference.getGeoLoc(context), false)
                 true
             }
             R.id.oeuvre_targetted -> {
                 map.overlays.clear()
                 addOeuvre(1)
+                addUser(SaveSharedPreference.getGeoLoc(context), false)
                 true
             }
             R.id.oeuvre_collected -> {
                 map.overlays.clear()
                 addOeuvre(2)
+                addUser(SaveSharedPreference.getGeoLoc(context), false)
                 true
             }
             R.id.map_geo -> {
-                getLastLocation()
+                //getLastLocation()
+                pinLocation = SaveSharedPreference.getGeoLoc(context)
+                addUser(pinLocation, false)
                 true
             }
             else -> super.onOptionsItemSelected(item)

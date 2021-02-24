@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.FileProvider
@@ -113,36 +114,36 @@ class OeuvreJourFragment : Fragment() {
     }
 
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    context?.let {
-                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.example.maison.fileprovider", photoFile)
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+        // Ensure that there's a camera activity to handle the intent
+        takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+            // Create the File where the photo should go
+            val photoFile: File? = try {
+                createImageFile()
+            } catch (ex: IOException) {
+                // Error occurred while creating the File
+                null
+            }
+            // Continue only if the File was successfully created
+            photoFile?.also {
+                context?.let {
+                    val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
 
-                        onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
-
-                            oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-
-                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
-                            findNavController().navigate(action)
-                        }
+                    onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
+                        oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
+                        Log.d("Save","Current: " + currentPhotoPath)
+                        val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
+                        findNavController().navigate(action)
                     }
-
                 }
+
             }
         }
     }
+}
+
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
