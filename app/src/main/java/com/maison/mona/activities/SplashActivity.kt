@@ -20,16 +20,13 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //Set the internet Mode
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
-        //lieuViewModel = ViewModelProvider(this).get(LieuViewModel::class.java)
-
+        startActivity(Intent(this, MainActivity::class.java))
         oeuvreViewModel.oeuvreList.observe(this, Observer { oeuvreList ->
             if(!oeuvreList.isEmpty()){
                 oeuvreViewModel.oeuvreList.observe(this, Observer {oeuvreList ->
                     startActivity(Intent(this,
                         MainActivity::class.java))
                 })
-            }else{
-                startActivity(Intent(this, MainActivity::class.java))
             }
         })
     }

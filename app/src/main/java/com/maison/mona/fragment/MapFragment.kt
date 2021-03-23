@@ -198,6 +198,7 @@ class MapFragment : Fragment() {
                 true
             }
             R.id.map_geo -> {
+                Log.d("Map", "ICI")
                 getLastLocation()
                 //pinLocation = SaveSharedPreference.getGeoLoc(context)
                 //addUser(pinLocation, false)
@@ -335,12 +336,15 @@ class MapFragment : Fragment() {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+                Log.d("Map", "No permission")
             return
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 // Got last known location. In some rare situations this can be null.
+                Log.d("Map", location.toString())
                 if (location != null) {
+                    Log.d("Map","optien location")
                     // get latest location
                     val geoP = GeoPoint(location.latitude, location.longitude)
                     SaveSharedPreference.setGeoLoc(context, geoP)

@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.Request
+import okhttp3.*
 import java.io.IOException
 
 private const val TAG = "ConnectivityBroadcastReceiver"
@@ -32,7 +31,7 @@ class ConnectivityBroadcastReceiver : BroadcastReceiver() {
                 .build()
             return try {
                 val response = client.newCall(request).execute()
-                return response.code() == 200
+                return response.code == 200
 
             } catch (e: IOException) {
                 e.printStackTrace()

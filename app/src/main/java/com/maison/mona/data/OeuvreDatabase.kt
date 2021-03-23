@@ -148,7 +148,10 @@ fun getOeuvreList(): List<Oeuvre>?{
     //API call to server to get all artworks and places
     //We combine the 2 in one lists
 
-    val artworksJson = ArtworksTask(lastUpdate).execute().get()
+    var artworksJson = ArtworksTask(lastUpdate).execute().get()
+    if(artworksJson == null){
+        artworksJson = "{}"
+    }
     var oeuvreArray = JSONArray(artworksJson)
     //val oeuvreArray = objectJson.getJSONArray("data")
     var nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
