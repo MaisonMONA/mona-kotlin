@@ -243,9 +243,15 @@ class ListFragment : Fragment() {
             // for ActivityCompat#requestPermissions for more details.
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
-                    val geoP = GeoPoint(location.latitude, location.longitude)
-                    userLocation = geoP
-                    SaveSharedPreference.setGeoLoc(context, geoP)
+
+                    Log.d("Liste", location.toString())
+                    if(location != null){
+                        Log.d("Liste", "optient location")
+
+                        val geoP = GeoPoint(location.latitude, location.longitude)
+                        userLocation = geoP
+                        SaveSharedPreference.setGeoLoc(context, geoP)
+                    }
                 }
         }
     }
