@@ -15,8 +15,8 @@ android {
         applicationId "com.maison.mona"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 17
-        versionName "1.1"
+        versionCode 19
+        versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     viewBinding {
@@ -94,9 +94,6 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
-
-    //Okhttp components
-    implementation "com.squareup.okhttp:okhttp:$rootProject.okhttpVersion"
 
     //Okhttp3
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp3Version"
