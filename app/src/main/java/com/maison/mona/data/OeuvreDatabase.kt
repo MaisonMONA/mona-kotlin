@@ -150,7 +150,7 @@ fun getOeuvreList(): List<Oeuvre>?{
 
     var artworksJson = ArtworksTask(lastUpdate).execute().get()
     if(artworksJson == null){
-        artworksJson = "{}"
+        return mutableListOf()
     }
     var oeuvreArray = JSONArray(artworksJson)
     //val oeuvreArray = objectJson.getJSONArray("data")

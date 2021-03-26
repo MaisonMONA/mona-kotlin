@@ -269,6 +269,9 @@ class ListFragment : Fragment() {
         var currentList = list
         var sortedList = listOf<Any>()
         setDistances(list)
+        if( currentList.isEmpty()){
+            return sortedList
+        }
         //Check for the category
         when(category){
             "Titres" ->{
