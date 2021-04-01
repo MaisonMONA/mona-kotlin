@@ -1,8 +1,8 @@
 package com.maison.mona.fragment
 
 //import com.example.mona.viewmodels.LieuViewModel
-import android.app.FragmentManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
+import com.maison.mona.activities.BadgeActivity
 import com.maison.mona.adapters.CollectionAdapter
 import com.maison.mona.databinding.FragmentCollectionBinding
 import com.maison.mona.viewmodels.OeuvreViewModel
@@ -58,15 +59,10 @@ class CollectionFragment : Fragment() {
             //startActivity(intent)
 
             var popup = PopUpManagerFragment()
+            popup.onAttach(requireContext())
             popup.onButtonShowPopupWindowClick(view)
 
-//            val fragmentManager: androidx.fragment.app.FragmentManager? = fragmentManager
-//            var fragmentTransaction = fragmentManager?.beginTransaction();
-//
-//            var popup = PopUpManagerFragment();
-//
-//            fragmentTransaction?.add(R.id.badge_popup_id, popup)
-//            fragmentTransaction?.commit();
+            getFragmentManager()?.executePendingTransactions();
         }
 
         return binding.root
