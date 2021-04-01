@@ -8,13 +8,16 @@ import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.viewModelScope
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.maison.mona.viewmodels.OeuvreViewModel
 import com.maison.mona.R
+import com.maison.mona.data.BadgeDatabase
+import com.maison.mona.data.BadgeRepository
 import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.task.SaveOeuvre
+import com.maison.mona.viewmodels.OeuvreViewModel
 import kotlinx.android.synthetic.main.fragment_item_rating.view.*
 import org.json.JSONObject
 import java.text.DateFormat
@@ -25,6 +28,15 @@ class OeuvreRatingFragment : Fragment() {
 
     val safeArgs : OeuvreRatingFragmentArgs by navArgs()
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
+
+    /*private val repository: BadgeRepository
+    init{
+        val badgeDAO = BadgeDatabase.getDatabase(
+            context.applicationContext,
+            viewModelScope
+        ).badgesDAO()
+        repository = BadgeRepository.getInstance(badgeDAO)
+    }*/
 
 
     override fun onCreateView(
@@ -45,6 +57,12 @@ class OeuvreRatingFragment : Fragment() {
 
         view.done_rating_button.setOnClickListener {
 
+            //Call fragment to handle pop-ups
+
+
+            /*val fragment = ListFragment()
+            fragment.getUserLocation()*/
+
             val ratingBar = view.findViewById<RatingBar>(R.id.rating)
             val rating  = ratingBar.rating
 
@@ -64,7 +82,7 @@ class OeuvreRatingFragment : Fragment() {
             if (oeuvreIdServeur != null) {
                 oeuvreViewModel.updateRating(oeuvreId, rating, comment, state, date)
             }
-            Toast.makeText(requireActivity(), "Oeuvre #"+oeuvreId+" ajoutée", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), "Oeuvre #" + oeuvreId + " ajoutée", Toast.LENGTH_LONG).show()
             //Save the informations in the database
             if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
 

@@ -43,11 +43,11 @@ class MoreFragment : Fragment(){
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
             setOnlineMessage(offlineButton, SaveSharedPreference.isOnline(requireContext()))
-            badgeButton.setOnClickListener {
+            /*badgeButton.setOnClickListener {
                 val action = HomeViewPagerFragmentDirections.homeToBadge()
                 findNavController().navigate(action)
 
-            }
+            }*/
             howItWorksButton.setOnClickListener{
                 //val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
                 //findNavController().navigate(action)

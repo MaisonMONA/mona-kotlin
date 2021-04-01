@@ -8,11 +8,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/monaYellow">
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/badge_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/Badge"
+                android:clickable="true">
+            </Button>
+
+            <TextView
+                android:id="@+id/badge_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Badge"
+                android:clickable="true"
+                android:layout_marginHorizontal="@dimen/options_padding"
+                style="@style/TextAppearance.Mona.Settings"/>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collection_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="120dp"
         android:layout_marginBottom="?attr/actionBarSize"
         tools:listitem="@layout/recyclerview_collection_oeuvre"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"

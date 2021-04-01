@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
 
 class SplashActivity : AppCompatActivity() {
@@ -14,6 +15,7 @@ class SplashActivity : AppCompatActivity() {
     //to display to the user while the MainActivity sets up to load
 
     private lateinit var oeuvreViewModel: OeuvreViewModel
+    private lateinit var badgeViewModel: BadgeViewModel
     //private lateinit var lieuViewModel: LieuViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
