@@ -90,12 +90,8 @@ class HomeViewPagerFragment(): Fragment() {
         repository = BadgeRepository.getInstance(badgeDAO)
 
         badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
-            Log.d("SAVE", "HomeViewPager : badgeDatabase initialised : " + badgesList.toString())
-
             for(badge in badgesList){
-                //Log.d("SAVE", "HomeviewPager : " + badge.required_args?.substringAfter(':')?.substringBeforeLast('}'))
-                badge.goal = badge.required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt()
-                Log.d("SAVE", badge.goal.toString())
+                badgeViewModel.setGoal(badge.id, badge.required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt())
             }
         })
     }

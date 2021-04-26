@@ -43,11 +43,13 @@ data class Badge_2(
 
     val visibility: String?,
 
-    var isCollected: Boolean? = false
+    var isCollected: Boolean = false,
+
+    var goal: Int? = 0
 
 ) : Serializable {
-    @Transient
-    var goal: Int? = required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt()
+//    @Transient
+//    var goal: Int? = required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt()
 
     @Transient
     var collected: Int = 0

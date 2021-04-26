@@ -15,6 +15,10 @@ class BadgeRepository(private val badgesDao:BadgeDAO){
         badgesDao.updateCollected(id, collected)
     }
 
+    suspend fun setGoal(id: Int, goal:Int?){
+        badgesDao.setGoal(id, goal)
+    }
+
     companion object {
 
         // For Singleton instantiation

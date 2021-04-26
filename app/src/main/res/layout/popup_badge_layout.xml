@@ -17,12 +17,12 @@
         android:orientation="vertical">
 
         <Space
-            android:layout_height="25dp"
+            android:layout_height="35dp"
             android:layout_width="match_parent"/>
 
         <TextView
             android:id="@+id/popup_nouveau_badge_text"
-            android:layout_width="280dp"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:text="@string/popup_nouveau_badge"
             android:layout_gravity="center"
@@ -30,18 +30,18 @@
             android:textSize="25sp" />
 
         <Space
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_width="match_parent"/>
 
         <ImageView
             android:id="@+id/popup_image_badge"
-            android:layout_width="280dp"
+            android:layout_width="260dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:src="@drawable/verdun_color" />
 
         <Space
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_width="match_parent"/>
 
         <TextView
@@ -54,7 +54,7 @@
             android:textSize="22sp" />
 
         <Space
-            android:layout_height="35dp"
+            android:layout_height="25dp"
             android:layout_width="match_parent"/>
 
         <TextView
@@ -67,7 +67,7 @@
             android:textSize="15sp" />
 
         <Space
-            android:layout_height="25dp"
+            android:layout_height="35dp"
             android:layout_width="match_parent"/>
 
     </LinearLayout>

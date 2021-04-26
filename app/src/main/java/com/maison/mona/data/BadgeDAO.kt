@@ -18,6 +18,9 @@ interface BadgeDAO {
     @Query("UPDATE badge_table SET isCollected= :collected WHERE id= :id")
     fun updateCollected(id: Int, collected: Boolean?)
 
+    @Query("UPDATE badge_table SET goal= :goal WHERE id= :id")
+    fun setGoal(id: Int, goal: Int?)
+
 //    @Query("SELECT * FROM badge_table WHERE badge_table.isCollected = :collected AND badge_table.quartier = :typeS")
 //    fun getBadgeByQuartier(typeS: String, collected: Boolean = false) : LiveData<List<Badge_2>>
 }

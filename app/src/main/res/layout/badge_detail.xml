@@ -56,8 +56,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/badge_detail_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="16/10" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/badge_detail_goal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/badge_detail_count"
+                style="@style/TextAppearance.Mona.Badge.Detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/badge_detail_description"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 

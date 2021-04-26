@@ -18,12 +18,6 @@ import com.maison.mona.databinding.BadgeRecyclerviewHeaderBinding
 import com.maison.mona.entity.Badge_2
 import com.maison.mona.fragment.Badge2DetailFragment
 
-inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
-    val fragmentTransaction = beginTransaction()
-    fragmentTransaction.func()
-    fragmentTransaction.commit()
-}
-
 class Badge_2Adapter internal constructor (
     context: Context?
 ): RecyclerView.Adapter<Badge_2Adapter.BaseViewHolder<*>>(){
@@ -83,7 +77,7 @@ class Badge_2Adapter internal constructor (
                 executePendingBindings()
             }
 
-            if(binding.badge2!!.isCollected == true){
+            if(binding.badge2!!.isCollected){
                 binding.imageView.setImageResource(R.drawable.verdun_color)
             } else{
                 binding.imageView.setImageResource(R.drawable.verdun_grey)

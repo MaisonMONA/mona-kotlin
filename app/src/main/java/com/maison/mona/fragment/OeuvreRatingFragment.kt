@@ -112,18 +112,15 @@ class OeuvreRatingFragment : Fragment() {
             }
 
             oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer {collected ->
-                collected.listIterator().forEach { item ->
-                    Log.d("SAVE", "collected : " + item.borough)}
 
                 badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
                     Log.d("SAVE", "OeuvreRating : " + badgeList.toString())
 
                     for(badge in badgeList){
-                        if(!badge.isCollected!!){
-                            var goal = badge.required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt()
+                        if(!badge.isCollected){
                             if(badge.optional_args!!.contains("borough")) {
                                 var borough = badge.optional_args.substringAfter(":'").substringBefore("'}")
-                                if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == goal) {
+                                if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == badge.goal) {
                                     newBadge.add(badge)
                                     badgeViewModel.updateCollected(badge.id, true)
 
@@ -133,7 +130,7 @@ class OeuvreRatingFragment : Fragment() {
 
                                     getFragmentManager()?.executePendingTransactions()
                                 }
-                            } else if(collected.size == goal){
+                            } else if(collected.size == badge.goal){
                                 newBadge.add(badge)
                                 badgeViewModel.updateCollected(badge.id, true)
                                 var popup = PopUpManagerFragment()

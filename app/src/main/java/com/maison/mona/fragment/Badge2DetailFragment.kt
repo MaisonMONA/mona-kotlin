@@ -2,19 +2,25 @@ package com.maison.mona.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.maison.mona.R
 import com.maison.mona.entity.Badge_2
+import com.maison.mona.viewmodels.OeuvreViewModel
 
 class Badge2DetailFragment(badge: Badge_2?): Fragment(R.layout.badge_detail) {
 
     private lateinit var mContext: Context
     private var mBadge = badge
+
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +38,22 @@ class Badge2DetailFragment(badge: Badge_2?): Fragment(R.layout.badge_detail) {
     ): View? {
         val view = inflater.inflate(R.layout.badge_detail, container, false)
 
+        oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer {collected ->
+            var count = 0
+            if(mBadge?.optional_args!!.contains("borough")) {
+                var borough = mBadge?.optional_args!!.substringAfter(":'").substringBefore("'}")
+                count = collected.filter { it.borough == borough }.size
+            } else {
+                count = collected.size
+            }
+
+            val countString = getString(R.string.badge_detail_count, count, mBadge?.goal)
+            view.findViewById<TextView>(R.id.badge_detail_goal).setText(countString)
+        })
+
         view.findViewById<TextView>(R.id.badge_detail_text).setText(mBadge?.title_fr)
         view.findViewById<TextView>(R.id.badge_detail_description).setText(mBadge?.description_fr)
+
 
         if(mBadge?.isCollected == true){
             view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(R.drawable.verdun_color)
