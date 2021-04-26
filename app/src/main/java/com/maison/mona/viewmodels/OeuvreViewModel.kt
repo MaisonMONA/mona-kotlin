@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -29,6 +28,8 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
     //List of Lieu
     val lieuList: LiveData<List<Oeuvre>>
 
+    val collectedList: LiveData<List<Oeuvre>>
+
     init {
         // Gets reference to OeuvreDao from OeuvreDatabase to construct
         // the correct OeuvreRepository.
@@ -41,6 +42,8 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
         oeuvreList = repository.oeuvreList
         oeuvreTList = repository.getType("artwork")
         lieuList = repository.getType("place")
+
+        collectedList = repository.getAllCollected(2)
     }
 
     fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){

@@ -1,6 +1,5 @@
 package com.maison.mona.activities
 
-
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.fragment.OeuvreRatingFragment
 import org.osmdroid.views.MapView
 
 
@@ -29,9 +29,10 @@ import org.osmdroid.views.MapView
 
 class MainActivity : AppCompatActivity() {
 
+    var mRatingFragment: OeuvreRatingFragment? = null
+
     //For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
-
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             2. Fine location
 
             */
-
+            Log.d("TOKEN LOG", SaveSharedPreference.getToken((this)))
 
             // One or both of the two required permissions are missing:
             // Ask for permissions
@@ -82,9 +83,7 @@ class MainActivity : AppCompatActivity() {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION
                     )
-
                 }
-
             }else {
                 // Both permissions are granted:
                 //  Setup Main Activity
@@ -105,7 +104,6 @@ class MainActivity : AppCompatActivity() {
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -154,9 +152,6 @@ class MainActivity : AppCompatActivity() {
 
  */
 
-
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
@@ -195,4 +190,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if(mRatingFragment?.isVisible == true){
+            mRatingFragment?.onBackPressed()
+        } else{
+            super.onBackPressed()
+        }
+    }
 }

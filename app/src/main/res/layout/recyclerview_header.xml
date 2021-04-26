@@ -12,6 +12,7 @@
             name="clickListener"
             type="android.view.View.OnClickListener"/>
     </data>
+
     <TextView
         android:id="@+id/featured_message"
         android:layout_width="match_parent"

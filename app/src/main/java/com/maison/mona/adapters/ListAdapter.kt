@@ -39,9 +39,11 @@ class ListAdapter internal constructor(
         private var TYPE_OEUVRE = 0
         private var TYPE_HEADER = 2
     }
+
     inner class OeuvreViewHolder(
         private val binding: RecyclerviewOeuvreBinding
     ) : BaseViewHolder<Oeuvre>(binding.root) {
+
         init {
             binding.setClickListener {
                 val oeuvre = binding.oeuvre
@@ -51,6 +53,7 @@ class ListAdapter internal constructor(
                 }
             }
         }
+
         override fun bind(item: Oeuvre) {
             binding.apply {
                 oeuvre = item
@@ -74,7 +77,6 @@ class ListAdapter internal constructor(
             TYPE_OEUVRE -> {
                 val itemBinding = RecyclerviewOeuvreBinding.inflate(inflater, parent, false)
                 OeuvreViewHolder(itemBinding)
-
             }
             TYPE_HEADER ->{
                 val itemBinding = RecyclerviewHeaderBinding.inflate(inflater, parent, false)
@@ -168,7 +170,6 @@ class ListAdapter internal constructor(
     }
 
     override fun getItemCount() = itemList.size
-
 
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder (itemView) {
         abstract fun bind(item: T)

@@ -29,7 +29,6 @@ class BadgeFragment : Fragment() {
         val binding = FragmentBadgeBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-
         val recyclerView = binding.badgeRecyclerview
 
         adapter = BadgeAdapter(

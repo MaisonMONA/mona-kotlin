@@ -4,7 +4,6 @@ package com.maison.mona.fragment
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -211,17 +210,17 @@ class MapFragment : Fragment() {
     fun getDrawable(state: Int?, type: String?): Int{
         if(type == "artwork"){
             return when(state){
-                null -> R.drawable.pin_oeuvre_normal
-                1 -> R.drawable.pin_oeuvre_target
-                2, 3 -> R.drawable.pin_oeuvre_collected
-                else -> R.drawable.pin_oeuvre_normal
+                null -> R.drawable.pin_oeuvre_normal_new
+                1 -> R.drawable.pin_oeuvre_target_new
+                2, 3 -> R.drawable.pin_oeuvre_collected_new
+                else -> R.drawable.pin_oeuvre_normal_new
             }
         }else if(type == "place"){
             return when(state){
-                null -> R.drawable.pin_lieu_normal
-                1 -> R.drawable.pin_lieu_target
-                2, 3 -> R.drawable.pin_lieu_collected
-                else -> R.drawable.pin_lieu_normal
+                null -> R.drawable.pin_lieu_normal_new
+                1 -> R.drawable.pin_lieu_target_new
+                2, 3 -> R.drawable.pin_lieu_collected_new
+                else -> R.drawable.pin_lieu_normal_new
             }
         }
         return  R.drawable.pin_lieu_normal

@@ -1,4 +1,4 @@
-package com.maison .mona.fragment
+package com.maison.mona.fragment
 
 //import com.example.mona.entity.Lieu
 //import com.example.mona.viewmodels.LieuViewModel
@@ -6,7 +6,6 @@ package com.maison .mona.fragment
 import `in`.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -26,10 +25,8 @@ import com.maison.mona.viewmodels.OeuvreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.maison.mona.data.SaveSharedPreference
-import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
 import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
-import java.util.*
 import kotlin.collections.ArrayList
 
 

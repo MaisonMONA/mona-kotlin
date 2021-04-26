@@ -15,20 +15,20 @@ import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
 import com.maison.mona.activities.LoginActivity
 import com.maison.mona.activities.MyGlobals
-import com.maison.mona.activities.OnboardingActivity
-import com.maison.mona.data.OeuvreDatabase
-import com.maison.mona.data.OeuvreRepository
-import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.data.*
 import com.maison.mona.databinding.FragmentMoreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.task.SaveOeuvre
+import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
-import kotlinx.android.synthetic.main.fragment_more.*
 import org.json.JSONObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment(){
+
+    private val badgeViewModel: BadgeViewModel by viewModels()
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,21 +43,23 @@ class MoreFragment : Fragment(){
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
             setOnlineMessage(offlineButton, SaveSharedPreference.isOnline(requireContext()))
-            /*badgeButton.setOnClickListener {
+            badgeButton.setOnClickListener {
                 val action = HomeViewPagerFragmentDirections.homeToBadge()
                 findNavController().navigate(action)
-
-            }*/
+            }
             howItWorksButton.setOnClickListener{
-                //val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
-                //findNavController().navigate(action)
-                val intent = Intent(context, OnboardingActivity::class.java)
-                startActivity(intent)
+                val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
+                findNavController().navigate(action)
             }
 
             aboutButton.setOnClickListener {
                 val action = HomeViewPagerFragmentDirections.homeToText("AproposMONA.md")
                 findNavController().navigate(action)
+
+//                badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
+//                    badgesList.filter { it.isCollected == true }
+//                    Log.d("SAVE", "More fragment - aboutButton - badgesList : " + badgesList.toString())
+//                })
             }
 
             whoAreWeButton.setOnClickListener {
@@ -98,6 +100,21 @@ class MoreFragment : Fragment(){
         })
     }
 
+    fun showBadge(){
+        Log.d("SAVE", "showBadge called")
+
+        val repository: BadgeRepository
+        val badgeDAO = BadgeDatabase.getDatabase(
+            requireContext(),
+            lifecycleScope
+        ).badgesDAO()
+        repository = BadgeRepository.getInstance(badgeDAO)
+
+        badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
+            Log.d("SAVE", "More fragment badgesList : " + badgesList.toString())
+        })
+    }
+
     fun update(list: List<Oeuvre>){
         val repository: OeuvreRepository
         val oeuvreDao = OeuvreDatabase.getDatabase(
@@ -131,5 +148,4 @@ class MoreFragment : Fragment(){
             }
         }
     }
-
 }

@@ -30,7 +30,7 @@
         android:background="?attr/colorPrimary"
         android:orientation="vertical">
 
-        <!--LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/options_padding"
@@ -50,7 +50,7 @@
                 android:clickable="true"
                 android:layout_marginHorizontal="@dimen/options_padding"
                 style="@style/TextAppearance.Mona.Settings"/>
-        </LinearLayout-->
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

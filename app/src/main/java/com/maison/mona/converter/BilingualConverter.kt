@@ -5,7 +5,6 @@ import com.maison.mona.entity.Bilingual
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
 class BilingualConverter {
 
     @TypeConverter

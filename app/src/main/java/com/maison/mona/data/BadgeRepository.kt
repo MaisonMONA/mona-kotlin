@@ -1,5 +1,6 @@
 package com.maison.mona.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.maison.mona.entity.Badge_2
 import com.maison.mona.entity.Oeuvre
@@ -10,26 +11,9 @@ class BadgeRepository(private val badgesDao:BadgeDAO){
 
     var newBadgesUnlocked: MutableList<Badge_2> = mutableListOf()
 
-    fun checkIfBadgesUnlocked(oeuvre:Oeuvre): Boolean{
-        if(!newBadgesUnlocked.isEmpty()){
-            newBadgesUnlocked = mutableListOf()
-        }
-
-        val badgesQuartier: LiveData<List<Badge_2>> = badgesDao.getBadgeByQuartier(oeuvre.borough!!)
-
-        for(badge in badgesQuartier.value!!.listIterator()){
-            badge.already_collected += 1
-
-            if(badge.already_collected == badge.collected_goal){
-                badge.isCollected = true;
-                newBadgesUnlocked.add(badge)
-            }
-        }
-
-        return !newBadgesUnlocked.isEmpty()
+    suspend fun updateCollected(id: Int, collected: Boolean?){
+        badgesDao.updateCollected(id, collected)
     }
-
-
 
     companion object {
 

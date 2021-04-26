@@ -22,7 +22,6 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-
 @Database(entities = arrayOf(Oeuvre::class), version = 1, exportSchema = false)
 @TypeConverters(
     ArtistConverter::class,
@@ -50,7 +49,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                     if( SaveSharedPreference.isOnline(mContext)//In online mode
                         && MyGlobals(mContext!!).isNetworkConnected()){//and actually connected
                         try{
-                            Log.d("Save","accede database")
+                            Log.d("Save","oeuvre accede database")
                             val oeuvreList = getOeuvreList()
                             oeuvreDao.insertAll(oeuvreList)
                         }catch (e: IOException){
@@ -212,37 +211,39 @@ fun getOeuvreList(): List<Oeuvre>?{
 // time it's accessed, using Room's database builder to create a RoomDatabase
 // object in the application context from the WordRoomDatabase class and
 // names it "word_database".
-companion object {
+    companion object {
 
-@Volatile
-private var INSTANCE: OeuvreDatabase? = null
-private var mContext: Context? = null
-fun getInstance(): OeuvreDatabase?{
-   val instance = INSTANCE
-   return instance
-}
+    @Volatile
+    private var INSTANCE: OeuvreDatabase? = null
+    private var mContext: Context? = null
 
-fun getDatabase(
-   context: Context,
-   scope: CoroutineScope
-): OeuvreDatabase {
-    mContext = context
-   // if the INSTANCE is not null, then return it,
-   // if it is, then create the database
-   return INSTANCE ?: synchronized(this) {
+    fun getInstance(): OeuvreDatabase?{
+       val instance = INSTANCE
+       return instance
+    }
 
-       val instance = Room.databaseBuilder(
-           context.applicationContext,
-           OeuvreDatabase::class.java,
-           "artwork-database"
-       )
-           .addCallback(OeuvreDatabaseCallback(scope))
-           .build()
+        fun getDatabase(
+           context: Context,
+           scope: CoroutineScope
+        ): OeuvreDatabase {
+            mContext = context
+           // if the INSTANCE is not null, then return it,
+           // if it is, then create the database
+           return INSTANCE ?: synchronized(this) {
+               Log.d("SAVE", "oeuvre get database")
 
-       INSTANCE = instance
-       // return instance
-       instance
-   }
-}
-}
+               val instance = Room.databaseBuilder(
+                   context.applicationContext,
+                   OeuvreDatabase::class.java,
+                   "artwork-database"
+               )
+                   .addCallback(OeuvreDatabaseCallback(scope))
+                   .build()
+
+               INSTANCE = instance
+               // return instance
+               instance
+           }
+        }
+    }
 }

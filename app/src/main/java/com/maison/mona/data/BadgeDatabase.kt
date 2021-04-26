@@ -2,10 +2,15 @@ package com.maison.mona.data
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
+import com.maison.mona.converter.BadgeOptArgsConverter
+import com.maison.mona.converter.BadgeRequiredArgsConverter
+import com.maison.mona.entity.BadgeOptArgs
 import com.maison.mona.entity.Badge_2
 import com.maison.mona.task.BadgeTask
 import com.squareup.moshi.JsonAdapter
@@ -18,17 +23,24 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
+@Database(entities = arrayOf(Badge_2::class), version = 1, exportSchema = false)
+@TypeConverters(
+    BadgeRequiredArgsConverter::class,
+    BadgeOptArgsConverter::class
+)
 abstract class BadgeDatabase : RoomDatabase() {
-    abstract fun badgesDAO(): BadgeDAO
-    init{
 
-    }
-    private class OeuvreDatabaseCallback(
+    abstract fun badgesDAO(): BadgeDAO
+
+    private class BadgeDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
+
+            Log.d("SAVE", "badge database on open called")
+
             INSTANCE?.let { database ->
                 scope.launch {
                     val badgesDao = database.badgesDAO()
@@ -36,9 +48,13 @@ abstract class BadgeDatabase : RoomDatabase() {
                     if( SaveSharedPreference.isOnline(mContext)//In online mode
                         && MyGlobals(mContext!!).isNetworkConnected()){//and actually connected
                         try{
-                            Log.d("Save","accede database")
+                            Log.d("Save","badge accede database")
+                            
                             val badgesList = getBadgesList()
+
                             badgesDao.insertAll(badgesList)
+
+                            Log.d("SAVE", "fin onOpen" + badgesList.toString())
                         }catch (e: IOException){
                             Log.d("Save","erreur database")
                         }
@@ -52,8 +68,20 @@ abstract class BadgeDatabase : RoomDatabase() {
         fun getBadgesList(): List<Badge_2>?{
             var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
 
-            val badgesJson = BadgeTask(lastUpdate)
+//            Log.d("SAVE", "inside getBadgesList : lastUpdate")
+
+            val badgesJson = BadgeTask(lastUpdate).execute().get().subSequence(8, 3031).toString()
+
+//            Log.d("SAVE", "inside getBadgesList : badgesJson : " + badgesJson)
+            //stringtoJSON
+
+            if(badgesJson == null){
+                return mutableListOf()
+            }
+
             val badgesArray = JSONArray(badgesJson)
+            
+//            Log.d("SAVE", "inside getBadgesList : badgesArray : " + badgesArray.toString())
 
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
@@ -80,10 +108,11 @@ abstract class BadgeDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: BadgeDatabase? = null
         private var mContext: Context? = null
-        fun getInstance(): BadgeDatabase?{
-            val instance = INSTANCE
-            return instance
-        }
+
+//        fun getInstance(): BadgeDatabase?{
+//            val instance = INSTANCE
+//            return instance
+//        }
 
         fun getDatabase(
             context: Context,
@@ -93,13 +122,14 @@ abstract class BadgeDatabase : RoomDatabase() {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
+                Log.d("SAVE","badge get database ici")
 
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     BadgeDatabase::class.java,
                     "badges-database"
                 )
-                    .addCallback(OeuvreDatabaseCallback(scope))
+                    .addCallback(BadgeDatabaseCallback(scope))
                     .build()
 
                 INSTANCE = instance
@@ -108,5 +138,4 @@ abstract class BadgeDatabase : RoomDatabase() {
             }
         }
     }
-
 }

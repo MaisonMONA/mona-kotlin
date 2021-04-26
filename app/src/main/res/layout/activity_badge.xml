@@ -4,25 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.BadgeActivity">
+    tools:context=".activities.BadgeActivity"
+    android:id="@+id/fragment_container">
 
     <androidx.appcompat.widget.Toolbar
-            android:id="@+id/badge_toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_detail_back"
-            app:layout_collapseMode="parallax"
+        android:id="@+id/badge_toolbar"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_collapseMode="parallax"
+        app:navigationIcon="@drawable/ic_detail_back"
         tools:ignore="MissingConstraints">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:gravity="center_vertical"
-                android:text="@string/Badge"
-                android:textAppearance="@style/TextAppearance.Mona.Toolbar.Text" />
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="?attr/actionBarSize"
+            android:gravity="center_vertical"
+            android:text="@string/Badge"
+            android:textAppearance="@style/TextAppearance.Mona.Toolbar.Text" />
 
-        </androidx.appcompat.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:orientation="vertical"
+        android:translationY="56dp"
+        tools:ignore="MissingConstraints">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/badge_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/offWhite"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2"
+            android:layout_marginBottom="?attr/actionBarSize"
+            tools:listitem="@layout/badge_recyclerview_header" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

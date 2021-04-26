@@ -8,7 +8,6 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.maison.mona.entity.Badge
 
-
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
     view.visibility = if (isGone) {

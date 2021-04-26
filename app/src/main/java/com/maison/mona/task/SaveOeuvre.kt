@@ -33,9 +33,10 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         var comment = params[2]
 
         var imageFile = File(context.cacheDir,"temp.jpg")
-        var imageBitMap = BitmapFactory.decodeFile(params[3])
-        var outStream = FileOutputStream(imageFile)
-        imageBitMap.compress(Bitmap.CompressFormat.JPEG,30,outStream)
+        var testImage = File(params[3])
+//        var imageBitMap = BitmapFactory.decodeFile(params[3])
+//        var outStream = FileOutputStream(imageFile)
+        //imageBitMap.compress(Bitmap.CompressFormat.JPEG,30,outStream)
 
         val fileName = "artwork" + params[0] + ".jpg"
 
@@ -67,18 +68,23 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
             "place"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/places"
         }
 
+        Log.d("Save", "SaveOeuvre Image test : " +  testImage)
+
         val formBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("api_token", SaveSharedPreference.getToken(context))//Get user token
                 .addFormDataPart("id", params[0])
                 .addFormDataPart("rating", params[1])
                 .addFormDataPart("comment", comment)
-                .addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
+                .addFormDataPart("photo", fileName, testImage.asRequestBody(mtjpeg))
                 .build()
         val request = Request.Builder()
                 .url(url)
                 .post(formBody)
                 .build()
+
+        Log.d("Save", "SaveOeuvre formBody : " + formBody.toString())
+
         return try {
             val response = client.newCall(request).execute()
             Log.d("Save", "Save fini")

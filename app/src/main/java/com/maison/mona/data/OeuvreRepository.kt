@@ -18,7 +18,6 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     fun getRandomUncollected(type:String){
         val listUncollected = oeuvreDao.getNotCollected("artwork")
         val randNumber = (0..(listUncollected.value?.size!!))
-
     }
 
     fun getAllCollected(state:Int): LiveData<List<Oeuvre>>{
@@ -40,7 +39,6 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     suspend fun updateTarget(oeuvreId: Int, target: Int?){
         oeuvreDao.updateTarget(oeuvreId, target)
     }
-
 
     companion object {
 

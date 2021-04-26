@@ -8,15 +8,16 @@ import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.viewModelScope
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.maison.mona.R
-import com.maison.mona.data.BadgeDatabase
-import com.maison.mona.data.BadgeRepository
 import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.entity.Badge_2
 import com.maison.mona.task.SaveOeuvre
+import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
 import kotlinx.android.synthetic.main.fragment_item_rating.view.*
 import org.json.JSONObject
@@ -28,6 +29,9 @@ class OeuvreRatingFragment : Fragment() {
 
     val safeArgs : OeuvreRatingFragmentArgs by navArgs()
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
+    private val badgeViewModel: BadgeViewModel by viewModels()
+
+    private var newBadge = mutableListOf<Badge_2>()
 
     /*private val repository: BadgeRepository
     init{
@@ -57,12 +61,6 @@ class OeuvreRatingFragment : Fragment() {
 
         view.done_rating_button.setOnClickListener {
 
-            //Call fragment to handle pop-ups
-
-
-            /*val fragment = ListFragment()
-            fragment.getUserLocation()*/
-
             val ratingBar = view.findViewById<RatingBar>(R.id.rating)
             val rating  = ratingBar.rating
 
@@ -86,34 +84,71 @@ class OeuvreRatingFragment : Fragment() {
             //Save the informations in the database
             if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
 
-                    Log.d("Save", "Commence Save")
-                    val sendOeuvre = activity?.let { it1 -> SaveOeuvre(it1) }
+                Log.d("Save", "Commence Save")
+                val sendOeuvre = activity?.let { it1 -> SaveOeuvre(it1) }
 
-                    if (sendOeuvre != null) {
-                        Log.d("Save", "obtien contexte")
-                        Log.d("Save", "Path: " + imagePath)
-                        sendOeuvre.execute(
-                            oeuvreIdServeur.toString(),
-                            rating.toInt().toString(),
-                            comment,
-                            imagePath,
-                            safeArgs.oeuvre.type
-                        )
-                    }
-                    var response = sendOeuvre?.get()
-                    if (response != "" && response != null) {
-                        Log.d("Save", "reponse: " + response)
-                        val reader = JSONObject(response)
-                        if (reader.has("errors")) {
-                            Log.d("Save", "Erreur Save reader");
-                            val errors = reader.getJSONObject("errors")
-                            Log.d("Save", errors.toString())
-                        }
-                    }
+                if (sendOeuvre != null) {
+                    Log.d("Save", "obtien contexte")
+                    Log.d("Save", "Path: " + imagePath)
+                    sendOeuvre.execute(
+                        oeuvreIdServeur.toString(),
+                        rating.toInt().toString(),
+                        comment,
+                        imagePath,
+                        safeArgs.oeuvre.type
+                    )
                 }
 
-            //Pop everything from the stack that is not the Home Pager
-            //findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+                var response = sendOeuvre?.get()
+                if (response != "" && response != null) {
+                    Log.d("Save", "reponse: " + response)
+                    val reader = JSONObject(response)
+                    if (reader.has("errors")) {
+                        Log.d("Save", "Erreur Save reader");
+                        val errors = reader.getJSONObject("errors")
+                        Log.d("Save", errors.toString())
+                    }
+                }
+            }
+
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer {collected ->
+                collected.listIterator().forEach { item ->
+                    Log.d("SAVE", "collected : " + item.borough)}
+
+                badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
+                    Log.d("SAVE", "OeuvreRating : " + badgeList.toString())
+
+                    for(badge in badgeList){
+                        if(!badge.isCollected!!){
+                            var goal = badge.required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt()
+                            if(badge.optional_args!!.contains("borough")) {
+                                var borough = badge.optional_args.substringAfter(":'").substringBefore("'}")
+                                if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == goal) {
+                                    newBadge.add(badge)
+                                    badgeViewModel.updateCollected(badge.id, true)
+
+                                    var popup = PopUpManagerFragment()
+                                    popup.onAttach(requireContext())
+                                    popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
+
+                                    getFragmentManager()?.executePendingTransactions()
+                                }
+                            } else if(collected.size == goal){
+                                newBadge.add(badge)
+                                badgeViewModel.updateCollected(badge.id, true)
+                                var popup = PopUpManagerFragment()
+                                popup.onAttach(requireContext())
+                                popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
+
+                                getFragmentManager()?.executePendingTransactions()
+                            }
+                        }
+                    }
+                    if(newBadge.isEmpty()){
+                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+                    }
+                })
+            })
         }
     }
 
@@ -121,5 +156,9 @@ class OeuvreRatingFragment : Fragment() {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd")
         val date = Date()
         return dateFormat.format(date)
+    }
+
+    public fun onBackPressed(){
+        Log.d("SAVE", "BACK PRESSED")
     }
 }

@@ -24,7 +24,6 @@ class CollectionAdapter internal constructor(
         //private var TYPE_LIEU = 1
     }
 
-
     inner class OeuvreViewHolder(
         private val binding: RecyclerviewCollectionOeuvreBinding
     ) : BaseViewHolder<Oeuvre>(binding.root) {
@@ -86,11 +85,8 @@ class CollectionAdapter internal constructor(
             else -> throw IllegalArgumentException()
         }
     }
-
-
-
+    
     internal fun submitList(items: List<Any>) {
-
         //Initially, sort the list alphabetically
         //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin
         //val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
@@ -109,7 +105,6 @@ class CollectionAdapter internal constructor(
     }
 
     override fun getItemCount() = itemList.size
-
 
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(item: T)
