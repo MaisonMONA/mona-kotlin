@@ -64,7 +64,6 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
         return isConnected
     }
-
 }
 
 //to bind view models in different fragments visit

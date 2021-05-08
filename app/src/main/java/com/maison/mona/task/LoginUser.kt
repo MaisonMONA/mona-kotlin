@@ -6,7 +6,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 
-
 class LoginUser() : AsyncTask<String, String, String>() {
 
     override fun doInBackground(vararg params: String): String? {
@@ -26,6 +25,5 @@ class LoginUser() : AsyncTask<String, String, String>() {
             e.printStackTrace()
             null
         }
-
     }
 }
