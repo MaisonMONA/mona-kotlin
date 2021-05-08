@@ -11,6 +11,7 @@ import com.maison.mona.entity.Badge
 import com.maison.mona.fragment.BadgeFragmentDirections
 import java.lang.IllegalArgumentException
 
+//a delete ?
 class BadgeAdapter internal constructor(
     context: Context?,
     navController: NavController

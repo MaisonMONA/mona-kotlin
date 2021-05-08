@@ -21,7 +21,6 @@ class CollectionAdapter internal constructor(
 
     companion object {
         private var TYPE_OEUVRE = 0
-        //private var TYPE_LIEU = 1
     }
 
     inner class OeuvreViewHolder(
@@ -44,30 +43,6 @@ class CollectionAdapter internal constructor(
         }
     }
 
-
-    /*
-    inner class LieuViewHolder(
-        private val binding: RecyclerviewCollectionLieuBinding
-    ) : BaseViewHolder<Lieu>(binding.root) {
-        init {
-            binding.setClickListener {
-                val lieu = binding.lieu
-                lieu?.let {
-                    val action = HomeViewPagerFragmentDirections.homeToLieu(it)
-                    navController.navigate(action)
-                }
-            }
-        }
-        override fun bind(item: Lieu) {
-            binding.apply {
-                lieu = item
-                executePendingBindings()
-            }
-        }
-
-
-    }
-    */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.BaseViewHolder<*> {
         return when (viewType) {
             TYPE_OEUVRE -> {

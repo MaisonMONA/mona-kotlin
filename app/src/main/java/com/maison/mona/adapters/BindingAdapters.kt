@@ -42,6 +42,7 @@ fun loadImage(view: ImageView, photo_path: String?) {
         .into(view)
 }
 
+//a delete ?
 @BindingAdapter("badgeCompletion")
 fun loadBadge(view: ImageView, badge:Badge) {
     //verify which badge to display
@@ -54,6 +55,7 @@ fun loadBadge(view: ImageView, badge:Badge) {
     }
 }
 
+//a delete ?
 @BindingAdapter("badgeProgress")
 fun loadProgress(view: TextView, badge:Badge) {
     badge.apply {
@@ -61,6 +63,7 @@ fun loadProgress(view: TextView, badge:Badge) {
     }
 }
 
+//a delete ?
 @BindingAdapter("isBadgeVisible")
 fun loadVisibility(view: TextView, badge:Badge) {
     badge.apply {
@@ -72,8 +75,7 @@ fun loadVisibility(view: TextView, badge:Badge) {
     }
 }
 
-/*
-@BindingAdapter("setTint")
+/* @BindingAdapter("setTint")
 fun setIconTint(fab: FloatingActionButton, isTarget: Boolean, context: Context){
 
     var color = R.color.white
@@ -83,6 +85,4 @@ fun setIconTint(fab: FloatingActionButton, isTarget: Boolean, context: Context){
     }
 
     fab.drawable.mutate().setTint(ContextCompat.getColor(context, color))
-}
-
- */
+}*/

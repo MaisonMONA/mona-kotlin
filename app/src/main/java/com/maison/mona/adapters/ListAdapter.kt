@@ -30,7 +30,6 @@ class ListAdapter internal constructor(
     private var masterList = mutableMapOf<String,List<Any>>()
     private var itemList = emptyList<Any>()
     private val navController = navController
-    //private var rootList = emptyList<String>();
     var mSectionPositions: MutableList<Int?> = mutableListOf()
     private var category:String = "Titres";
     private var currentLocation: GeoPoint = GeoPoint(45.5044372, -73.578502)
@@ -84,16 +83,19 @@ class ListAdapter internal constructor(
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
-
     }
+
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = itemList[position]
+
         if(holder is OeuvreViewHolder){
             holder.bind(element as Oeuvre)
+
             if(holder.itemView.circleImage != null){
                 //Set the texts
                 var titleText  = holder.itemView.titleView;
                 var detailText = holder.itemView.boroughView;
+
                 when(this.category){
                     "Titres"->{
                         titleText.text = element.title
@@ -108,12 +110,14 @@ class ListAdapter internal constructor(
                         detailText.text = element.borough
                     }
                 }
+
                 //select the color for the articles
                 if(element.type == "artwork"){
                     holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
                 }else if(element.type == "place"){
                     holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
                 }
+
                 //Set the image icon
                 if(element.state == 1){
                     holder.itemView.circleImage.setImageResource(R.drawable.targeted)
@@ -122,16 +126,18 @@ class ListAdapter internal constructor(
                 }else{
                     holder.itemView.circleImage.setImageResource(android.R.color.transparent)
                 }
+
                 //Set the location if we have the permission to do so
                 var format = DecimalFormat("###.##")
                 var text = ""
+
                 if(element.distance!! < 1){
                     text +=  format.format(Math.round(element.distance!! * 1000)).toString() + "\nm"
                 }else{
                     text +=  format.format(element.distance).toString() + "\nkm"
                 }
-                holder.itemView.distance.text = text
 
+                holder.itemView.distance.text = text
             }
         }else if(holder is HeaderViewHolder){
             holder.bind(element as String)
@@ -146,20 +152,7 @@ class ListAdapter internal constructor(
         this.currentLocation = location
         notifyDataSetChanged()
     }
-    /*
-    internal fun submitMasterList(items: MutableMap<String,List<Any>>) {
-        this.masterList = items
-        notifyDataSetChanged()
-    }
 
-    internal fun submitRootList(items: List<String>) {
-        this.rootList = items
-    }
-
-    internal fun submitSubList(child :String, items: List<Any>) {
-        this.masterList[child] = items
-    }
-    */
     override fun getItemViewType(position: Int): Int {
         val comparable = itemList[position]
         return when (comparable) {
@@ -189,14 +182,17 @@ class ListAdapter internal constructor(
         mSectionPositions = ArrayList(26)
         var i = 0
         val size: Int = this.itemList.size
+
         while (i < size) {
             if(itemList.get(i) is String) {
                 val section: String =  java.lang.String.valueOf((itemList.get(i) as String).first()).toUpperCase(Locale.ROOT)
+
                 if (!sections.contains(section)) {
                     sections.add(section)
                     mSectionPositions.add(i)
                 }
             }
+
             i++
         }
         return sections.toTypedArray()
@@ -209,10 +205,12 @@ class ListAdapter internal constructor(
     fun getArtistsList(item:Oeuvre):String{
         var artistsList = ""
         var counter = 1;
+
         if(!item.artists.isNullOrEmpty()) {
             for (artist in item.artists!!) {
                 if(!artist.name.isBlank()) artistsList += artist.name
                 if(counter != item.artists!!.size) artistsList += ", "
+
                 counter++
             }
         }

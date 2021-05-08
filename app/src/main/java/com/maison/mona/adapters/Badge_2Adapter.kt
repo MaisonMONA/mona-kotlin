@@ -23,23 +23,30 @@ class Badge_2Adapter internal constructor (
 ): RecyclerView.Adapter<Badge_2Adapter.BaseViewHolder<*>>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    //liste des headers
     private var itemList = emptyList<Any>()
+    //liste des badges
     private var badgeList = emptyList<Badge_2>()
-//    private val navController = TODO()
 
     private var mToolbar: Toolbar? = null
     private var mActivity: Activity? = null
     private var mFragmentSupportManager: FragmentManager? = null
 
+    private var inBadge = false
+
+    //onClickListener quand on est sur la premiere page (liste des categories)
     private val onClickCategoryLayer: View.OnClickListener = View.OnClickListener { mActivity?.finish() }
 
+    //onClickListener quand on est sur la deuxieme page (liste des badges par categories)
     private val onClickBadgeLayer: View.OnClickListener = View.OnClickListener {
         val test: List<String> = listOf("Quartiers", "Oeuvres", "Autres")
         submitList(test)
         mToolbar?.setOnClickListener(onClickCategoryLayer)
     }
 
+    //onClickListener quand on est sur la page du badge
     private val onClickDetailLayer: View.OnClickListener = View.OnClickListener{
+        //si on clique sur le retour quand on est sur le detail d'un badge, on detruit le fragment sur lequel on etait
         val ft2 = mFragmentSupportManager?.beginTransaction()
         mFragmentSupportManager?.popBackStack()
         ft2?.commit()
@@ -47,21 +54,24 @@ class Badge_2Adapter internal constructor (
         mToolbar?.setOnClickListener(onClickBadgeLayer)
     }
 
-    private var inBadge = false
-
+    //pour que le recyclerview differencie les badges des headers
     companion object{
         private var TYPE_HEADER = 0
         private var TYPE_BADGE = 1
     }
 
+    //On gère l'affichage si c'est un badge
     inner class Badge2ViewHolder(
         private val binding: BadgeRecyclerviewBadgeBinding
     ) : BaseViewHolder<Badge_2>(binding.root){
         init{
             binding.setClickListener {
                 if(!inBadge){
+                    //si on est pas deja dans un badge, on accede au detail du badge dans un autre fragment
                     val badge = binding.badge2
                     val ft = mFragmentSupportManager?.beginTransaction()
+
+                    //on passe en argument le badge que l'on veut acceder
                     ft?.add(R.id.fragment_container, Badge2DetailFragment(badge))
                     ft?.addToBackStack(null)
                     ft?.commit()
@@ -77,6 +87,7 @@ class Badge_2Adapter internal constructor (
                 executePendingBindings()
             }
 
+            //on check si le badge a ete collecte ou non, on met la bonne image en fonction
             if(binding.badge2!!.isCollected){
                 binding.imageView.setImageResource(R.drawable.verdun_color)
             } else{
@@ -85,6 +96,7 @@ class Badge_2Adapter internal constructor (
         }
     }
 
+    //on gere l'affichage si c'est un titre (header)
     inner class BadgeHeaderViewHolder(
         private val binding: BadgeRecyclerviewHeaderBinding
     ) : BaseViewHolder<String>(binding.root){
@@ -131,11 +143,14 @@ class Badge_2Adapter internal constructor (
         }
     }
 
+    //
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         val element = itemList[position]
         if(holder is BadgeHeaderViewHolder){
+            //si c'est un header on bind comme un string
             holder.bind(element as String)
         } else if (holder is Badge2ViewHolder){
+            //sinon comme un badge
             holder.bind(element as Badge_2)
         } else{
             throw IllegalArgumentException()
@@ -144,11 +159,13 @@ class Badge_2Adapter internal constructor (
 
     override fun getItemCount() = itemList.size
 
+    //methode pour donner les elements du recyclerview
     internal fun submitList(items: List<Any>){
         this.itemList = items
         notifyDataSetChanged()
     }
 
+    //assigne en int si c'est un badge ou un header (cf le companion object)
     override fun getItemViewType(position: Int): Int {
         val comparable = itemList[position]
         return when (comparable) {
@@ -158,6 +175,7 @@ class Badge_2Adapter internal constructor (
         }
     }
 
+    //fonction pour donner l'activity, la toolbar, le support manager et la liste des badges a l'adapter, un peu bourrin mais ca marche
     internal fun giveAdapter(tool: Toolbar?, badges: List<Badge_2>, activity: Activity, fragmentM: FragmentManager){
         mToolbar = tool
         badgeList = badges
