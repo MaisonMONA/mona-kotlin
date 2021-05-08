@@ -14,7 +14,6 @@ import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.fragment.OeuvreRatingFragment
 import org.osmdroid.views.MapView
 
-
 /*
 *This application is developped following strict practice and respect of architecture components
 *to efficiently manage a UI's component lifecyle and handling data persistence
@@ -28,8 +27,6 @@ import org.osmdroid.views.MapView
  */
 
 class MainActivity : AppCompatActivity() {
-
-    var mRatingFragment: OeuvreRatingFragment? = null
 
     //For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
@@ -59,7 +56,6 @@ class MainActivity : AppCompatActivity() {
             2. Fine location
 
             */
-            Log.d("TOKEN LOG", SaveSharedPreference.getToken((this)))
 
             // One or both of the two required permissions are missing:
             // Ask for permissions
@@ -86,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }else {
                 // Both permissions are granted:
-                //  Setup Main Activity
+                // Setup Main Activity
                 setContentView(
                     this,
                     R.layout.activity_main
@@ -94,7 +90,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -158,18 +153,16 @@ class MainActivity : AppCompatActivity() {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
                     // Both permissions are granted:
-                    //  Setup Main Activity
+                    // Setup Main Activity
                     setContentView(this,
                         R.layout.activity_main
                     )
 
-
                     //Collecting Artworks
                     //TODO: permission for internet
                     //TODO: Parse all data and create a DB for it?
-                    // Note that the Toolbar defined in the layout has the id "my_toolbar"
+                    //Note that the Toolbar defined in the layout has the id "my_toolbar"
                 } else {
                     // Permissions denied
                     // Send to PermissionsDeniedActivity
@@ -178,7 +171,6 @@ class MainActivity : AppCompatActivity() {
                         // putExtra(EXTRA_MESSAGE, message)
                     }
                     startActivity(intent)
-
                 }
                 return
             }
@@ -187,14 +179,6 @@ class MainActivity : AppCompatActivity() {
             else -> {
                 // Ignore all other requests.
             }
-        }
-    }
-
-    override fun onBackPressed() {
-        if(mRatingFragment?.isVisible == true){
-            mRatingFragment?.onBackPressed()
-        } else{
-            super.onBackPressed()
         }
     }
 }

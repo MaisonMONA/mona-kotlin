@@ -69,12 +69,6 @@ class MapFragment : Fragment() {
 
         //initialization of location agent
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        //getLocationUpdates()
-
-        /*if (pinLocation == null) {
-            Log.d("PIN", "getting getLastLocation()")
-            getLastLocation()
-        }*/
     }
 
     override fun onCreateView(

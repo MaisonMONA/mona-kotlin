@@ -17,27 +17,24 @@ import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
 import com.google.android.material.tabs.TabLayout
 
-
 private const val NUM_PAGES = 7
 
 class OnboardingActivity : AppCompatActivity() {
     private var pager: ViewPager? = null
     private var indicator: TabLayout? = null
-    private var skip: Button? = null
     private var next: Button? = null
-    private var previous: Button? = null
     private var end:Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding);
-        Log.d("TUTORIAL", "Strart tutorial")
+
+        Log.d("TUTORIAL", "Start tutorial")
+
         pager = findViewById(R.id.pager);
         indicator = findViewById(R.id.indicator)
-        //skip = findViewById(R.id.skip);
-        //next = findViewById(R.id.next);
-        //previous = findViewById(R.id.previous);
         end = findViewById(R.id.end)
+
         val pagerAdapter = ScreenSlidePagerAdapter(
             supportFragmentManager,
             BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
@@ -86,7 +83,6 @@ class OnboardingActivity : AppCompatActivity() {
                 pager!!.currentItem = pager!!.currentItem - 1}
          */
         indicator?.setupWithViewPager(pager)
-
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager, behavior: Int) : FragmentStatePagerAdapter(

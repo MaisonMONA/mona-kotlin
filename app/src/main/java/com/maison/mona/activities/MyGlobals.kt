@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.util.Log
 import com.maison.mona.data.SaveSharedPreference
 
-
 class MyGlobals(var mContext: Context) {
 
     fun setOnlineMode():Boolean{

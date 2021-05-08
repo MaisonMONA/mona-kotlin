@@ -1,6 +1,5 @@
 package com.maison.mona.activities
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -27,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
         mUsername = findViewById(R.id.register_username)
         mPassword = findViewById(R.id.register_password)
         mPassword_confirmation = findViewById(R.id.register_password_confirmation)
@@ -43,8 +43,8 @@ class RegisterActivity : AppCompatActivity() {
                 )
                 val response = registerUser.get()
                 val reader = JSONObject(response)
-                if (reader.has("token")) {
 
+                if (reader.has("token")) {
                     //Save the token and the username in the SharedPrefference
                     val token = reader.getString("token")
                     val username = mUsername?.text.toString()

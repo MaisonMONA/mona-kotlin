@@ -154,8 +154,4 @@ class OeuvreRatingFragment : Fragment() {
         val date = Date()
         return dateFormat.format(date)
     }
-
-    public fun onBackPressed(){
-        Log.d("SAVE", "BACK PRESSED")
-    }
 }
