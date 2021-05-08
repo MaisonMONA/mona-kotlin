@@ -1,6 +1,5 @@
 package com.maison.mona.entity
 
-import androidx.room.PrimaryKey
 import java.io.Serializable
 
 data class BadgeRequiredArgs(

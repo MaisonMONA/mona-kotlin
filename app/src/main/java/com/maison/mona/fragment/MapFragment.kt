@@ -37,6 +37,8 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
 
+//a clean
+
 // Instances of this class are fragments representing a single
 // object in our collection.
 class MapFragment : Fragment() {

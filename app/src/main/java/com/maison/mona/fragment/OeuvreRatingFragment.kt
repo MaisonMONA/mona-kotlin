@@ -25,6 +25,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+//a clean
 class OeuvreRatingFragment : Fragment() {
 
     val safeArgs : OeuvreRatingFragmentArgs by navArgs()
@@ -32,16 +33,6 @@ class OeuvreRatingFragment : Fragment() {
     private val badgeViewModel: BadgeViewModel by viewModels()
 
     private var newBadge = mutableListOf<Badge_2>()
-
-    /*private val repository: BadgeRepository
-    init{
-        val badgeDAO = BadgeDatabase.getDatabase(
-            context.applicationContext,
-            viewModelScope
-        ).badgesDAO()
-        repository = BadgeRepository.getInstance(badgeDAO)
-    }*/
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +51,6 @@ class OeuvreRatingFragment : Fragment() {
         val imagePath = safeArgs.imagePath
 
         view.done_rating_button.setOnClickListener {
-
             val ratingBar = view.findViewById<RatingBar>(R.id.rating)
             val rating  = ratingBar.rating
 
@@ -80,10 +70,11 @@ class OeuvreRatingFragment : Fragment() {
             if (oeuvreIdServeur != null) {
                 oeuvreViewModel.updateRating(oeuvreId, rating, comment, state, date)
             }
+
             Toast.makeText(requireActivity(), "Oeuvre #" + oeuvreId + " ajoutée", Toast.LENGTH_LONG).show()
+
             //Save the informations in the database
             if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
-
                 Log.d("Save", "Commence Save")
                 val sendOeuvre = activity?.let { it1 -> SaveOeuvre(it1) }
 
@@ -100,9 +91,11 @@ class OeuvreRatingFragment : Fragment() {
                 }
 
                 var response = sendOeuvre?.get()
+
                 if (response != "" && response != null) {
                     Log.d("Save", "reponse: " + response)
                     val reader = JSONObject(response)
+
                     if (reader.has("errors")) {
                         Log.d("Save", "Erreur Save reader");
                         val errors = reader.getJSONObject("errors")
@@ -112,14 +105,12 @@ class OeuvreRatingFragment : Fragment() {
             }
 
             oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer {collected ->
-
                 badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
-                    Log.d("SAVE", "OeuvreRating : " + badgeList.toString())
-
                     for(badge in badgeList){
                         if(!badge.isCollected){
                             if(badge.optional_args!!.contains("borough")) {
                                 var borough = badge.optional_args.substringAfter(":'").substringBefore("'}")
+
                                 if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == badge.goal) {
                                     newBadge.add(badge)
                                     badgeViewModel.updateCollected(badge.id, true)
@@ -144,6 +135,7 @@ class OeuvreRatingFragment : Fragment() {
                     if(newBadge.isEmpty()){
                         findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
                     }
+                    //TODO SI PLUSIEURS BADGES DEBLOQUEES EN MEME TEMPS
                 })
             })
         }

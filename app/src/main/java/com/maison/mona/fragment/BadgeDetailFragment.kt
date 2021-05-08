@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.maison.mona.databinding.FragmentBadgeItemBinding
 
+//a delete ?
 class BadgeDetailFragment : Fragment(){
 
     private val safeArgs: BadgeDetailFragmentArgs by navArgs()

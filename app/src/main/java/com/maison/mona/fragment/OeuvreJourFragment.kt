@@ -26,6 +26,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+//a clean
 class OeuvreJourFragment : Fragment() {
 
     //View Models

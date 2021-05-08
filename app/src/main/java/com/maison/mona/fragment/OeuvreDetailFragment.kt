@@ -33,7 +33,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+//a clean
 class OeuvreDetailFragment () : Fragment() {
 
     //View Models
@@ -49,9 +49,7 @@ class OeuvreDetailFragment () : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
         oeuvreDetailViewModel = ViewModelProviders.of(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
-
         ).get(OeuvreDetailViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(

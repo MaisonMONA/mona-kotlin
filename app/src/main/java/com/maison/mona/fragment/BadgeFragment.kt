@@ -15,6 +15,7 @@ import com.maison.mona.databinding.FragmentBadgeBinding
 import com.maison.mona.entity.Badge
 import com.maison.mona.viewmodels.OeuvreViewModel
 
+//a delete ?
 class BadgeFragment : Fragment() {
 
     //view models

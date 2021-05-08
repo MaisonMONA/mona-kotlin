@@ -27,9 +27,6 @@ import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment(){
 
-    private val badgeViewModel: BadgeViewModel by viewModels()
-    private val oeuvreViewModel: OeuvreViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,13 +37,11 @@ class MoreFragment : Fragment(){
 
         binding?.apply {
             var online = MyGlobals(requireContext())
+
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
             setOnlineMessage(offlineButton, SaveSharedPreference.isOnline(requireContext()))
-            badgeButton.setOnClickListener {
-                val action = HomeViewPagerFragmentDirections.homeToBadge()
-                findNavController().navigate(action)
-            }
+
             howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
                 findNavController().navigate(action)
@@ -55,11 +50,6 @@ class MoreFragment : Fragment(){
             aboutButton.setOnClickListener {
                 val action = HomeViewPagerFragmentDirections.homeToText("AproposMONA.md")
                 findNavController().navigate(action)
-
-//                badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
-//                    badgesList.filter { it.isCollected == true }
-//                    Log.d("SAVE", "More fragment - aboutButton - badgesList : " + badgesList.toString())
-//                })
             }
 
             whoAreWeButton.setOnClickListener {
@@ -70,10 +60,10 @@ class MoreFragment : Fragment(){
             offlineButton.setOnClickListener {
                 online.setOnlineMode()
                 setOnlineMessage(offlineButton,SaveSharedPreference.isOnline(requireContext()))
+
                 if(SaveSharedPreference.isOnline(requireContext())){
                     updateInfoOnline()
                 }
-
             }
 
             signOutButton.setOnClickListener {
@@ -100,21 +90,6 @@ class MoreFragment : Fragment(){
         })
     }
 
-    fun showBadge(){
-        Log.d("SAVE", "showBadge called")
-
-        val repository: BadgeRepository
-        val badgeDAO = BadgeDatabase.getDatabase(
-            requireContext(),
-            lifecycleScope
-        ).badgesDAO()
-        repository = BadgeRepository.getInstance(badgeDAO)
-
-        badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
-            Log.d("SAVE", "More fragment badgesList : " + badgesList.toString())
-        })
-    }
-
     fun update(list: List<Oeuvre>){
         val repository: OeuvreRepository
         val oeuvreDao = OeuvreDatabase.getDatabase(
@@ -133,9 +108,11 @@ class MoreFragment : Fragment(){
                 item.type
             )
             val response = sendOeuvre.get()
+
             if (response != "" && response != null) {
                 Log.d("Save", "reponse: " + response)
                 val reader = JSONObject(response)
+                
                 if (reader.has("errors")) {
                     Log.d("Save", "Erreur Save reader");
                     val errors = reader.getJSONObject("errors")

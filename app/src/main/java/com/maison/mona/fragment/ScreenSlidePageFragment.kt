@@ -16,7 +16,9 @@ class ScreenSlidePageFragment : Fragment() {
         var view: View? = null
         val bundle = arguments
         var position = bundle?.get("position")
+
         Log.d("TUTORIAL", position.toString())
+
         view = when(position){
             0 -> inflater.inflate(R.layout.fragmentscreenslidepage, container, false)
             1 -> inflater.inflate(R.layout.fragmentscreenslidepage2, container, false)

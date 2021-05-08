@@ -1,8 +1,6 @@
 package com.maison.mona.fragment
 
-//import com.example.mona.viewmodels.LieuViewModel
 import android.content.Intent
-import android.graphics.BlurMaskFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,19 +11,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.activities.BadgeActivity
-import com.maison.mona.activities.MainActivity
 import com.maison.mona.adapters.CollectionAdapter
 import com.maison.mona.databinding.FragmentCollectionBinding
 import com.maison.mona.viewmodels.OeuvreViewModel
 
 
-//TODO implementation of cardview
-//https://developer.android.com/guide/topics/ui/layout/cardview
-
 class CollectionFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
-    //private val lieuViewModel : LieuViewModel by viewModels()
 
     private var badge_button : Button? = null;
 
@@ -46,23 +39,18 @@ class CollectionFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
+        //on observe les oeuvres en state 2 (collectionnees) ou 3 (collectionnes mais hors ligne)
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
             val sortedOeuvres = oeuvreList.filter { (it.state == 2 || it.state == 3) }
-
             adapter.submitList(sortedOeuvres)
         })
 
         badge_button = binding.badgeButton
 
+        //en appuyant sur le bouton de badge on lance l'activity
         badge_button?.setOnClickListener { view ->
             val intent = Intent(context, BadgeActivity::class.java)
             startActivity(intent)
-
-//            var popup = PopUpManagerFragment()
-//            popup.onAttach(requireContext())
-//            popup.onButtonShowPopupWindowClick(view)
-//
-//            getFragmentManager()?.executePendingTransactions();
         }
 
         return binding.root

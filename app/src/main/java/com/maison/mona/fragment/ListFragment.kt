@@ -29,28 +29,31 @@ import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
 import kotlin.collections.ArrayList
 
-
+//a clean
 class ListFragment : Fragment() {
 
-    //view models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
-    //adapter refference
+
     private lateinit var adapter: ListAdapter
     private var layout: View? = null
     private var position: Parcelable? = null
     private lateinit var recyclerView: IndexFastScrollRecyclerView
     var popupWindow: PopupWindow? = null
+
     //user location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var userLocation = GeoPoint(45.5044372, -73.578502)
+
     private var iconsStates = arrayListOf(
         arrayListOf(true, true, true),//Oeuvre
         arrayListOf(true, true, true) //Lieu
     )
+
     private var iconsStatesBack = arrayListOf(
         arrayListOf(true, true, true),//Oeuvre
         arrayListOf(true, true, true) //Lieu
     )
+
     private var category_index: Int = 0
     private var filter_index: Int = 0
 
