@@ -30,7 +30,7 @@
         android:background="?attr/colorPrimary"
         android:orientation="vertical">
 
-        <LinearLayout
+        <!--LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/options_padding"
@@ -50,7 +50,7 @@
                 android:clickable="true"
                 android:layout_marginHorizontal="@dimen/options_padding"
                 style="@style/TextAppearance.Mona.Settings"/>
-        </LinearLayout>
+        </LinearLayout-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_how_it_works"
+                android:background="@drawable/ic_more_how_it_works"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -83,7 +83,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_about"
+                android:background="@drawable/ic_more_about"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -106,7 +106,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_sun"
+                android:background="@drawable/ic_more_sun"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -128,7 +128,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_rss_feed"
+                android:background="@drawable/ic_more_rss_feed"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -150,7 +150,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_sign_out"
+                android:background="@drawable/ic_more_sign_out"
                 android:backgroundTint="@color/grey"/>
 
             <TextView

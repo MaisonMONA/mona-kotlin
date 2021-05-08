@@ -2,15 +2,12 @@ package com.maison.mona.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.maison.mona.R
 import com.maison.mona.databinding.BadgeRecyclerviewBadgeBinding
@@ -89,9 +86,9 @@ class Badge_2Adapter internal constructor (
 
             //on check si le badge a ete collecte ou non, on met la bonne image en fonction
             if(binding.badge2!!.isCollected){
-                binding.imageView.setImageResource(R.drawable.verdun_color)
+                binding.imageView.setImageResource(R.drawable.badge_icon_verdun_color)
             } else{
-                binding.imageView.setImageResource(R.drawable.verdun_grey)
+                binding.imageView.setImageResource(R.drawable.badge_icon_verdun_grey)
             }
         }
     }

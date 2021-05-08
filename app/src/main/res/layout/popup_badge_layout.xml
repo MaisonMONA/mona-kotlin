@@ -38,7 +38,7 @@
             android:layout_width="260dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:src="@drawable/verdun_color" />
+            android:src="@drawable/badge_icon_verdun_color" />
 
         <Space
             android:layout_height="40dp"

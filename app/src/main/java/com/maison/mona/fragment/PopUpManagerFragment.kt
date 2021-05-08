@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +47,7 @@ class PopUpManagerFragment() : Fragment(){
         textPopUp?.setText(badge.title_fr)
 
         val imagePopUp = popupView?.findViewById<ImageView>(R.id.popup_image_badge)
-        imagePopUp?.setImageResource(R.drawable.verdun_color)
+        imagePopUp?.setImageResource(R.drawable.badge_icon_verdun_color)
 
         val descriptionPopUp = popupView?.findViewById<TextView>(R.id.popup_badge_description_text)
         descriptionPopUp?.setText(badge.description_fr)

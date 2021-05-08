@@ -195,8 +195,6 @@ class MapFragment : Fragment() {
             R.id.map_geo -> {
                 Log.d("Map", "ICI")
                 getLastLocation()
-                //pinLocation = SaveSharedPreference.getGeoLoc(context)
-                //addUser(pinLocation, false)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -206,17 +204,17 @@ class MapFragment : Fragment() {
     fun getDrawable(state: Int?, type: String?): Int{
         if(type == "artwork"){
             return when(state){
-                null -> R.drawable.pin_oeuvre_normal_new
-                1 -> R.drawable.pin_oeuvre_target_new
-                2, 3 -> R.drawable.pin_oeuvre_collected_new
-                else -> R.drawable.pin_oeuvre_normal_new
+                null -> R.drawable.pin_oeuvre_normal
+                1 -> R.drawable.pin_oeuvre_target
+                2, 3 -> R.drawable.pin_oeuvre_collected
+                else -> R.drawable.pin_oeuvre_normal
             }
         }else if(type == "place"){
             return when(state){
-                null -> R.drawable.pin_lieu_normal_new
-                1 -> R.drawable.pin_lieu_target_new
-                2, 3 -> R.drawable.pin_lieu_collected_new
-                else -> R.drawable.pin_lieu_normal_new
+                null -> R.drawable.pin_lieu_normal
+                1 -> R.drawable.pin_lieu_target
+                2, 3 -> R.drawable.pin_lieu_collected
+                else -> R.drawable.pin_lieu_normal
             }
         }
         return  R.drawable.pin_lieu_normal

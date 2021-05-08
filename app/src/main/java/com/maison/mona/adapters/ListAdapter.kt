@@ -2,7 +2,6 @@ package com.maison.mona.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.location.Location
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,9 +119,9 @@ class ListAdapter internal constructor(
 
                 //Set the image icon
                 if(element.state == 1){
-                    holder.itemView.circleImage.setImageResource(R.drawable.targeted)
+                    holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_targeted)
                 }else if(element.state == 2 || element.state == 3){
-                    holder.itemView.circleImage.setImageResource(R.drawable.ic_collected)
+                    holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_collected)
                 }else{
                     holder.itemView.circleImage.setImageResource(android.R.color.transparent)
                 }

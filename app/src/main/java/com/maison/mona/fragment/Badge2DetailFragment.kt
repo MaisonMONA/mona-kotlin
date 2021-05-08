@@ -58,9 +58,9 @@ class Badge2DetailFragment(badge: Badge_2?): Fragment(R.layout.badge_detail) {
 
         //si on a collecté le badge on met l'image adequate
         if(mBadge?.isCollected == true){
-            view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(R.drawable.verdun_color)
+            view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(R.drawable.badge_icon_verdun_color)
         } else{
-            view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(R.drawable.verdun_grey)
+            view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(R.drawable.badge_icon_verdun_grey)
         }
 
         return view
