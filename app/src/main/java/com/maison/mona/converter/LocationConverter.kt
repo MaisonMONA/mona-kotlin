@@ -5,7 +5,6 @@ import com.maison.mona.entity.Location
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
 class LocationConverter {
 
     @TypeConverter
@@ -19,5 +18,4 @@ class LocationConverter {
         val type = object: TypeToken<Location>() {}.type
         return Gson().toJson(location, type)
     }
-
 }

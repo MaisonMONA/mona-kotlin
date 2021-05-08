@@ -11,6 +11,7 @@ class BadgeRepository(private val badgesDao:BadgeDAO){
 
     var newBadgesUnlocked: MutableList<Badge_2> = mutableListOf()
 
+    //pour updater si le badge a deja ete collecte ou pas
     suspend fun updateCollected(id: Int, collected: Boolean?){
         badgesDao.updateCollected(id, collected)
     }
@@ -20,7 +21,6 @@ class BadgeRepository(private val badgesDao:BadgeDAO){
     }
 
     companion object {
-
         // For Singleton instantiation
         @Volatile private var instance: BadgeRepository? = null
 
@@ -29,5 +29,4 @@ class BadgeRepository(private val badgesDao:BadgeDAO){
                 instance ?: BadgeRepository(badgesDao).also { instance = it }
             }
     }
-
 }

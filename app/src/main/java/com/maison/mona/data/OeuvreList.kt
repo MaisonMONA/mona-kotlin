@@ -8,7 +8,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.Serializable
 
-
 @Entity(tableName = "oeuvre_list_table")
 @JsonClass(generateAdapter = true)
 data class OeuvreList(
@@ -20,5 +19,4 @@ data class OeuvreList(
     @field:Json(name = "next") var next: String?,
     @field:Json(name = "last") var last: String?,
     @field:Json(name = "previous") var previous: String?
-
     ): Serializable

@@ -41,7 +41,6 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     }
 
     companion object {
-
         // For Singleton instantiation
         @Volatile private var instance: OeuvreRepository? = null
 
@@ -50,5 +49,4 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
                 instance ?: OeuvreRepository(oeuvreDao).also { instance = it }
             }
     }
-
 }

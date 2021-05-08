@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.maison.mona.entity.BadgeOptArgs
 
 class BadgeOptArgsConverter {
+
     @TypeConverter
     fun toOptArgs(json: String?): BadgeOptArgs?{
         val type = object : TypeToken<BadgeOptArgs?>() {}.type

@@ -18,5 +18,4 @@ class BilingualConverter {
         val type = object: TypeToken<Bilingual?>() {}.type
         return Gson().toJson(bilingual, type)
     }
-
 }

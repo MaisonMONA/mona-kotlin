@@ -10,7 +10,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.BadgeOptArgsConverter
 import com.maison.mona.converter.BadgeRequiredArgsConverter
-import com.maison.mona.entity.BadgeOptArgs
 import com.maison.mona.entity.Badge_2
 import com.maison.mona.task.BadgeTask
 import com.squareup.moshi.JsonAdapter
@@ -39,19 +38,16 @@ abstract class BadgeDatabase : RoomDatabase() {
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
 
-            Log.d("SAVE", "badge database on open called")
-
             INSTANCE?.let { database ->
                 scope.launch {
                     val badgesDao = database.badgesDAO()
-                    //If not connected
+
                     if( SaveSharedPreference.isOnline(mContext)//In online mode
                         && MyGlobals(mContext!!).isNetworkConnected()){//and actually connected
                         try{
                             Log.d("Save","badge accede database")
                             
                             val badgesList = getBadgesList()
-
                             badgesDao.insertAll(badgesList)
 
                             Log.d("SAVE", "fin onOpen" + badgesList.toString())
@@ -68,20 +64,14 @@ abstract class BadgeDatabase : RoomDatabase() {
         fun getBadgesList(): List<Badge_2>?{
             var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
 
-//            Log.d("SAVE", "inside getBadgesList : lastUpdate")
-
             val badgesJson = BadgeTask(lastUpdate).execute().get().subSequence(8, 3031).toString()
 
-//            Log.d("SAVE", "inside getBadgesList : badgesJson : " + badgesJson)
-            //stringtoJSON
-
+            //si on a rien reussi a avoir on retourne une liste vide, sinon ça crash
             if(badgesJson == null){
                 return mutableListOf()
             }
 
             val badgesArray = JSONArray(badgesJson)
-            
-//            Log.d("SAVE", "inside getBadgesList : badgesArray : " + badgesArray.toString())
 
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
@@ -101,18 +91,13 @@ abstract class BadgeDatabase : RoomDatabase() {
     //getDatabase returns the singleton. It'll create the database the first
 
     // time it's accessed, using Room's database builder to create a RoomDatabase
-// object in the application context from the WordRoomDatabase class and
-// names it "word_database".
+    // object in the application context from the WordRoomDatabase class and
+    // names it "word_database".
     companion object {
 
         @Volatile
         private var INSTANCE: BadgeDatabase? = null
         private var mContext: Context? = null
-
-//        fun getInstance(): BadgeDatabase?{
-//            val instance = INSTANCE
-//            return instance
-//        }
 
         fun getDatabase(
             context: Context,
