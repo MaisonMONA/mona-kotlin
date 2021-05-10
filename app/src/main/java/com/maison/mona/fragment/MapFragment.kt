@@ -265,6 +265,7 @@ class MapFragment : Fragment() {
 
     }
 
+    //specifier la fonction pour mettre soit le pin bleu soit le pin rouge
     fun addUser(location: GeoPoint, first: Boolean) {
 
         if(!first){
@@ -288,7 +289,7 @@ class MapFragment : Fragment() {
         )
 
         val userOverlayMarker =
-            ContextCompat.getDrawable(requireContext(), R.drawable.pin_user)
+            ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user)
         userOverlay.setMarker(userOverlayMarker)
         userItems.add(userOverlay)
 

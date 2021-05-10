@@ -119,7 +119,7 @@ class ListAdapter internal constructor(
 
                 //Set the image icon
                 if(element.state == 1){
-                    holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_targeted)
+                    holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_liste_targeted)
                 }else if(element.state == 2 || element.state == 3){
                     holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_collected)
                 }else{

@@ -67,7 +67,7 @@ class OeuvreItemMapFragment : Fragment() {
         val pinLocation = SaveSharedPreference.getGeoLoc(context)
         val pinMarker = Marker(mMap)
         pinMarker.position = pinLocation
-        pinMarker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.pin_user)
+        pinMarker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user)
 
         mMap.getOverlays()?.add(startMarker)
         mMap.getOverlays()?.add(pinMarker)

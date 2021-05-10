@@ -139,6 +139,7 @@ class ListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     //Creates a list of items in the spotlight if we want to implement this feature
     /*
     fun itemsOfTheWeek() {
@@ -192,6 +193,7 @@ class ListFragment : Fragment() {
 
     }
      */
+
     //Set the main list that will be displayed on screen
     fun setList(category: String, filter: String){
         var filteredList = listOf<Oeuvre>()
@@ -301,7 +303,7 @@ class ListFragment : Fragment() {
                 sortedList = currentList
             }
         }
-        Log.d("Popup", "Liste lenght: " + sortedList.size)
+        Log.d("Popup", "Liste length: " + sortedList.size)
         return sortedList
     }
 
