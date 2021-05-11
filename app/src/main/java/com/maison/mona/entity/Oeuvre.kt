@@ -65,7 +65,3 @@ data class Oeuvre(
     @Transient
     var distance: Double? = null
 }
-
-
-
-

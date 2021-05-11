@@ -12,15 +12,14 @@ const val COLLECTION_PAGE_INDEX = 3
 const val MORE_PAGE_INDEX = 4
 
 class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-
     /**
      * Mapping of the ViewPager page indexes to their respective Fragments
      */
+
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         ODJ_PAGE_INDEX to { OeuvreJourFragment() },
         MAP_PAGE_INDEX to { MapFragment() },
         LIST_PAGE_INDEX to { ListFragment() },
-        //LIST_PAGE_INDEX to { ExpListFragment() },
         COLLECTION_PAGE_INDEX to { CollectionFragment() },
         MORE_PAGE_INDEX to { MoreFragment() }
     )
@@ -30,5 +29,4 @@ class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun createFragment(position: Int): Fragment {
         return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
     }
-
 }

@@ -5,7 +5,6 @@ import com.maison.mona.entity.Artist
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
 class ArtistConverter {
 
     @TypeConverter
@@ -19,5 +18,4 @@ class ArtistConverter {
         val type = object: TypeToken<List<Artist>>() {}.type
         return Gson().toJson(artistList, type)
     }
-
 }

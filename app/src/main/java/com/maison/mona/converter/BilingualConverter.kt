@@ -5,7 +5,6 @@ import com.maison.mona.entity.Bilingual
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
 class BilingualConverter {
 
     @TypeConverter
@@ -19,5 +18,4 @@ class BilingualConverter {
         val type = object: TypeToken<Bilingual?>() {}.type
         return Gson().toJson(bilingual, type)
     }
-
 }

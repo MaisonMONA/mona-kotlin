@@ -21,9 +21,7 @@ class CollectionAdapter internal constructor(
 
     companion object {
         private var TYPE_OEUVRE = 0
-        //private var TYPE_LIEU = 1
     }
-
 
     inner class OeuvreViewHolder(
         private val binding: RecyclerviewCollectionOeuvreBinding
@@ -45,30 +43,6 @@ class CollectionAdapter internal constructor(
         }
     }
 
-
-    /*
-    inner class LieuViewHolder(
-        private val binding: RecyclerviewCollectionLieuBinding
-    ) : BaseViewHolder<Lieu>(binding.root) {
-        init {
-            binding.setClickListener {
-                val lieu = binding.lieu
-                lieu?.let {
-                    val action = HomeViewPagerFragmentDirections.homeToLieu(it)
-                    navController.navigate(action)
-                }
-            }
-        }
-        override fun bind(item: Lieu) {
-            binding.apply {
-                lieu = item
-                executePendingBindings()
-            }
-        }
-
-
-    }
-    */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.BaseViewHolder<*> {
         return when (viewType) {
             TYPE_OEUVRE -> {
@@ -86,11 +60,8 @@ class CollectionAdapter internal constructor(
             else -> throw IllegalArgumentException()
         }
     }
-
-
-
+    
     internal fun submitList(items: List<Any>) {
-
         //Initially, sort the list alphabetically
         //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin
         //val sortedList = oeuvres.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
@@ -109,7 +80,6 @@ class CollectionAdapter internal constructor(
     }
 
     override fun getItemCount() = itemList.size
-
 
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(item: T)

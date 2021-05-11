@@ -33,7 +33,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class OeuvreDetailFragment () : Fragment() {
 
     //View Models
@@ -45,13 +44,10 @@ class OeuvreDetailFragment () : Fragment() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
 
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
         oeuvreDetailViewModel = ViewModelProviders.of(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
-
         ).get(OeuvreDetailViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
@@ -177,13 +173,12 @@ class OeuvreDetailFragment () : Fragment() {
         }
     }
 
-
-
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+
         /*return File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
             ".jpg", /* suffix */
@@ -192,6 +187,7 @@ class OeuvreDetailFragment () : Fragment() {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
         }*/
+
         return File(storageDir,
             "JPEG_${timeStamp}_.jpg"
         ).apply{
@@ -206,7 +202,4 @@ class OeuvreDetailFragment () : Fragment() {
 
         fun captureOeuvre(oeuvre: Oeuvre)
     }
-
-
-
 }

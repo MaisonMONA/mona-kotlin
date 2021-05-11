@@ -34,6 +34,7 @@
     <string name="equal">=</string>
     <string name="MapTilerURL">https://api.maptiler.com/maps/basic/256/</string>
     <string name="artworksURL">https://picasso.iro.umontreal.ca/~mona/api/artworks</string>
+    <string name="badgesURL">https://picasso.iro.umontreal.ca/~mona/api/badges</string>
 
     <!-- PIN -->
     <string name="pinDialogAlertTitle">Confirmation</string>
@@ -95,4 +96,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Badge Pop-Up -->
+    <string name="popup_nouveau_badge">Vous avez débloquez un nouveau badge !</string>
+
+    <!-- Badge Detail -->
+    <string name="badge_detail_count">%1$d / %2$d </string>
 </resources>

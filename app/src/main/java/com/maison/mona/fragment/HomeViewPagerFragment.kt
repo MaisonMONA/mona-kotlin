@@ -7,15 +7,19 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.maison.mona.R
 import com.maison.mona.adapters.*
+import com.maison.mona.data.BadgeDatabase
+import com.maison.mona.data.BadgeRepository
 import com.maison.mona.databinding.FragmentViewPagerBinding
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_view_pager.*
-import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
-
+import com.maison.mona.viewmodels.BadgeViewModel
 
 class HomeViewPagerFragment(): Fragment() {
+
+    private val badgeViewModel: BadgeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +31,8 @@ class HomeViewPagerFragment(): Fragment() {
                     // do nothing
                 }
             }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
@@ -42,7 +46,6 @@ class HomeViewPagerFragment(): Fragment() {
         val viewPager = binding.viewPager
 
         viewPager.isUserInputEnabled = false
-
         viewPager.adapter = PagerAdapter(this)
 
         //Save states of four fragments
@@ -51,9 +54,8 @@ class HomeViewPagerFragment(): Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         val bottomNavigation = binding.bottomNavView
-        //bottomNavigation.background.setTint(resources.getColor(R.color.black))
-        bottomNavigation.setOnNavigationItemSelectedListener { item ->
 
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.odj_dest -> viewPager.currentItem = ODJ_PAGE_INDEX
                 R.id.map_dest -> viewPager.currentItem = MAP_PAGE_INDEX
@@ -67,8 +69,24 @@ class HomeViewPagerFragment(): Fragment() {
         //Remove tint and use custom selectors
         bottomNavigation.itemIconTintList = null
 
+        badgeDatabaseInit()
+
         return binding.root
     }
 
+    //TO DO : a mettre autrepart
+    fun badgeDatabaseInit(){
+        val repository: BadgeRepository
+        val badgeDAO = BadgeDatabase.getDatabase(
+            requireContext(),
+            lifecycleScope
+        ).badgesDAO()
+        repository = BadgeRepository.getInstance(badgeDAO)
 
+        badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
+            for(badge in badgesList){
+                badgeViewModel.setGoal(badge.id, badge.required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt())
+            }
+        })
+    }
 }

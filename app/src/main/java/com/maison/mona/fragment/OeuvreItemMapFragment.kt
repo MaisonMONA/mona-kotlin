@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.maison.mona.R
@@ -67,7 +66,7 @@ class OeuvreItemMapFragment : Fragment() {
         val pinLocation = SaveSharedPreference.getGeoLoc(context)
         val pinMarker = Marker(mMap)
         pinMarker.position = pinLocation
-        pinMarker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.pin_user)
+        pinMarker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user)
 
         mMap.getOverlays()?.add(startMarker)
         mMap.getOverlays()?.add(pinMarker)

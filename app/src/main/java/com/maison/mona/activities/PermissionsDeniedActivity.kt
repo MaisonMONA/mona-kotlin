@@ -40,7 +40,6 @@ class PermissionsDeniedActivity : AppCompatActivity() {
                 // Don't show explanation
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
                     // Request the permission.
                     ActivityCompat.requestPermissions(this, arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -59,7 +58,6 @@ class PermissionsDeniedActivity : AppCompatActivity() {
             }
         })
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {

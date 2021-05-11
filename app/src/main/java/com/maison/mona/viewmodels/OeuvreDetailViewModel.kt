@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Double.parseDouble
 
-
 //View Model for the single artwork displayed on the UI to bind properly
 class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int): AndroidViewModel(application){
 
@@ -39,12 +38,10 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
     }
 
-
     fun isCollected(): Boolean{
-
         var artwork_collected = false
 
-        //State checuk to see if artwork is collected
+        //State check to see if artwork is collected
         if(oeuvre?.state == 2){
             artwork_collected = true
         }
@@ -53,7 +50,6 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun isTarget(): Boolean{
-
         var artwork_target = false
 
         //State checuk to see if artwork is collected
@@ -64,14 +60,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return artwork_target
     }
 
-
     fun getArtists() : String{
         var artist_string = ""
 
         val array = oeuvre?.artists
 
         array?.let {
-
             for (element in array){
                 //If last element of array we dont put a comma and vice versa
                 if(array.last().name != element.name){
@@ -85,7 +79,6 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
 
         return artist_string
-
     }
 
     //Parsing through dimensions
@@ -93,17 +86,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var dimensions: MutableList<Int> = ArrayList()
         var dimensions_string = ""
         var metric = ""
-
         val array = oeuvre?.dimension
 
         //We suppose array is not empty
         array?.let {
-
-
             //We iterate through to find out whats a number and what is the metric
             //Since data on the server is not formed properly
             for (element in array){
-
                 var numeric = true
 
                 try {
@@ -130,16 +119,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
                     dimensions_string += temp
                 }
             }
-
         }
 
         return dimensions_string
-
     }
 
     fun getMaterials() : String{
         var materials_string = ""
-
         val array = oeuvre?.materials
 
         array?.let {
@@ -156,12 +142,10 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
 
         return materials_string
-
     }
 
     fun getTechniques() : String{
         var techniques_string = ""
-
         val array = oeuvre?.techniques
 
         array?.let {
@@ -178,7 +162,6 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
 
         return techniques_string
-
     }
 
     fun getCaptureDateMessage(): String{
@@ -188,8 +171,4 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     fun getComment(): String{
         return "Commentaire: "+ oeuvre?.comment
     }
-
-
-
-
 }

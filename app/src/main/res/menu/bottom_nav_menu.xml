@@ -3,22 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/odj_dest"
-        android:icon="@drawable/odj"
+        android:icon="@drawable/navbar_odj"
         android:title="@string/ODJ" />
     <item
         android:id="@+id/list_dest"
-        android:icon="@drawable/list"
+        android:icon="@drawable/navbar_list"
         android:title="@string/List" />
     <item
         android:id="@+id/map_dest"
-        android:icon="@drawable/map"
+        android:icon="@drawable/navbar_map"
         android:title="@string/Map" />
     <item
         android:id="@+id/collection_dest"
-        android:icon="@drawable/collection"
+        android:icon="@drawable/navbar_collection"
         android:title="@string/Collection" />
     <item
         android:id="@+id/more_dest"
-        android:icon="@drawable/more"
+        android:icon="@drawable/navbar_more"
         android:title="@string/More"/>
 </menu>

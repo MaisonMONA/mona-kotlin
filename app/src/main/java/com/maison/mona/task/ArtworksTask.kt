@@ -1,6 +1,5 @@
 package com.maison.mona.task
 
-
 import android.os.AsyncTask
 import okhttp3.*
 import java.io.IOException
@@ -10,7 +9,7 @@ class ArtworksTask(time: String) : AsyncTask<Void, Void, String>() {
     private val time: String?
 
     init {
-        this.time= time
+        this.time = time
     }
 
     override fun doInBackground(vararg params: Void?): String? {

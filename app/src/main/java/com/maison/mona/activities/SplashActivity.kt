@@ -1,9 +1,11 @@
 package com.maison.mona.activities
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
 
 class SplashActivity : AppCompatActivity() {
@@ -14,16 +16,22 @@ class SplashActivity : AppCompatActivity() {
     //to display to the user while the MainActivity sets up to load
 
     private lateinit var oeuvreViewModel: OeuvreViewModel
-    //private lateinit var lieuViewModel: LieuViewModel
+    private lateinit var badgeViewModel: BadgeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //Set the internet Mode
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
+        badgeViewModel = ViewModelProvider(this).get(BadgeViewModel::class.java)
+
         startActivity(Intent(this, MainActivity::class.java))
+
+        //va chercher les oeuvres
         oeuvreViewModel.oeuvreList.observe(this, Observer { oeuvreList ->
             if(!oeuvreList.isEmpty()){
-                oeuvreViewModel.oeuvreList.observe(this, Observer {oeuvreList ->
+                //va chercher les badges
+                badgeViewModel.badgesList.observe(this, Observer {badgesList ->
                     startActivity(Intent(this,
                         MainActivity::class.java))
                 })

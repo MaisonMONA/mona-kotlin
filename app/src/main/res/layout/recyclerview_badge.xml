@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:background="@drawable/cdn_color"/>
+                tools:background="@drawable/badge_icon_cdn_color"/>
 
             <TextView
                 android:id="@+id/titleView"
@@ -58,9 +58,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     </androidx.cardview.widget.CardView>
-
 
 </layout>

@@ -1,6 +1,5 @@
 package com.maison.mona.activities
 
-
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,8 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.fragment.OeuvreRatingFragment
 import org.osmdroid.views.MapView
-
 
 /*
 *This application is developped following strict practice and respect of architecture components
@@ -31,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     //For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
-
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -59,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
             */
 
-
             // One or both of the two required permissions are missing:
             // Ask for permissions
 
@@ -82,12 +79,10 @@ class MainActivity : AppCompatActivity() {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION
                     )
-
                 }
-
             }else {
                 // Both permissions are granted:
-                //  Setup Main Activity
+                // Setup Main Activity
                 setContentView(
                     this,
                     R.layout.activity_main
@@ -95,7 +90,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -105,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         mMap?.onResume() //needed for compass, my location overlays, v6.0.0 and up
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -154,27 +147,22 @@ class MainActivity : AppCompatActivity() {
 
  */
 
-
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
                     // Both permissions are granted:
-                    //  Setup Main Activity
+                    // Setup Main Activity
                     setContentView(this,
                         R.layout.activity_main
                     )
 
-
                     //Collecting Artworks
                     //TODO: permission for internet
                     //TODO: Parse all data and create a DB for it?
-                    // Note that the Toolbar defined in the layout has the id "my_toolbar"
+                    //Note that the Toolbar defined in the layout has the id "my_toolbar"
                 } else {
                     // Permissions denied
                     // Send to PermissionsDeniedActivity
@@ -183,7 +171,6 @@ class MainActivity : AppCompatActivity() {
                         // putExtra(EXTRA_MESSAGE, message)
                     }
                     startActivity(intent)
-
                 }
                 return
             }
@@ -194,5 +181,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

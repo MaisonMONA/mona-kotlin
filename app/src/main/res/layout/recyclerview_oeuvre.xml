@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.ListFragment">
@@ -34,9 +35,8 @@
                 android:layout_height="@dimen/card_circle_size"
                 android:layout_gravity="center"
 
-                android:background="@drawable/circle"
-                android:backgroundTint="@color/monaYellow"
-                />
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/monaYellow" />
 
             <TextView
                 android:id="@+id/distance"

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.BadgeActivity">
+
+    <data>
+        <variable
+            name="headerText"
+            type="String"/>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="Badge"
+            type="com.maison.mona.entity.Badge_2"/>
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/badge_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="@dimen/card_elevation_size"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/badge_header_circle"
+                android:layout_weight="0.02"
+                android:layout_width="@dimen/card_circle_size"
+                android:layout_height="@dimen/card_circle_size"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_badge_header_circle"
+                android:backgroundTint="@color/monaYellow" />
+
+            <TextView
+                android:id="@+id/messageHeader"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1.1"
+                android:gravity="center"
+                style="@style/TextAppearance.Mona.Featured"
+                android:clickable="true"
+                android:text="PLATEAU"
+                android:textSize="30sp"
+                android:onClick="@{clickListener}" />
+
+            <ImageView
+                android:id="@+id/badge_header_arrow"
+                android:layout_weight="0.1"
+                android:layout_width="@dimen/card_circle_size"
+                android:layout_height="@dimen/card_circle_size"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_badge_header_arrow" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

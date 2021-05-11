@@ -14,7 +14,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.concurrent.ExecutionException
 
-
 class LoginActivity : AppCompatActivity() {
 
     private var mUsername: TextView? = null
@@ -43,8 +42,8 @@ class LoginActivity : AppCompatActivity() {
                 val response = loginUser.get()
                 println(response)
                 val reader = JSONObject(response)
-                if (reader.has("token")) {
 
+                if (reader.has("token")) {
                     //Save the token and the username in the SharedPrefference
                     val token = reader.getString("token")
                     val username = mUsername?.text.toString()

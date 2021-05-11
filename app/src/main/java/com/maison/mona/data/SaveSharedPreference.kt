@@ -21,7 +21,6 @@ object SaveSharedPreference {
     private var LASTUPDATE:String = "00-00-0000"
 
     private var GEOLOC:String = "45.5044372_-73.578502"
-    //val point = GeoPoint(45.5044372, -73.578502)
 
     fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
@@ -56,12 +55,14 @@ object SaveSharedPreference {
         editor.putString(TOKEN, token)
         editor.commit()
     }
+
     //Online informations
     //Check if the user is in online or offline mode
     fun isOnline(ctx: Context?): Boolean{
         val value = getSharedPreferences(ctx)
             .getString(ONLINE, "true")
-        return value.toBoolean()}
+        return value.toBoolean()
+    }
 
     //Set the online mode to true or false
     fun setOnline(ctx: Context?, value: Boolean){
@@ -88,6 +89,7 @@ object SaveSharedPreference {
         editor.putString(FIRSTTIME,"false")
         editor.apply()
     }
+
     //Set first time manually, mostly for tests can remove in the final version
     fun setFirstTime(ctx: Context?, status:Boolean){
         val editor: SharedPreferences.Editor = getSharedPreferences(

@@ -15,15 +15,12 @@ import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
 import com.maison.mona.activities.LoginActivity
 import com.maison.mona.activities.MyGlobals
-import com.maison.mona.activities.OnboardingActivity
-import com.maison.mona.data.OeuvreDatabase
-import com.maison.mona.data.OeuvreRepository
-import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.data.*
 import com.maison.mona.databinding.FragmentMoreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.task.SaveOeuvre
+import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
-import kotlinx.android.synthetic.main.fragment_more.*
 import org.json.JSONObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,19 +37,19 @@ class MoreFragment : Fragment(){
 
         binding?.apply {
             var online = MyGlobals(requireContext())
+
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
             setOnlineMessage(offlineButton, SaveSharedPreference.isOnline(requireContext()))
-            badgeButton.setOnClickListener {
+
+            /*badgeButton.setOnClickListener {
                 val action = HomeViewPagerFragmentDirections.homeToBadge()
                 findNavController().navigate(action)
+            }*/
 
-            }
             howItWorksButton.setOnClickListener{
-                //val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
-                //findNavController().navigate(action)
-                val intent = Intent(context, OnboardingActivity::class.java)
-                startActivity(intent)
+                val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
+                findNavController().navigate(action)
             }
 
             aboutButton.setOnClickListener {
@@ -68,10 +65,10 @@ class MoreFragment : Fragment(){
             offlineButton.setOnClickListener {
                 online.setOnlineMode()
                 setOnlineMessage(offlineButton,SaveSharedPreference.isOnline(requireContext()))
+
                 if(SaveSharedPreference.isOnline(requireContext())){
                     updateInfoOnline()
                 }
-
             }
 
             signOutButton.setOnClickListener {
@@ -116,9 +113,11 @@ class MoreFragment : Fragment(){
                 item.type
             )
             val response = sendOeuvre.get()
+
             if (response != "" && response != null) {
                 Log.d("Save", "reponse: " + response)
                 val reader = JSONObject(response)
+                
                 if (reader.has("errors")) {
                     Log.d("Save", "Erreur Save reader");
                     val errors = reader.getJSONObject("errors")
@@ -131,5 +130,4 @@ class MoreFragment : Fragment(){
             }
         }
     }
-
 }

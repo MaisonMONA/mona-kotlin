@@ -18,7 +18,6 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     fun getRandomUncollected(type:String){
         val listUncollected = oeuvreDao.getNotCollected("artwork")
         val randNumber = (0..(listUncollected.value?.size!!))
-
     }
 
     fun getAllCollected(state:Int): LiveData<List<Oeuvre>>{
@@ -41,9 +40,7 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
         oeuvreDao.updateTarget(oeuvreId, target)
     }
 
-
     companion object {
-
         // For Singleton instantiation
         @Volatile private var instance: OeuvreRepository? = null
 
@@ -52,5 +49,4 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
                 instance ?: OeuvreRepository(oeuvreDao).also { instance = it }
             }
     }
-
 }
