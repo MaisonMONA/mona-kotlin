@@ -11,25 +11,19 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:gravity="center"
+            android:layout_marginTop="60dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/badge_button"
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="match_parent"
                 android:text="@string/Badge"
-                android:clickable="true">
-            </Button>
-
-            <TextView
-                android:id="@+id/badge_button_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Badge"
+                android:gravity="center"
                 android:clickable="true"
-                android:layout_marginHorizontal="@dimen/options_padding"
-                style="@style/TextAppearance.Mona.Settings"/>
+                style="@style/TextAppearance.Mona.Settings">
+            </Button>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

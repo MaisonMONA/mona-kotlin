@@ -13,7 +13,7 @@
         android:id="@+id/badge_popup_id"
         android:layout_width="300dp"
         android:layout_height="450dp"
-        android:background="@drawable/badge_popup_shape"
+        android:background="@drawable/shape_badge_popup"
         android:orientation="vertical">
 
         <Space

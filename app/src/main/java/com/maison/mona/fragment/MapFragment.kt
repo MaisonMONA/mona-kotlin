@@ -52,6 +52,7 @@ class MapFragment : Fragment() {
     private lateinit var userOverlay: OverlayItem
     private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
     private var first = true
+    private var pin_set = false
 
     //view models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
@@ -94,7 +95,7 @@ class MapFragment : Fragment() {
 
         val coord = SaveSharedPreference.getGeoLoc(context)
         Log.d("COORD", coord.toString())
-        addUser(coord, true)
+        addUser(coord, false, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user))
         first = false
 
         val touchOverlay = object: Overlay(){
@@ -114,7 +115,8 @@ class MapFragment : Fragment() {
                     pinLocation = geoPoint
                     SaveSharedPreference.setGeoLoc(context, geoPoint)
 
-                    addUser(geoPoint, false)
+                    addUser(geoPoint, false, ContextCompat.getDrawable(requireContext(), R.drawable.pin_new_location))
+                    pin_set = true
                 }
 
                 pinConfirm.setNegativeButton(R.string.No) {dialog, which -> null}
@@ -149,7 +151,7 @@ class MapFragment : Fragment() {
         setHasOptionsMenu(true)
 
         pinLocation = SaveSharedPreference.getGeoLoc(context)
-        addUser(pinLocation, false)
+        addUser(pinLocation, false, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user))
 
         map.onResume()
     }
@@ -195,6 +197,7 @@ class MapFragment : Fragment() {
             R.id.map_geo -> {
                 Log.d("Map", "ICI")
                 getLastLocation()
+                pin_set = false
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -266,10 +269,11 @@ class MapFragment : Fragment() {
     }
 
     //specifier la fonction pour mettre soit le pin bleu soit le pin rouge
-    fun addUser(location: GeoPoint, first: Boolean) {
-
-        if(!first){
+    fun addUser(location: GeoPoint, first: Boolean, pin: Drawable?) {
+        if(pin_set){
             map.overlays.remove(userObject)
+        } else if (first){
+            map.overlays.forEach { it -> map.overlays.remove(it) }
         }
 
         //val point = GeoPoint(location.latitude, location.longitude)
@@ -288,9 +292,7 @@ class MapFragment : Fragment() {
             location
         )
 
-        val userOverlayMarker =
-            ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user)
-        userOverlay.setMarker(userOverlayMarker)
+        userOverlay.setMarker(pin)
         userItems.add(userOverlay)
 
         userObject = ItemizedIconOverlay(
@@ -342,7 +344,7 @@ class MapFragment : Fragment() {
                     // get latest location
                     val geoP = GeoPoint(location.latitude, location.longitude)
                     SaveSharedPreference.setGeoLoc(context, geoP)
-                    addUser(geoP, first)
+                    addUser(geoP, true, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user))
                     first = false
                 }
             }
