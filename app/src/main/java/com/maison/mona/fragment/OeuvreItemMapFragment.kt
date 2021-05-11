@@ -20,7 +20,6 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
-//a clean
 class OeuvreItemMapFragment : Fragment() {
 
     private lateinit var mMap: MapView

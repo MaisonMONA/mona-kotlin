@@ -25,7 +25,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-//a clean
 class OeuvreRatingFragment : Fragment() {
 
     val safeArgs : OeuvreRatingFragmentArgs by navArgs()
@@ -75,12 +74,9 @@ class OeuvreRatingFragment : Fragment() {
 
             //Save the informations in the database
             if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
-                Log.d("Save", "Commence Save")
                 val sendOeuvre = activity?.let { it1 -> SaveOeuvre(it1) }
 
                 if (sendOeuvre != null) {
-                    Log.d("Save", "obtien contexte")
-                    Log.d("Save", "Path: " + imagePath)
                     sendOeuvre.execute(
                         oeuvreIdServeur.toString(),
                         rating.toInt().toString(),
@@ -93,7 +89,6 @@ class OeuvreRatingFragment : Fragment() {
                 var response = sendOeuvre?.get()
 
                 if (response != "" && response != null) {
-                    Log.d("Save", "reponse: " + response)
                     val reader = JSONObject(response)
 
                     if (reader.has("errors")) {
@@ -104,7 +99,7 @@ class OeuvreRatingFragment : Fragment() {
                 }
             }
 
-            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer {collected ->
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer { collected ->
                 badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
                     for(badge in badgeList){
                         if(!badge.isCollected){
@@ -132,6 +127,7 @@ class OeuvreRatingFragment : Fragment() {
                             }
                         }
                     }
+
                     if(newBadge.isEmpty()){
                         findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
                     }

@@ -2,18 +2,14 @@ package com.maison.mona.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maison.mona.R
-import com.maison.mona.adapters.Badge_2Adapter
+import com.maison.mona.adapters.BadgeAdapter
 import com.maison.mona.viewmodels.BadgeViewModel
-import java.util.*
 
 class BadgeActivity : AppCompatActivity() {
 
@@ -23,7 +19,7 @@ class BadgeActivity : AppCompatActivity() {
     private var mBackButton: Toolbar? = null
 
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var adapter: Badge_2Adapter
+    private lateinit var adapter: BadgeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +35,7 @@ class BadgeActivity : AppCompatActivity() {
         })
 
         //on crée l'adapter pour les badges
-        adapter = Badge_2Adapter(applicationContext)
+        adapter = BadgeAdapter(applicationContext)
 
         //on le donne au recyclerview
         mRecyclerView.adapter = adapter

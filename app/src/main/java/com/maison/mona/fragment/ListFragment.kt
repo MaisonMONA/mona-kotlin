@@ -1,8 +1,5 @@
 package com.maison.mona.fragment
 
-//import com.example.mona.entity.Lieu
-//import com.example.mona.viewmodels.LieuViewModel
-
 import `in`.myinnos.alphabetsindexfastscrollrecycler.IndexFastScrollRecyclerView
 import android.Manifest
 import android.content.pm.PackageManager
@@ -29,7 +26,6 @@ import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
 import kotlin.collections.ArrayList
 
-//a clean
 class ListFragment : Fragment() {
 
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
@@ -110,10 +106,6 @@ class ListFragment : Fragment() {
         recyclerView.layoutManager?.onRestoreInstanceState(position)
     }
 
-    fun reloadPage() {
-
-    }
-
     override fun onPause() {
         super.onPause()
        position = recyclerView.layoutManager?.onSaveInstanceState()
@@ -140,66 +132,13 @@ class ListFragment : Fragment() {
         }
     }
 
-    //Creates a list of items in the spotlight if we want to implement this feature
-    /*
-    fun itemsOfTheWeek() {
-
-        val weeklyIndex = Calendar.WEEK_OF_YEAR
-
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
-            var featured_oeuvre = emptyList<Oeuvre>()
-
-            for (num in 1..20) {
-                val index = weeklyIndex + 7 * num
-                featured_oeuvre = featured_oeuvre + oeuvreList.get(index)
-            }
-
-            var temp = featured_oeuvre
-
-            var header = listOf("")
-
-            var featured_list = header + temp.shuffled(Random(weeklyIndex))
-
-            adapter.submitList(featured_list)
-
-        })
-    }*/
-    //Creates menus with sub menues, if we wan to implement this feature
-    /*
-    fun masterList() {
-        val rootList = listOf<String>("Oeuvres", "Lieux")
-
-        val lists = mutableMapOf<String, List<Any>>(
-            "Oeuvres" to listOf<String>(
-                "Titres", "Artistes", "Categorie", "Arrondissements", "Materiaux", "Techiques"
-            ),
-            "Titres" to emptyList(),
-            "Artistes" to emptyList(),
-            "Categorie" to emptyList(),
-            "Arrondissements" to emptyList(),
-            "Materiaux" to emptyList(),
-            "Techniques" to emptyList()
-        )
-        adapter.submitMasterList(lists)
-        adapter.submitRootList(rootList)
-        adapter.submitList(rootList)
-
-        oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
-            var sortedList =
-                oeuvrelist.sortedWith(compareBy(Oeuvre::title, Oeuvre::borough))
-            var headerList = addAlphabeticHeaders(sortedList as MutableList<Oeuvre>)
-            oeuvrelist?.let { adapter.submitSubList("Titres", headerList) }
-        })
-
-    }
-     */
-
     //Set the main list that will be displayed on screen
     fun setList(category: String, filter: String){
         var filteredList = listOf<Oeuvre>()
         var sortedList: List<Any> = listOf()
         //Gets the location of the user
         userLocation = SaveSharedPreference.getGeoLoc(context)
+
         if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
             && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
             oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
@@ -236,13 +175,6 @@ class ListFragment : Fragment() {
         ) {
             //Do not have permission
         }else{
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
 
@@ -260,15 +192,23 @@ class ListFragment : Fragment() {
 
     fun filterStateList(list: List<Oeuvre>): List<Oeuvre>{
         var filteredList = list
+
         if(!(iconsStates[0][0]) && !(iconsStates[1][0])){//if we remove the non collected/non targete
             filteredList = filteredList.filter { (it.state != null)}
         }
+
         if(!(iconsStates[0][1]) && !(iconsStates[1][1])){//if we remove the targeted items
             filteredList = filteredList.filter{it.state != 1}
         }
+
         if(!(iconsStates[0][2]) && !(iconsStates[1][2])){//if we remove the collected items
             filteredList = filteredList.filter{it.state != 2}
         }
+
+//        if(!(iconsStates[0][0])){//if we remove the non collected/non targete
+//            filteredList = filteredList.filter { (it.type == "place") && (it.state != null)}
+//        }
+
         return filteredList
     }
 
@@ -277,9 +217,11 @@ class ListFragment : Fragment() {
         var currentList = list
         var sortedList = listOf<Any>()
         setDistances(list)
+
         if( currentList.isEmpty()){
             return sortedList
         }
+
         //Check for the category
         when(category){
             "Titres" ->{

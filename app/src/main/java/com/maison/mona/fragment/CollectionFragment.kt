@@ -15,7 +15,6 @@ import com.maison.mona.adapters.CollectionAdapter
 import com.maison.mona.databinding.FragmentCollectionBinding
 import com.maison.mona.viewmodels.OeuvreViewModel
 
-
 class CollectionFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
@@ -58,6 +57,5 @@ class CollectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
 }
