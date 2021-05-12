@@ -50,7 +50,6 @@ class OeuvreJourFragment : Fragment() {
 
         //Select a random artwork from those the user didn't collect yet
 
-
         oeuvreDetailViewModel = ViewModelProviders.of(
             this,
             OeuvreDetailViewModelFactory(requireActivity().application,
@@ -115,36 +114,35 @@ class OeuvreJourFragment : Fragment() {
     }
 
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
-    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-        // Ensure that there's a camera activity to handle the intent
-        takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
-            // Create the File where the photo should go
-            val photoFile: File? = try {
-                createImageFile()
-            } catch (ex: IOException) {
-                // Error occurred while creating the File
-                null
-            }
-            // Continue only if the File was successfully created
-            photoFile?.also {
-                context?.let {
-                    val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
-
-                    onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
-                        oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-                        Log.d("Save","Current: " + currentPhotoPath)
-                        val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
-                        findNavController().navigate(action)
-                    }
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
                 }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    context?.let {
+                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
 
+                        onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
+                            oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
+                            Log.d("Save","Current: " + currentPhotoPath)
+                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
+                            findNavController().navigate(action)
+                        }
+                    }
+
+                }
             }
         }
     }
-}
-
 
     @Throws(IOException::class)
     private fun createImageFile(): File {

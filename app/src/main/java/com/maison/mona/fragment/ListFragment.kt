@@ -136,6 +136,7 @@ class ListFragment : Fragment() {
     fun setList(category: String, filter: String){
         var filteredList = listOf<Oeuvre>()
         var sortedList: List<Any> = listOf()
+
         //Gets the location of the user
         userLocation = SaveSharedPreference.getGeoLoc(context)
 
@@ -177,8 +178,6 @@ class ListFragment : Fragment() {
         }else{
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
-
-                    Log.d("Liste", location.toString())
                     if(location != null){
                         Log.d("Liste", "optient location")
 
@@ -193,21 +192,23 @@ class ListFragment : Fragment() {
     fun filterStateList(list: List<Oeuvre>): List<Oeuvre>{
         var filteredList = list
 
-        if(!(iconsStates[0][0]) && !(iconsStates[1][0])){//if we remove the non collected/non targete
-            filteredList = filteredList.filter { (it.state != null)}
-        }
+        if(!(iconsStates[0][0]))
+            filteredList = filteredList.filter { (it.type != "artwork") || (it.state != null)}
 
-        if(!(iconsStates[0][1]) && !(iconsStates[1][1])){//if we remove the targeted items
-            filteredList = filteredList.filter{it.state != 1}
-        }
+        if(!(iconsStates[0][1]))
+            filteredList = filteredList.filter { (it.type != "artwork") || (it.state != 1)}
 
-        if(!(iconsStates[0][2]) && !(iconsStates[1][2])){//if we remove the collected items
-            filteredList = filteredList.filter{it.state != 2}
-        }
+        if(!(iconsStates[0][2]))
+            filteredList = filteredList.filter { (it.type != "artwork") || (it.state != 2)}
 
-//        if(!(iconsStates[0][0])){//if we remove the non collected/non targete
-//            filteredList = filteredList.filter { (it.type == "place") && (it.state != null)}
-//        }
+        if(!(iconsStates[1][0]))
+            filteredList = filteredList.filter { (it.type != "place") || (it.state != null)}
+
+        if(!(iconsStates[1][1]))
+            filteredList = filteredList.filter { (it.type != "place") || (it.state != 1)}
+
+        if(!(iconsStates[1][2]))
+            filteredList = filteredList.filter { (it.type != "place") || (it.state != 2)}
 
         return filteredList
     }
@@ -251,6 +252,7 @@ class ListFragment : Fragment() {
 
     fun setDistances(list:List<Oeuvre>){
         userLocation = SaveSharedPreference.getGeoLoc(context)
+
         for(oeuvre in list) {
             val distance = distance(
                 userLocation.latitude,
@@ -266,20 +268,23 @@ class ListFragment : Fragment() {
     fun addDistanceHeaders(list: MutableList<Oeuvre>): List<Any>{
         //Creation of mutable list of Interval object where the item and
         // their distance from the user are stored
-        Log.d("Liste",list[0].distance.toString())
         val sortedList = list.sortedWith(compareBy(Oeuvre::distance))
+
         //adding the item to their respectable list sequentially
         var sortedOeuvres = mutableListOf<Any>()
         //Set the distance headers as items at a lesser distance than X
         //var distanceCounter = 0;//initial
         //var distJump = 1//Jump between each header
+
         var current = -1
         var min = 0
         var max = 9//last header(all items after more than)
         for (oeuvre in sortedList) {
             var distKm = oeuvre.distance//Km
+
             if (distKm != null) {
                 var roundDist = distKm.toInt()
+
                 if(roundDist in (current + 1)..max){
                     current = roundDist
                     sortedOeuvres.add(current.toString() + "Km")
@@ -297,10 +302,12 @@ class ListFragment : Fragment() {
 
         var alphabetMap = normalList.groupBy { unaccent(it.title!!).first().toUpperCase()}
         var listAlphabet = mutableListOf<Any>()
-       alphabetMap.forEach { (t, u) ->
+
+        alphabetMap.forEach { (t, u) ->
            listAlphabet.add(t.toString())
            listAlphabet.addAll(u)
         }
+
         listAlphabet.add("*")
         listAlphabet.addAll(specialList)
         return listAlphabet
@@ -310,6 +317,7 @@ class ListFragment : Fragment() {
         //Find the list of all categories(names, borought ...)
         var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
         categoryMap.put("*", mutableListOf())
+
         for(item in list){
             if(item.artists.isNullOrEmpty()){
                 categoryMap["*"]!!.add(item)
@@ -320,6 +328,7 @@ class ListFragment : Fragment() {
                         if (!categoryMap.contains(artist.name)) {
                             categoryMap.put(artist.name, mutableListOf())
                         }
+
                         categoryMap[artist.name]?.add(item)
                     }
                 }
@@ -329,18 +338,22 @@ class ListFragment : Fragment() {
         val sortedCategoryMap = categoryMap.toSortedMap()
         //Create the list of items
         val sortedList = mutableListOf<Any>()
+
         for((k,v) in sortedCategoryMap){
             if(k != "*"){
                 sortedList.add(k)
                 var vSort = listOf<Oeuvre>()
+
                 if(filter == "A-Z"){
                     vSort = v.sortedWith(compareBy(Oeuvre::title))
                 }else{
                     vSort = v.sortedWith(compareBy(Oeuvre::distance))
                 }
+
                 sortedList.addAll(vSort)
             }
         }
+
         if(sortedCategoryMap["*"]?.isNotEmpty()!!){
             sortedList.add("* Pas d'artiste *")
             sortedCategoryMap["*"]?.let { sortedList.addAll(it) }
