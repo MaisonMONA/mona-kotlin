@@ -139,6 +139,14 @@
                 android:clickable="true"
                 android:layout_marginHorizontal="@dimen/options_padding"
                 style="@style/TextAppearance.Mona.Settings"/>
+
+            <Switch
+                android:id="@+id/more_online_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginLeft="130dp"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
         </LinearLayout>
 
         <LinearLayout

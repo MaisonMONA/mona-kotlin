@@ -1,11 +1,14 @@
 package com.maison.mona.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import android.widget.Switch
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,13 +22,15 @@ import com.maison.mona.data.*
 import com.maison.mona.databinding.FragmentMoreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.task.SaveOeuvre
-import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
 import org.json.JSONObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment(){
+
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    private lateinit var mSwitch: Switch
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,17 +40,29 @@ class MoreFragment : Fragment(){
         val binding = FragmentMoreBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        binding?.apply {
-            var online = MyGlobals(requireContext())
+        mSwitch = binding.moreOnlineSwitch
 
+        if(SaveSharedPreference.isOnline(requireContext()))
+            mSwitch.isChecked = true
+
+
+        mSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener(){ compoundButton: CompoundButton, b: Boolean ->
+            if(mSwitch.isChecked){
+                MyGlobals(requireContext()).setOnlineMode()
+
+                if(SaveSharedPreference.isOnline(requireContext()))
+                    updateInfoOnline()
+            } else{
+                MyGlobals(requireContext()).setOnlineMode()
+
+                if(SaveSharedPreference.isOnline(requireContext()))
+                    updateInfoOnline()
+            }
+        })
+
+        binding?.apply {
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
-            setOnlineMessage(offlineButton, SaveSharedPreference.isOnline(requireContext()))
-
-            /*badgeButton.setOnClickListener {
-                val action = HomeViewPagerFragmentDirections.homeToBadge()
-                findNavController().navigate(action)
-            }*/
 
             howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
@@ -62,15 +79,6 @@ class MoreFragment : Fragment(){
                 findNavController().navigate(action)
             }
 
-            offlineButton.setOnClickListener {
-                online.setOnlineMode()
-                setOnlineMessage(offlineButton,SaveSharedPreference.isOnline(requireContext()))
-
-                if(SaveSharedPreference.isOnline(requireContext())){
-                    updateInfoOnline()
-                }
-            }
-
             signOutButton.setOnClickListener {
                 val myIntent = Intent(requireActivity(), LoginActivity::class.java)
                 startActivity(myIntent)
@@ -78,12 +86,6 @@ class MoreFragment : Fragment(){
         }
 
         return binding.root
-    }
-
-    fun setOnlineMessage(button: TextView, status: Boolean){
-        var offlineMessage = R.string.go_offline
-        if(!status) offlineMessage = R.string.go_online
-        button.setText(offlineMessage)
     }
 
     fun updateInfoOnline(){
