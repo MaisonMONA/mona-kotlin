@@ -118,6 +118,7 @@ class MapFragment : Fragment() {
                 return super.onLongPress(e, mapView)
             }
         }
+
         map.overlays.add(touchOverlay)
         return binding.root
     }

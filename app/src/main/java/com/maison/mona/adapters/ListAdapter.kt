@@ -111,19 +111,29 @@ class ListAdapter internal constructor(
                 }
 
                 //select the color for the articles
-                if(element.type == "artwork"){
-                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
-                }else if(element.type == "place"){
-                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
-                }
+//                if(element.type == "artwork"){
+//                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
+//                }else if(element.type == "place"){
+//                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
+//                }
 
                 //Set the image icon
                 if(element.state == 1){
-                    holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_liste_targeted)
+                    holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_targeted)
                 }else if(element.state == 2 || element.state == 3){
-                    holder.itemView.circleImage.setImageResource(R.drawable.ic_oeuvre_collected)
+                    if(element.type == "artwork")
+                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_collected)
+
+                    if(element.type == "place")
+                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_collected)
                 }else{
-                    holder.itemView.circleImage.setImageResource(android.R.color.transparent)
+//                    holder.itemView.circleImage.setImageResource(android.R.color.transparent)
+
+                    if(element.type == "artwork"){
+                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre)
+                    }else if(element.type == "place"){
+                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu)
+                    }
                 }
 
                 //Set the location if we have the permission to do so
