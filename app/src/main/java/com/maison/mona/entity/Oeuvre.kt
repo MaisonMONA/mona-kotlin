@@ -22,7 +22,7 @@ data class Oeuvre(
     var produced_at: String?,
 
     @TypeConverters(BilingualConverter::class)
-    @field:Json(name = "category") var category: Bilingual?,
+    @field:Json(name = "category") var category: Bilingual?, //TODO voir long terme
 
     @TypeConverters(BilingualConverter::class)
     @field:Json(name = "subcategory") var subcategory: Bilingual?,
@@ -49,7 +49,6 @@ data class Oeuvre(
     var details: String?,
 
     var type: String?,
-
     //Collection
     var state: Int?,
 

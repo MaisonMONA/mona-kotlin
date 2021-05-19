@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.*
@@ -175,6 +176,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                    OeuvreDatabase::class.java,
                    "artwork-database"
                )
+                   .addMigrations(MIGRATION_1_2)
                    .addCallback(OeuvreDatabaseCallback(scope))
                    .build()
 
@@ -183,5 +185,11 @@ abstract class OeuvreDatabase : RoomDatabase() {
                instance
            }
         }
+    }
+}
+val MIGRATION_1_2 = object : Migration(1,2){
+    override fun migrate(database: SupportSQLiteDatabase){
+        database.execSQL("ALTER TABLE artwork_table ADD COLUMN idServer INT")
+        database.execSQL("ALTER TABLE artwork_table ADD COLUMN type TEXT")
     }
 }
