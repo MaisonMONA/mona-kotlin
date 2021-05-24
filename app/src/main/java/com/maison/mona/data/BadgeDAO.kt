@@ -5,15 +5,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 
 @Dao
 interface BadgeDAO {
     @Query("SELECT * FROM badge_table")
-    fun getAll(): LiveData<List<Badge_2>>
+    fun getAll(): LiveData<List<Badge>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(oeuvres: List<Badge_2>?)
+    suspend fun insertAll(oeuvres: List<Badge>?)
 
     @Query("UPDATE badge_table SET isCollected= :collected WHERE id= :id")
     fun updateCollected(id: Int, collected: Boolean?)

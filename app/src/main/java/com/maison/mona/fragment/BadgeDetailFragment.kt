@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.maison.mona.R
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 import com.maison.mona.viewmodels.OeuvreViewModel
 
-class BadgeDetailFragment(badge: Badge_2?): Fragment(R.layout.badge_detail) {
+class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
 
     private lateinit var mContext: Context
     private var mBadge = badge

@@ -1,15 +1,13 @@
 package com.maison.mona.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import com.maison.mona.entity.Badge_2
-import com.maison.mona.entity.Oeuvre
+import com.maison.mona.entity.Badge
 
 class BadgeRepository(private val badgesDao:BadgeDAO){
 
-    val badgesList: LiveData<List<Badge_2>> = badgesDao.getAll()
+    val badgesList: LiveData<List<Badge>> = badgesDao.getAll()
 
-    var newBadgesUnlocked: MutableList<Badge_2> = mutableListOf()
+    var newBadgesUnlocked: MutableList<Badge> = mutableListOf()
 
     //pour updater si le badge a deja ete collecte ou pas
     suspend fun updateCollected(id: Int, collected: Boolean?){

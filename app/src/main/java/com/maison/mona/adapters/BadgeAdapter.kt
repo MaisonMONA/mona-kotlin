@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.maison.mona.R
 import com.maison.mona.databinding.BadgeRecyclerviewBadgeBinding
 import com.maison.mona.databinding.BadgeRecyclerviewHeaderBinding
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 import com.maison.mona.fragment.BadgeDetailFragment
 
 class BadgeAdapter internal constructor (
@@ -23,7 +23,7 @@ class BadgeAdapter internal constructor (
     //liste des headers
     private var itemList = emptyList<Any>()
     //liste des badges
-    private var badgeList = emptyList<Badge_2>()
+    private var badgeList = emptyList<Badge>()
 
     private var mToolbar: Toolbar? = null
     private var mActivity: Activity? = null
@@ -60,7 +60,7 @@ class BadgeAdapter internal constructor (
     //On gère l'affichage si c'est un badge
     inner class Badge2ViewHolder(
         private val binding: BadgeRecyclerviewBadgeBinding
-    ) : BaseViewHolder<Badge_2>(binding.root){
+    ) : BaseViewHolder<Badge>(binding.root){
         init{
             binding.setClickListener {
                 if(!inBadge){
@@ -78,7 +78,7 @@ class BadgeAdapter internal constructor (
             }
         }
 
-        override fun bind(item: Badge_2) {
+        override fun bind(item: Badge) {
             binding.apply{
                 badge2 = item
                 executePendingBindings()
@@ -148,7 +148,7 @@ class BadgeAdapter internal constructor (
             holder.bind(element as String)
         } else if (holder is Badge2ViewHolder){
             //sinon comme un badge
-            holder.bind(element as Badge_2)
+            holder.bind(element as Badge)
         } else{
             throw IllegalArgumentException()
         }
@@ -166,14 +166,14 @@ class BadgeAdapter internal constructor (
     override fun getItemViewType(position: Int): Int {
         val comparable = itemList[position]
         return when (comparable) {
-            is Badge_2 -> TYPE_BADGE
+            is Badge -> TYPE_BADGE
             is String -> TYPE_HEADER
             else -> throw IllegalArgumentException("Invalid type of data " + position)
         }
     }
 
     //fonction pour donner l'activity, la toolbar, le support manager et la liste des badges a l'adapter, un peu bourrin mais ca marche
-    internal fun giveAdapter(tool: Toolbar?, badges: List<Badge_2>, activity: Activity, fragmentM: FragmentManager){
+    internal fun giveAdapter(tool: Toolbar?, badges: List<Badge>, activity: Activity, fragmentM: FragmentManager){
         mToolbar = tool
         badgeList = badges
         mActivity = activity

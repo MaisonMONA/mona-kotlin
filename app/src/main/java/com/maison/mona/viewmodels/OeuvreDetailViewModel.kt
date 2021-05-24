@@ -1,6 +1,7 @@
 package com.maison.mona.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.maison.mona.data.OeuvreDatabase
@@ -29,11 +30,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     private fun getOeuvre(){
         viewModelScope.launch(Dispatchers.IO) {
             oeuvre = repository.getArticleById(oeuvreId)
-
-//            tentative de fix pour trouver une oeuvre non collectionnee pour l'oeuvre du jour
+//            Log.d("OEUVRE", "appel get oeuvre")
+//
+////            tentative de fix pour trouver une oeuvre non collectionnee pour l'oeuvre du jour
 //            if(oeuvre!!.state == 2){
-//                oeuvreId = (oeuvreId * 2)
-//                getOeuvre()
+//                Log.d("OEUVRE", "deja collectionnée")
+////                oeuvreId = (oeuvreId * 2)
+////                getOeuvre()
 //            }
         }
     }

@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.maison.mona.data.BadgeDatabase
 import com.maison.mona.data.BadgeRepository
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -17,7 +17,7 @@ class BadgeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: BadgeRepository
 
-    val badgesList: LiveData<List<Badge_2>>
+    val badgesList: LiveData<List<Badge>>
 
     init{
         var database = BadgeDatabase

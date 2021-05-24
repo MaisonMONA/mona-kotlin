@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 import com.maison.mona.task.SaveOeuvre
 import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
@@ -31,7 +31,7 @@ class OeuvreRatingFragment : Fragment() {
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
     private val badgeViewModel: BadgeViewModel by viewModels()
 
-    private var newBadge = mutableListOf<Badge_2>()
+    private var newBadge = mutableListOf<Badge>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

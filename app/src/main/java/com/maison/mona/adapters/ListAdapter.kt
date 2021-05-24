@@ -1,7 +1,6 @@
 package com.maison.mona.adapters
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,16 +109,13 @@ class ListAdapter internal constructor(
                     }
                 }
 
-                //select the color for the articles
-//                if(element.type == "artwork"){
-//                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.artwork))
-//                }else if(element.type == "place"){
-//                    holder.itemView.circleImage.backgroundTintList = ColorStateList.valueOf( holder.itemView.context.resources.getColor(R.color.lieu))
-//                }
-
                 //Set the image icon
                 if(element.state == 1){
-                    holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_targeted)
+                    if(element.type == "artwork")
+                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_targeted)
+
+                    if(element.type == "place")
+                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_targeted)
                 }else if(element.state == 2 || element.state == 3){
                     if(element.type == "artwork")
                         holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_collected)
@@ -127,8 +123,6 @@ class ListAdapter internal constructor(
                     if(element.type == "place")
                         holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_collected)
                 }else{
-//                    holder.itemView.circleImage.setImageResource(android.R.color.transparent)
-
                     if(element.type == "artwork"){
                         holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre)
                     }else if(element.type == "place"){

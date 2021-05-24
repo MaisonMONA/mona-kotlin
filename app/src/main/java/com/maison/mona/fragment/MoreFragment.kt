@@ -43,7 +43,7 @@ class MoreFragment : Fragment(){
         mSwitch = binding.moreOnlineSwitch
 
         if(SaveSharedPreference.isOnline(requireContext()))
-            mSwitch.isChecked = true
+            mSwitch.isChecked = false
 
 
         mSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener(){ compoundButton: CompoundButton, b: Boolean ->

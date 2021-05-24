@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.BadgeOptArgsConverter
 import com.maison.mona.converter.BadgeRequiredArgsConverter
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 import com.maison.mona.task.BadgeTask
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -22,7 +22,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-@Database(entities = arrayOf(Badge_2::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Badge::class), version = 1, exportSchema = false)
 @TypeConverters(
     BadgeRequiredArgsConverter::class,
     BadgeOptArgsConverter::class
@@ -61,7 +61,7 @@ abstract class BadgeDatabase : RoomDatabase() {
             }
         }
 
-        fun getBadgesList(): List<Badge_2>?{
+        fun getBadgesList(): List<Badge>?{
             var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
 
             val badgesJson = BadgeTask(lastUpdate).execute().get().subSequence(8, 3031).toString()
@@ -77,9 +77,9 @@ abstract class BadgeDatabase : RoomDatabase() {
                 .add(KotlinJsonAdapterFactory())
                 .build()
 
-            val type = Types.newParameterizedType(List::class.java, Badge_2::class.java)
-            val adapter: JsonAdapter<List<Badge_2>> = moshi.adapter(type)
-            val badgesList: List<Badge_2>? = adapter.fromJson(badgesArray.toString())
+            val type = Types.newParameterizedType(List::class.java, Badge::class.java)
+            val adapter: JsonAdapter<List<Badge>> = moshi.adapter(type)
+            val badgesList: List<Badge>? = adapter.fromJson(badgesArray.toString())
 
             var currentTime = Timestamp(System.currentTimeMillis())
             SaveSharedPreference.setLastUpdate(mContext, currentTime.toString())

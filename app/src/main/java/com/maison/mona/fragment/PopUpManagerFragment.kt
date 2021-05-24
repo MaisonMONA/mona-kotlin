@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.maison.mona.R
-import com.maison.mona.entity.Badge_2
+import com.maison.mona.entity.Badge
 
 class PopUpManagerFragment() : Fragment(){
 
@@ -30,7 +30,7 @@ class PopUpManagerFragment() : Fragment(){
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun onButtonShowPopupWindowClick(view: View?, nav: NavController, badge: Badge_2) {
+    fun onButtonShowPopupWindowClick(view: View?, nav: NavController, badge: Badge) {
         view?.rootView?.alpha = 0.2F
 
         // inflate the layout of the popup window

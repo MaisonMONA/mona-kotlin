@@ -108,7 +108,7 @@ class ListFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-       position = recyclerView.layoutManager?.onSaveInstanceState()
+        position = recyclerView.layoutManager?.onSaveInstanceState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -123,9 +123,8 @@ class ListFragment : Fragment() {
                 true
             }
             R.id.list_geo -> {
-                //TO-DO
                 getUserLocation()
-                setList("Titres", "A-Z")
+                setList(this.category, this.filter)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -184,6 +183,7 @@ class ListFragment : Fragment() {
                         val geoP = GeoPoint(location.latitude, location.longitude)
                         userLocation = geoP
                         SaveSharedPreference.setGeoLoc(context, geoP)
+                        Toast.makeText(requireActivity(), "Position recentrée !", Toast.LENGTH_LONG).show()
                     }
                 }
         }
@@ -277,7 +277,6 @@ class ListFragment : Fragment() {
         //var distJump = 1//Jump between each header
 
         var current = -1
-        var min = 0
         var max = 9//last header(all items after more than)
         for (oeuvre in sortedList) {
             var distKm = oeuvre.distance//Km

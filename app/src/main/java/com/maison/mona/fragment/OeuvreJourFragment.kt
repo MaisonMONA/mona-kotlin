@@ -9,18 +9,20 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.maison.mona.viewmodels.OeuvreViewModel
-import com.maison.mona.R
-import com.maison.mona.entity.Oeuvre
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.maison.mona.R
+import com.maison.mona.databinding.FragmentOdjNewBinding
 import com.maison.mona.databinding.FragmentOdjBinding
+import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
+import com.maison.mona.viewmodels.OeuvreViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -28,6 +30,13 @@ import java.util.*
 
 //a clean
 class OeuvreJourFragment : Fragment() {
+
+    //callback des fonctions pour l'oeuvre
+    interface Callback {
+        fun openMap(oeuvre:Oeuvre)
+        fun captureOeuvre(oeuvre: Oeuvre)
+        fun updateOeuvre(oeuvre: Oeuvre)
+    }
 
     //View Models
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
@@ -38,7 +47,6 @@ class OeuvreJourFragment : Fragment() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
 
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -46,7 +54,7 @@ class OeuvreJourFragment : Fragment() {
         //Artwork of the way is represented by the id of the artwork that
         //represents the the current day of the year
         val calendar = Calendar.getInstance()
-        oeuvreId = calendar[Calendar.DAY_OF_YEAR]
+        oeuvreId = calendar[Calendar.DAY_OF_YEAR] * (calendar[Calendar.MONTH] / 2)
 
         //Select a random artwork from those the user didn't collect yet
 
@@ -57,9 +65,9 @@ class OeuvreJourFragment : Fragment() {
             )
         ).get(OeuvreDetailViewModel::class.java)
 
-        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(
-            inflater, R.layout.fragment_odj, container, false
-        ).apply {
+        val binding = DataBindingUtil.inflate<FragmentOdjNewBinding>(
+            inflater, R.layout.fragment_odj_new, container, false
+        ).apply{
             viewModel = oeuvreDetailViewModel
             lifecycleOwner = viewLifecycleOwner
 
@@ -72,8 +80,40 @@ class OeuvreJourFragment : Fragment() {
                     val action = HomeViewPagerFragmentDirections.odjToMap(oeuvre)
                     findNavController().navigate(action)
                 }
+
+                override fun updateOeuvre(oeuvre: Oeuvre) {
+                    oeuvre.let {
+                        if(oeuvre.state == null){
+                            oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
+                            Toast.makeText(requireActivity(), oeuvre.title+" ciblé", Toast.LENGTH_LONG).show()
+                        }
+
+                        if(oeuvre.state == 1){ //from target to non target
+                            oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
+                            Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
         }
+
+//        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(
+//            inflater, R.layout.fragment_odj, container, false
+//        ).apply {
+//            viewModel = oeuvreDetailViewModel
+//            lifecycleOwner = viewLifecycleOwner
+//
+//            callback = object : Callback {
+//                override fun captureOeuvre(oeuvre: Oeuvre) {
+//                    dispatchTakePictureIntent(oeuvre)
+//                }
+//
+//                override fun openMap(oeuvre: Oeuvre) {
+//                    val action = HomeViewPagerFragmentDirections.odjToMap(oeuvre)
+//                    findNavController().navigate(action)
+//                }
+//            }
+//        }
 
         setHasOptionsMenu(true)
 
@@ -157,11 +197,5 @@ class OeuvreJourFragment : Fragment() {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
         }
-    }
-
-    interface Callback {
-        fun openMap(oeuvre:Oeuvre)
-
-        fun captureOeuvre(oeuvre: Oeuvre)
     }
 }

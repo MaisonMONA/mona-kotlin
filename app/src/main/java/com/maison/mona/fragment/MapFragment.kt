@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -19,13 +20,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentMapBinding
+import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreViewModel
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -43,12 +42,13 @@ class MapFragment : Fragment() {
     //Map attribute
     private lateinit var map: MapView
     private lateinit var mapController: IMapController
-    private var pinLocation: GeoPoint = GeoPoint(45.5044372, -73.578502)
     private val ZOOM_LEVEL = 17.0
 
     private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
     private var pin_set = false
     private var pin_loc: ItemizedIconOverlay<OverlayItem>? = null
+    private lateinit var init_coord: GeoPoint
+    private lateinit var coord: GeoPoint
 
     //view models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
@@ -66,6 +66,30 @@ class MapFragment : Fragment() {
 
         //initialization of location agent
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult ?: return
+                for (location in locationResult.locations){
+                    Log.d("UPDATES", location.toString())
+                    val geoPoint = GeoPoint(location.latitude, location.longitude)
+
+                    if(!pin_set) {
+                        SaveSharedPreference.setGeoLoc(context, geoPoint)
+                        map.overlays.remove(userObject)
+
+                        addUser(geoPoint, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                    }
+
+                    coord = geoPoint
+                }
+            }
+        }
+        locationRequest = LocationRequest.create()?.apply {
+            interval = 1000
+            fastestInterval = 500
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }!!
     }
 
     override fun onCreateView(
@@ -85,12 +109,13 @@ class MapFragment : Fragment() {
         mapController = map.controller
         mapController.setZoom(ZOOM_LEVEL)
 
-        //Updates his or her location
-        //startLocationUpdates()
+        init_coord = SaveSharedPreference.getGeoLoc(context)
+        coord = init_coord
+        addUser(init_coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+        mapController.setCenter(init_coord)
 
-        val coord = SaveSharedPreference.getGeoLoc(context)
-        Log.d("COORD", coord.toString())
-        addUser(coord, false, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), true)
+        //Updates his or her location
+        startLocationUpdates()
 
         val touchOverlay = object: Overlay(){
             override fun onLongPress(e: MotionEvent?, mapView: MapView?): Boolean {
@@ -103,11 +128,35 @@ class MapFragment : Fragment() {
                 pinConfirm.setMessage(R.string.pinDialogAlertMessage)
 
                 pinConfirm.setPositiveButton(R.string.Yes) { dialog, which ->
-                    pinLocation = geoPoint
                     SaveSharedPreference.setGeoLoc(context, geoPoint)
 
-                    addUser(geoPoint, false, ContextCompat.getDrawable(requireContext(), R.drawable.pin_new_location), false)
+                    if(pin_set){
+                        map.overlays.remove(pin_loc)
+                    }
+
+                    addUser(geoPoint, ContextCompat.getDrawable(requireContext(), R.drawable.pin_new_location), true)
+                    mapController.setCenter(geoPoint)
                     pin_set = true
+
+                    oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { list ->
+                        for(oeuvre in list) {
+                            val distance = distance(
+                                geoPoint.latitude,
+                                geoPoint.longitude,
+                                oeuvre.location!!.lat,
+                                oeuvre.location!!.lng
+                            )
+                            oeuvre.distance = distance
+                        }
+
+                        val sortedList = list.sortedWith(compareBy(Oeuvre::distance))
+
+                        var threeList = mutableListOf<Oeuvre>(sortedList[0], sortedList[1], sortedList[2])
+
+                        for(oeuvre in threeList){
+                            Log.d("MAPMAP", oeuvre.title.toString() + " à " + oeuvre.distance?.times(1000)?.toInt().toString() + " m")
+                        }
+                    })
                 }
 
                 pinConfirm.setNegativeButton(R.string.No) {dialog, which -> null}
@@ -126,15 +175,35 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addOeuvre(null)
-        addOeuvre(1)
-        addOeuvre(2)
-        addOeuvre(3)
+        addOeuvre(null, "place")
+        addOeuvre(null, "artwork")
+        addOeuvre(3, "place")
+        addOeuvre(3, "artwork")
+        addOeuvre(2, "place")
+        addOeuvre(2, "artwork")
+        addOeuvre(1, "place")
+        addOeuvre(1, "artwork")
     }
 
     override fun onResume() {
         super.onResume()
 
+        Log.d("UPDATES", "po la meme")
+
+        if(coord != SaveSharedPreference.getGeoLoc(context)){
+            Log.d("UPDATES", "po la meme")
+
+            if(pin_set){
+                map.overlays.remove(pin_loc)
+                pin_set = false
+            }
+
+            coord = SaveSharedPreference.getGeoLoc(context)
+            mapController.setCenter(coord)
+            addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+        }
+
+        startLocationUpdates()
         setHasOptionsMenu(true)
         map.onResume()
     }
@@ -142,6 +211,7 @@ class MapFragment : Fragment() {
     override fun onPause() {
         super.onPause()
 
+        stopLocationUpdates()
         map.onPause()
     }
 
@@ -159,21 +229,48 @@ class MapFragment : Fragment() {
         return when (item.itemId) {
             R.id.oeuvre_noncollected -> {
                 map.overlays.clear()
-                addOeuvre(null)
+                addOeuvre(null, "artwork")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                 true
             }
             R.id.oeuvre_targetted -> {
                 map.overlays.clear()
-                addOeuvre(1)
+                addOeuvre(1, "artwork")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                 true
             }
             R.id.oeuvre_collected -> {
                 map.overlays.clear()
-                addOeuvre(2)
+                addOeuvre(2, "artwork")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                true
+            }
+            R.id.lieu_noncollected -> {
+                map.overlays.clear()
+                addOeuvre(null, "place")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                true
+            }
+            R.id.lieu_targetted -> {
+                map.overlays.clear()
+                addOeuvre(1, "place")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                true
+            }
+            R.id.lieu_collected -> {
+                map.overlays.clear()
+                addOeuvre(2, "place")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                 true
             }
             R.id.map_geo -> {
-                getLastLocation()
+                if(pin_set){
+                    map.overlays.remove(pin_loc)
+                    pin_set = false
+                    SaveSharedPreference.setGeoLoc(context, coord)
+                }
+
+                mapController.setCenter(coord)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -200,11 +297,11 @@ class MapFragment : Fragment() {
         return  R.drawable.pin_lieu_normal
     }
 
-    fun addOeuvre(state: Int?) {
+    fun addOeuvre(state: Int?, type: String) {
         oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
             val items = ArrayList<OverlayItem>()
             for (oeuvre in oeuvreList) {
-                if (oeuvre.state == state) {
+                if (oeuvre.state == state && oeuvre.type == type) {
                     val item_latitude = oeuvre.location!!.lat
                     val item_longitude = oeuvre.location!!.lng
                     val oeuvre_location = GeoPoint(item_latitude, item_longitude)
@@ -243,18 +340,18 @@ class MapFragment : Fragment() {
         })
     }
 
-    fun addUser(location: GeoPoint, first: Boolean, pin: Drawable?, new_pin: Boolean) {
-        if(pin_set){
-            map.overlays.remove(userObject)
-        } else if (first){
-            map.overlays.remove(userObject)
-            if(pin_set){
-                Log.d("MAPLOG", "pinloc delete : " + pin_loc.toString())
-                map.overlays.remove(pin_loc)
-            }
-        }
+    fun addUser(location: GeoPoint, pin: Drawable?, new_pin: Boolean) {
+//        if(pin_set){
+//            map.overlays.remove(userObject)
+//        } else if (first){
+//            map.overlays.remove(userObject)
+//            if(pin_set){
+//                Log.d("MAPLOG", "pinloc delete : " + pin_loc.toString())
+//                map.overlays.remove(pin_loc)
+//            }
+//        }
 
-        mapController.setCenter(location)
+
 
         //your items
         val userItems = ArrayList<OverlayItem>()
@@ -286,12 +383,23 @@ class MapFragment : Fragment() {
 
         if(new_pin){
             pin_loc = userObject
-            Log.d("MAPLOG", "pinloc def " + pin_loc.toString())
         }
 
-        Log.d("MAPLOG", "userObject def " + userObject.toString())
-
         map.overlays.add(userObject)
+    }
+
+    fun distance(
+        fromLat: Double,
+        fromLon: Double,
+        toLat: Double,
+        toLon: Double
+    ): Double {
+        var p = 0.017453292519943295;    // Math.PI / 180
+        var a = 0.5 - Math.cos((toLat - fromLat) * p)/2 +
+                Math.cos(fromLat * p) * Math.cos(toLat * p) *
+                (1 - Math.cos((toLon - fromLon) * p))/2;
+
+        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     }
 
     private fun getLastLocation(){
@@ -314,7 +422,8 @@ class MapFragment : Fragment() {
                         // get latest location
                         val geoP = GeoPoint(location.latitude, location.longitude)
                         SaveSharedPreference.setGeoLoc(context, geoP)
-                        addUser(geoP, true, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), true)
+                        //addUser(geoP, true, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), true, true)
+                        Toast.makeText(requireActivity(), "Position recentrée !", Toast.LENGTH_LONG).show()
                     }
                 }
         }
@@ -325,7 +434,6 @@ class MapFragment : Fragment() {
      * onLocationResult call when location is changed
      */
 
-    /*
     //start location updates
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
@@ -348,7 +456,7 @@ class MapFragment : Fragment() {
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
-            null /* Looper */
+            Looper.getMainLooper() /* Looper */
         )
     }
 
@@ -356,6 +464,5 @@ class MapFragment : Fragment() {
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
-    */
 
 }

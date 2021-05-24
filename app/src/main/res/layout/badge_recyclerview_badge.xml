@@ -10,7 +10,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="badge2"
-            type="com.maison.mona.entity.Badge_2" />
+            type="com.maison.mona.entity.Badge" />
     </data>
 
     <androidx.cardview.widget.CardView
