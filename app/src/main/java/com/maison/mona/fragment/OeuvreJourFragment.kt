@@ -5,11 +5,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.*
+import android.view.animation.BounceInterpolator
+import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,8 +23,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
-import com.maison.mona.databinding.FragmentOdjNewBinding
-import com.maison.mona.databinding.FragmentOdjBinding
+import com.maison.mona.databinding.FragmentOdjNew2Binding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
@@ -43,6 +48,10 @@ class OeuvreJourFragment : Fragment() {
     private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
     private var oeuvreId: Int = 0
 
+    private var odj_top: ConstraintLayout? = null
+    private var odj_bottom: LinearLayout? = null
+    private var odj_cardview: CardView? = null
+
     //Photo Attributes
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
@@ -65,8 +74,8 @@ class OeuvreJourFragment : Fragment() {
             )
         ).get(OeuvreDetailViewModel::class.java)
 
-        val binding = DataBindingUtil.inflate<FragmentOdjNewBinding>(
-            inflater, R.layout.fragment_odj_new, container, false
+        val binding = DataBindingUtil.inflate<FragmentOdjNew2Binding>(
+            inflater, R.layout.fragment_odj_new2, container, false
         ).apply{
             viewModel = oeuvreDetailViewModel
             lifecycleOwner = viewLifecycleOwner
@@ -96,6 +105,26 @@ class OeuvreJourFragment : Fragment() {
                 }
             }
         }
+
+        odj_cardview = binding.odjCardview
+        odj_bottom = binding.odjConstraintLayoutAnim2
+        odj_top = binding.odjConstraintLayoutAnim1
+
+        val transition = AutoTransition()
+        transition.duration = 1000
+
+        odj_bottom?.setOnClickListener { view ->
+            if(odj_top?.visibility == View.GONE){
+                TransitionManager.beginDelayedTransition(odj_cardview, transition)
+                odj_top?.visibility = View.VISIBLE
+                Log.d("ODJ", "ça ouvre")
+            }
+        }
+
+        val mHandler = Handler()
+        mHandler.postDelayed(Runnable {
+            odj_bottom?.callOnClick()
+        }, 1500L)
 
 //        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(
 //            inflater, R.layout.fragment_odj, container, false

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.maison.mona.viewmodels.OeuvreDetailViewModel" />
+
+        <variable
+            name="callback"
+            type="com.maison.mona.fragment.OeuvreJourFragment.Callback" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSecondaryVariant">
+
+        <LinearLayout
+            android:id="@+id/odj_top"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="70dp"
+            android:layoutAnimation="@anim/layout_animation_slide_from_bottom"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@mipmap/ic_odj_logo"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:scaleX="1"
+                android:scaleY="1"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/odj_name"
+                style="@style/TextAppearance.Mona.Odj.Fragment"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textSize="35sp"
+                android:gravity="start"
+                android:layout_gravity="center_vertical"
+                android:text="L'œuvre du jour"/>
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/odj_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="30dp"
+            app:motionInterpolator="linear"
+            android:animateLayoutChanges="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/odj_constraint_layout_anim1"
+                    android:layout_width="match_parent"
+                    android:layout_height="430dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp">
+
+                    <TextView
+                        android:id="@+id/odj_title"
+                        style="@style/TextAppearance.Mona.Odj.Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_large"
+                        android:layout_marginEnd="@dimen/margin_extra_large"
+                        android:text="@{viewModel.oeuvre.title}"
+                        android:textColor="@color/black"
+                        android:textSize="27sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:ignore="MissingConstraints"
+                        tools:text="Hommage à Clémence Desrochers" />
+
+                    <TextView
+                        android:id="@+id/odj_artist"
+                        style="@style/TextAppearance.Mona.Odj.Attributes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_large"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:layout_marginEnd="@dimen/margin_extra_large"
+                        android:gravity="left"
+                        android:text="@{viewModel.artists}"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/odj_title"
+                        tools:text="Dominique Desbiens, 2017" />
+
+                    <TextView
+                        android:id="@+id/odj_dimensions"
+                        style="@style/TextAppearance.Mona.Odj.Attributes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_large"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:gravity="left"
+                        android:text="@{viewModel.dimensions}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/odj_artist"
+                        tools:text="129.3 x m x 2" />
+
+                    <TextView
+                        android:id="@+id/odj_category"
+                        style="@style/TextAppearance.Mona.Odj.Attributes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_large"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:gravity="left"
+                        android:text="@{viewModel.oeuvre.category.fr}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/odj_dimensions"
+                        tools:text="Murales" />
+
+                    <LinearLayout
+                        android:id="@+id/odj_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="125dp"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="@dimen/margin_large"
+                        app:layout_constraintTop_toBottomOf="@id/odj_category">
+
+                        <ImageButton
+                            android:layout_width="162dp"
+                            android:layout_height="105dp"
+                            android:layout_marginEnd="@dimen/margin_small"
+                            android:onClick="@{()-> callback.captureOeuvre(viewModel.oeuvre)}"
+                            android:background="@drawable/ic_odj_photo"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:text="Hans Schleeh" />
+
+                        <ImageButton
+                            android:layout_width="162dp"
+                            android:layout_height="105dp"
+                            android:layout_marginEnd="@dimen/margin_small"
+                            android:background="@drawable/ic_odj_cible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:text="Hans Schleeh"
+                            android:onClick="@{()-> callback.updateOeuvre(viewModel.oeuvre)}"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/odj_carte"
+                        android:layout_width="330dp"
+                        android:layout_height="110dp"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:src="@drawable/ic_odj_carte"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/odj_layout"
+                        android:onClick="@{()-> callback.openMap(viewModel.oeuvre)}"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/odj_constraint_layout_anim2"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
