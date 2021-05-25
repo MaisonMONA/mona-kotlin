@@ -22,6 +22,7 @@ import com.maison.mona.data.*
 import com.maison.mona.databinding.FragmentMoreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.task.SaveOeuvre
+import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
 import org.json.JSONObject
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,9 @@ class MoreFragment : Fragment(){
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var mSwitch: Switch
+
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
+    private val badgeViewModel: BadgeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +67,32 @@ class MoreFragment : Fragment(){
         binding?.apply {
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
+
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer {collected ->
+                val count = collected.filter { it.state == 2 || it.state == 3 }.size
+
+                if(count == 0){
+                    moreUserArtworks.text = "Aucune œuvre collectionnée"
+                } else if (count == 1){
+                    moreUserArtworks.text = "1 œuvre collectionnée"
+                } else {
+                    val artworksString = getString(R.string.more_user_artworks_count, count)
+                    moreUserArtworks.setText(artworksString)
+                }
+            })
+
+            badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer {collected ->
+                val count = collected.filter { it.isCollected }.size
+
+                if(count == 0){
+                    moreUserBadges.text = "Aucun badge débloqué"
+                } else if (count == 1){
+                    moreUserBadges.text = "1 badge débloqué"
+                } else {
+                    val badgesString = getString(R.string.more_user_badges_count, count)
+                    moreUserBadges.setText(badgesString)
+                }
+            })
 
             howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")

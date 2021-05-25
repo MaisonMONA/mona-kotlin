@@ -9,8 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
-        android:background="?attr/colorSecondary">
+        android:layout_weight="0.5"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:background="?attr/colorSecondaryVariant">
 
         <TextView
             android:id="@+id/username"
@@ -18,8 +20,28 @@
             android:layout_height="wrap_content"
             tools:text="user@mona.ca"
             style="@style/TextAppearance.Mona.Username"
-            android:layout_gravity="bottom"
             android:padding="@dimen/username_padding"/>
+
+        <TextView
+            android:id="@+id/more_user_artworks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/more_user_artworks_count"
+            android:textSize="20sp"
+            android:padding="6dp"
+            android:paddingStart="@dimen/username_padding"
+            style="@style/TextAppearance.Mona.Username"/>
+
+        <TextView
+            android:id="@+id/more_user_badges"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="@string/more_user_badges_count"
+            android:textSize="20sp"
+            android:padding="6dp"
+            android:paddingStart="@dimen/username_padding"
+            style="@style/TextAppearance.Mona.Username"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -29,28 +51,6 @@
         android:padding="@dimen/options_padding"
         android:background="?attr/colorPrimary"
         android:orientation="vertical">
-
-        <!--LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/options_padding"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_badge"
-                android:backgroundTint="@color/grey"/>
-
-            <TextView
-                android:id="@+id/badge_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Badge"
-                android:clickable="true"
-                android:layout_marginHorizontal="@dimen/options_padding"
-                style="@style/TextAppearance.Mona.Settings"/>
-        </LinearLayout-->
 
         <LinearLayout
             android:layout_width="match_parent"

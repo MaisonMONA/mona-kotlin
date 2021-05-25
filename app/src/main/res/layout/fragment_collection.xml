@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     android:id="@+id/collection_recyclerview_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/monaYellow">
+    android:background="?attr/colorSecondaryVariant">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/collection_cardview_badge"
@@ -16,11 +16,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_gravity="center_horizontal"
+        android:visibility="visible"
         app:cardCornerRadius="20dp"
         app:motionInterpolator="linear"
-        android:animateLayoutChanges="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:animateLayoutChanges="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,36 +64,17 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!--LinearLayout
-        android:id="@+id/collection_badge_layout"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:layout_marginTop="60dp"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/badge_button"
-            android:layout_width="400dp"
-            android:layout_height="match_parent"
-            android:text="@string/Badge"
-            android:gravity="center"
-            android:clickable="true"
-            android:textSize="35sp"
-            style="@style/TextAppearance.Mona.Settings">
-        </Button>
-    </LinearLayout-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collection_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
         android:clipToPadding="false"
         android:scrollbarSize="8dp"
-        android:scrollbarThumbVertical="@color/monaYellow"
+        android:scrollbarThumbVertical="?attr/colorSecondaryVariant"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:scrollbars="vertical"
+        android:nestedScrollingEnabled="false"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/collection_cardview_badge"
@@ -102,4 +82,4 @@
         tools:context="com.maison.mona.activities.MainActivity"
         tools:listitem="@layout/recyclerview_collection_oeuvre" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

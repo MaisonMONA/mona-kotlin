@@ -23,8 +23,6 @@ class CollectionFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
 
-    private var badge_button : Button? = null
-
     private var badge_top: LinearLayout? = null
     private var badge_bottom: LinearLayout? = null
     private var badge_cardview: CardView? = null
@@ -57,26 +55,21 @@ class CollectionFragment : Fragment() {
         badge_bottom = binding.collectionBadgeBottom
         badge_cardview = binding.collectionCardviewBadge
 
-        //en appuyant sur le bouton de badge on lance l'activity
-//        badge_button?.setOnClickListener { view ->
-//            val intent = Intent(context, BadgeActivity::class.java)
-//            startActivity(intent)
-//        }
 
         val transition = AutoTransition()
         transition.duration = 500
 
-        badge_top?.setOnClickListener { view ->
-            if(badge_bottom?.visibility == View.GONE){
-                TransitionManager.beginDelayedTransition(badge_cardview, transition)
-                badge_bottom?.visibility = View.VISIBLE
-            } else {
-                TransitionManager.beginDelayedTransition(badge_cardview, transition)
-                badge_bottom?.visibility = View.GONE
-            }
-        }
+//        badge_top?.setOnClickListener { view ->
+//            if(badge_bottom?.visibility == View.GONE){
+//                TransitionManager.beginDelayedTransition(badge_cardview, transition)
+//                badge_bottom?.visibility = View.VISIBLE
+//            } else {
+//                TransitionManager.beginDelayedTransition(badge_cardview, transition)
+//                badge_bottom?.visibility = View.GONE
+//            }
+//        }
 
-        badge_bottom?.setOnClickListener { view ->
+        badge_top?.setOnClickListener { view ->
             val intent = Intent(context, BadgeActivity::class.java)
             startActivity(intent)
         }
