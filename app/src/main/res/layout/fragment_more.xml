@@ -61,7 +61,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_more_how_it_works"
+                android:background="@drawable/more_ic_how_it_works"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -83,7 +83,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_more_about"
+                android:background="@drawable/more_ic_about"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -106,7 +106,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_more_sun"
+                android:background="@drawable/more_ic_sun_quisommesnous"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -128,7 +128,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_more_rss_feed"
+                android:background="@drawable/more_ic_rss_feed"
                 android:backgroundTint="@color/grey"/>
 
             <TextView
@@ -158,7 +158,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_more_sign_out"
+                android:background="@drawable/more_ic_sign_out"
                 android:backgroundTint="@color/grey"/>
 
             <TextView

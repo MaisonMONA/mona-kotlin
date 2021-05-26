@@ -47,6 +47,7 @@ class MapFragment : Fragment() {
     private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
     private var pin_set = false
     private var pin_loc: ItemizedIconOverlay<OverlayItem>? = null
+    private var pin_user: ItemizedIconOverlay<OverlayItem>? = null
     private lateinit var init_coord: GeoPoint
     private lateinit var coord: GeoPoint
 
@@ -190,18 +191,18 @@ class MapFragment : Fragment() {
 
         Log.d("UPDATES", "po la meme")
 
-        if(coord != SaveSharedPreference.getGeoLoc(context)){
-            Log.d("UPDATES", "po la meme")
-
-            if(pin_set){
-                map.overlays.remove(pin_loc)
-                pin_set = false
-            }
-
-            coord = SaveSharedPreference.getGeoLoc(context)
-            mapController.setCenter(coord)
-            addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
-        }
+//        if(coord != SaveSharedPreference.getGeoLoc(context)){
+//            Log.d("UPDATES", "po la meme")
+//
+//            if(pin_set){
+//                map.overlays.remove(pin_loc)
+//                pin_set = false
+//            }
+//
+//            coord = SaveSharedPreference.getGeoLoc(context)
+//            mapController.setCenter(coord)
+//            addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+//        }
 
         startLocationUpdates()
         setHasOptionsMenu(true)
@@ -269,7 +270,7 @@ class MapFragment : Fragment() {
                     pin_set = false
                     SaveSharedPreference.setGeoLoc(context, coord)
                 }
-
+                Log.d("UPDATES", "recentre")
                 mapController.setCenter(coord)
                 true
             }

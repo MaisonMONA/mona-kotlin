@@ -287,7 +287,7 @@
             app:isGone="@{viewModel.isCollected}"
             app:layout_anchor="@id/appbar"
             app:layout_anchorGravity="bottom|end"
-            app:srcCompat="@drawable/ic_odj_target_white" />
+            app:srcCompat="@drawable/ic_target_white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

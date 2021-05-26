@@ -11,7 +11,6 @@ import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.*
-import android.view.animation.BounceInterpolator
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -23,7 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
-import com.maison.mona.databinding.FragmentOdjNew2Binding
+import com.maison.mona.databinding.FragmentOdjBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
@@ -74,8 +73,8 @@ class OeuvreJourFragment : Fragment() {
             )
         ).get(OeuvreDetailViewModel::class.java)
 
-        val binding = DataBindingUtil.inflate<FragmentOdjNew2Binding>(
-            inflater, R.layout.fragment_odj_new2, container, false
+        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(
+            inflater, R.layout.fragment_odj, container, false
         ).apply{
             viewModel = oeuvreDetailViewModel
             lifecycleOwner = viewLifecycleOwner
@@ -147,27 +146,6 @@ class OeuvreJourFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding.root
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        with(oeuvreDetailViewModel){
-            if (!isCollected()){
-                inflater.inflate(R.menu.odj_menu, menu)
-            } else {
-                //do not inflate menu
-            }
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.target_odj -> {
-                updateData()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun updateData() {
