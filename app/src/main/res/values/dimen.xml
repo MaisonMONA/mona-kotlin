@@ -3,7 +3,7 @@
     <dimen name="tab_indicator_height">3dp</dimen>
     <dimen name="tab_text_size">12dp</dimen>
     <dimen name="toolbar_text_size">20dp</dimen>
-    <dimen name="tab_icon_size">28dp</dimen>
+    <dimen name="tab_icon_size">35dp</dimen>
 
     <dimen name="oeuvre_detail_app_bar_height">500dp</dimen>
     <dimen name="margin_extra_large">42dp</dimen>

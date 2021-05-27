@@ -100,8 +100,6 @@ class OeuvreDetailFragment () : Fragment() {
             }
         }
 
-
-
         return binding.root
     }
 

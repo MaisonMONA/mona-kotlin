@@ -189,20 +189,12 @@ class MapFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        Log.d("UPDATES", "po la meme")
-
-//        if(coord != SaveSharedPreference.getGeoLoc(context)){
-//            Log.d("UPDATES", "po la meme")
-//
-//            if(pin_set){
-//                map.overlays.remove(pin_loc)
-//                pin_set = false
-//            }
-//
-//            coord = SaveSharedPreference.getGeoLoc(context)
-//            mapController.setCenter(coord)
-//            addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
-//        }
+        if(pin_set && coord == SaveSharedPreference.getGeoLoc(context)){
+            map.overlays.remove(pin_loc)
+            map.overlays.remove(pin_user)
+            pin_set = false
+            addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+        }
 
         startLocationUpdates()
         setHasOptionsMenu(true)
@@ -267,7 +259,9 @@ class MapFragment : Fragment() {
             R.id.map_geo -> {
                 if(pin_set){
                     map.overlays.remove(pin_loc)
+                    map.overlays.remove(pin_user)
                     pin_set = false
+                    addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                     SaveSharedPreference.setGeoLoc(context, coord)
                 }
                 Log.d("UPDATES", "recentre")
@@ -342,18 +336,6 @@ class MapFragment : Fragment() {
     }
 
     fun addUser(location: GeoPoint, pin: Drawable?, new_pin: Boolean) {
-//        if(pin_set){
-//            map.overlays.remove(userObject)
-//        } else if (first){
-//            map.overlays.remove(userObject)
-//            if(pin_set){
-//                Log.d("MAPLOG", "pinloc delete : " + pin_loc.toString())
-//                map.overlays.remove(pin_loc)
-//            }
-//        }
-
-
-
         //your items
         val userItems = ArrayList<OverlayItem>()
 
@@ -384,6 +366,8 @@ class MapFragment : Fragment() {
 
         if(new_pin){
             pin_loc = userObject
+        } else {
+            pin_user = userObject
         }
 
         map.overlays.add(userObject)
@@ -465,5 +449,4 @@ class MapFragment : Fragment() {
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
-
 }

@@ -124,7 +124,6 @@ class ListFragment : Fragment() {
             }
             R.id.list_geo -> {
                 getUserLocation()
-                setList(this.category, this.filter)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -184,6 +183,8 @@ class ListFragment : Fragment() {
                         userLocation = geoP
                         SaveSharedPreference.setGeoLoc(context, geoP)
                         Toast.makeText(requireActivity(), "Position recentrée !", Toast.LENGTH_LONG).show()
+
+                        setList(this.category, this.filter)
                     }
                 }
         }
