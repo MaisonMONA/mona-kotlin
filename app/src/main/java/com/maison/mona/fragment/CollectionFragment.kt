@@ -51,8 +51,8 @@ class CollectionFragment : Fragment() {
         })
 
         //badge_button = binding.badgeButton
-        badge_top = binding.collectionBadgeTop
-        badge_bottom = binding.collectionBadgeBottom
+//        badge_top = binding.collectionBadgeTop
+//        badge_bottom = binding.collectionBadgeBottom
         badge_cardview = binding.collectionCardviewBadge
 
 
@@ -69,10 +69,10 @@ class CollectionFragment : Fragment() {
 //            }
 //        }
 
-        badge_top?.setOnClickListener { view ->
-            val intent = Intent(context, BadgeActivity::class.java)
-            startActivity(intent)
-        }
+//        badge_top?.setOnClickListener { view ->
+//            val intent = Intent(context, BadgeActivity::class.java)
+//            startActivity(intent)
+//        }
 
         return binding.root
     }

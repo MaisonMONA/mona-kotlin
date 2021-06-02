@@ -25,14 +25,14 @@
         <TextView
             android:id="@+id/more_user_artworks"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="@string/more_user_artworks_count"
             android:textSize="20sp"
             android:padding="6dp"
             android:paddingStart="@dimen/username_padding"
             style="@style/TextAppearance.Mona.Username"/>
 
-        <TextView
+        <!--TextView
             android:id="@+id/more_user_badges"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -40,7 +40,7 @@
             android:textSize="20sp"
             android:padding="6dp"
             android:paddingStart="@dimen/username_padding"
-            style="@style/TextAppearance.Mona.Username"/>
+            style="@style/TextAppearance.Mona.Username"/-->
 
     </LinearLayout>
 

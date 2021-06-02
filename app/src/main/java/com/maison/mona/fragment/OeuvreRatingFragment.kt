@@ -99,41 +99,41 @@ class OeuvreRatingFragment : Fragment() {
                 }
             }
 
-            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer { collected ->
-                badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
-                    for(badge in badgeList){
-                        if(!badge.isCollected){
-                            if(badge.optional_args!!.contains("borough")) {
-                                var borough = badge.optional_args.substringAfter(":'").substringBefore("'}")
-
-                                if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == badge.goal) {
-                                    newBadge.add(badge)
-                                    badgeViewModel.updateCollected(badge.id, true)
-
-                                    var popup = PopUpManagerFragment()
-                                    popup.onAttach(requireContext())
-                                    popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
-
-                                    getFragmentManager()?.executePendingTransactions()
-                                }
-                            } else if(collected.size == badge.goal){
-                                newBadge.add(badge)
-                                badgeViewModel.updateCollected(badge.id, true)
-                                var popup = PopUpManagerFragment()
-                                popup.onAttach(requireContext())
-                                popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
-
-                                getFragmentManager()?.executePendingTransactions()
-                            }
-                        }
-                    }
-
-                    if(newBadge.isEmpty()){
-                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-                    }
-                    //TODO SI PLUSIEURS BADGES DEBLOQUEES EN MEME TEMPS
-                })
-            })
+//            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer { collected ->
+//                badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
+//                    for(badge in badgeList){
+//                        if(!badge.isCollected){
+//                            if(badge.optional_args!!.contains("borough")) {
+//                                var borough = badge.optional_args.substringAfter(":'").substringBefore("'}")
+//
+//                                if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == badge.goal) {
+//                                    newBadge.add(badge)
+//                                    badgeViewModel.updateCollected(badge.id, true)
+//
+//                                    var popup = PopUpManagerFragment()
+//                                    popup.onAttach(requireContext())
+//                                    popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
+//
+//                                    getFragmentManager()?.executePendingTransactions()
+//                                }
+//                            } else if(collected.size == badge.goal){
+//                                newBadge.add(badge)
+//                                badgeViewModel.updateCollected(badge.id, true)
+//                                var popup = PopUpManagerFragment()
+//                                popup.onAttach(requireContext())
+//                                popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
+//
+//                                getFragmentManager()?.executePendingTransactions()
+//                            }
+//                        }
+//                    }
+//
+//                    if(newBadge.isEmpty()){
+//                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+//                    }
+//                    //TODO SI PLUSIEURS BADGES DEBLOQUEES EN MEME TEMPS
+//                })
+//            })
         }
     }
 

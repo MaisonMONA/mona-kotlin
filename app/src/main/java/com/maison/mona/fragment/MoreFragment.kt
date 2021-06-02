@@ -81,18 +81,18 @@ class MoreFragment : Fragment(){
                 }
             })
 
-            badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer {collected ->
-                val count = collected.filter { it.isCollected }.size
-
-                if(count == 0){
-                    moreUserBadges.text = "Aucun badge débloqué"
-                } else if (count == 1){
-                    moreUserBadges.text = "1 badge débloqué"
-                } else {
-                    val badgesString = getString(R.string.more_user_badges_count, count)
-                    moreUserBadges.setText(badgesString)
-                }
-            })
+//            badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer {collected ->
+//                val count = collected.filter { it.isCollected }.size
+//
+//                if(count == 0){
+//                    moreUserBadges.text = "Aucun badge débloqué"
+//                } else if (count == 1){
+//                    moreUserBadges.text = "1 badge débloqué"
+//                } else {
+//                    val badgesString = getString(R.string.more_user_badges_count, count)
+//                    moreUserBadges.setText(badgesString)
+//                }
+//            })
 
             howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
