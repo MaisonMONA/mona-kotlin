@@ -85,9 +85,6 @@ dependencies {
     //Material
     implementation "com.google.android.material:material:$rootProject.materialVersion"
 
-    //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
-
     //RecyclerView
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerVersion"
 

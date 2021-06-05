@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:id="@+id/badge_popup_id"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="450dp"
         android:background="@drawable/shape_badge_popup"
         android:orientation="vertical">
@@ -27,7 +27,7 @@
             android:text="@string/popup_nouveau_badge"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="25sp" />
+            android:textSize="30sp" />
 
         <Space
             android:layout_height="40dp"
@@ -38,6 +38,7 @@
             android:layout_width="260dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
+            android:scaleType="centerInside"
             android:src="@drawable/badge_icon_verdun_color" />
 
         <Space
@@ -46,10 +47,11 @@
 
         <TextView
             android:id="@+id/popup_badge_titre_text"
-            android:layout_width="280dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:text="@{badge.title_fr}"
             android:layout_gravity="center"
+            android:maxLines="2"
             android:gravity="center"
             android:textSize="22sp" />
 
@@ -59,11 +61,12 @@
 
         <TextView
             android:id="@+id/popup_badge_description_text"
-            android:layout_width="230dp"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:text="@{badge.description_fr}"
             android:layout_gravity="center"
             android:gravity="center"
+            android:maxLines="3"
             android:textSize="15sp" />
 
         <Space

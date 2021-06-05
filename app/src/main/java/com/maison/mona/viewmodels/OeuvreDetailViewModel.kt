@@ -30,14 +30,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     private fun getOeuvre(){
         viewModelScope.launch(Dispatchers.IO) {
             oeuvre = repository.getArticleById(oeuvreId)
-//            Log.d("OEUVRE", "appel get oeuvre")
-//
-////            tentative de fix pour trouver une oeuvre non collectionnee pour l'oeuvre du jour
-//            if(oeuvre!!.state == 2){
-//                Log.d("OEUVRE", "deja collectionnée")
-////                oeuvreId = (oeuvreId * 2)
-////                getOeuvre()
-//            }
+            Log.d("OEUVRES", "oeuvre dans oeuvredetailviewmodel : " + oeuvre?.title.toString())
         }
     }
 

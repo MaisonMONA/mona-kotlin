@@ -2,12 +2,16 @@ package com.maison.mona.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maison.mona.R
 import com.maison.mona.databinding.BadgeRecyclerviewBadgeBinding
@@ -28,6 +32,7 @@ class BadgeAdapter internal constructor (
     private var mToolbar: Toolbar? = null
     private var mActivity: Activity? = null
     private var mFragmentSupportManager: FragmentManager? = null
+    private var mRecyclerView: RecyclerView? = null
 
     private var inBadge = false
 
@@ -36,9 +41,10 @@ class BadgeAdapter internal constructor (
 
     //onClickListener quand on est sur la deuxieme page (liste des badges par categories)
     private val onClickBadgeLayer: View.OnClickListener = View.OnClickListener {
-        val test: List<String> = listOf("Quartiers", "Oeuvres", "Autres")
+        val test: List<String> = listOf("Quartiers", "Oeuvres", "Catégories", "Autres")
         submitList(test)
         mToolbar?.setOnClickListener(onClickCategoryLayer)
+        mRecyclerView?.layoutManager = LinearLayoutManager(mActivity)
     }
 
     //onClickListener quand on est sur la page du badge
@@ -65,11 +71,14 @@ class BadgeAdapter internal constructor (
             binding.setClickListener {
                 if(!inBadge){
                     //si on est pas deja dans un badge, on accede au detail du badge dans un autre fragment
-                    val badge = binding.badge2
+                    val badge = binding.badge
                     val ft = mFragmentSupportManager?.beginTransaction()
 
+                    val fragment = BadgeDetailFragment(badge)
+                    fragment.view?.isFocusableInTouchMode = true
+
                     //on passe en argument le badge que l'on veut acceder
-                    ft?.add(R.id.fragment_container, BadgeDetailFragment(badge))
+                    ft?.add(R.id.fragment_container, fragment)
                     ft?.addToBackStack(null)
                     ft?.commit()
                     inBadge = true
@@ -80,16 +89,79 @@ class BadgeAdapter internal constructor (
 
         override fun bind(item: Badge) {
             binding.apply{
-                badge2 = item
+                badge = item
                 executePendingBindings()
             }
 
-            //on check si le badge a ete collecte ou non, on met la bonne image en fonction
-            if(binding.badge2!!.isCollected){
-                binding.imageView.setImageResource(R.drawable.badge_icon_verdun_color)
-            } else{
-                binding.imageView.setImageResource(R.drawable.badge_icon_verdun_grey)
+            if(binding.badge!!.optional_args!!.contains("borough")){
+                val borough = binding.badge!!.optional_args
+
+                if(borough!!.contains("Côte-des-Neiges")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_cdn_color, R.drawable.badge_icon_cdn_grey)
+                } else if(borough.contains("Ville-Marie")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_vm_color, R.drawable.badge_icon_vm_grey)
+                } else if(borough.contains("Rosemont")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_rosemont_color, R.drawable.badge_icon_rosemont_grey)
+                } else if(borough.contains("Le Plateau")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_pmr_color, R.drawable.badge_icon_pmr_grey)
+                } else if(borough.contains("Le Sud-Ouest")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_so_color, R.drawable.badge_icon_so_grey)
+                } else if(borough.contains("Mercier")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_hochelaga_color, R.drawable.badge_icon_hochelaga_grey)
+                } else if(borough.contains("Rivière-des-Prairies")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_riviere_des_prairies_color, R.drawable.badge_icon_riviere_des_prairies_grey)
+                } else if(borough.contains("Verdun")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_verdun_color, R.drawable.badge_icon_verdun_grey)
+                } else if(borough.contains("Villeray")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_villeray_color, R.drawable.badge_icon_villeray_grey)
+                } else if(borough.contains("Lachine")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_lachine_color, R.drawable.badge_icon_lachine_grey)
+                } else if (borough.contains("LaSalle")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_lasalle_color, R.drawable.badge_icon_lasalle_grey)
+                } else if(borough.contains("Ahuntsic")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_ac_color, R.drawable.badge_icon_ac_grey)
+                } else if(borough.contains("Outremont")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_outremont_color, R.drawable.badge_icon_outremont_grey)
+                }
+            } else if(binding.badge!!.optional_args!!.contains("category")){
+                val category = binding.badge!!.optional_args
+
+                if(category!!.contains("Decorative")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_art_decoratif_color, R.drawable.badge_icon_art_decoratif_grey)
+                } else if(category.contains("Beaux-Arts")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_beaux_arts_color, R.drawable.badge_icon_beaux_arts_grey)
+                } else if(category.contains("Murals")){
+                    setDrawableBadge(binding, R.drawable.badge_icon_murales_color, R.drawable.badge_icon_murales_grey)
+                }
+            } else if(binding.badge!!.optional_args!!.length <= 3){
+                val quantite = binding.badge!!.goal
+
+                when(quantite){
+                    1 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_1_color, R.drawable.badge_icon_quantite_1_grey) }
+                    3 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_3_color, R.drawable.badge_icon_quantite_3_grey) }
+                    5 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_5_color, R.drawable.badge_icon_quantite_5_grey) }
+                    8 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_8_color, R.drawable.badge_icon_quantite_8_grey) }
+                    10 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_10_color, R.drawable.badge_icon_quantite_10_grey) }
+                    15 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_15_color, R.drawable.badge_icon_quantite_15_grey) }
+                    20 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_20_color, R.drawable.badge_icon_quantite_20_grey) }
+                    25 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_25_color, R.drawable.badge_icon_quantite_25_grey) }
+                    30 -> { setDrawableBadge(binding, R.drawable.badge_icon_quantite_30_color, R.drawable.badge_icon_quantite_30_grey) }
+                }
+            } else if(binding.badge!!.optional_args!!.contains("collection")){
+                setDrawableBadge(binding, R.drawable.badge_icon_udem_color, R.drawable.badge_icon_udem_grey)
             }
+        }
+    }
+
+    fun setDrawableBadge(
+        binding: BadgeRecyclerviewBadgeBinding,
+        imageCollected: Int,
+        imageNotCollected: Int
+    ){
+        if(binding.badge!!.isCollected){
+            binding.imageView.setImageResource(imageCollected)
+        } else {
+            binding.imageView.setImageResource(imageNotCollected)
         }
     }
 
@@ -101,16 +173,20 @@ class BadgeAdapter internal constructor (
         init {
             binding.setClickListener {
                 mToolbar?.setOnClickListener(onClickBadgeLayer)
+                mRecyclerView?.layoutManager = GridLayoutManager(mActivity, 2)
 
                 when(binding.messageHeader.text){
                     "Quartiers" -> {
                         submitList(badgeList.filter { it.optional_args!!.contains("borough") })
                     }
                     "Oeuvres" -> {
-                        submitList(badgeList.filter { it.optional_args!!.length < 5 })
+                        submitList(badgeList.filter { it.optional_args!!.length < 3 })
+                    }
+                    "Catégories" -> {
+                        submitList(badgeList.filter { it.optional_args!!.contains("category") })
                     }
                     "Autres" -> {
-                        submitList(badgeList.filter{ it.optional_args!!.length >= 5 && !it.optional_args!!.contains("borough")})
+                        submitList(badgeList.filter{ it.optional_args!!.length >= 3 && !it.optional_args.contains("borough") && !it.optional_args.contains("category")})
                     }
                 }
             }
@@ -173,10 +249,11 @@ class BadgeAdapter internal constructor (
     }
 
     //fonction pour donner l'activity, la toolbar, le support manager et la liste des badges a l'adapter, un peu bourrin mais ca marche
-    internal fun giveAdapter(tool: Toolbar?, badges: List<Badge>, activity: Activity, fragmentM: FragmentManager){
+    internal fun giveAdapter(tool: Toolbar?, badges: List<Badge>, activity: Activity, fragmentM: FragmentManager, recyclerview: RecyclerView){
         mToolbar = tool
         badgeList = badges
         mActivity = activity
         mFragmentSupportManager = fragmentM
+        mRecyclerView = recyclerview
     }
 }

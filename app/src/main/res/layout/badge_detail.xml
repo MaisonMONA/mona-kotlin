@@ -25,12 +25,11 @@
             <ImageView
                 android:id="@+id/badge_detail_image"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
+                android:layout_height="250dp"
+                android:scaleType="centerInside"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:background="@drawable/badge_icon_cdn_color"
                 android:src="@drawable/badge_icon_verdun_color"/>
 
             <TextView
@@ -40,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_large"
                 android:gravity="center"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="blablabalba"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

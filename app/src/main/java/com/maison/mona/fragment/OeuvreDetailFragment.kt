@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -47,14 +48,28 @@ class OeuvreDetailFragment () : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        oeuvreDetailViewModel = ViewModelProviders.of(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
+        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
         ).get(OeuvreDetailViewModel::class.java)
+
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
-            viewModel = oeuvreDetailViewModel
+            val mHandler = Handler()
+            mHandler.postDelayed(Runnable {
+                viewModel = oeuvreDetailViewModel
+                Log.d("OEUVRES","associe")
+            }, 1000L)
+
             lifecycleOwner = viewLifecycleOwner
+
+            if(oeuvreDetailViewModel.oeuvre?.title == null){
+                mHandler.postDelayed(Runnable {
+                    viewModel = oeuvreDetailViewModel
+                    Log.d("OEUVRES","associe2")
+                }, 3000L)
+            }
+
             callback = object : Callback {
                 override fun updateTarget(oeuvre: Oeuvre) {
                     oeuvre.let {
@@ -68,7 +83,7 @@ class OeuvreDetailFragment () : Fragment() {
 
                             oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
 
-                            Toast.makeText(requireActivity(), oeuvre.title+" ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
                         }
                         //from target to non target
                         if(oeuvre.state == 1){ //from target to non target
@@ -92,7 +107,6 @@ class OeuvreDetailFragment () : Fragment() {
                     val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
                     findNavController().navigate(action)
                 }
-
             }
 
             toolbar.setNavigationOnClickListener { view ->
@@ -106,6 +120,7 @@ class OeuvreDetailFragment () : Fragment() {
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?){
         //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
         Log.d("Save","Photo path: " +  oeuvreDetailViewModel.oeuvre?.photo_path)
+
         val arrayParameters = arrayOf(
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
@@ -131,7 +146,8 @@ class OeuvreDetailFragment () : Fragment() {
         for(param in arrayParameters){
             if(param == null || param == ""){
                 Log.d("Param ", "Paran vide: " + i.toString())
-                arrayViews[i].visibility = View.GONE
+                Log.d("Param", param.toString())
+//                arrayViews[i].visibility = View.GONE
             }else{
                 Log.d("Param", "Parametre non vide:$param")
                 arrayViews[i].visibility = View.VISIBLE

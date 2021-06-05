@@ -1,6 +1,7 @@
 package com.maison.mona.fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.maison.mona.R
@@ -38,9 +38,8 @@ class OeuvreRatingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_item_rating, container, false)
 
-        return rootView
+        return inflater.inflate(R.layout.fragment_item_rating, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +55,7 @@ class OeuvreRatingFragment : Fragment() {
             val itemComment = view.findViewById<TextView>(R.id.comment)
             val comment = itemComment.text.toString()
 
-            var state: Int?
+            val state: Int?
 
             if(SaveSharedPreference.isOnline(requireContext())){
                 state = 2
@@ -92,49 +91,72 @@ class OeuvreRatingFragment : Fragment() {
                     val reader = JSONObject(response)
 
                     if (reader.has("errors")) {
-                        Log.d("Save", "Erreur Save reader");
+                        Log.d("Save", "Erreur Save reader")
                         val errors = reader.getJSONObject("errors")
                         Log.d("Save", errors.toString())
                     }
                 }
             }
 
-//            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, Observer { collected ->
-//                badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgeList ->
-//                    for(badge in badgeList){
-//                        if(!badge.isCollected){
-//                            if(badge.optional_args!!.contains("borough")) {
-//                                var borough = badge.optional_args.substringAfter(":'").substringBefore("'}")
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
+                badgeViewModel.badgesList.observe(viewLifecycleOwner, { badgeList ->
+                    for(badge in badgeList){
+                        if(!badge.isCollected){
+                            val args = badge.optional_args!!
+                            if(args.contains("borough")) {
+                                if (collected.filter { args.contains(it.borough.toString()) }.size == badge.goal) {
+                                    addBadge(badge)
+                                } else if(args.contains("Rivière-des-Prairies")){
+                                    if(collected.filter { it.borough?.contains("Rivière-des-Prairies")!! }.size == badge.goal){
+                                        addBadge(badge)
+                                    }
+                                }
+                            } else if(collected.size == badge.goal && args.length < 3){
+                                addBadge(badge)
+                            } else if(args.contains("category")){
+                                if(collected.filter { args.contains(it.category?.en.toString())}.size == badge.goal || collected.filter { args.contains(it.category?.fr.toString())}.size == badge.goal){
+                                    addBadge(badge)
+                                }
+                            } else if(args.contains("collection")){
+                                var collection = "Université de Montréal"
+                                if(safeArgs.oeuvre.collection == collection && collected.filter { it.collection == collection }.size == badge.goal){
+                                    addBadge(badge)
+                                }
+                            }
+                        }
+                    }
+                })
+            })
+
+            val mHandler = Handler()
+            mHandler.postDelayed({
+                Log.d("BADGES", newBadge.toString())
+                if(newBadge.isEmpty()){
+                    findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+                } else {
+                    val popup = PopUpManagerFragment()
+                    popup.onAttach(requireContext())
+                    popup.createPopUpsBadges(view, findNavController(), newBadge)
+
+                    fragmentManager?.executePendingTransactions()
+
+//                    for (badge in newBadge) {
+//                        Log.d("BADGES", badge.description_fr.toString())
 //
-//                                if (safeArgs.oeuvre.borough == borough && collected.filter { it.borough == borough }.size == badge.goal) {
-//                                    newBadge.add(badge)
-//                                    badgeViewModel.updateCollected(badge.id, true)
+//                        var popup = PopUpManagerFragment()
+//                        popup.onAttach(requireContext())
+//                        popup.onButtonShowPopupWindowClick(view, findNavController(), badge, badge == newBadge.last())
 //
-//                                    var popup = PopUpManagerFragment()
-//                                    popup.onAttach(requireContext())
-//                                    popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
-//
-//                                    getFragmentManager()?.executePendingTransactions()
-//                                }
-//                            } else if(collected.size == badge.goal){
-//                                newBadge.add(badge)
-//                                badgeViewModel.updateCollected(badge.id, true)
-//                                var popup = PopUpManagerFragment()
-//                                popup.onAttach(requireContext())
-//                                popup.onButtonShowPopupWindowClick(view, findNavController(), badge)
-//
-//                                getFragmentManager()?.executePendingTransactions()
-//                            }
-//                        }
+//                        fragmentManager?.executePendingTransactions()
 //                    }
-//
-//                    if(newBadge.isEmpty()){
-//                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-//                    }
-//                    //TODO SI PLUSIEURS BADGES DEBLOQUEES EN MEME TEMPS
-//                })
-//            })
+                }
+            }, 500L)
         }
+    }
+
+    fun addBadge(badge: Badge){
+        newBadge.add(badge)
+        badgeViewModel.updateCollected(badge.id, true)
     }
 
     private fun getDate(): String? {

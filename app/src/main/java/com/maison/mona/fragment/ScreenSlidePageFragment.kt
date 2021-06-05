@@ -13,7 +13,7 @@ class ScreenSlidePageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ):View{
-        var view: View? = null
+        var view: View?
         val bundle = arguments
         var position = bundle?.get("position")
 

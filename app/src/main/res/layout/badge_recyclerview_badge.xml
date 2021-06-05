@@ -9,7 +9,7 @@
             name="clickListener"
             type="android.view.View.OnClickListener"/>
         <variable
-            name="badge2"
+            name="badge"
             type="com.maison.mona.entity.Badge" />
     </data>
 
@@ -34,7 +34,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/badge_cards_size"
-                android:scaleType="centerCrop"
+                android:scaleType="centerInside"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -44,10 +44,10 @@
                 android:id="@+id/titleView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_small"
                 android:gravity="center"
-                android:maxLines="1"
-                android:text="@{badge2.title_fr}"
+                android:maxLines="2"
+                android:padding="8dp"
+                android:text="@{badge.title_fr}"
                 style="@style/TextAppearance.Mona.Badge"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

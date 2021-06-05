@@ -125,24 +125,6 @@ class OeuvreJourFragment : Fragment() {
             odj_bottom?.callOnClick()
         }, 1500L)
 
-//        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(
-//            inflater, R.layout.fragment_odj, container, false
-//        ).apply {
-//            viewModel = oeuvreDetailViewModel
-//            lifecycleOwner = viewLifecycleOwner
-//
-//            callback = object : Callback {
-//                override fun captureOeuvre(oeuvre: Oeuvre) {
-//                    dispatchTakePictureIntent(oeuvre)
-//                }
-//
-//                override fun openMap(oeuvre: Oeuvre) {
-//                    val action = HomeViewPagerFragmentDirections.odjToMap(oeuvre)
-//                    findNavController().navigate(action)
-//                }
-//            }
-//        }
-
         setHasOptionsMenu(true)
 
         return binding.root
