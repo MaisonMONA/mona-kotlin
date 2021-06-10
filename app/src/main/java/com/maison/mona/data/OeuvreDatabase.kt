@@ -76,11 +76,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
             //API call to server to get all artworks and places
             //We combine the 2 in one lists
 
-            var artworksJson = ArtworksTask(lastUpdate).execute().get()
-
-            if(artworksJson == null){
-                return mutableListOf()
-            }
+            var artworksJson: String? = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
 
             var oeuvreArray = JSONArray(artworksJson)
             var nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks

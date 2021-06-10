@@ -64,12 +64,14 @@ abstract class BadgeDatabase : RoomDatabase() {
         fun getBadgesList(): List<Badge>?{
             var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
 
-            val badgesJson = BadgeTask(lastUpdate).execute().get().subSequence(8, 18524).toString()
+            var badgesJson = BadgeTask(lastUpdate).execute().get()
 
             //si on a rien reussi a avoir on retourne une liste vide, sinon ça crash
             if(badgesJson.isEmpty()){
                 return mutableListOf()
             }
+
+            badgesJson = badgesJson.subSequence(8, 18524).toString()
 
             val badgesArray = JSONArray(badgesJson)
 
