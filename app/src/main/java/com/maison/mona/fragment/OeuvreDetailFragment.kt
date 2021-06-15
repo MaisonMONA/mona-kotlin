@@ -34,7 +34,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class OeuvreDetailFragment () : Fragment() {
+class OeuvreDetailFragment : Fragment() {
 
     //View Models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
@@ -56,57 +56,94 @@ class OeuvreDetailFragment () : Fragment() {
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
             val mHandler = Handler()
-            mHandler.postDelayed(Runnable {
+            mHandler.postDelayed({
                 viewModel = oeuvreDetailViewModel
                 Log.d("OEUVRES","associe")
+                callback = object : Callback {
+                    override fun updateTarget(oeuvre: Oeuvre) {
+                        oeuvre.let {
+                            //Set state depending on current state of artwork
+                            //from non target to target
+                            if(oeuvre.state == null){
+
+                                fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
+
+                                findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+
+                                oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
+
+                                Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
+                            }
+                            //from target to non target
+                            if(oeuvre.state == 1){ //from target to non target
+
+                                fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
+
+                                findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+
+                                oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
+
+                                Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+
+                    override fun captureOeuvre(oeuvre: Oeuvre) {
+                        dispatchTakePictureIntent(oeuvre)
+                    }
+
+                    override fun openMap(oeuvre: Oeuvre) {
+                        val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
+                        findNavController().navigate(action)
+                    }
+                }
             }, 1000L)
 
             lifecycleOwner = viewLifecycleOwner
 
             if(oeuvreDetailViewModel.oeuvre?.title == null){
-                mHandler.postDelayed(Runnable {
+                mHandler.postDelayed({
                     viewModel = oeuvreDetailViewModel
                     Log.d("OEUVRES","associe2")
-                }, 3000L)
-            }
+                    callback = object : Callback {
+                        override fun updateTarget(oeuvre: Oeuvre) {
+                            oeuvre.let {
+                                //Set state depending on current state of artwork
+                                //from non target to target
+                                if(oeuvre.state == null){
 
-            callback = object : Callback {
-                override fun updateTarget(oeuvre: Oeuvre) {
-                    oeuvre.let {
-                        //Set state depending on current state of artwork
-                        //from non target to target
-                        if(oeuvre.state == null){
+                                    fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
 
-                            fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
+                                    findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
 
-                            findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+                                    oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
 
-                            oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
+                                    Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
+                                }
+                                //from target to non target
+                                if(oeuvre.state == 1){ //from target to non target
 
-                            Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
+                                    fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
+
+                                    findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+
+                                    oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
+
+                                    Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                                }
+                            }
                         }
-                        //from target to non target
-                        if(oeuvre.state == 1){ //from target to non target
 
-                            fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
+                        override fun captureOeuvre(oeuvre: Oeuvre) {
+                            dispatchTakePictureIntent(oeuvre)
+                        }
 
-                            findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-
-                            oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
-
-                            Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                        override fun openMap(oeuvre: Oeuvre) {
+                            val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
+                            findNavController().navigate(action)
                         }
                     }
-                }
-
-                override fun captureOeuvre(oeuvre: Oeuvre) {
-                    dispatchTakePictureIntent(oeuvre)
-                }
-
-                override fun openMap(oeuvre: Oeuvre) {
-                    val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
-                    findNavController().navigate(action)
-                }
+                }, 3000L)
             }
 
             toolbar.setNavigationOnClickListener { view ->
@@ -130,7 +167,7 @@ class OeuvreDetailFragment () : Fragment() {
             oeuvreDetailViewModel.oeuvre?.subcategory?.fr,
             oeuvreDetailViewModel.getMaterials(),
             oeuvreDetailViewModel.getTechniques()
-        );
+        )
         val arrayViews = arrayOf(
             view.findViewById<TextView>(R.id.oeuvre_name),
             view.findViewById<TextView>(R.id.oeuvre_artist),
@@ -140,9 +177,9 @@ class OeuvreDetailFragment () : Fragment() {
             view.findViewById<TextView>(R.id.oeuvre_subcategory),
             view.findViewById<TextView>(R.id.oeuvre_materials),
             view.findViewById<TextView>(R.id.oeuvre_techniques)
-        );
+        )
 
-        var i=0;
+        var i=0
         for(param in arrayParameters){
             if(param == null || param == ""){
                 Log.d("Param ", "Paran vide: " + i.toString())
