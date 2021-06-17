@@ -40,14 +40,14 @@ class BadgeAdapter internal constructor (
 
     //onClickListener quand on est sur la deuxieme page (liste des badges par categories)
     private val onClickBadgeLayer: View.OnClickListener = View.OnClickListener {
-        val listTypes: List<String?> = listOf(
-            mActivity?.getString(R.string.badges_type_borough),
-            mActivity?.getString(R.string.badges_type_artworks),
-            mActivity?.getString(R.string.badges_type_category),
-            mActivity?.getString(R.string.badges_type_other))
+        val listTypes: List<String> = listOf(
+            mActivity!!.getString(R.string.badges_type_borough),
+            mActivity!!.getString(R.string.badges_type_artworks),
+            mActivity!!.getString(R.string.badges_type_category),
+            mActivity!!.getString(R.string.badges_type_other))
 
-        submitList(listOf(listTypes))
-        mToolbar?.title = R.string.badge_toolbar_title_main.toString()
+        submitList(listTypes)
+        mToolbar?.title = mActivity!!.getString(R.string.badge_toolbar_title_main)
         mToolbar?.setOnClickListener(onClickCategoryLayer)
         mRecyclerView?.layoutManager = LinearLayoutManager(mActivity)
     }
@@ -89,7 +89,7 @@ class BadgeAdapter internal constructor (
                     ft?.commit()
                     inBadge = true
 
-                    mToolbar?.title = mActivity?.getString(R.string.badge_toolbar_title_main) + " > " + binding.badge!!.title_fr.toString()
+                    mToolbar?.title = mToolbar?.title.toString() + " > " + binding.badge!!.title_fr.toString()
 
                     mToolbar?.setOnClickListener(onClickDetailLayer)
                 }
