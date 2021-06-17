@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.5.20-RC'
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.31'
     ext.navigation_version = '2.1.0'
     ext.android_plugin_version = '4.2.1'
     dependencies {

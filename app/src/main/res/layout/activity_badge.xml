@@ -17,13 +17,6 @@
         app:navigationIcon="@drawable/ic_detail_back"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="?attr/actionBarSize"
-            android:gravity="center_vertical"
-            android:text="@string/Badge"
-            android:textAppearance="@style/TextAppearance.Mona.Toolbar.Text" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout

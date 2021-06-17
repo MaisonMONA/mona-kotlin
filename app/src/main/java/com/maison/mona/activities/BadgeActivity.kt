@@ -2,9 +2,9 @@ package com.maison.mona.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maison.mona.R
@@ -17,6 +17,7 @@ class BadgeActivity : AppCompatActivity() {
 
     //toolbar en haut de l'ecran
     private var mBackButton: Toolbar? = null
+    private var mBackButtonText: TextView? = null
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var adapter: BadgeAdapter
@@ -27,12 +28,13 @@ class BadgeActivity : AppCompatActivity() {
 
         //on recupere la toolbar
         mBackButton = findViewById(R.id.badge_toolbar)
+//        mBackButtonText = findViewById(R.id.badge_detail_text)
         mRecyclerView = findViewById(R.id.badge_recyclerview)
 
         //si on clique sur la toolbar on stop l'activité
-        mBackButton?.setOnClickListener({
+        mBackButton?.setOnClickListener {
             finish()
-        })
+        }
 
         //on crée l'adapter pour les badges
         adapter = BadgeAdapter(applicationContext)
@@ -48,9 +50,11 @@ class BadgeActivity : AppCompatActivity() {
         //on donne a l'adapter une liste a afficher
         adapter.submitList(test)
 
+        mBackButton?.title = "Badges"
+
         //on "observe" la liste des badges de notre database et on la donne a l'adapter
-        badgeViewModel.badgesList.observe(this, Observer { badgeList ->
-            adapter.giveAdapter(mBackButton, badgeList, this, supportFragmentManager, mRecyclerView)
-        })
+        badgeViewModel.badgesList.observe(this) { badgeList ->
+            adapter.giveAdapter(mBackButton, mBackButtonText, badgeList, this, supportFragmentManager, mRecyclerView)
+        }
     }
 }
