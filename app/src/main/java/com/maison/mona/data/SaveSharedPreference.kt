@@ -2,7 +2,6 @@ package com.maison.mona.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.location.Location
 import android.preference.PreferenceManager
 import org.osmdroid.util.GeoPoint
 
@@ -22,7 +21,7 @@ object SaveSharedPreference {
 
     private var GEOLOC:String = "45.5044372_-73.578502"
 
-    fun getSharedPreferences(ctx: Context?): SharedPreferences {
+    private fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx)
     }
 
@@ -38,7 +37,7 @@ object SaveSharedPreference {
             ctx
         ).edit()
         editor.putString(PREF_USER_NAME, username)
-        editor.commit()
+        editor.apply()
     }
 
     fun getToken(ctx: Context?): String {
@@ -53,7 +52,7 @@ object SaveSharedPreference {
             ctx
         ).edit()
         editor.putString(TOKEN, token)
-        editor.commit()
+        editor.apply()
     }
 
     //Online informations
@@ -82,13 +81,13 @@ object SaveSharedPreference {
     }
 
     //Toggle off after the first time for the first time tutorial
-    fun toggleFirstTime(ctx: Context?){
-        val editor: SharedPreferences.Editor = getSharedPreferences(
-            ctx
-        ).edit()
-        editor.putString(FIRSTTIME,"false")
-        editor.apply()
-    }
+//    fun toggleFirstTime(ctx: Context?){
+//        val editor: SharedPreferences.Editor = getSharedPreferences(
+//            ctx
+//        ).edit()
+//        editor.putString(FIRSTTIME,"false")
+//        editor.apply()
+//    }
 
     //Set first time manually, mostly for tests can remove in the final version
     fun setFirstTime(ctx: Context?, status:Boolean){

@@ -11,12 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
-import com.maison.mona.fragment.OeuvreRatingFragment
 import org.osmdroid.views.MapView
 
 /*
-*This application is developped following strict practice and respect of architecture components
-*to efficiently manage a UI's component lifecyle and handling data persistence
+*This application is developed following strict practice and respect of architecture components
+*to efficiently manage a UI's component lifecycle and handling data persistence
 *
 * Find everything you need to know here:
 * https://developer.android.com/topic/libraries/architecture/index.html
@@ -33,20 +32,20 @@ class MainActivity : AppCompatActivity() {
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
-        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL: Int = 2
-        private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION: Int = 3
+        //private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL: Int = 2
+        //private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION: Int = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Check if user has current session via Shared Prefferences
-        if (SaveSharedPreference.getToken(this).length == 0){
+        //Check if user has current session via SharedPreferences
+        if (SaveSharedPreference.getToken(this).isEmpty()){
             Log.d("Mode","Login")
             val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(myIntent)
         } else if(SaveSharedPreference.firstTime(applicationContext)) {
-            val intent = Intent(applicationContext, OnboardingActivity::class.java)
+            val intent = Intent(applicationContext, OnBoardingActivity::class.java)
             startActivity(intent)
         }else {
             /*
@@ -119,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             this.window.setLocalFocus(true, true)
-        }, FOCUS_LENGHT)
+        }, FOCUS_LENTGH)
 
     }
 

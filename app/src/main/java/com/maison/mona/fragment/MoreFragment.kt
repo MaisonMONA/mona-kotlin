@@ -151,7 +151,7 @@ class MoreFragment : Fragment(){
             val response = sendOeuvre.get()
 
             if (response != "" && response != null) {
-                Log.d("Save", "reponse: " + response)
+                Log.d("Save", "reponse: $response")
                 val reader = JSONObject(response)
                 
                 if (reader.has("errors")) {

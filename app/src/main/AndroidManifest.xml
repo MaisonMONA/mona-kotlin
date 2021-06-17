@@ -35,7 +35,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.BadgeActivity"></activity>
         <activity
-            android:name=".activities.OnboardingActivity"
+            android:name=".activities.OnBoardingActivity"
             android:label="@string/title_activity_onboarding"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>

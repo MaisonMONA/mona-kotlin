@@ -12,12 +12,11 @@ import com.maison.mona.fragment.HomeViewPagerFragmentDirections
 
 class CollectionAdapter internal constructor(
     context: Context?,
-    navController: NavController
+    private val navController: NavController
 ) : RecyclerView.Adapter<CollectionAdapter.BaseViewHolder<*>>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var itemList = emptyList<Any>()
-    private val navController = navController
 
     companion object {
         private var TYPE_OEUVRE = 0
@@ -43,7 +42,7 @@ class CollectionAdapter internal constructor(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.BaseViewHolder<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return when (viewType) {
             TYPE_OEUVRE -> {
                 val itemBinding = RecyclerviewCollectionOeuvreBinding.inflate(inflater, parent, false)
@@ -72,10 +71,9 @@ class CollectionAdapter internal constructor(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val comparable = itemList[position]
-        return when (comparable) {
+        return when (itemList[position]) {
             is Oeuvre -> TYPE_OEUVRE
-            else -> throw IllegalArgumentException("Invalid type of data " + position)
+            else -> throw IllegalArgumentException("Invalid type of data $position")
         }
     }
 

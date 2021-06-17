@@ -42,52 +42,52 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun isCollected(): Boolean{
-        var artwork_collected = false
+        var artworkCollected = false
 
         //State check to see if artwork is collected
         if(oeuvre?.state == 2){
-            artwork_collected = true
+            artworkCollected = true
         }
 
-        return artwork_collected
+        return artworkCollected
     }
 
     fun isTarget(): Boolean{
-        var artwork_target = false
+        var artworkTarget = false
 
         //State checuk to see if artwork is collected
         if(oeuvre?.state == 1){
-            artwork_target = true
+            artworkTarget = true
         }
 
-        return artwork_target
+        return artworkTarget
     }
 
     fun getArtists() : String{
-        var artist_string = ""
+        var artistString = ""
 
         val array = oeuvre?.artists
 
         array?.let {
             for (element in array){
                 //If last element of array we dont put a comma and vice versa
-                if(array.last().name != element.name){
-                    var temp = element.name + ", "
-                    artist_string += temp
+                artistString += if(array.last().name != element.name){
+                    val temp = element.name + ", "
+                    temp
                 } else {
-                    var temp = element.name
-                    artist_string += temp
+                    val temp = element.name
+                    temp
                 }
             }
         }
 
-        return artist_string
+        return artistString
     }
 
     //Parsing through dimensions
     fun getDimensions() : String{
-        var dimensions: MutableList<Int> = ArrayList()
-        var dimensions_string = ""
+        val dimensions: MutableList<Int> = ArrayList()
+        var dimensionsString = ""
         var metric = ""
         val array = oeuvre?.dimension
 
@@ -99,7 +99,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
                 var numeric = true
 
                 try {
-                    val num = parseDouble(element.toString())
+                    parseDouble(element.toString())
                 } catch (e: NumberFormatException) {
                     numeric = false
                 }
@@ -114,64 +114,64 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
             //Form final string of dimensions well formed
             for (dim in dimensions){
-                if (dimensions.last() != dim){
-                    var temp = dim.toString() + " x "
-                    dimensions_string += temp
+                dimensionsString += if (dimensions.last() != dim){
+                    val temp = "$dim x "
+                    temp
                 } else {
-                    var temp = dim.toString() + " " + metric
-                    dimensions_string += temp
+                    val temp = "$dim $metric"
+                    temp
                 }
             }
         }
 
-        return dimensions_string
+        return dimensionsString
     }
 
     fun getMaterials() : String{
-        var materials_string = ""
+        var materialsString = ""
         val array = oeuvre?.materials
 
         array?.let {
             for (element in array){
                 //If last element of array we dont put a comma and vice versa
-                if(array.last().fr != element.fr){
-                    var temp = element.fr + ", "
-                    materials_string += temp
+                materialsString += if(array.last().fr != element.fr){
+                    val temp = element.fr + ", "
+                    temp
                 } else {
-                    var temp = element.fr
-                    materials_string += temp
+                    val temp = element.fr
+                    temp
                 }
             }
         }
 
-        return materials_string
+        return materialsString
     }
 
     fun getTechniques() : String{
-        var techniques_string = ""
+        var techniquesString = ""
         val array = oeuvre?.techniques
 
         array?.let {
             for (element in array){
                 //If last element of array we dont put a comma and vice versa
-                if(array.last().fr != element.fr){
-                    var temp = element.fr + ", "
-                    techniques_string += temp
+                techniquesString += if(array.last().fr != element.fr){
+                    val temp = element.fr + ", "
+                    temp
                 } else {
-                    var temp = element.fr
-                    techniques_string += temp
+                    val temp = element.fr
+                    temp
                 }
             }
         }
 
-        return techniques_string
+        return techniquesString
     }
 
     fun getCaptureDateMessage(): String{
         return "Cette oeuvre a été collectionnée le " + oeuvre?.date_photo
     }
 
-    fun getComment(): String{
-        return "Commentaire: "+ oeuvre?.comment
-    }
+//    fun getComment(): String{
+//        return "Commentaire: "+ oeuvre?.comment
+//    }
 }

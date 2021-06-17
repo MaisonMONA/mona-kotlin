@@ -1,5 +1,6 @@
 package com.maison.mona.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -146,27 +147,25 @@ class OeuvreDetailFragment : Fragment() {
             oeuvreDetailViewModel.getTechniques()
         )
         val arrayViews = arrayOf(
-            view.findViewById<TextView>(R.id.oeuvre_name),
-            view.findViewById<TextView>(R.id.oeuvre_artist),
-            view.findViewById<TextView>(R.id.oeuvre_date),
-            view.findViewById<TextView>(R.id.oeuvre_dimensions),
-            view.findViewById<TextView>(R.id.oeuvre_category),
-            view.findViewById<TextView>(R.id.oeuvre_subcategory),
-            view.findViewById<TextView>(R.id.oeuvre_materials),
+            view.findViewById(R.id.oeuvre_name),
+            view.findViewById(R.id.oeuvre_artist),
+            view.findViewById(R.id.oeuvre_date),
+            view.findViewById(R.id.oeuvre_dimensions),
+            view.findViewById(R.id.oeuvre_category),
+            view.findViewById(R.id.oeuvre_subcategory),
+            view.findViewById(R.id.oeuvre_materials),
             view.findViewById<TextView>(R.id.oeuvre_techniques)
         )
 
-        var i=0
-        for(param in arrayParameters){
+        for((i, param) in arrayParameters.withIndex()){
             if(param == null || param == ""){
-                Log.d("Param ", "Paran vide: " + i.toString())
+                Log.d("Param ", "Param vide: $i")
                 Log.d("Param", param.toString())
 //                arrayViews[i].visibility = View.GONE
             }else{
                 Log.d("Param", "Parametre non vide:$param")
                 arrayViews[i].visibility = View.VISIBLE
             }
-            i++
         }
     }
 
@@ -190,7 +189,7 @@ class OeuvreDetailFragment : Fragment() {
 
                         onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
                             oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-                            Log.d("Save","Current: " + currentPhotoPath)
+                            Log.d("Save", "Current: $currentPhotoPath")
                             val action = OeuvreDetailFragmentDirections.itemToRating(oeuvre,currentPhotoPath)
                             findNavController().navigate(action)
                         }
@@ -201,6 +200,7 @@ class OeuvreDetailFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name

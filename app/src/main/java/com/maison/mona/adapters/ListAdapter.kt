@@ -1,7 +1,6 @@
 package com.maison.mona.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +18,18 @@ import org.osmdroid.util.GeoPoint
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class ListAdapter internal constructor(
     context: Context?,
-    navController: NavController
+    private val navController: NavController
 ) : RecyclerView.Adapter<ListAdapter.BaseViewHolder<*>>(), SectionIndexer {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var masterList = mutableMapOf<String,List<Any>>()
+//    private var masterList = mutableMapOf<String,List<Any>>()
     private var itemList = emptyList<Any>()
-    private val navController = navController
-    var mSectionPositions: MutableList<Int?> = mutableListOf()
-    private var category:String = "Titres";
+    private var mSectionPositions: MutableList<Int?> = mutableListOf()
+    private var category:String = "Titres"
     private var currentLocation: GeoPoint = GeoPoint(45.5044372, -73.578502)
 
     companion object {
@@ -92,8 +91,8 @@ class ListAdapter internal constructor(
 
             if(holder.itemView.circleImage != null){
                 //Set the texts
-                var titleText  = holder.itemView.titleView;
-                var detailText = holder.itemView.boroughView;
+                val titleText  = holder.itemView.titleView
+                val detailText = holder.itemView.boroughView
 
                 when(this.category){
                     "Titres"->{
@@ -132,13 +131,13 @@ class ListAdapter internal constructor(
                 }
 
                 //Set the location if we have the permission to do so
-                var format = DecimalFormat("###.##")
+                val format = DecimalFormat("###.##")
                 var text = ""
 
-                if(element.distance!! < 1){
-                    text +=  format.format(Math.round(element.distance!! * 1000)).toString() + "\nm"
+                text += if(element.distance!! < 1){
+                    format.format((element.distance!! * 1000).roundToInt()).toString() + "\nm"
                 }else{
-                    text +=  format.format(element.distance).toString() + "\nkm"
+                    format.format(element.distance).toString() + "\nkm"
                 }
 
                 holder.itemView.distance.text = text
@@ -151,18 +150,17 @@ class ListAdapter internal constructor(
     }
 
     internal fun submitList(items: List<Any>,category: String,location: GeoPoint) {
-        this.category = category;
+        this.category = category
         this.itemList = items
         this.currentLocation = location
         notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
-        val comparable = itemList[position]
-        return when (comparable) {
+        return when (itemList[position]) {
             is Oeuvre -> TYPE_OEUVRE
             is String -> TYPE_HEADER
-            else -> throw IllegalArgumentException("Invalid type of data " + position)
+            else -> throw IllegalArgumentException("Invalid type of data $position")
         }
     }
 
@@ -172,24 +170,24 @@ class ListAdapter internal constructor(
         abstract fun bind(item: T)
     }
 
-    fun getEmojiByUnicode(unicode: Int): String? {
-        return String(Character.toChars(unicode))
-    }
+//    fun getEmojiByUnicode(unicode: Int): String {
+//        return String(Character.toChars(unicode))
+//    }
 
     //These functions are for the fast scroller
     override fun getSectionForPosition(position: Int): Int {
         return 0
     }
 
-    override fun getSections(): Array<out Any>? {
+    override fun getSections(): Array<out Any> {
         val sections: MutableList<String> = ArrayList(26)
         mSectionPositions = ArrayList(26)
         var i = 0
         val size: Int = this.itemList.size
 
         while (i < size) {
-            if(itemList.get(i) is String) {
-                val section: String =  java.lang.String.valueOf((itemList.get(i) as String).first()).toUpperCase(Locale.ROOT)
+            if(itemList[i] is String) {
+                val section: String =  java.lang.String.valueOf((itemList[i] as String).first()).toUpperCase(Locale.ROOT)
 
                 if (!sections.contains(section)) {
                     sections.add(section)
@@ -203,16 +201,16 @@ class ListAdapter internal constructor(
     }
 
     override fun getPositionForSection(sectionIndex: Int): Int {
-        return mSectionPositions.get(sectionIndex)!!
+        return mSectionPositions[sectionIndex]!!
     }
 
-    fun getArtistsList(item:Oeuvre):String{
+    private fun getArtistsList(item:Oeuvre):String{
         var artistsList = ""
-        var counter = 1;
+        var counter = 1
 
         if(!item.artists.isNullOrEmpty()) {
             for (artist in item.artists!!) {
-                if(!artist.name.isBlank()) artistsList += artist.name
+                if(artist.name.isNotBlank()) artistsList += artist.name
                 if(counter != item.artists!!.size) artistsList += ", "
 
                 counter++

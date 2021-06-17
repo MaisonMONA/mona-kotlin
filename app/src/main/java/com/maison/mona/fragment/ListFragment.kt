@@ -52,8 +52,8 @@ class ListFragment : Fragment() {
         arrayListOf(true, true, true) //Lieu
     )
 
-    private var category_index: Int = 0
-    private var filter_index: Int = 0
+    private var categoryIndex: Int = 0
+    private var filterIndex: Int = 0
 
     private var category: String = "Titres"
     private var filter: String = "A-Z"
@@ -462,15 +462,15 @@ class ListFragment : Fragment() {
         //Sets the popup the first time, or return the current one
         if(popupWindow == null){
             Log.d("Popup", "Create Popup")
-            val list_drawer = layoutInflater.inflate(R.layout.list_menu_drawer, null)
+            val listDrawer = layoutInflater.inflate(R.layout.list_menu_drawer, null)
             popupWindow = PopupWindow(
-                list_drawer,
+                listDrawer,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             popupWindow!!.isOutsideTouchable = true
             //popupWindow.showAsDropDown(view)
-            val category_spinner = list_drawer.findViewById<Spinner>(R.id.category_spinner)
+            val categorySpinner = listDrawer.findViewById<Spinner>(R.id.category_spinner)
             val listCategory = listOf(
                 "Titres",
                 "Artistes",
@@ -483,15 +483,15 @@ class ListFragment : Fragment() {
                 listCategory
             )
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            category_spinner.adapter = spinnerAdapter
+            categorySpinner.adapter = spinnerAdapter
             //Set the icons
             val icons = listOf(
-                listOf<ImageView>(  list_drawer.findViewById(R.id.oeuvre_normal),
-                                    list_drawer.findViewById(R.id.oeuvre_targetted),
-                                    list_drawer.findViewById(R.id.oeuvre_collected)),
-                listOf<ImageView>(  list_drawer.findViewById(R.id.lieu_normal),
-                                    list_drawer.findViewById(R.id.lieu_targetted),
-                                    list_drawer.findViewById(R.id.lieu_collected))
+                listOf<ImageView>(  listDrawer.findViewById(R.id.oeuvre_normal),
+                                    listDrawer.findViewById(R.id.oeuvre_targetted),
+                                    listDrawer.findViewById(R.id.oeuvre_collected)),
+                listOf<ImageView>(  listDrawer.findViewById(R.id.lieu_normal),
+                                    listDrawer.findViewById(R.id.lieu_targetted),
+                                    listDrawer.findViewById(R.id.lieu_collected))
             )
             icons.forEachIndexed{i,row ->
                 row.forEachIndexed{ j, _ ->
@@ -499,15 +499,15 @@ class ListFragment : Fragment() {
                 }
             }
             //Send the information from the filters when we close the popup
-            val filterButton = list_drawer.findViewById<Button>(R.id.filterButton)
-            val radioGroup = list_drawer.findViewById<RadioGroup>(R.id.radio_group)
+            val filterButton = listDrawer.findViewById<Button>(R.id.filterButton)
+            val radioGroup = listDrawer.findViewById<RadioGroup>(R.id.radio_group)
             radioGroup.check(R.id.radio_alphabet)
-            this.filter_index = R.id.radio_alphabet
+            this.filterIndex = R.id.radio_alphabet
             //When we click the filter button
             filterButton.setOnClickListener {
                 //Get info from the radio buttons
                 val idCurrent  = radioGroup.checkedRadioButtonId
-                this.filter_index = idCurrent
+                this.filterIndex = idCurrent
                 var radioValue = "None"
                 if(idCurrent != -1){//Not needed, just in case
                     val radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
@@ -515,8 +515,8 @@ class ListFragment : Fragment() {
                     Log.d("Popup", radioValue)
                 }
                 //Get Spinner value
-                val spinnerValue = category_spinner.selectedItem.toString()
-                this.category_index = category_spinner.selectedItemPosition
+                val spinnerValue = categorySpinner.selectedItem.toString()
+                this.categoryIndex = categorySpinner.selectedItemPosition
 
                 this.filter = radioValue
                 this.category = spinnerValue
@@ -531,8 +531,8 @@ class ListFragment : Fragment() {
             popupWindow!!.setOnDismissListener {
                 //If the user clicked outside, reset the values
                 if (!this.fromButton) {
-                    radioGroup.check(this.filter_index)
-                    category_spinner.setSelection(this.category_index)
+                    radioGroup.check(this.filterIndex)
+                    categorySpinner.setSelection(this.categoryIndex)
                     this.iconsStates[0] = ArrayList(this.iconsStatesBack[0])
                     this.iconsStates[1] = ArrayList(this.iconsStatesBack[1])
 

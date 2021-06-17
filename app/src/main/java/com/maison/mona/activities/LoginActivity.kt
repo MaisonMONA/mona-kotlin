@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
     private var mPassword: TextView? = null
     private var mLogin: Button? = null
     private var mRegister: Button? = null
-    private var mError_Message: TextView? = null
+    private var mErrorMessage: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         mPassword = findViewById(R.id.login_password)
         mLogin = findViewById(R.id.login_button)
         mRegister = findViewById(R.id.register_button)
-        mError_Message = findViewById(R.id.login_error_message)
+        mErrorMessage = findViewById(R.id.login_error_message)
 
         mLogin?.setOnClickListener {
             try {
@@ -39,29 +39,27 @@ class LoginActivity : AppCompatActivity() {
                     mUsername?.text.toString(),
                     mPassword?.text.toString()
                 )
-                val response = loginUser.get()
+                @Suppress("DEPRECATION") val response = loginUser.get()
                 println(response)
                 if(response == null){
-                    mError_Message?.text =
-                        "Erreur de connexion au serveur"
-                    mError_Message?.visibility = View.VISIBLE
+                    mErrorMessage?.setText(R.string.login_connexion_error_message)
+                    mErrorMessage?.visibility = View.VISIBLE
                 } else {
                     val reader = JSONObject(response)
 
                     if (reader.has("token")) {
-                        //Save the token and the username in the SharedPrefference
+                        //Save the token and the username in the SharedPreference
                         val token = reader.getString("token")
                         val username = mUsername?.text.toString()
                         SaveSharedPreference.setToken(this, token)
                         SaveSharedPreference.setUsername(this, username)
 
                         val intent = Intent(applicationContext, MainActivity::class.java)
-                        intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yess!")
+                        intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yes!")
                         startActivity(intent)
                     } else {
-                        mError_Message?.text =
-                            "Veuillez verifier votre nom d'utilisateur \n ou mot de passe"
-                        mError_Message?.visibility = View.VISIBLE
+                        mErrorMessage?.setText(R.string.login_error_message)
+                        mErrorMessage?.visibility = View.VISIBLE
                     }
                 }
             } catch (e: ExecutionException) {

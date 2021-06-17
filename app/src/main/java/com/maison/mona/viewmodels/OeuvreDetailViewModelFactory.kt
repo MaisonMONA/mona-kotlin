@@ -1,7 +1,6 @@
 package com.maison.mona.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 

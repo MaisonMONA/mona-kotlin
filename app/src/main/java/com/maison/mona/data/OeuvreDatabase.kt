@@ -1,5 +1,6 @@
 package com.maison.mona.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.room.Database
@@ -22,7 +23,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-@Database(entities = arrayOf(Oeuvre::class), version = 1, exportSchema = false)
+@Database(entities = [Oeuvre::class], version = 1, exportSchema = false)
 @TypeConverters(
     ArtistConverter::class,
     BilingualConverter::class,
@@ -63,30 +64,30 @@ abstract class OeuvreDatabase : RoomDatabase() {
             }
         }
 
-        fun getOeuvreList(): List<Oeuvre>?{
+        fun getOeuvreList(): List<Oeuvre> {
             val finalList : MutableList<Oeuvre> = mutableListOf()
             var id = 1
             var idOeuvre = 1
             var idPlace  = 1
             //localhost:8000/api/lastUpdatedPlaces?date=2015-12-19 17:36:22.444
 
-            var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
+            val lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
             Log.d("Database: ", "Last update: $lastUpdate")
             //Manually fill in the maximum number of pages
             //API call to server to get all artworks and places
             //We combine the 2 in one lists
 
-            var artworksJson: String? = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
+            val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
 
-            var oeuvreArray = JSONArray(artworksJson)
-            var nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
+            val oeuvreArray = JSONArray(artworksJson)
+            val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
 
             Log.d("Database", "Nb Artworks: $nbArtworks")
 
             val placeJson = PlacesTask(lastUpdate).execute().get()
 
-            var placeArray = JSONArray(placeJson)
-            var articleArray = JSONArray()
+            val placeArray = JSONArray(placeJson)
+            val articleArray = JSONArray()
 
             Log.d("Database", "Nb Lieu: ${placeArray.length()}")
 
@@ -111,11 +112,11 @@ abstract class OeuvreDatabase : RoomDatabase() {
             val adapter: JsonAdapter<List<Oeuvre>> = moshi.adapter(type)
             val oeuvreList: List<Oeuvre>? = adapter.fromJson(articleArray.toString())
 
-            val changed_list = oeuvreList?.toMutableList()
-            if (changed_list != null) {
+            val changedList = oeuvreList?.toMutableList()
+            if (changedList != null) {
                 var index = 1
 
-                for(oeuvre: Oeuvre in changed_list) {
+                for(oeuvre: Oeuvre in changedList) {
                     if(index++ <= nbArtworks){
                         oeuvre.type = "artwork"
                         oeuvre.idServer = idOeuvre++
@@ -129,10 +130,10 @@ abstract class OeuvreDatabase : RoomDatabase() {
             }
 
             finalList.let{
-                changed_list?.let(finalList::addAll)
+                changedList?.let(finalList::addAll)
             }
 
-            var currentTime = Timestamp(System.currentTimeMillis())
+            val currentTime = Timestamp(System.currentTimeMillis())
 
             Log.d("Database",currentTime.toString())
 
@@ -147,13 +148,14 @@ abstract class OeuvreDatabase : RoomDatabase() {
 // names it "word_database".
     companion object {
 
+    @SuppressLint("StaticFieldLeak")
     @Volatile
     private var INSTANCE: OeuvreDatabase? = null
+    @SuppressLint("StaticFieldLeak")
     private var mContext: Context? = null
 
-    fun getInstance(): OeuvreDatabase?{
-       val instance = INSTANCE
-       return instance
+    fun getInstance(): OeuvreDatabase? {
+        return INSTANCE
     }
 
         fun getDatabase(

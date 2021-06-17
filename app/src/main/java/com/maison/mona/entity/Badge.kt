@@ -2,9 +2,6 @@ package com.maison.mona.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.maison.mona.converter.*
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.io.Serializable
 

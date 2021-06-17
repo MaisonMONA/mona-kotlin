@@ -20,9 +20,9 @@ class CollectionFragment : Fragment() {
 
     private val oeuvreViewModel : OeuvreViewModel by viewModels()
 
-    private var badge_top: LinearLayout? = null
-    private var badge_bottom: LinearLayout? = null
-    private var badge_cardview: CardView? = null
+    private var badgeTop: LinearLayout? = null
+    private var badgeBottom: LinearLayout? = null
+    private var badgeCardview: CardView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,9 +48,9 @@ class CollectionFragment : Fragment() {
         })
 
         //badge_button = binding.badgeButton
-        badge_top = binding.collectionBadgeTop
-        badge_bottom = binding.collectionBadgeBottom
-        badge_cardview = binding.collectionCardviewBadge
+        badgeTop = binding.collectionBadgeTop
+        badgeBottom = binding.collectionBadgeBottom
+        badgeCardview = binding.collectionCardviewBadge
 
 
         val transition = AutoTransition()
@@ -66,7 +66,7 @@ class CollectionFragment : Fragment() {
 //            }
 //        }
 
-        badge_top?.setOnClickListener {
+        badgeTop?.setOnClickListener {
             val intent = Intent(context, BadgeActivity::class.java)
             startActivity(intent)
         }

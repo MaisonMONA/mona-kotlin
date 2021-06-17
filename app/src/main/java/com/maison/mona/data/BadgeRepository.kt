@@ -9,12 +9,12 @@ class BadgeRepository(private val badgesDao:BadgeDAO){
 
     var newBadgesUnlocked: MutableList<Badge> = mutableListOf()
 
-    //pour updater si le badge a deja ete collecte ou pas
-    suspend fun updateCollected(id: Int, collected: Boolean?){
+    //pour updater si le badge a deja ete collecté ou pas
+    fun updateCollected(id: Int, collected: Boolean?){
         badgesDao.updateCollected(id, collected)
     }
 
-    suspend fun setGoal(id: Int, goal:Int?){
+    fun setGoal(id: Int, goal:Int?){
         badgesDao.setGoal(id, goal)
     }
 

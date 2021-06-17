@@ -1,5 +1,6 @@
 package com.maison.mona.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.room.Database
@@ -22,7 +23,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-@Database(entities = arrayOf(Badge::class), version = 1, exportSchema = false)
+@Database(entities = [Badge::class], version = 1, exportSchema = false)
 @TypeConverters(
     BadgeRequiredArgsConverter::class,
     BadgeOptArgsConverter::class
@@ -62,7 +63,7 @@ abstract class BadgeDatabase : RoomDatabase() {
         }
 
         fun getBadgesList(): List<Badge>?{
-            var lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
+            val lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
 
             var badgesJson = BadgeTask(lastUpdate).execute().get()
 
@@ -83,7 +84,7 @@ abstract class BadgeDatabase : RoomDatabase() {
             val adapter: JsonAdapter<List<Badge>> = moshi.adapter(type)
             val badgesList: List<Badge>? = adapter.fromJson(badgesArray.toString())
 
-            var currentTime = Timestamp(System.currentTimeMillis())
+            val currentTime = Timestamp(System.currentTimeMillis())
             SaveSharedPreference.setLastUpdate(mContext, currentTime.toString())
 
             return badgesList
@@ -97,8 +98,10 @@ abstract class BadgeDatabase : RoomDatabase() {
     // names it "word_database".
     companion object {
 
+        @SuppressLint("StaticFieldLeak")
         @Volatile
         private var INSTANCE: BadgeDatabase? = null
+        @SuppressLint("StaticFieldLeak")
         private var mContext: Context? = null
 
         fun getDatabase(

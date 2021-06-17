@@ -19,7 +19,7 @@ import com.google.android.material.tabs.TabLayout
 
 private const val NUM_PAGES = 7
 
-class OnboardingActivity : AppCompatActivity() {
+class OnBoardingActivity : AppCompatActivity() {
     private var pager: ViewPager? = null
     private var indicator: TabLayout? = null
     private var next: Button? = null
@@ -27,11 +27,11 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboarding);
+        setContentView(R.layout.activity_onboarding)
 
         Log.d("TUTORIAL", "Start tutorial")
 
-        pager = findViewById(R.id.pager);
+        pager = findViewById(R.id.pager)
         indicator = findViewById(R.id.indicator)
         end = findViewById(R.id.end)
 
@@ -43,9 +43,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         //The end button
         end?.visibility = View.INVISIBLE
-        end?.setOnClickListener {
-            Log.d("Tutoriel", "end")
-            finishOnboarding() }
+        end?.setOnClickListener { finishOnBoarding() }
 
         //Detect changes when we swipe
         pager?.addOnPageChangeListener(object : OnPageChangeListener {
@@ -74,7 +72,7 @@ class OnboardingActivity : AppCompatActivity() {
             }
         })
         /*
-        skip?.setOnClickListener { finishOnboarding() }
+        skip?.setOnClickListener { finishOnBoarding() }
         next?.setOnClickListener {
             if(pager!!.currentItem < NUM_PAGES)
                 pager!!.currentItem = pager!!.currentItem + 1}
@@ -92,7 +90,6 @@ class OnboardingActivity : AppCompatActivity() {
         override fun getCount(): Int = NUM_PAGES
 
         override fun getItem(position: Int): Fragment{
-            Log.d("Tutoriel", position.toString())
             val fragment = ScreenSlidePageFragment()
             val bundle = Bundle()
             bundle.putInt("position", position)
@@ -101,12 +98,12 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishOnboarding() {
+    private fun finishOnBoarding() {
         // Launch the main Activity, called MainActivity
         val main = Intent(applicationContext, MainActivity::class.java)
         startActivity(main)
         SaveSharedPreference.setFirstTime(this, false)
-        // Close the com.example.mona.activities.OnboardingActivity
+        // Close the com.example.mona.activities.OnBoardingActivity
         finish()
     }
 }

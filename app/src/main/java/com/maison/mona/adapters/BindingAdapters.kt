@@ -23,14 +23,14 @@ fun bindIsVisible(view: View, isGone: Boolean) {
     }
 }
 
-@BindingAdapter("isTarget")
-fun bindIsTarget(view: View, isTarget: Boolean) {
-    view.visibility = if (isTarget) {
-        View.VISIBLE
-    } else {
-        View.GONE
-    }
-}
+//@BindingAdapter("isTarget")
+//fun bindIsTarget(view: View, isTarget: Boolean) {
+//    view.visibility = if (isTarget) {
+//        View.VISIBLE
+//    } else {
+//        View.GONE
+//    }
+//}
 
 @BindingAdapter("imagePath")
 fun loadImage(view: ImageView, photo_path: String?) {

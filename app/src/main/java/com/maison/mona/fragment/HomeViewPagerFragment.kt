@@ -75,12 +75,11 @@ class HomeViewPagerFragment : Fragment() {
 
     //TO DO : a mettre autrepart
     private fun badgeDatabaseInit(){
-        val repository: BadgeRepository
         val badgeDAO = BadgeDatabase.getDatabase(
             requireContext(),
             lifecycleScope
         ).badgesDAO()
-        repository = BadgeRepository.getInstance(badgeDAO)
+        val repository: BadgeRepository = BadgeRepository.getInstance(badgeDAO)
 
         badgeViewModel.badgesList.observe(viewLifecycleOwner, { badgesList ->
             for(badge in badgesList){

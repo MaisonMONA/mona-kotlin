@@ -78,11 +78,13 @@
     <string name="username">nom d\'usager</string>
     <string name="password">mot de passe</string>
     <string name="confirm_password">confirmez votre mot de passe</string>
-    <string name="login_error_message">Soit le nom d\'usager ou le mot de passe est incorrect</string>
+    <string name="login_error_message">Le nom d\'usager ou le mot de passe est incorrect</string>
+    <string name="login_connexion_error_message">Erreur de connexion au serveur</string>
     <string name="register_error_message">Soit le nom d\'usager est pris ou le mot de passe \n n\'est pas valide</string>
     <string name="no_account_message">Pas de compte? Enregistrez-vous ici</string>
     <string name="login_button">s\'identifier</string>
     <string name="register_button">Créer mon compte</string>
+    <string name="register_name_not_available">"Le nom d'usager n'est pas disponible</string>
 
     <string name="odj_collected_message">Félicitations! Cette oeuvre est collectionnée</string>
     <!--Online-->
@@ -100,6 +102,15 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Badge Activity Catégories -->
+    <string name="badges_type_borough">Quartiers</string>
+    <string name="badges_type_artworks">Œuvres</string>
+    <string name="badges_type_category">Catégories</string>
+    <string name="badges_type_other">Autres</string>
+
+    <!-- Badge Activity Toolbar Title -->
+    <string name="badge_toolbar_title_main">Badges</string>
 
     <!-- Badge Pop-Up -->
     <string name="popup_nouveau_badge">Nouveau Badge !</string>

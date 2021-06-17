@@ -1,6 +1,5 @@
 package com.maison.mona.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.maison.mona.entity.Oeuvre
 
@@ -16,10 +15,10 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     //Get all of one type
     fun getType(type: String) = oeuvreDao.getType(type)
 
-    fun getRandomUncollected(type:String){
-        val listUncollected = oeuvreDao.getNotCollected("artwork")
-        val randNumber = (0..(listUncollected.value?.size!!))
-    }
+//    fun getRandomUncollected(type:String){
+//        val listUncollected = oeuvreDao.getNotCollected("artwork")
+//        val randNumber = (0..(listUncollected.value?.size!!))
+//    }
 
     fun getAllCollected(state:Int): LiveData<List<Oeuvre>>{
         return oeuvreDao.getCollected(state)
@@ -29,15 +28,15 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
         return oeuvreDao.getOeuvre(articleId)
     }
 
-    suspend fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
+    fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
         oeuvreDao.updateRating(id, rating, comment, state, date)
     }
 
-    suspend fun updatePath(id: Int, path: String?){
+    fun updatePath(id: Int, path: String?){
         oeuvreDao.updatePath(id, path)
     }
 
-    suspend fun updateTarget(oeuvreId: Int, target: Int?){
+    fun updateTarget(oeuvreId: Int, target: Int?){
         oeuvreDao.updateTarget(oeuvreId, target)
     }
 

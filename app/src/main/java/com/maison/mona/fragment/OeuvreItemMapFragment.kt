@@ -52,12 +52,12 @@ class OeuvreItemMapFragment : Fragment() {
 
         val lieu = safeArgs.oeuvre
 
-        val item_latitude = lieu.location!!.lat
-        val item_longitude = lieu.location!!.lng
-        val oeuvre_location = GeoPoint(item_latitude, item_longitude)
+        val itemLatitude = lieu.location!!.lat
+        val itemLongitude = lieu.location!!.lng
+        val oeuvreLocation = GeoPoint(itemLatitude, itemLongitude)
 
         val startMarker = Marker(mMap)
-        startMarker.position = oeuvre_location
+        startMarker.position = oeuvreLocation
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         startMarker.icon = ContextCompat.getDrawable(requireContext(), getDrawable(lieu.state, lieu.type))
 
@@ -69,7 +69,7 @@ class OeuvreItemMapFragment : Fragment() {
         mMap.overlays?.add(startMarker)
         mMap.overlays?.add(pinMarker)
 
-        mapController.setCenter(oeuvre_location)
+        mapController.setCenter(oeuvreLocation)
 
         return binding.root
     }

@@ -1,5 +1,6 @@
 package com.maison.mona.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -47,9 +48,9 @@ class OeuvreJourFragment : Fragment() {
     private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
     private var oeuvreId: Int = 0
 
-    private var odj_top: ConstraintLayout? = null
-    private var odj_bottom: LinearLayout? = null
-    private var odj_cardview: CardView? = null
+    private var odjTop: ConstraintLayout? = null
+    private var odjBottom: LinearLayout? = null
+    private var odjCardview: CardView? = null
 
     //Photo Attributes
     private val REQUEST_TAKE_PHOTO = 1
@@ -105,24 +106,24 @@ class OeuvreJourFragment : Fragment() {
             }
         }
 
-        odj_cardview = binding.odjCardview
-        odj_bottom = binding.odjConstraintLayoutAnim2
-        odj_top = binding.odjConstraintLayoutAnim1
+        odjCardview = binding.odjCardview
+        odjBottom = binding.odjConstraintLayoutAnim2
+        odjTop = binding.odjConstraintLayoutAnim1
 
         val transition = AutoTransition()
         transition.duration = 1000
 
-        odj_bottom?.setOnClickListener {
-            if(odj_top?.visibility == View.GONE){
-                TransitionManager.beginDelayedTransition(odj_cardview, transition)
-                odj_top?.visibility = View.VISIBLE
+        odjBottom?.setOnClickListener {
+            if(odjTop?.visibility == View.GONE){
+                TransitionManager.beginDelayedTransition(odjCardview, transition)
+                odjTop?.visibility = View.VISIBLE
                 Log.d("ODJ", "ça ouvre")
             }
         }
 
         val mHandler = Handler()
         mHandler.postDelayed({
-            odj_bottom?.callOnClick()
+            odjBottom?.callOnClick()
         }, 1500L)
 
         setHasOptionsMenu(true)
@@ -150,7 +151,7 @@ class OeuvreJourFragment : Fragment() {
 
                         onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
                             oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-                            Log.d("Save","Current: " + currentPhotoPath)
+                            Log.d("Save", "Current: $currentPhotoPath")
                             val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
                             findNavController().navigate(action)
                         }
@@ -161,6 +162,7 @@ class OeuvreJourFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name

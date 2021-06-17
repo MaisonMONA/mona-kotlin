@@ -45,16 +45,20 @@ class BadgeActivity : AppCompatActivity() {
         //on definit un linearLayout pour le recyclerview (= liste verticale)
         mRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
 
-        val test: List<String> = listOf("Quartiers", "Oeuvres", "Catégories", "Autres")
+        val listTypes: List<String> = listOf(
+            getString(R.string.badges_type_borough),
+            getString(R.string.badges_type_artworks),
+            getString(R.string.badges_type_category),
+            getString(R.string.badges_type_other))
 
         //on donne a l'adapter une liste a afficher
-        adapter.submitList(test)
+        adapter.submitList(listTypes)
 
-        mBackButton?.title = "Badges"
+        mBackButton?.title = getString(R.string.badge_toolbar_title_main)
 
         //on "observe" la liste des badges de notre database et on la donne a l'adapter
         badgeViewModel.badgesList.observe(this) { badgeList ->
-            adapter.giveAdapter(mBackButton, mBackButtonText, badgeList, this, supportFragmentManager, mRecyclerView)
+            adapter.giveAdapter(mBackButton, badgeList, this, supportFragmentManager, mRecyclerView)
         }
     }
 }

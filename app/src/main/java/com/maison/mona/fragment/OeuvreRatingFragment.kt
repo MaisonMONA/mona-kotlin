@@ -1,5 +1,6 @@
 package com.maison.mona.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -67,7 +68,7 @@ class OeuvreRatingFragment : Fragment() {
                 oeuvreViewModel.updateRating(oeuvreId, rating, comment, state, date)
             }
 
-            Toast.makeText(requireActivity(), "Oeuvre #" + oeuvreId + " ajoutée", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), "Oeuvre #$oeuvreId ajoutée", Toast.LENGTH_LONG).show()
 
             //Save the informations in the database
             if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
@@ -155,6 +156,7 @@ class OeuvreRatingFragment : Fragment() {
         badgeViewModel.updateCollected(badge.id, true)
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getDate(): String? {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd")
         val date = Date()

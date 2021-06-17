@@ -1,9 +1,6 @@
 package com.maison.mona.viewmodels
 
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -20,7 +17,7 @@ class BadgeViewModel(application: Application) : AndroidViewModel(application) {
     val badgesList: LiveData<List<Badge>>
 
     init{
-        var database = BadgeDatabase
+        val database = BadgeDatabase
 
         val badgesDao = database.getDatabase(application, viewModelScope).badgesDAO()
 
@@ -41,10 +38,10 @@ class BadgeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun isNetworkConnected(): Boolean {
-        val cm = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-        return isConnected
-    }
+//    private fun isNetworkConnected(): Boolean {
+//        val cm = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+//        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+//        return isConnected
+//    }
 }

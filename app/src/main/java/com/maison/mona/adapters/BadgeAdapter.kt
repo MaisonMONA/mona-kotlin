@@ -23,9 +23,9 @@ class BadgeAdapter internal constructor (
 ): RecyclerView.Adapter<BadgeAdapter.BaseViewHolder<*>>(){
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    //liste des headers
+    //Liste des headers
     private var itemList = emptyList<Any>()
-    //liste des badges
+    //Liste des badges
     private var badgeList = emptyList<Badge>()
 
     private var mToolbar: Toolbar? = null
@@ -40,9 +40,14 @@ class BadgeAdapter internal constructor (
 
     //onClickListener quand on est sur la deuxieme page (liste des badges par categories)
     private val onClickBadgeLayer: View.OnClickListener = View.OnClickListener {
-        val test: List<String> = listOf("Quartiers", "Oeuvres", "Catégories", "Autres")
-        submitList(test)
-        mToolbar?.title = "Badges"
+        val listTypes: List<String?> = listOf(
+            mActivity?.getString(R.string.badges_type_borough),
+            mActivity?.getString(R.string.badges_type_artworks),
+            mActivity?.getString(R.string.badges_type_category),
+            mActivity?.getString(R.string.badges_type_other))
+
+        submitList(listOf(listTypes))
+        mToolbar?.title = R.string.badge_toolbar_title_main.toString()
         mToolbar?.setOnClickListener(onClickCategoryLayer)
         mRecyclerView?.layoutManager = LinearLayoutManager(mActivity)
     }
@@ -84,7 +89,7 @@ class BadgeAdapter internal constructor (
                     ft?.commit()
                     inBadge = true
 
-                    mToolbar?.title = mToolbar?.title.toString() + " > " + binding.badge!!.title_fr.toString()
+                    mToolbar?.title = mActivity?.getString(R.string.badge_toolbar_title_main) + " > " + binding.badge!!.title_fr.toString()
 
                     mToolbar?.setOnClickListener(onClickDetailLayer)
                 }
@@ -201,22 +206,21 @@ class BadgeAdapter internal constructor (
                 mToolbar?.setOnClickListener(onClickBadgeLayer)
                 mRecyclerView?.layoutManager = GridLayoutManager(mActivity, 2)
 
+                val string: String? = mActivity?.getString(R.string.badge_toolbar_title_main)
+                mToolbar?.title = string + " > " + binding.messageHeader.text
+
                 when(binding.messageHeader.text){
-                    "Quartiers" -> {
+                    mActivity?.getString(R.string.badges_type_borough) -> {
                         submitList(badgeList.filter { it.optional_args!!.contains("borough") })
-                        mToolbar?.title = "Badges > Quartiers"
                     }
-                    "Oeuvres" -> {
+                    mActivity?.getString(R.string.badges_type_artworks) -> {
                         submitList(badgeList.filter { it.optional_args!!.length < 3 })
-                        mToolbar?.title = "Badges > Oeuvres"
                     }
-                    "Catégories" -> {
+                    mActivity?.getString(R.string.badges_type_category) -> {
                         submitList(badgeList.filter { it.optional_args!!.contains("category") })
-                        mToolbar?.title = "Badges > Catégories"
                     }
-                    "Autres" -> {
+                    mActivity?.getString(R.string.badges_type_other) -> {
                         submitList(badgeList.filter{ it.optional_args!!.length >= 3 && !it.optional_args.contains("borough") && !it.optional_args.contains("category")})
-                        mToolbar?.title = "Badges > Autres"
                     }
                 }
             }
@@ -277,12 +281,12 @@ class BadgeAdapter internal constructor (
         return when (itemList[position]) {
             is Badge -> TYPE_BADGE
             is String -> TYPE_HEADER
-            else -> throw IllegalArgumentException("Invalid type of data " + position)
+            else -> throw IllegalArgumentException("Invalid type of data $position")
         }
     }
 
     //fonction pour donner l'activity, la toolbar, le support manager et la liste des badges a l'adapter, un peu bourrin mais ca marche
-    internal fun giveAdapter(tool: Toolbar?, text: TextView?, badges: List<Badge>, activity: Activity, fragmentM: FragmentManager, recyclerview: RecyclerView){
+    internal fun giveAdapter(tool: Toolbar?, badges: List<Badge>, activity: Activity, fragmentM: FragmentManager, recyclerview: RecyclerView){
         mToolbar = tool
         badgeList = badges
         mActivity = activity

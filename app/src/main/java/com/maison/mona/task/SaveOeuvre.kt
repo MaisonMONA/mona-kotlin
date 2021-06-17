@@ -26,12 +26,12 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         val client = OkHttpClient()
 
         //We must check if the comment is empty
-        var comment = params[2]
+        val comment = params[2]
 
-        var imageFile = File(context.cacheDir,"temp.jpg")
+        val imageFile = File(context.cacheDir,"temp.jpg")
 //        var testImage = File(params[3])
-        var imageBitMap = BitmapFactory.decodeFile(params[3])
-        var outStream = FileOutputStream(imageFile)
+        val imageBitMap = BitmapFactory.decodeFile(params[3])
+        val outStream = FileOutputStream(imageFile)
         imageBitMap.compress(Bitmap.CompressFormat.JPEG,30,outStream)
 
         val fileName = "artwork" + params[0] + ".jpg"
@@ -47,10 +47,10 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         }
 
         if(!isNetworkConnected()){
-            Log.d("Save", "Probleme connexion");
+            Log.d("Save", "Probleme connexion")
         }
 
-        var url = "";
+        var url = ""
         when(params[4]){
             "artwork"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/artworks"
             "place"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/places"
@@ -71,8 +71,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
 
         return try {
             val response = client.newCall(request).execute()
-            val message = response.body!!.string()
-            return message
+            return response.body!!.string()
         } catch (e: IOException) {
             Log.d("Save", "Erreur Save oeuvre: " + e.printStackTrace().toString())
             e.printStackTrace()
@@ -83,7 +82,6 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
     private fun isNetworkConnected(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-        return isConnected
+        return activeNetwork?.isConnectedOrConnecting == true
     }
 }

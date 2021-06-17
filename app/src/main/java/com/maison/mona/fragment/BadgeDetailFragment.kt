@@ -46,9 +46,6 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
             var count: Int
             val args = mBadge?.optional_args!!
 
-            Log.d("BADGES", collected.toString())
-            Log.d("BADGES", args)
-
             for(oeuvre in collected){
                 Log.d("BADGES", oeuvre.borough.toString())
             }
