@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.maison.mona.R
 import com.maison.mona.databinding.FragmentOeuvreItemBinding
 import com.maison.mona.entity.Oeuvre
@@ -55,48 +56,20 @@ class OeuvreDetailFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
+            //empty callback bc of the viewmodel delay to get the artwork
+            callback = object : Callback {
+                override fun updateTarget(oeuvre: Oeuvre) { }
+
+                override fun captureOeuvre(oeuvre: Oeuvre) { }
+
+                override fun openMap(oeuvre: Oeuvre) { }
+            }
+
             val mHandler = Handler()
             mHandler.postDelayed({
                 viewModel = oeuvreDetailViewModel
                 Log.d("OEUVRES","associe")
-                callback = object : Callback {
-                    override fun updateTarget(oeuvre: Oeuvre) {
-                        oeuvre.let {
-                            //Set state depending on current state of artwork
-                            //from non target to target
-                            if(oeuvre.state == null){
-
-                                fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
-
-                                findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-
-                                oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
-
-                                Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
-                            }
-                            //from target to non target
-                            if(oeuvre.state == 1){ //from target to non target
-
-                                fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
-
-                                findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-
-                                oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
-
-                                Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    }
-
-                    override fun captureOeuvre(oeuvre: Oeuvre) {
-                        dispatchTakePictureIntent(oeuvre)
-                    }
-
-                    override fun openMap(oeuvre: Oeuvre) {
-                        val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
-                        findNavController().navigate(action)
-                    }
-                }
+                callback = getProperCallback(fab)
             }, 1000L)
 
             lifecycleOwner = viewLifecycleOwner
@@ -105,44 +78,7 @@ class OeuvreDetailFragment : Fragment() {
                 mHandler.postDelayed({
                     viewModel = oeuvreDetailViewModel
                     Log.d("OEUVRES","associe2")
-                    callback = object : Callback {
-                        override fun updateTarget(oeuvre: Oeuvre) {
-                            oeuvre.let {
-                                //Set state depending on current state of artwork
-                                //from non target to target
-                                if(oeuvre.state == null){
-
-                                    fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
-
-                                    findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-
-                                    oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
-
-                                    Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
-                                }
-                                //from target to non target
-                                if(oeuvre.state == 1){ //from target to non target
-
-                                    fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
-
-                                    findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
-
-                                    oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
-
-                                    Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
-                                }
-                            }
-                        }
-
-                        override fun captureOeuvre(oeuvre: Oeuvre) {
-                            dispatchTakePictureIntent(oeuvre)
-                        }
-
-                        override fun openMap(oeuvre: Oeuvre) {
-                            val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
-                            findNavController().navigate(action)
-                        }
-                    }
+                    callback = getProperCallback(fab)
                 }, 3000L)
             }
 
@@ -152,6 +88,47 @@ class OeuvreDetailFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun getProperCallback(fab: FloatingActionButton): Callback{
+        return object : Callback {
+            override fun updateTarget(oeuvre: Oeuvre) {
+                oeuvre.let {
+                    //Set state depending on current state of artwork
+                    //from non target to target
+                    if(oeuvre.state == null){
+
+                        fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
+
+                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+
+                        oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
+
+                        Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
+                    }
+                    //from target to non target
+                    if(oeuvre.state == 1){ //from target to non target
+
+                        fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
+
+                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+
+                        oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
+
+                        Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun captureOeuvre(oeuvre: Oeuvre) {
+                dispatchTakePictureIntent(oeuvre)
+            }
+
+            override fun openMap(oeuvre: Oeuvre) {
+                val action = OeuvreDetailFragmentDirections.openOeuvreMap(oeuvre)
+                findNavController().navigate(action)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?){

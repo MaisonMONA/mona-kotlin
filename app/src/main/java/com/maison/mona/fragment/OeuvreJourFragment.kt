@@ -112,7 +112,7 @@ class OeuvreJourFragment : Fragment() {
         val transition = AutoTransition()
         transition.duration = 1000
 
-        odj_bottom?.setOnClickListener { view ->
+        odj_bottom?.setOnClickListener {
             if(odj_top?.visibility == View.GONE){
                 TransitionManager.beginDelayedTransition(odj_cardview, transition)
                 odj_top?.visibility = View.VISIBLE
@@ -121,25 +121,13 @@ class OeuvreJourFragment : Fragment() {
         }
 
         val mHandler = Handler()
-        mHandler.postDelayed(Runnable {
+        mHandler.postDelayed({
             odj_bottom?.callOnClick()
         }, 1500L)
 
         setHasOptionsMenu(true)
 
         return binding.root
-    }
-
-    private fun updateData() {
-        with(oeuvreDetailViewModel) {
-            if (isTarget()) {
-                oeuvreDetailViewModel.updateTarget(oeuvreId, 0)
-                Toast.makeText(requireActivity(), R.string.oeuvre_untargetted, Toast.LENGTH_SHORT).show()
-            } else {
-                oeuvreDetailViewModel.updateTarget(oeuvreId, 1)
-                Toast.makeText(requireActivity(), R.string.oeuvre_targetted, Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {

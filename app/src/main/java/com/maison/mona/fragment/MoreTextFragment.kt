@@ -15,7 +15,7 @@ class MoreTextFragment : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentMoreTextBinding.inflate(inflater, container, false)
 
         binding.apply {

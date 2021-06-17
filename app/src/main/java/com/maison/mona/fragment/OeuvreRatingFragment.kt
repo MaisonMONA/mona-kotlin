@@ -55,12 +55,10 @@ class OeuvreRatingFragment : Fragment() {
             val itemComment = view.findViewById<TextView>(R.id.comment)
             val comment = itemComment.text.toString()
 
-            val state: Int?
-
-            if(SaveSharedPreference.isOnline(requireContext())){
-                state = 2
+            val state: Int = if(SaveSharedPreference.isOnline(requireContext())){
+                2
             }else{
-                state = 3
+                3
             }
 
             val date = getDate().toString()
@@ -75,17 +73,15 @@ class OeuvreRatingFragment : Fragment() {
             if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
                 val sendOeuvre = activity?.let { it1 -> SaveOeuvre(it1) }
 
-                if (sendOeuvre != null) {
-                    sendOeuvre.execute(
-                        oeuvreIdServeur.toString(),
-                        rating.toInt().toString(),
-                        comment,
-                        imagePath,
-                        safeArgs.oeuvre.type
-                    )
-                }
+                sendOeuvre?.execute(
+                    oeuvreIdServeur.toString(),
+                    rating.toInt().toString(),
+                    comment,
+                    imagePath,
+                    safeArgs.oeuvre.type
+                )
 
-                var response = sendOeuvre?.get()
+                val response = sendOeuvre?.get()
 
                 if (response != "" && response != null) {
                     val reader = JSONObject(response)
@@ -118,7 +114,7 @@ class OeuvreRatingFragment : Fragment() {
                                     addBadge(badge)
                                 }
                             } else if(args.contains("collection")){
-                                var collection = "Université de Montréal"
+                                val collection = "Université de Montréal"
                                 if(safeArgs.oeuvre.collection == collection && collected.filter { it.collection == collection }.size == badge.goal){
                                     addBadge(badge)
                                 }

@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.maison.mona.R
 import com.maison.mona.adapters.*
@@ -17,7 +16,7 @@ import com.maison.mona.data.BadgeRepository
 import com.maison.mona.databinding.FragmentViewPagerBinding
 import com.maison.mona.viewmodels.BadgeViewModel
 
-class HomeViewPagerFragment(): Fragment() {
+class HomeViewPagerFragment : Fragment() {
 
     private val badgeViewModel: BadgeViewModel by viewModels()
 
@@ -39,7 +38,7 @@ class HomeViewPagerFragment(): Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = FragmentViewPagerBinding.inflate(inflater, container, false)
 
@@ -75,7 +74,7 @@ class HomeViewPagerFragment(): Fragment() {
     }
 
     //TO DO : a mettre autrepart
-    fun badgeDatabaseInit(){
+    private fun badgeDatabaseInit(){
         val repository: BadgeRepository
         val badgeDAO = BadgeDatabase.getDatabase(
             requireContext(),
@@ -83,7 +82,7 @@ class HomeViewPagerFragment(): Fragment() {
         ).badgesDAO()
         repository = BadgeRepository.getInstance(badgeDAO)
 
-        badgeViewModel.badgesList.observe(viewLifecycleOwner, Observer { badgesList ->
+        badgeViewModel.badgesList.observe(viewLifecycleOwner, { badgesList ->
             for(badge in badgesList){
                 badgeViewModel.setGoal(badge.id, badge.required_args?.substringAfter(':')?.substringBeforeLast('}')?.toInt())
             }

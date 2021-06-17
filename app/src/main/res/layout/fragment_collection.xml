@@ -8,6 +8,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorSecondaryVariant">
 
+    <!--LinearLayout
+        android:id="@+id/odj_top"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="60dp"
+        android:layoutAnimation="@anim/layout_animation_slide_from_bottom">
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:src="@mipmap/ic_collection_logo"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/odj_name"
+            style="@style/TextAppearance.Mona.Odj.Fragment"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:textSize="35sp"
+            android:gravity="start"
+            android:layout_gravity="center_vertical"
+            android:text="Votre Collection"/>
+
+    </LinearLayout-->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/collection_cardview_badge"
         android:layout_width="match_parent"
@@ -68,7 +98,7 @@
         android:id="@+id/collection_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="135dp"
         android:clipToPadding="false"
         android:scrollbarSize="8dp"
         android:scrollbarThumbVertical="?attr/colorSecondaryVariant"

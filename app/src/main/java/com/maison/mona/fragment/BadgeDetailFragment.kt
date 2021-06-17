@@ -22,10 +22,6 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
 
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -74,79 +70,103 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
             }
 
             val countString = getString(R.string.badge_detail_count, count, mBadge?.goal)
-            view.findViewById<TextView>(R.id.badge_detail_goal).setText(countString)
+            view.findViewById<TextView>(R.id.badge_detail_goal).text = countString
         })
 
         //on assigne le texte du badge, ainsi que la description
-        view.findViewById<TextView>(R.id.badge_detail_text).setText(mBadge?.title_fr)
-        view.findViewById<TextView>(R.id.badge_detail_description).setText(mBadge?.description_fr)
+        view.findViewById<TextView>(R.id.badge_detail_text).text = mBadge?.title_fr
+        view.findViewById<TextView>(R.id.badge_detail_description).text = mBadge?.description_fr
 
         assignDrawable(mBadge, view)
 
         return view
     }
 
-    fun assignDrawable(badge: Badge?, view: View){
-        if(badge?.optional_args!!.contains("borough")){
-            val borough = badge.optional_args
+    private fun assignDrawable(badge: Badge?, view: View){
+        when {
+            badge?.optional_args!!.contains("borough") -> {
+                val borough = badge.optional_args
 
-            if(borough.contains("Côte-des-Neiges")){
-                setDrawable(view, R.drawable.badge_icon_cdn_color, R.drawable.badge_icon_cdn_grey)
-            } else if(borough.contains("Ville-Marie")){
-                setDrawable(view, R.drawable.badge_icon_vm_color, R.drawable.badge_icon_vm_grey)
-            } else if(borough.contains("Rosemont")){
-                setDrawable(view, R.drawable.badge_icon_rosemont_color, R.drawable.badge_icon_rosemont_grey)
-            } else if(borough.contains("Le Plateau")){
-                setDrawable(view, R.drawable.badge_icon_pmr_color, R.drawable.badge_icon_pmr_grey)
-            } else if(borough.contains("Le Sud-Ouest")){
-                setDrawable(view, R.drawable.badge_icon_so_color, R.drawable.badge_icon_so_grey)
-            } else if(borough.contains("Mercier")){
-                setDrawable(view, R.drawable.badge_icon_hochelaga_color, R.drawable.badge_icon_hochelaga_grey)
-            } else if(borough.contains("Rivière-des-Prairies")){
-                setDrawable(view, R.drawable.badge_icon_riviere_des_prairies_color, R.drawable.badge_icon_riviere_des_prairies_grey)
-            } else if(borough.contains("Verdun")){
-                setDrawable(view, R.drawable.badge_icon_verdun_color, R.drawable.badge_icon_verdun_grey)
-            } else if(borough.contains("Villeray")){
-                setDrawable(view, R.drawable.badge_icon_villeray_color, R.drawable.badge_icon_villeray_grey)
-            } else if(borough.contains("Lachine")){
-                setDrawable(view, R.drawable.badge_icon_lachine_color, R.drawable.badge_icon_lachine_grey)
-            } else if (borough.contains("LaSalle")){
-                setDrawable(view, R.drawable.badge_icon_lasalle_color, R.drawable.badge_icon_lasalle_grey)
-            } else if(borough.contains("Ahuntsic")){
-                setDrawable(view, R.drawable.badge_icon_ac_color, R.drawable.badge_icon_ac_grey)
-            } else if(borough.contains("Outremont")){
-                setDrawable(view, R.drawable.badge_icon_outremont_color, R.drawable.badge_icon_outremont_grey)
+                when {
+                    borough.contains("Côte-des-Neiges") -> {
+                        setDrawable(view, R.drawable.badge_icon_cdn_color, R.drawable.badge_icon_cdn_grey)
+                    }
+                    borough.contains("Ville-Marie") -> {
+                        setDrawable(view, R.drawable.badge_icon_vm_color, R.drawable.badge_icon_vm_grey)
+                    }
+                    borough.contains("Rosemont") -> {
+                        setDrawable(view, R.drawable.badge_icon_rosemont_color, R.drawable.badge_icon_rosemont_grey)
+                    }
+                    borough.contains("Le Plateau") -> {
+                        setDrawable(view, R.drawable.badge_icon_pmr_color, R.drawable.badge_icon_pmr_grey)
+                    }
+                    borough.contains("Le Sud-Ouest") -> {
+                        setDrawable(view, R.drawable.badge_icon_so_color, R.drawable.badge_icon_so_grey)
+                    }
+                    borough.contains("Mercier") -> {
+                        setDrawable(view, R.drawable.badge_icon_hochelaga_color, R.drawable.badge_icon_hochelaga_grey)
+                    }
+                    borough.contains("Rivière-des-Prairies") -> {
+                        setDrawable(view, R.drawable.badge_icon_riviere_des_prairies_color, R.drawable.badge_icon_riviere_des_prairies_grey)
+                    }
+                    borough.contains("Verdun") -> {
+                        setDrawable(view, R.drawable.badge_icon_verdun_color, R.drawable.badge_icon_verdun_grey)
+                    }
+                    borough.contains("Villeray") -> {
+                        setDrawable(view, R.drawable.badge_icon_villeray_color, R.drawable.badge_icon_villeray_grey)
+                    }
+                    borough.contains("Lachine") -> {
+                        setDrawable(view, R.drawable.badge_icon_lachine_color, R.drawable.badge_icon_lachine_grey)
+                    }
+                    borough.contains("LaSalle") -> {
+                        setDrawable(view, R.drawable.badge_icon_lasalle_color, R.drawable.badge_icon_lasalle_grey)
+                    }
+                    borough.contains("Ahuntsic") -> {
+                        setDrawable(view, R.drawable.badge_icon_ac_color, R.drawable.badge_icon_ac_grey)
+                    }
+                    borough.contains("Outremont") -> {
+                        setDrawable(view, R.drawable.badge_icon_outremont_color, R.drawable.badge_icon_outremont_grey)
+                    }
+                }
             }
-        } else if(badge.optional_args.contains("category")){
-            val category = badge.optional_args
 
-            if(category.contains("Decorative")){
-                setDrawable(view, R.drawable.badge_icon_art_decoratif_color, R.drawable.badge_icon_art_decoratif_grey)
-            } else if(category.contains("Beaux-Arts")){
-                setDrawable(view, R.drawable.badge_icon_beaux_arts_color, R.drawable.badge_icon_beaux_arts_grey)
-            } else if(category.contains("Murals")){
-                setDrawable(view, R.drawable.badge_icon_murales_color, R.drawable.badge_icon_murales_grey)
-            }
-        } else if(badge.optional_args.length <= 3){
-            val quantite = badge.goal
+            badge.optional_args.contains("category") -> {
+                val category = badge.optional_args
 
-            when(quantite){
-                1 -> { setDrawable(view, R.drawable.badge_icon_quantite_1_color, R.drawable.badge_icon_quantite_1_grey) }
-                3 -> { setDrawable(view, R.drawable.badge_icon_quantite_3_color, R.drawable.badge_icon_quantite_3_grey) }
-                5 -> { setDrawable(view, R.drawable.badge_icon_quantite_5_color, R.drawable.badge_icon_quantite_5_grey) }
-                8 -> { setDrawable(view, R.drawable.badge_icon_quantite_8_color, R.drawable.badge_icon_quantite_8_grey) }
-                10 -> { setDrawable(view, R.drawable.badge_icon_quantite_10_color, R.drawable.badge_icon_quantite_10_grey) }
-                15 -> { setDrawable(view, R.drawable.badge_icon_quantite_15_color, R.drawable.badge_icon_quantite_15_grey) }
-                20 -> { setDrawable(view, R.drawable.badge_icon_quantite_20_color, R.drawable.badge_icon_quantite_20_grey) }
-                25 -> { setDrawable(view, R.drawable.badge_icon_quantite_25_color, R.drawable.badge_icon_quantite_25_grey) }
-                30 -> { setDrawable(view, R.drawable.badge_icon_quantite_30_color, R.drawable.badge_icon_quantite_30_grey) }
+                when {
+                    category.contains("Decorative") -> {
+                        setDrawable(view, R.drawable.badge_icon_art_decoratif_color, R.drawable.badge_icon_art_decoratif_grey)
+                    }
+                    category.contains("Beaux-Arts") -> {
+                        setDrawable(view, R.drawable.badge_icon_beaux_arts_color, R.drawable.badge_icon_beaux_arts_grey)
+                    }
+                    category.contains("Murals") -> {
+                        setDrawable(view, R.drawable.badge_icon_murales_color, R.drawable.badge_icon_murales_grey)
+                    }
+                }
             }
-        } else if(badge.optional_args.contains("collection")){
-            setDrawable(view, R.drawable.badge_icon_udem_color, R.drawable.badge_icon_udem_grey)
+
+            badge.optional_args.length <= 3 -> {
+                when(badge.goal){
+                    1 -> { setDrawable(view, R.drawable.badge_icon_quantite_1_color, R.drawable.badge_icon_quantite_1_grey) }
+                    3 -> { setDrawable(view, R.drawable.badge_icon_quantite_3_color, R.drawable.badge_icon_quantite_3_grey) }
+                    5 -> { setDrawable(view, R.drawable.badge_icon_quantite_5_color, R.drawable.badge_icon_quantite_5_grey) }
+                    8 -> { setDrawable(view, R.drawable.badge_icon_quantite_8_color, R.drawable.badge_icon_quantite_8_grey) }
+                    10 -> { setDrawable(view, R.drawable.badge_icon_quantite_10_color, R.drawable.badge_icon_quantite_10_grey) }
+                    15 -> { setDrawable(view, R.drawable.badge_icon_quantite_15_color, R.drawable.badge_icon_quantite_15_grey) }
+                    20 -> { setDrawable(view, R.drawable.badge_icon_quantite_20_color, R.drawable.badge_icon_quantite_20_grey) }
+                    25 -> { setDrawable(view, R.drawable.badge_icon_quantite_25_color, R.drawable.badge_icon_quantite_25_grey) }
+                    30 -> { setDrawable(view, R.drawable.badge_icon_quantite_30_color, R.drawable.badge_icon_quantite_30_grey) }
+                }
+            }
+
+            badge.optional_args.contains("collection") -> {
+                setDrawable(view, R.drawable.badge_icon_udem_color, R.drawable.badge_icon_udem_grey)
+            }
         }
     }
 
-    fun setDrawable(view: View, imageCollected: Int, imageNotCollected: Int, ){
+    fun setDrawable(view: View, imageCollected: Int, imageNotCollected: Int){
         if(mBadge?.isCollected == true){
             view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(imageCollected)
         } else {

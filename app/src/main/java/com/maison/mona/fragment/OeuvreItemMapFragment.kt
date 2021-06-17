@@ -12,8 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentItemMapBinding
-import kotlinx.android.synthetic.main.list_menu_drawer.*
-import kotlinx.android.synthetic.main.list_menu_drawer.view.*
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -38,13 +36,13 @@ class OeuvreItemMapFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentItemMapBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
         mMap = binding.itemMap
 
-        mMap?.setTileSource(TileSourceFactory.MAPNIK)
+        mMap.setTileSource(TileSourceFactory.MAPNIK)
 
         mMap.setMultiTouchControls(true)
         mMap.setBuiltInZoomControls(false)
@@ -68,8 +66,8 @@ class OeuvreItemMapFragment : Fragment() {
         pinMarker.position = pinLocation
         pinMarker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user)
 
-        mMap.getOverlays()?.add(startMarker)
-        mMap.getOverlays()?.add(pinMarker)
+        mMap.overlays?.add(startMarker)
+        mMap.overlays?.add(pinMarker)
 
         mapController.setCenter(oeuvre_location)
 
@@ -78,12 +76,12 @@ class OeuvreItemMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mMap?.onResume()
+        mMap.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mMap?.onPause();
+        mMap.onPause()
     }
 
     //TO DO

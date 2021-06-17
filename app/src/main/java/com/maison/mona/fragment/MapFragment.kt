@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -17,7 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
@@ -34,6 +32,9 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
+import kotlin.math.asin
+import kotlin.math.cos
+import kotlin.math.sqrt
 
 // Instances of this class are fragments representing a single
 // object in our collection.
@@ -128,7 +129,7 @@ class MapFragment : Fragment() {
                 pinConfirm.setTitle(R.string.pinDialogAlertTitle)
                 pinConfirm.setMessage(R.string.pinDialogAlertMessage)
 
-                pinConfirm.setPositiveButton(R.string.Yes) { dialog, which ->
+                pinConfirm.setPositiveButton(R.string.Yes) { _, _ ->
                     SaveSharedPreference.setGeoLoc(context, geoPoint)
 
                     if(pin_set){
@@ -139,7 +140,7 @@ class MapFragment : Fragment() {
                     mapController.setCenter(geoPoint)
                     pin_set = true
 
-                    oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { list ->
+                    oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { list ->
                         for(oeuvre in list) {
                             val distance = distance(
                                 geoPoint.latitude,
@@ -152,7 +153,7 @@ class MapFragment : Fragment() {
 
                         val sortedList = list.sortedWith(compareBy(Oeuvre::distance))
 
-                        var threeList = mutableListOf<Oeuvre>(sortedList[0], sortedList[1], sortedList[2])
+                        val threeList = mutableListOf(sortedList[0], sortedList[1], sortedList[2])
 
                         for(oeuvre in threeList){
                             Log.d("MAPMAP", oeuvre.title.toString() + " à " + oeuvre.distance?.times(1000)?.toInt().toString() + " m")
@@ -160,7 +161,7 @@ class MapFragment : Fragment() {
                     })
                 }
 
-                pinConfirm.setNegativeButton(R.string.No) {dialog, which -> null}
+                pinConfirm.setNegativeButton(R.string.No) { _, _ -> }
 
                 val alert = pinConfirm.create()
                 alert.show()
@@ -292,8 +293,8 @@ class MapFragment : Fragment() {
         return  R.drawable.pin_lieu_normal
     }
 
-    fun addOeuvre(state: Int?, type: String) {
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvreList ->
+    private fun addOeuvre(state: Int?, type: String) {
+        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { oeuvreList ->
             val items = ArrayList<OverlayItem>()
             for (oeuvre in oeuvreList) {
                 if (oeuvre.state == state && oeuvre.type == type) {
@@ -339,7 +340,7 @@ class MapFragment : Fragment() {
         //your items
         val userItems = ArrayList<OverlayItem>()
 
-        var userOverlay = OverlayItem(
+        val userOverlay = OverlayItem(
             "You",
             "Your position",
             location
@@ -379,40 +380,40 @@ class MapFragment : Fragment() {
         toLat: Double,
         toLon: Double
     ): Double {
-        var p = 0.017453292519943295;    // Math.PI / 180
-        var a = 0.5 - Math.cos((toLat - fromLat) * p)/2 +
-                Math.cos(fromLat * p) * Math.cos(toLat * p) *
-                (1 - Math.cos((toLon - fromLon) * p))/2;
+        val p = 0.017453292519943295    // Math.PI / 180
+        val a = 0.5 - cos((toLat - fromLat) * p) /2 +
+                cos(fromLat * p) * cos(toLat * p) *
+                (1 - cos((toLon - fromLon) * p))/2
 
-        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+        return 12742 * asin(sqrt(a)) // 2 * R; R = 6371 km
     }
 
-    private fun getLastLocation(){
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-
-        } else {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
-                    Log.d("Map", location.toString())
-                    if (location != null) {
-                        Log.d("Map", "optien location")
-                        // get latest location
-                        val geoP = GeoPoint(location.latitude, location.longitude)
-                        SaveSharedPreference.setGeoLoc(context, geoP)
-                        //addUser(geoP, true, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), true, true)
-                        Toast.makeText(requireActivity(), "Position recentrée !", Toast.LENGTH_LONG).show()
-                    }
-                }
-        }
-    }
+//    private fun getLastLocation(){
+//        if (ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//
+//        } else {
+//            fusedLocationClient.lastLocation
+//                .addOnSuccessListener { location: Location? ->
+//                    // Got last known location. In some rare situations this can be null.
+//                    Log.d("Map", location.toString())
+//                    if (location != null) {
+//                        Log.d("Map", "optien location")
+//                        // get latest location
+//                        val geoP = GeoPoint(location.latitude, location.longitude)
+//                        SaveSharedPreference.setGeoLoc(context, geoP)
+//                        //addUser(geoP, true, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), true, true)
+//                        Toast.makeText(requireActivity(), "Position recentrée !", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+//        }
+//    }
 
     /**
      * call this method in onCreate

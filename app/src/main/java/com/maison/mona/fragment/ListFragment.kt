@@ -11,7 +11,6 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maison.mona.R
@@ -25,6 +24,9 @@ import com.maison.mona.data.SaveSharedPreference
 import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
 import kotlin.collections.ArrayList
+import kotlin.math.asin
+import kotlin.math.cos
+import kotlin.math.sqrt
 
 class ListFragment : Fragment() {
 
@@ -34,7 +36,7 @@ class ListFragment : Fragment() {
     private var layout: View? = null
     private var position: Parcelable? = null
     private lateinit var recyclerView: IndexFastScrollRecyclerView
-    var popupWindow: PopupWindow? = null
+    private var popupWindow: PopupWindow? = null
 
     //user location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -56,7 +58,7 @@ class ListFragment : Fragment() {
     private var category: String = "Titres"
     private var filter: String = "A-Z"
 
-    private var fromButton = false;
+    private var fromButton = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +121,7 @@ class ListFragment : Fragment() {
         return when (item.itemId) {
             R.id.list_sort -> {
                 Log.d("Popup", item.toString())
-                popupDisplay(layout)
+                popupDisplay()
                 true
             }
             R.id.list_geo -> {
@@ -132,7 +134,7 @@ class ListFragment : Fragment() {
 
     //Set the main list that will be displayed on screen
     fun setList(category: String, filter: String){
-        var filteredList = listOf<Oeuvre>()
+        var filteredList: List<Oeuvre>
         var sortedList: List<Any> = listOf()
 
         //Gets the location of the user
@@ -140,19 +142,19 @@ class ListFragment : Fragment() {
 
         if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
             && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
-            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
+            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
             })
         }else if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])){//Only oeuvre
-            oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, Observer { oeuvrelist ->
+            oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
             })
         } else if((iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {//Only lieu
-            oeuvreViewModel.lieuList.observe(viewLifecycleOwner, Observer { lieulist ->
+            oeuvreViewModel.lieuList.observe(viewLifecycleOwner, { lieulist ->
                 filteredList = filterStateList(lieulist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
@@ -163,7 +165,7 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun getUserLocation(){
+    private fun getUserLocation(){
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -190,7 +192,7 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun filterStateList(list: List<Oeuvre>): List<Oeuvre>{
+    private fun filterStateList(list: List<Oeuvre>): List<Oeuvre>{
         var filteredList = list
 
         if(!(iconsStates[0][0]))
@@ -215,7 +217,7 @@ class ListFragment : Fragment() {
     }
 
     //Filter the list of items
-    fun filterList(list: List<Oeuvre>, category: String, filter: String): List<Any>{
+    private fun filterList(list: List<Oeuvre>, category: String, filter: String): List<Any>{
         var currentList = list
         var sortedList = listOf<Any>()
         setDistances(list)
@@ -251,7 +253,7 @@ class ListFragment : Fragment() {
         return sortedList
     }
 
-    fun setDistances(list:List<Oeuvre>){
+    private fun setDistances(list:List<Oeuvre>){
         userLocation = SaveSharedPreference.getGeoLoc(context)
 
         for(oeuvre in list) {
@@ -266,24 +268,24 @@ class ListFragment : Fragment() {
     }
 
     //Adds the header at the right position in the list
-    fun addDistanceHeaders(list: MutableList<Oeuvre>): List<Any>{
+    private fun addDistanceHeaders(list: MutableList<Oeuvre>): List<Any>{
         //Creation of mutable list of Interval object where the item and
         // their distance from the user are stored
         val sortedList = list.sortedWith(compareBy(Oeuvre::distance))
 
         //adding the item to their respectable list sequentially
-        var sortedOeuvres = mutableListOf<Any>()
+        val sortedOeuvres = mutableListOf<Any>()
         //Set the distance headers as items at a lesser distance than X
         //var distanceCounter = 0;//initial
         //var distJump = 1//Jump between each header
 
         var current = -1
-        var max = 9//last header(all items after more than)
+        val max = 9//last header(all items after more than)
         for (oeuvre in sortedList) {
-            var distKm = oeuvre.distance//Km
+            val distKm = oeuvre.distance//Km
 
             if (distKm != null) {
-                var roundDist = distKm.toInt()
+                val roundDist = distKm.toInt()
 
                 if(roundDist in (current + 1)..max){
                     current = roundDist
@@ -297,11 +299,11 @@ class ListFragment : Fragment() {
 
     //Adds the header at the right position in the list
     fun addAlphabeticHeaders(list: MutableList<Oeuvre>): List<Any>{
-        var normalList = list.filter{ it.title!!.first().isLetter()}
-        var specialList = list.filter{ !(it.title!!.first().isLetter()) }
+        val normalList = list.filter{ it.title!!.first().isLetter()}
+        val specialList = list.filter{ !(it.title!!.first().isLetter()) }
 
-        var alphabetMap = normalList.groupBy { unaccent(it.title!!).first().toUpperCase()}
-        var listAlphabet = mutableListOf<Any>()
+        val alphabetMap = normalList.groupBy { unaccent(it.title!!).first().toUpperCase()}
+        val listAlphabet = mutableListOf<Any>()
 
         alphabetMap.forEach { (t, u) ->
            listAlphabet.add(t.toString())
@@ -313,10 +315,10 @@ class ListFragment : Fragment() {
         return listAlphabet
     }
     //Adds the header at the right position in the list
-    fun addArtistsHeaders(list: MutableList<Oeuvre>,filter: String): List<Any> {
+    private fun addArtistsHeaders(list: MutableList<Oeuvre>,filter: String): List<Any> {
         //Find the list of all categories(names, borought ...)
-        var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
-        categoryMap.put("*", mutableListOf())
+        val categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf()
+        categoryMap["*"] = mutableListOf()
 
         for(item in list){
             if(item.artists.isNullOrEmpty()){
@@ -324,9 +326,9 @@ class ListFragment : Fragment() {
             }else {
                 for(artist in item.artists!!){
                     //Because we might have a name == ""
-                    if(!artist.name.isBlank()) {
+                    if(artist.name.isNotBlank()) {
                         if (!categoryMap.contains(artist.name)) {
-                            categoryMap.put(artist.name, mutableListOf())
+                            categoryMap[artist.name] = mutableListOf()
                         }
 
                         categoryMap[artist.name]?.add(item)
@@ -342,12 +344,11 @@ class ListFragment : Fragment() {
         for((k,v) in sortedCategoryMap){
             if(k != "*"){
                 sortedList.add(k)
-                var vSort = listOf<Oeuvre>()
 
-                if(filter == "A-Z"){
-                    vSort = v.sortedWith(compareBy(Oeuvre::title))
+                val vSort: List<Oeuvre> = if(filter == "A-Z"){
+                    v.sortedWith(compareBy(Oeuvre::title))
                 }else{
-                    vSort = v.sortedWith(compareBy(Oeuvre::distance))
+                    v.sortedWith(compareBy(Oeuvre::distance))
                 }
 
                 sortedList.addAll(vSort)
@@ -362,16 +363,16 @@ class ListFragment : Fragment() {
     }
 
     //Adds the header at the right position in the list
-    fun addBoroughtHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
+    private fun addBoroughtHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
         //Find the list of all categories(names, borought ...)
-        var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
-        categoryMap.put("*", mutableListOf())
+        val categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf()
+        categoryMap["*"] = mutableListOf()
         for(item in list){
             if(item.borough.isNullOrEmpty()){
                 categoryMap["*"]!!.add(item)
             }else {
                 if (!categoryMap.contains(item.borough)) {
-                    categoryMap.put(item.borough!!, mutableListOf())
+                    categoryMap[item.borough!!] = mutableListOf()
                 }
                 categoryMap[item.borough]?.add(item)
             }
@@ -383,11 +384,10 @@ class ListFragment : Fragment() {
         for((k,v) in sortedCategoryMap){
             if(k != "*"){
                 sortedList.add(k)
-                var vSort = listOf<Oeuvre>()
-                if(filter == "A-Z"){
-                    vSort = v.sortedWith(compareBy(Oeuvre::title))
+                val vSort: List<Oeuvre> = if(filter == "A-Z"){
+                    v.sortedWith(compareBy(Oeuvre::title))
                 }else{
-                    vSort = v.sortedWith(compareBy(Oeuvre::distance))
+                    v.sortedWith(compareBy(Oeuvre::distance))
                 }
                 sortedList.addAll(vSort)
             }
@@ -402,14 +402,14 @@ class ListFragment : Fragment() {
     //Adds the header at the right position in the list
     fun addCategoriesHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
         //Find the list of all categories(names, borought ...)
-        var categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf();
-        categoryMap.put("*", mutableListOf())
+        val categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf()
+        categoryMap["*"] = mutableListOf()
         for(item in list){
-            if(item.category == null || item.category!!.fr.isNullOrEmpty()){
+            if(item.category == null || item.category!!.fr.isEmpty()){
                 categoryMap["*"]!!.add(item)
             }else {
                 if (!categoryMap.contains(item.category!!.fr)) {
-                    categoryMap.put(item.category!!.fr, mutableListOf())
+                    categoryMap[item.category!!.fr] = mutableListOf()
                 }
                 categoryMap[item.category!!.fr]?.add(item)
             }
@@ -421,11 +421,11 @@ class ListFragment : Fragment() {
         for((k,v) in sortedCategoryMap){
             if(k != "*"){
                 sortedList.add(k)
-                var vSort = listOf<Oeuvre>()
-                if(filter == "A-Z"){
-                    vSort = v.sortedWith(compareBy(Oeuvre::title))
+
+                val vSort: List<Oeuvre> = if(filter == "A-Z"){
+                    v.sortedWith(compareBy(Oeuvre::title))
                 }else{
-                    vSort = v.sortedWith(compareBy(Oeuvre::distance))
+                    v.sortedWith(compareBy(Oeuvre::distance))
                 }
                 sortedList.addAll(vSort)
             }
@@ -437,7 +437,7 @@ class ListFragment : Fragment() {
         return sortedList
     }
 
-    fun unaccent(src: String): String {
+    private fun unaccent(src: String): String {
         return Normalizer
             .normalize(src, Normalizer.Form.NFD)
             .replace("[^\\p{ASCII}]".toRegex(), "")
@@ -449,16 +449,16 @@ class ListFragment : Fragment() {
         toLat: Double,
         toLon: Double
     ): Double {
-        var p = 0.017453292519943295;    // Math.PI / 180
-        var a = 0.5 - Math.cos((toLat - fromLat) * p)/2 +
-                Math.cos(fromLat * p) * Math.cos(toLat * p) *
-                (1 - Math.cos((toLon - fromLon) * p))/2;
+        val p = 0.017453292519943295    // Math.PI / 180
+        val a = 0.5 - cos((toLat - fromLat) * p) /2 +
+                cos(fromLat * p) * cos(toLat * p) *
+                (1 - cos((toLon - fromLon) * p))/2
 
-        return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+        return 12742 * asin(sqrt(a)) // 2 * R; R = 6371 km
     }
 
     //Manages the filter popup display
-    fun popupDisplay(view: View?) {
+    private fun popupDisplay() {
         //Sets the popup the first time, or return the current one
         if(popupWindow == null){
             Log.d("Popup", "Create Popup")
@@ -470,22 +470,22 @@ class ListFragment : Fragment() {
             )
             popupWindow!!.isOutsideTouchable = true
             //popupWindow.showAsDropDown(view)
-            var category_spinner = list_drawer.findViewById<Spinner>(R.id.category_spinner)
-            var listCategory = listOf(
+            val category_spinner = list_drawer.findViewById<Spinner>(R.id.category_spinner)
+            val listCategory = listOf(
                 "Titres",
                 "Artistes",
                 "Categorie",
                 "Arrondissements"
             )
-            var spinnerAdapter = ArrayAdapter(
+            val spinnerAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
                 listCategory
             )
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            category_spinner.setAdapter(spinnerAdapter);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            category_spinner.adapter = spinnerAdapter
             //Set the icons
-            var icons = listOf(
+            val icons = listOf(
                 listOf<ImageView>(  list_drawer.findViewById(R.id.oeuvre_normal),
                                     list_drawer.findViewById(R.id.oeuvre_targetted),
                                     list_drawer.findViewById(R.id.oeuvre_collected)),
@@ -494,28 +494,28 @@ class ListFragment : Fragment() {
                                     list_drawer.findViewById(R.id.lieu_collected))
             )
             icons.forEachIndexed{i,row ->
-                row.forEachIndexed{j,icon ->
+                row.forEachIndexed{ j, _ ->
                     setIconToggle(icons[i][j],i,j)
                 }
             }
             //Send the information from the filters when we close the popup
-            var filterButton = list_drawer.findViewById<Button>(R.id.filterButton)
-            var radioGroup = list_drawer.findViewById<RadioGroup>(R.id.radio_group)
+            val filterButton = list_drawer.findViewById<Button>(R.id.filterButton)
+            val radioGroup = list_drawer.findViewById<RadioGroup>(R.id.radio_group)
             radioGroup.check(R.id.radio_alphabet)
             this.filter_index = R.id.radio_alphabet
             //When we click the filter button
             filterButton.setOnClickListener {
                 //Get info from the radio buttons
-                var idCurrent  = radioGroup.checkedRadioButtonId
+                val idCurrent  = radioGroup.checkedRadioButtonId
                 this.filter_index = idCurrent
                 var radioValue = "None"
                 if(idCurrent != -1){//Not needed, just in case
-                    var radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
-                    radioValue = radioButton.getText().toString()
+                    val radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
+                    radioValue = radioButton.text.toString()
                     Log.d("Popup", radioValue)
                 }
                 //Get Spinner value
-                var spinnerValue = category_spinner.selectedItem.toString()
+                val spinnerValue = category_spinner.selectedItem.toString()
                 this.category_index = category_spinner.selectedItemPosition
 
                 this.filter = radioValue
@@ -536,8 +536,8 @@ class ListFragment : Fragment() {
                     this.iconsStates[0] = ArrayList(this.iconsStatesBack[0])
                     this.iconsStates[1] = ArrayList(this.iconsStatesBack[1])
 
-                    icons.forEachIndexed { i, row ->
-                        icons.forEachIndexed { j, icon ->
+                    icons.forEachIndexed { i, _ ->
+                        icons.forEachIndexed { j, _ ->
                             setIcon(icons[i][j], i, j)
                         }
                     }
@@ -546,7 +546,7 @@ class ListFragment : Fragment() {
                 this.fromButton = false
             }
         }
-        popupWindow!!.showAtLocation(layout, Gravity.TOP or Gravity.END, 0, 0);
+        popupWindow!!.showAtLocation(layout, Gravity.TOP or Gravity.END, 0, 0)
     }
 
     fun setIconToggle(view: ImageView, i: Int, j: Int) {
@@ -561,7 +561,7 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun setIcon(view: ImageView, i: Int, j: Int) {
+    private fun setIcon(view: ImageView, i: Int, j: Int) {
         if (!iconsStates[i][j]) {
             view.setColorFilter(R.color.black)
         } else {
