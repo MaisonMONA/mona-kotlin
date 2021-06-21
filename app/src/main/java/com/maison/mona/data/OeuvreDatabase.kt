@@ -7,6 +7,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.*
@@ -142,44 +143,50 @@ abstract class OeuvreDatabase : RoomDatabase() {
         }
     }
 
-//getDatabase returns the singleton. It'll create the database the first
+    //getDatabase returns the singleton. It'll create the database the first
 // time it's accessed, using Room's database builder to create a RoomDatabase
 // object in the application context from the WordRoomDatabase class and
 // names it "word_database".
     companion object {
 
-    @SuppressLint("StaticFieldLeak")
-    @Volatile
-    private var INSTANCE: OeuvreDatabase? = null
-    @SuppressLint("StaticFieldLeak")
-    private var mContext: Context? = null
+        @SuppressLint("StaticFieldLeak")
+        @Volatile
+        private var INSTANCE: OeuvreDatabase? = null
+        @SuppressLint("StaticFieldLeak")
+        private var mContext: Context? = null
 
-    fun getInstance(): OeuvreDatabase? {
-        return INSTANCE
-    }
+        fun getInstance(): OeuvreDatabase? {
+            return INSTANCE
+        }
 
         fun getDatabase(
-           context: Context,
-           scope: CoroutineScope
+            context: Context,
+            scope: CoroutineScope
         ): OeuvreDatabase {
             mContext = context
-           // if the INSTANCE is not null, then return it,
-           // if it is, then create the database
-           return INSTANCE ?: synchronized(this) {
-               Log.d("SAVE", "oeuvre get database")
+            // if the INSTANCE is not null, then return it,
+            // if it is, then create the database
+            return INSTANCE ?: synchronized(this) {
+                Log.d("SAVE", "oeuvre get database")
 
-               val instance = Room.databaseBuilder(
-                   context.applicationContext,
-                   OeuvreDatabase::class.java,
-                   "artwork-database"
-               )
-                   .addCallback(OeuvreDatabaseCallback(scope))
-                   .build()
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    OeuvreDatabase::class.java,
+                    "artwork-database"
+                )
+                    .addMigrations(MIGRATION_0_1)
+                    .addCallback(OeuvreDatabaseCallback(scope))
+                    .build()
 
-               INSTANCE = instance
-               // return instance
-               instance
-           }
+                INSTANCE = instance
+                instance
+            }
         }
+    }
+}
+val MIGRATION_0_1 = object : Migration(0,1){
+    override fun migrate(database: SupportSQLiteDatabase){
+        database.execSQL("ALTER TABLE artwork_table ADD COLUMN idServer INT")
+        database.execSQL("ALTER TABLE artwork_table ADD COLUMN type TEXT")
     }
 }
