@@ -20,5 +20,5 @@
     <item
         android:id="@+id/more_dest"
         android:icon="@drawable/navbar_more"
-        android:title="@string/More"/>
+        android:title="@string/More" />
 </menu>

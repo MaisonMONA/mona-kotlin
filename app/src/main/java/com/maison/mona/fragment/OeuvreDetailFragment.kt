@@ -61,7 +61,9 @@ class OeuvreDetailFragment : Fragment() {
             callback = object : Callback {
                 override fun updateTarget(oeuvre: Oeuvre) { }
 
-                override fun captureOeuvre(oeuvre: Oeuvre) { }
+                override fun captureOeuvre(oeuvre: Oeuvre) {
+                    Log.d("OEUVRES", "la cça touche")
+                }
 
                 override fun openMap(oeuvre: Oeuvre) { }
             }
