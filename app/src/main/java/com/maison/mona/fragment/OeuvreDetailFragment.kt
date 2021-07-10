@@ -61,14 +61,14 @@ class OeuvreDetailFragment : Fragment() {
             callback = object : Callback {
                 override fun updateTarget(oeuvre: Oeuvre) { }
 
-                override fun captureOeuvre(oeuvre: Oeuvre) { }
+                override fun captureOeuvre(oeuvre: Oeuvre) { } //Photo problem
 
                 override fun openMap(oeuvre: Oeuvre) { }
             }
 
             val mHandler = Handler()
             mHandler.postDelayed({
-                viewModel = oeuvreDetailViewModel
+                viewModel = oeuvreDetailViewModel //TODO Call fait a la BD, envoie au viewModel. Mais arrive pas a trouver l'oeuvre donc on met le delai
                 Log.d("OEUVRES","associe")
                 callback = getProperCallback(fab)
             }, 1000L)
@@ -121,7 +121,7 @@ class OeuvreDetailFragment : Fragment() {
                 }
             }
 
-            override fun captureOeuvre(oeuvre: Oeuvre) {
+            override fun captureOeuvre(oeuvre: Oeuvre) { //TODO fait le crash de l'appareil quand les details sont pas loaded
                 dispatchTakePictureIntent(oeuvre)
             }
 

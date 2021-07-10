@@ -11,6 +11,7 @@
 *.class
 
 # Generated files
+.idea/
 bin/
 gen/
 out/
@@ -44,6 +45,8 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
+.idea/shelf
+.idea/sonarlint
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml

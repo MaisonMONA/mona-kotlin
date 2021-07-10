@@ -14,7 +14,7 @@ class BilingualConverter {
     }
 
     @TypeConverter
-    fun toJson(bilingual: Bilingual?): String? {
+    fun toJson(bilingual: Bilingual? = Bilingual("","")): String? {
         val type = object: TypeToken<Bilingual?>() {}.type
         return Gson().toJson(bilingual, type)
     }
