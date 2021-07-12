@@ -72,7 +72,7 @@
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
                             android:background="@drawable/odj_camera"
                             android:onClick="@{() -> callback.captureOeuvre(viewModel.oeuvre)}"
-                            app:isGone="@{viewModel.isCollected}" />
+                            android:visibility="gone" />
 
                         <ImageButton
                             android:id="@+id/button_map"
@@ -82,7 +82,7 @@
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
                             android:background="@drawable/odj_map"
                             android:onClick="@{() -> callback.openMap(viewModel.oeuvre)}"
-                            app:isGone="@{viewModel.isCollected}" />
+                            android:visibility="gone"/>
 
                     </LinearLayout>
 
@@ -255,7 +255,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/oeuvre_capture_date"
-                    tools:rating="3.5"></RatingBar>
+                    tools:rating="3.5" />
 
                 <TextView
                     android:id="@+id/plant_description"
@@ -285,7 +285,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:onClick="@{()-> callback.updateTarget(viewModel.oeuvre)}"
             android:tint="@{viewModel.isTarget ? @color/target : @color/white}"
-            app:isGone="@{viewModel.isCollected}"
+            android:visibility="gone"
             app:layout_anchor="@id/appbar"
             app:layout_anchorGravity="bottom|end"
             app:srcCompat="@drawable/ic_target_white" />

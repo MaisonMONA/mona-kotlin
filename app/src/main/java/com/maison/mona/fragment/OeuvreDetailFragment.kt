@@ -57,22 +57,19 @@ class OeuvreDetailFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
-            //empty callback bc of the viewmodel delay to get the artwork
-            callback = object : Callback {
-                override fun updateTarget(oeuvre: Oeuvre) { }
-
-                override fun captureOeuvre(oeuvre: Oeuvre) {
-                    Log.d("OEUVRES", "la cça touche")
-                }
-
-                override fun openMap(oeuvre: Oeuvre) { }
-            }
+            callback = getProperCallback(fab)
 
             val mHandler = Handler()
             mHandler.postDelayed({
                 viewModel = oeuvreDetailViewModel
                 Log.d("OEUVRES","associe")
-                callback = getProperCallback(fab)
+
+                if(oeuvreDetailViewModel.oeuvre?.state != 2 && oeuvreDetailViewModel.oeuvre?.state != 3
+                    && oeuvreDetailViewModel.oeuvre?.title != null){
+                    buttonCam.visibility = View.VISIBLE
+                    buttonMap.visibility = View.VISIBLE
+                    fab.visibility = View.VISIBLE
+                }
             }, 1000L)
 
             lifecycleOwner = viewLifecycleOwner
@@ -81,7 +78,13 @@ class OeuvreDetailFragment : Fragment() {
                 mHandler.postDelayed({
                     viewModel = oeuvreDetailViewModel
                     Log.d("OEUVRES","associe2")
-                    callback = getProperCallback(fab)
+
+                    if(oeuvreDetailViewModel.oeuvre?.state != 2 && oeuvreDetailViewModel.oeuvre?.state != 3
+                        && oeuvreDetailViewModel.oeuvre?.title != null){
+                        buttonCam.visibility = View.VISIBLE
+                        buttonMap.visibility = View.VISIBLE
+                        fab.visibility = View.VISIBLE
+                    }
                 }, 3000L)
             }
 
