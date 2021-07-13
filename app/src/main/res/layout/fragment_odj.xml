@@ -92,7 +92,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:ignore="MissingConstraints"
-                        tools:text="Hommage à Clémence Desrochers" />
+                        tools:text="Hommage à Clémence Desrochers"/>
 
                     <TextView
                         android:id="@+id/odj_artist"
@@ -109,7 +109,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/odj_title"
-                        tools:text="Dominique Desbiens, 2017" />
+                        tools:text="Dominique Desbiens, 2017"/>
 
                     <TextView
                         android:id="@+id/odj_dimensions"
@@ -126,7 +126,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/odj_artist"
-                        tools:text="129.3 x m x 2" />
+                        tools:text="129.3 x m x 2"/>
 
                     <TextView
                         android:id="@+id/odj_category"
@@ -143,7 +143,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/odj_dimensions"
-                        tools:text="Murales" />
+                        tools:text="Murales"/>
 
                     <LinearLayout
                         android:id="@+id/odj_layout"

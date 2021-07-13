@@ -20,7 +20,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -50,7 +50,13 @@ class OeuvreDetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
+
+        oeuvreDetailViewModel = ViewModelProviders.of(
+            this,
+            OeuvreDetailViewModelFactory(
+                requireActivity().application,
+                safeArgs.itemSelected.id
+            )
         ).get(OeuvreDetailViewModel::class.java)
 
 
@@ -70,7 +76,7 @@ class OeuvreDetailFragment : Fragment() {
                     buttonMap.visibility = View.VISIBLE
                     fab.visibility = View.VISIBLE
                 }
-            }, 1000L)
+            }, 250L)
 
             lifecycleOwner = viewLifecycleOwner
 
@@ -85,7 +91,7 @@ class OeuvreDetailFragment : Fragment() {
                         buttonMap.visibility = View.VISIBLE
                         fab.visibility = View.VISIBLE
                     }
-                }, 3000L)
+                }, 2000L)
             }
 
             toolbar.setNavigationOnClickListener { view ->

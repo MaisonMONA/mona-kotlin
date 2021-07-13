@@ -69,7 +69,8 @@ class OeuvreJourFragment : Fragment() {
 
         oeuvreDetailViewModel = ViewModelProviders.of(
             this,
-            OeuvreDetailViewModelFactory(requireActivity().application,
+            OeuvreDetailViewModelFactory(
+                requireActivity().application,
                 oeuvreId
             )
         ).get(OeuvreDetailViewModel::class.java)
