@@ -7,9 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,7 +18,6 @@ import com.maison.mona.entity.Badge
 import com.maison.mona.task.SaveOeuvre
 import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
-import kotlinx.android.synthetic.main.fragment_item_rating.view.*
 import org.json.JSONObject
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -49,7 +46,7 @@ class OeuvreRatingFragment : Fragment() {
         val oeuvreIdServeur = safeArgs.oeuvre.idServer
         val imagePath = safeArgs.imagePath
 
-        view.done_rating_button.setOnClickListener {
+        view.findViewById<Button>(R.id.done_rating_button).setOnClickListener {
             val ratingBar = view.findViewById<RatingBar>(R.id.rating)
             val rating  = ratingBar.rating
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SectionIndexer
 import android.widget.TextView
 import androidx.navigation.NavController
@@ -13,7 +14,6 @@ import com.maison.mona.databinding.RecyclerviewHeaderBinding
 import com.maison.mona.databinding.RecyclerviewOeuvreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.fragment.HomeViewPagerFragmentDirections
-import kotlinx.android.synthetic.main.recyclerview_oeuvre.view.*
 import org.osmdroid.util.GeoPoint
 import java.text.DecimalFormat
 import java.util.*
@@ -89,10 +89,10 @@ class ListAdapter internal constructor(
         if(holder is OeuvreViewHolder){
             holder.bind(element as Oeuvre)
 
-            if(holder.itemView.circleImage != null){
+            if(holder.itemView.findViewById<ImageView>(R.id.circleImage) != null){
                 //Set the texts
-                val titleText  = holder.itemView.titleView
-                val detailText = holder.itemView.boroughView
+                val titleText  = holder.itemView.findViewById<TextView>(R.id.titleView)
+                val detailText = holder.itemView.findViewById<TextView>(R.id.boroughView)
 
                 when(this.category){
                     "Titres"->{
@@ -112,21 +112,21 @@ class ListAdapter internal constructor(
                 //Set the image icon
                 if(element.state == 1){
                     if(element.type == "artwork")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_targeted)
+                        holder.itemView.findViewById<ImageView>(R.id.circleImage).setImageResource(R.drawable.ic_list_oeuvre_targeted)
 
                     if(element.type == "place")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_targeted)
+                        holder.itemView.findViewById<ImageView>(R.id.circleImage).setImageResource(R.drawable.ic_list_lieu_targeted)
                 }else if(element.state == 2 || element.state == 3){
                     if(element.type == "artwork")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_collected)
+                        holder.itemView.findViewById<ImageView>(R.id.circleImage).setImageResource(R.drawable.ic_list_oeuvre_collected)
 
                     if(element.type == "place")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_collected)
+                        holder.itemView.findViewById<ImageView>(R.id.circleImage).setImageResource(R.drawable.ic_list_lieu_collected)
                 }else{
                     if(element.type == "artwork"){
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre)
+                        holder.itemView.findViewById<ImageView>(R.id.circleImage).setImageResource(R.drawable.ic_list_oeuvre)
                     }else if(element.type == "place"){
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu)
+                        holder.itemView.findViewById<ImageView>(R.id.circleImage).setImageResource(R.drawable.ic_list_lieu)
                     }
                 }
 
@@ -140,7 +140,7 @@ class ListAdapter internal constructor(
                     format.format(element.distance).toString() + "\nkm"
                 }
 
-                holder.itemView.distance.text = text
+                holder.itemView.findViewById<TextView>(R.id.distance).text = text
             }
         }else if(holder is HeaderViewHolder){
             holder.bind(element as String)

@@ -4,11 +4,11 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.maison.mona.R
-import kotlinx.android.synthetic.main.activity_permissions_denied.*
 
 class PermissionsDeniedActivity : AppCompatActivity() {
 
@@ -21,7 +21,10 @@ class PermissionsDeniedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permissions_denied)
-        btn_try_again_request_permissions_id.setOnClickListener {
+
+        val mButton = findViewById<Button>(R.id.btn_try_again_request_permissions_id)
+
+        mButton.setOnClickListener {
             /*
 
             We must check that all permissions are granted before using the app
@@ -75,6 +78,7 @@ class PermissionsDeniedActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_FINE_LOCATION_AND_WRITE_EXTERNAL ->{
                 // If request is cancelled, the result arrays are empty.
