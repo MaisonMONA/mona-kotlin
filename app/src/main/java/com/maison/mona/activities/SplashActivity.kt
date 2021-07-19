@@ -3,6 +3,7 @@ package com.maison.mona.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
@@ -19,6 +20,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         //Set the internet Mode
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
