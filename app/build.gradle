@@ -19,7 +19,7 @@ android {
         applicationId "com.maison.mona"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 28
+        versionCode 30
         versionName "1.6.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
@@ -54,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.osmdroid:osmdroid-android:6.1.4'
+    implementation 'org.osmdroid:osmdroid-android:6.1.10'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.viewpager:viewpager:1.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -72,7 +72,7 @@ dependencies {
     implementation "com.android.support:design:$rootProject.supportDesign"
 
     //Ktx
-    implementation "androidx.core:core-ktx:1.5.0"
+    implementation 'androidx.core:core-ktx:1.7.0-alpha01'
 
     //Fragment
     implementation "androidx.fragment:fragment-ktx:$rootProject.fragmentVersion"
@@ -87,10 +87,10 @@ dependencies {
     implementation 'com.android.support:support-v4:28.1.0'
 
     //Material
-    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation 'com.google.android.material:material:1.5.0-alpha01'
 
     //RecyclerView
-    implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerVersion"
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
@@ -107,13 +107,13 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$rootProject.moshiVersion"
 
     //For managing Uri files
-    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.core:core-ktx:1.7.0-alpha01'
 
     // Room components
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    implementation "androidx.room:room-runtime:2.3.0"
+    implementation "androidx.room:room-ktx:2.3.0"
+    androidTestImplementation "androidx.room:room-testing:2.3.0"
 
     // Lifecycle components
     kapt "androidx.lifecycle:lifecycle-compiler:2.3.1"
@@ -126,10 +126,10 @@ dependencies {
 
     // UI
     //noinspection GradleDependency
-    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation 'com.google.android.material:material:1.5.0-alpha01'
 
     //Google Play Services Location
-    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     implementation "com.android.support:cardview-v7:28.0.0"
 
@@ -142,7 +142,7 @@ dependencies {
     //First time tutorial
     def leanback_version = "1.0.0"
 
-    implementation "androidx.leanback:leanback:$leanback_version"
+    implementation 'androidx.leanback:leanback:1.1.0-rc01'
 
     // leanback-preference is an add-on that provides a settings UI for TV apps.
     implementation "androidx.leanback:leanback-preference:$leanback_version"
@@ -159,16 +159,10 @@ dependencies {
     //Fast scroll
     implementation 'com.github.myinnos:AlphabetIndex-Fast-Scroll-RecyclerView:1.0.95'
     //Custum menu
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
-    implementation "androidx.core:core-ktx:+"
+    implementation 'com.google.android.material:material:1.5.0-alpha01'
+    implementation 'androidx.core:core-ktx:1.7.0-alpha01'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //Custom menu
-    implementation 'com.google.android.material:material:1.4.0-rc01'
-    implementation "androidx.core:core-ktx:1.6.0"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20"
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30-M1"
     //Unit test
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
