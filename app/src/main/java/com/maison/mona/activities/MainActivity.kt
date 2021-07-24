@@ -7,12 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.camera.core.ImageCapture
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
+import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
 import org.osmdroid.views.MapView
+import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 /*
 *This application is developed following strict practice and respect of architecture components
@@ -149,6 +154,7 @@ class MainActivity : AppCompatActivity() {
  */
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
                 // If request is cancelled, the result arrays are empty.

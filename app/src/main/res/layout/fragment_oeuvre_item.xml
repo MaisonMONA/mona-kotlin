@@ -65,15 +65,17 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:id="@+id/button_cam"
-                            android:layout_width="@dimen/item_button_size"
+                            android:id="@+id/camera_capture_button"                            android:layout_width="@dimen/item_button_size"
                             android:layout_height="@dimen/item_button_size"
                             android:layout_marginHorizontal="@dimen/item_button_horizontal_margin"
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
+                            android:text="Take Photo"
                             android:background="@drawable/odj_camera"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             android:onClick="@{() -> callback.captureOeuvre(viewModel.oeuvre)}"
                             app:isGone="@{viewModel.isCollected}" />
-
                         <ImageButton
                             android:id="@+id/button_map"
                             android:layout_width="@dimen/item_button_size"

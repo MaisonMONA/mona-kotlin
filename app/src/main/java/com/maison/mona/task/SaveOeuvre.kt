@@ -62,7 +62,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
                 .addFormDataPart("id", params[0])
                 .addFormDataPart("rating", params[1])
                 .addFormDataPart("comment", comment)
-                .addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
+                //.addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg)) TODO decommenter lorsque les photos marchent
                 .build()
         val request = Request.Builder()
                 .url(url)

@@ -173,6 +173,7 @@ class OeuvreDetailFragment : Fragment() {
 
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            Log.d("Picture","Picture intent triggered")
             // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
                 // Create the File where the photo should go
