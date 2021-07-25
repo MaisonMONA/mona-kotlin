@@ -10,9 +10,11 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.maison.mona.data.SaveSharedPreference
-import okhttp3.*
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -20,7 +22,7 @@ import java.io.IOException
 //Store the artwork in the database
 //artwork_id|user_id|rating|comment|photo|created_at|updated_at
 class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
-
+    private val saveOeuvre = "Save Oeuvre"
     @RequiresApi(Build.VERSION_CODES.P)
     override fun doInBackground(vararg params: String): String? {
         val client = OkHttpClient()
@@ -29,7 +31,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         val comment = params[2]
 
         val imageFile = File(context.cacheDir,"temp.jpg")
-//        var testImage = File(params[3])
+        // var testImage = File(params[3])
         val imageBitMap = BitmapFactory.decodeFile(params[3])
         val outStream = FileOutputStream(imageFile)
         imageBitMap.compress(Bitmap.CompressFormat.JPEG,30,outStream)
@@ -37,17 +39,17 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         val fileName = "artwork" + params[0] + ".jpg"
 
         if(!imageFile.exists()){
-            Log.d("Save", "File does not exits")
+            Log.d(saveOeuvre, "File does not exits")
         }
 
         val mtjpeg: MediaType? = "image/jpeg".toMediaTypeOrNull()
 
         if (mtjpeg == null) {
-            Log.d("Save", "Probleme Media type")
+            Log.d(saveOeuvre, "Probleme Media type")
         }
 
         if(!isNetworkConnected()){
-            Log.d("Save", "Probleme connexion")
+            Log.d(saveOeuvre, "Probleme connexion")
         }
 
         var url = ""
@@ -62,7 +64,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
                 .addFormDataPart("id", params[0])
                 .addFormDataPart("rating", params[1])
                 .addFormDataPart("comment", comment)
-                .addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
+                //.addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
                 .build()
         val request = Request.Builder()
                 .url(url)
@@ -73,7 +75,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
             val response = client.newCall(request).execute()
             return response.body!!.string()
         } catch (e: IOException) {
-            Log.d("Save", "Erreur Save oeuvre: " + e.printStackTrace().toString())
+            Log.d(saveOeuvre, "Erreur Save oeuvre: " + e.printStackTrace().toString())
             e.printStackTrace()
             null
         }

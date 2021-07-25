@@ -37,11 +37,4 @@ class BadgeViewModel(application: Application) : AndroidViewModel(application) {
             repository.setGoal(id, goal)
         }
     }
-
-//    private fun isNetworkConnected(): Boolean {
-//        val cm = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-//        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-//        return isConnected
-//    }
 }
