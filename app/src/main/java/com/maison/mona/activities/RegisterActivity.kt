@@ -8,19 +8,22 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.maison.mona.R
+import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.task.RegisterUser
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.concurrent.ExecutionException
-import com.maison.mona.data.SaveSharedPreference
 
 class RegisterActivity : AppCompatActivity() {
+    private val ERRORS = "errors"
+    private val TOKEN = "token"
+    private val PASSWORD = "password"
 
-    private var mUsername: TextView? = null
-    private var mPassword: TextView? = null
-    private var mPasswordConfirmation: TextView? = null
-    private var mCreate: Button? = null
-    private var mErrorMessage: TextView? = null
+    var mUsername: TextView? = null
+    var mPassword: TextView? = null
+    var mPasswordConfirmation: TextView? = null
+    var mCreate: Button? = null
+    var mErrorMessage: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,39 +38,22 @@ class RegisterActivity : AppCompatActivity() {
         mCreate?.setOnClickListener {
             try {
                 val registerUser = RegisterUser()
-                registerUser.execute(
+                @Suppress("DEPRECATION") registerUser.execute(
                     mUsername?.text.toString(),
                     mPassword?.text.toString(),
                     mPasswordConfirmation?.text.toString()
                 )
-                val response = registerUser.get()
+                @Suppress("DEPRECATION") val response = registerUser.get()
                 val reader = JSONObject(response)
 
-                if (reader.has("token")) {
-                    //Save the token and the username in the SharedPreference
-                    val token = reader.getString("token")
-                    val username = mUsername?.text.toString()
-                    SaveSharedPreference.setToken(this, token)
-                    SaveSharedPreference.setUsername(this, username)
-
+                if (reader.has(TOKEN)) {
+                    saveSharedPreferences(mUsername, reader)
                     val intent = Intent(applicationContext, MainActivity::class.java)
                     intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yess!")
                     startActivity(intent)
                 }
-                if (reader.has("errors")) {
-                    val errors = reader.getJSONObject("errors")
-                    if (errors.has("username")) {
-                        mErrorMessage?.setText(R.string.register_name_not_available)
-                        mErrorMessage?.visibility = View.VISIBLE
-                    } else if (errors.has("password")) {
-                        val password = errors.getJSONArray("password")
-                        var words = ""
-                        for (i in 0 until password.length()) {
-                            words += password[i].toString() + "\n"
-                        }
-                        mErrorMessage?.text = words
-                        mErrorMessage?.visibility = View.VISIBLE
-                    }
+                if (reader.has(ERRORS)) {
+                    errorMessageHandling(mErrorMessage, reader)
                 }
             } catch (e: ExecutionException) {
                 e.printStackTrace()
@@ -76,6 +62,29 @@ class RegisterActivity : AppCompatActivity() {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    private fun saveSharedPreferences(mUsername: TextView?, reader: JSONObject){
+        val token = reader.getString(TOKEN)
+        val username = mUsername?.text.toString()
+        SaveSharedPreference.setToken(this, token)
+        SaveSharedPreference.setUsername(this, username)
+    }
+
+    private fun errorMessageHandling(mErrorMessage: TextView?, reader: JSONObject){
+        val errors = reader.getJSONObject(ERRORS)
+        if (errors.has("username")) {
+            mErrorMessage?.setText(R.string.register_name_not_available)
+            mErrorMessage?.visibility = View.VISIBLE
+        } else if (errors.has(PASSWORD)) {
+            val password = errors.getJSONArray(PASSWORD)
+            var words = ""
+            for (i in 0 until password.length()) {
+                words += password[i].toString() + "\n"
+            }
+            mErrorMessage?.text = words
+            mErrorMessage?.visibility = View.VISIBLE
         }
     }
 }

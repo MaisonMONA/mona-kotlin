@@ -111,18 +111,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 /*
-    //If ever we desire to implement this feature
-
-    //Hide Navigation Bar after 3 seconds
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) hideSystemUI()
-
-        Handler().postDelayed({
-            this.window.setLocalFocus(true, true)
-        }, FOCUS_LENTGH)
-
-    }
 
     private fun hideSystemUI() {
         // Enables regular immersive mode.
