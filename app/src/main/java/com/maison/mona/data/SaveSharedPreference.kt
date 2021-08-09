@@ -26,9 +26,7 @@ object SaveSharedPreference {
     }
 
     fun getUsername(ctx: Context?): String {
-        return getSharedPreferences(
-            ctx
-        )
+        return getSharedPreferences(ctx)
             .getString(PREF_USER_NAME, "")!!
     }
 

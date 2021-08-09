@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity() {
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     // Send to PermissionsDeniedActivity
                     val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
-                        // Optionally add message
-                        // putExtra(EXTRA_MESSAGE, message)
                     }
                     startActivity(intent)
                 } else {
@@ -110,33 +108,8 @@ class MainActivity : AppCompatActivity() {
         mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
 
-/*
-
-    private fun hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-    }
-
-    // Shows the system bars by removing all the flags
-    // except for the ones that make the content appear under the system bars.
-    private fun showSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-    }
-
- */
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
                 // If request is cancelled, the result arrays are empty.
@@ -156,8 +129,6 @@ class MainActivity : AppCompatActivity() {
                     // Permissions denied
                     // Send to PermissionsDeniedActivity
                     val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
-                        // Optionally add message
-                        // putExtra(EXTRA_MESSAGE, message)
                     }
                     startActivity(intent)
                 }
