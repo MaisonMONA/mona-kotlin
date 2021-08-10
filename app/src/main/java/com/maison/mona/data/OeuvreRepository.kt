@@ -16,7 +16,7 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     fun getType(type: String) = oeuvreDao.getType(type)
 
 //    fun getRandomUncollected(type:String){
-//        val listUncollected = oeuvreDao.getNotCollected("artwork")
+//        val listUncollected = oeuvreDao.getNotCollexcted("artwork")
 //        val randNumber = (0..(listUncollected.value?.size!!))
 //    }
 

@@ -11,7 +11,9 @@ import android.provider.MediaStore
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -59,7 +61,7 @@ class OeuvreJourFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        //TODO a enlever
+
         //Artwork of the way is represented by the id of the artwork that
         //represents the the current day of the year
         val calendar = Calendar.getInstance()
