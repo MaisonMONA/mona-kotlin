@@ -13,7 +13,8 @@ This code uses:
 2) [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
 3) [Data Binding](https://developer.android.com/topic/libraries/data-binding)
 
-Définition of done
+Définition of done:
+
 0) git checkout dans une branche de type « bugfix/ » ou « feature/ » 
 1) implémentation de fonctionnalité
 2) Vérifier sur sonarlint si il n’y a pas de code smells, s’il y en a les corrigés.
@@ -24,6 +25,7 @@ Définition of done
 7) Ensuite, fusionner la branche avec le master.
 
 Avant de commencer 
+
 Télécharger le plug-in de Sonarlint et Spotbug dans les plug-ins d’androïde studio.
 S’il y a une version créée un APK et le mettre dans le dossier APK, cela permettra de débugger certains comportements plus facilement.
 Il est fortement recommandé de télécharger un émulateur et aussi tester sur son appareil physique.
