@@ -15,6 +15,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -31,7 +32,6 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
         val comment = params[2]
 
         val imageFile = File(context.cacheDir,"temp.jpg")
-        // var testImage = File(params[3])
         val imageBitMap = BitmapFactory.decodeFile(params[3])
         val outStream = FileOutputStream(imageFile)
         imageBitMap.compress(Bitmap.CompressFormat.JPEG,30,outStream)
@@ -64,7 +64,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
                 .addFormDataPart("id", params[0])
                 .addFormDataPart("rating", params[1])
                 .addFormDataPart("comment", comment)
-                //.addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
+                .addFormDataPart("photo", fileName, imageFile.asRequestBody(mtjpeg))
                 .build()
         val request = Request.Builder()
                 .url(url)

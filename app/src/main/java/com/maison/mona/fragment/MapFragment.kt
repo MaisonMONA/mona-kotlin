@@ -207,12 +207,6 @@ class MapFragment : Fragment() {
         map.onPause()
     }
 
-//    private fun resize(image: Drawable?, dimension: Int): Drawable {
-//        val b = (image as BitmapDrawable).bitmap
-//        val bitmapResized = Bitmap.createScaledBitmap(b, dimension, dimension, false)
-//        return BitmapDrawable(resources, bitmapResized)
-//    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_menu, menu)
     }
@@ -385,33 +379,6 @@ class MapFragment : Fragment() {
 
         return 12742 * asin(sqrt(a)) // 2 * R; R = 6371 km
     }
-
-//    private fun getLastLocation(){
-//        if (ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//
-//        } else {
-//            fusedLocationClient.lastLocation
-//                .addOnSuccessListener { location: Location? ->
-//                    // Got last known location. In some rare situations this can be null.
-//                    Log.d("Map", location.toString())
-//                    if (location != null) {
-//                        Log.d("Map", "optien location")
-//                        // get latest location
-//                        val geoP = GeoPoint(location.latitude, location.longitude)
-//                        SaveSharedPreference.setGeoLoc(context, geoP)
-//                        //addUser(geoP, true, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), true, true)
-//                        Toast.makeText(requireActivity(), "Position recentrée !", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//        }
-//    }
 
     /**
      * call this method in onCreate

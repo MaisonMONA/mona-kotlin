@@ -15,11 +15,6 @@ class OeuvreRepository(private val oeuvreDao: OeuvreDAO) {
     //Get all of one type
     fun getType(type: String) = oeuvreDao.getType(type)
 
-//    fun getRandomUncollected(type:String){
-//        val listUncollected = oeuvreDao.getNotCollexcted("artwork")
-//        val randNumber = (0..(listUncollected.value?.size!!))
-//    }
-
     fun getAllCollected(state:Int): LiveData<List<Oeuvre>>{
         return oeuvreDao.getCollected(state)
     }

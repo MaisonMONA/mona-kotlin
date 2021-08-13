@@ -37,7 +37,7 @@ internal class BilingualListConverterTest {
                 Bilingual(fr = "aurevoir", en = "bye")
             )
         }
-        //TODO fix this
+
         //@Test
         fun toBilingualList_Empty() {
             val bilingualListConverterTest =

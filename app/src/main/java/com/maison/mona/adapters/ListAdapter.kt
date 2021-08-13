@@ -26,7 +26,6 @@ class ListAdapter internal constructor(
 ) : RecyclerView.Adapter<ListAdapter.BaseViewHolder<*>>(), SectionIndexer {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-//    private var masterList = mutableMapOf<String,List<Any>>()
     private var itemList = emptyList<Any>()
     private var mSectionPositions: MutableList<Int?> = mutableListOf()
     private var category:String = "Titres"
@@ -90,62 +89,70 @@ class ListAdapter internal constructor(
             holder.bind(element as Oeuvre)
 
             if(holder.itemView.circleImage != null){
-                //Set the texts
-                val titleText  = holder.itemView.titleView
-                val detailText = holder.itemView.boroughView
+                setHolderText(element, holder)
 
-                when(this.category){
-                    "Titres"->{
-                        titleText.text = element.title
-                        detailText.text = element.borough
-                    }
-                    "Artistes"->{
-                        titleText.text   = element.title
-                        detailText.text = getArtistsList(element)
-                    }
-                    else ->{
-                        titleText.text = element.title
-                        detailText.text = element.borough
-                    }
-                }
+                setImageIcon(element, holder)
 
-                //Set the image icon
-                if(element.state == 1){
-                    if(element.type == "artwork")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_targeted)
-
-                    if(element.type == "place")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_targeted)
-                }else if(element.state == 2 || element.state == 3){
-                    if(element.type == "artwork")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_collected)
-
-                    if(element.type == "place")
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_collected)
-                }else{
-                    if(element.type == "artwork"){
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre)
-                    }else if(element.type == "place"){
-                        holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu)
-                    }
-                }
-
-                //Set the location if we have the permission to do so
-                val format = DecimalFormat("###.##")
-                var text = ""
-
-                text += if(element.distance!! < 1){
-                    format.format((element.distance!! * 1000).roundToInt()).toString() + "\nm"
-                }else{
-                    format.format(element.distance).toString() + "\nkm"
-                }
-
-                holder.itemView.distance.text = text
+                setLocation(element, holder)
             }
         }else if(holder is HeaderViewHolder){
             holder.bind(element as String)
         }else{
             throw java.lang.IllegalArgumentException()
+        }
+    }
+
+    private fun setImageIcon(element: Oeuvre, holder: BaseViewHolder<*>){
+        if(element.state == 1){
+            if(element.type == "artwork")
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_targeted)
+
+            if(element.type == "place")
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_targeted)
+        }else if(element.state == 2 || element.state == 3){
+            if(element.type == "artwork")
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_collected)
+
+            if(element.type == "place")
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_collected)
+        }else{
+            if(element.type == "artwork"){
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre)
+            }else if(element.type == "place"){
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu)
+            }
+        }
+    }
+
+    private fun setLocation(element: Oeuvre, holder: BaseViewHolder<*>){
+        val format = DecimalFormat("###.##")
+        var text = ""
+
+        text += if(element.distance!! < 1){
+            format.format((element.distance!! * 1000).roundToInt()).toString() + "\nm"
+        }else{
+            format.format(element.distance).toString() + "\nkm"
+        }
+        holder.itemView.distance.text = text
+    }
+
+    private fun setHolderText(element: Oeuvre, holder: BaseViewHolder<*>){
+        val titleText  = holder.itemView.titleView
+        val detailText = holder.itemView.boroughView
+
+        when(this.category){
+            "Titres"->{
+                titleText.text = element.title
+                detailText.text = element.borough
+            }
+            "Artistes"->{
+                titleText.text   = element.title
+                detailText.text = getArtistsList(element)
+            }
+            else ->{
+                titleText.text = element.title
+                detailText.text = element.borough
+            }
         }
     }
 
@@ -169,10 +176,6 @@ class ListAdapter internal constructor(
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder (itemView) {
         abstract fun bind(item: T)
     }
-
-//    fun getEmojiByUnicode(unicode: Int): String {
-//        return String(Character.toChars(unicode))
-//    }
 
     //These functions are for the fast scroller
     override fun getSectionForPosition(position: Int): Int {

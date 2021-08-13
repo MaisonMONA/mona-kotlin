@@ -64,4 +64,7 @@ data class Oeuvre(
 ) : Serializable{
     @Transient
     var distance: Double? = null
+
+    @Transient
+    var isSent: Boolean = false
 }

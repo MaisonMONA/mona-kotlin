@@ -148,7 +148,7 @@ dependencies {
     implementation "androidx.leanback:leanback-preference:$leanback_version"
 
     // leanback-paging is an add-on that simplifies adding paging support to a RecyclerView Adapter.
-    implementation 'androidx.leanback:leanback-paging:1.1.0-alpha07'
+    implementation 'androidx.leanback:leanback-paging:1.1.0-alpha08'
 
     // leanback-tab is an add-on that provides customized TabLayout to be used as the top navigation bar.
     implementation 'androidx.leanback:leanback-tab:1.1.0-beta01'
@@ -158,6 +158,8 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
     //Fast scroll
     implementation 'com.github.myinnos:AlphabetIndex-Fast-Scroll-RecyclerView:1.0.95'
+    //Preference manager
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     //Custum menu
     implementation 'com.google.android.material:material:1.5.0-alpha01'
     implementation 'androidx.core:core-ktx:1.7.0-alpha01'

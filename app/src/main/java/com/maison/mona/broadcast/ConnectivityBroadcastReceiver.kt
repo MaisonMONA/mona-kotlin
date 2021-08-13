@@ -7,7 +7,6 @@ import android.os.AsyncTask
 import okhttp3.*
 import java.io.IOException
 
-//private const val TAG = "ConnectivityBroadcastReceiver"
 
 class ConnectivityBroadcastReceiver : BroadcastReceiver() {
 

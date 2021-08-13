@@ -56,16 +56,6 @@ class CollectionFragment : Fragment() {
         val transition = AutoTransition()
         transition.duration = 500
 
-//        badge_top?.setOnClickListener { view ->
-//            if(badge_bottom?.visibility == View.GONE){
-//                TransitionManager.beginDelayedTransition(badge_cardview, transition)
-//                badge_bottom?.visibility = View.VISIBLE
-//            } else {
-//                TransitionManager.beginDelayedTransition(badge_cardview, transition)
-//                badge_bottom?.visibility = View.GONE
-//            }
-//        }
-
         badgeTop?.setOnClickListener {
             val intent = Intent(context, BadgeActivity::class.java)
             startActivity(intent)

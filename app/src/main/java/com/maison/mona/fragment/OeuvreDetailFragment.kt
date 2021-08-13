@@ -59,12 +59,16 @@ class OeuvreDetailFragment : Fragment() {
         ).apply {
             //empty callback bc of the viewmodel delay to get the artwork
             callback = object : Callback {
-                override fun updateTarget(oeuvre: Oeuvre) { }
+                override fun updateTarget(oeuvre: Oeuvre) {
+                    //do nothing
+                }
 
                 override fun captureOeuvre(oeuvre: Oeuvre) {//Photo problem
                     Log.d("OEUVRES", "la cça touche")
                 }
-                override fun openMap(oeuvre: Oeuvre) { }
+                override fun openMap(oeuvre: Oeuvre) {
+                    //do nothing
+                }
             }
 
             val mHandler = Handler()
@@ -162,7 +166,6 @@ class OeuvreDetailFragment : Fragment() {
             if(param == null || param == ""){
                 Log.d("Param ", "Param vide: $i")
                 Log.d("Param", param.toString())
-//                arrayViews[i].visibility = View.GONE
             }else{
                 Log.d("Param", "Parametre non vide:$param")
                 arrayViews[i].visibility = View.VISIBLE
@@ -207,15 +210,6 @@ class OeuvreDetailFragment : Fragment() {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-
-        /*return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
-        }*/
 
         return File(storageDir,
             "JPEG_${timeStamp}_.jpg"
