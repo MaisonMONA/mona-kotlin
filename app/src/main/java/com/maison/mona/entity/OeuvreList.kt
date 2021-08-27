@@ -1,4 +1,4 @@
-package com.maison.mona.data
+package com.maison.mona.entity
 
 // All data properties of an artwork
 // Bult in Moshi Adapter translates them directly into its instance

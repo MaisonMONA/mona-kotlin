@@ -5,11 +5,14 @@ buildscript {
     ext.kotlin_version = '1.4.31'
     ext.navigation_version = '2.1.0'
     ext.android_plugin_version = '4.2.2'
+    ext.jacocoVersion = '0.8.4'
     dependencies {
         classpath "com.android.tools.build:gradle:$android_plugin_version"
         classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
+        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
     }
     repositories {
         google()

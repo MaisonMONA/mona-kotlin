@@ -171,7 +171,8 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return "Cette oeuvre a été collectionnée le " + oeuvre?.date_photo
     }
 
-//    fun getComment(): String{
-//        return "Commentaire: "+ oeuvre?.comment
-//    }
+    fun isOeuvreSent(): Boolean? {
+        return if (oeuvre != null) oeuvre?.isSent else false
+    }
+
 }

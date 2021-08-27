@@ -48,11 +48,7 @@ class LoginActivity : AppCompatActivity() {
                     val reader = JSONObject(response)
 
                     if (reader.has("token")) {
-                        //Save the token and the username in the SharedPreference
-                        val token = reader.getString("token")
-                        val username = mUsername?.text.toString()
-                        SaveSharedPreference.setToken(this, token)
-                        SaveSharedPreference.setUsername(this, username)
+                        saveSharedPreferences(mUsername, reader)
 
                         val intent = Intent(applicationContext, MainActivity::class.java)
                         intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yes!")
@@ -74,5 +70,11 @@ class LoginActivity : AppCompatActivity() {
             val myIntent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(myIntent)
         }
+    }
+    private fun saveSharedPreferences(mUsername: TextView?, reader: JSONObject){
+        val token = reader.getString("token")
+        val username = mUsername?.text.toString()
+        SaveSharedPreference.setToken(this, token)
+        SaveSharedPreference.setUsername(this, username)
     }
 }

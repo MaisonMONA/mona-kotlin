@@ -19,7 +19,7 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
 
     private lateinit var mContext: Context
     private var mBadge = badge
-
+    private val RIVIERE_DES_PRAIRIES= "Rivière-des-Prairies"
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
 
     override fun onAttach(context: Context) {
@@ -53,8 +53,8 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
             if(args.contains("borough")) {
                 count = collected.filter { args.contains(it.borough.toString()) }.size
 
-                if(args.contains("Rivière-des-Prairies")){
-                    count = collected.filter { it.borough?.contains("Rivière-des-Prairies")!! }.size
+                if(args.contains(RIVIERE_DES_PRAIRIES)){
+                    count = collected.filter { it.borough?.contains(RIVIERE_DES_PRAIRIES)!! }.size
                 }
             } else if(args.contains("category")){
                 val a = collected.filter { args.contains(it.category?.en.toString())}.size
@@ -103,7 +103,7 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
                     borough.contains("Mercier") -> {
                         setDrawable(view, R.drawable.badge_icon_hochelaga_color, R.drawable.badge_icon_hochelaga_grey)
                     }
-                    borough.contains("Rivière-des-Prairies") -> {
+                    borough.contains("RIVIERE_DES_PRAIRIES") -> {
                         setDrawable(view, R.drawable.badge_icon_riviere_des_prairies_color, R.drawable.badge_icon_riviere_des_prairies_grey)
                     }
                     borough.contains("Verdun") -> {

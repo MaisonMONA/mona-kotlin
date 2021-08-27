@@ -2,7 +2,7 @@ package com.maison.mona.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import org.osmdroid.util.GeoPoint
 
 //Based off: https://stackoverflow.com/questions/12744337/how-to-keep-android-applications-always-be-logged-in-state
@@ -26,9 +26,7 @@ object SaveSharedPreference {
     }
 
     fun getUsername(ctx: Context?): String {
-        return getSharedPreferences(
-            ctx
-        )
+        return getSharedPreferences(ctx)
             .getString(PREF_USER_NAME, "")!!
     }
 
@@ -80,14 +78,6 @@ object SaveSharedPreference {
         return value.toBoolean()
     }
 
-    //Toggle off after the first time for the first time tutorial
-//    fun toggleFirstTime(ctx: Context?){
-//        val editor: SharedPreferences.Editor = getSharedPreferences(
-//            ctx
-//        ).edit()
-//        editor.putString(FIRSTTIME,"false")
-//        editor.apply()
-//    }
 
     //Set first time manually, mostly for tests can remove in the final version
     fun setFirstTime(ctx: Context?, status:Boolean){

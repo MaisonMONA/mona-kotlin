@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import com.maison.mona.R
 import com.maison.mona.adapters.*
 import com.maison.mona.data.BadgeDatabase
-import com.maison.mona.data.BadgeRepository
 import com.maison.mona.databinding.FragmentViewPagerBinding
 import com.maison.mona.viewmodels.BadgeViewModel
 
@@ -79,7 +78,6 @@ class HomeViewPagerFragment : Fragment() {
             requireContext(),
             lifecycleScope
         ).badgesDAO()
-        val repository: BadgeRepository = BadgeRepository.getInstance(badgeDAO)
 
         badgeViewModel.badgesList.observe(viewLifecycleOwner, { badgesList ->
             for(badge in badgesList){

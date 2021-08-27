@@ -137,15 +137,6 @@ class OeuvreRatingFragment : Fragment() {
 
                     fragmentManager?.executePendingTransactions()
 
-//                    for (badge in newBadge) {
-//                        Log.d("BADGES", badge.description_fr.toString())
-//
-//                        var popup = PopUpManagerFragment()
-//                        popup.onAttach(requireContext())
-//                        popup.onButtonShowPopupWindowClick(view, findNavController(), badge, badge == newBadge.last())
-//
-//                        fragmentManager?.executePendingTransactions()
-//                    }
                 }
             }, 500L)
         }

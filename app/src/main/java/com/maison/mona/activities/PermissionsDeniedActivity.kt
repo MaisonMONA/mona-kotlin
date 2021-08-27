@@ -66,8 +66,6 @@ class PermissionsDeniedActivity : AppCompatActivity() {
                 // Permissions are all granted
                 // Go to MainActivity
                 val intent = Intent(this, MainActivity::class.java).apply {
-                    // Optionally add message
-                    // putExtra(EXTRA_MESSAGE, message)
                 }
                 startActivity(intent)
             }
@@ -83,8 +81,7 @@ class PermissionsDeniedActivity : AppCompatActivity() {
                     // All permissions were granted
                     // Send to MainActivity
                     val intent = Intent(this, MainActivity::class.java).apply {
-                        // Optionally add message
-                        // putExtra(EXTRA_MESSAGE, message)
+
                     }
                     startActivity(intent)
                 }

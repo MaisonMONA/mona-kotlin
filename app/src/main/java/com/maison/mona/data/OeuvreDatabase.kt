@@ -184,6 +184,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
         }
     }
 }
+//Migration Manuel
 val MIGRATION_0_1 = object : Migration(0,1){
     override fun migrate(database: SupportSQLiteDatabase){
         database.execSQL("ALTER TABLE artwork_table ADD COLUMN idServer INT")

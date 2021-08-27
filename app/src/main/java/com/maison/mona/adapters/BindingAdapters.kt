@@ -23,30 +23,9 @@ fun bindIsVisible(view: View, isGone: Boolean) {
     }
 }
 
-//@BindingAdapter("isTarget")
-//fun bindIsTarget(view: View, isTarget: Boolean) {
-//    view.visibility = if (isTarget) {
-//        View.VISIBLE
-//    } else {
-//        View.GONE
-//    }
-//}
-
 @BindingAdapter("imagePath")
 fun loadImage(view: ImageView, photo_path: String?) {
     Glide.with(view.context)
         .load(photo_path)
         .into(view)
 }
-
-/* @BindingAdapter("setTint")
-fun setIconTint(fab: FloatingActionButton, isTarget: Boolean, context: Context){
-
-    var color = R.color.white
-
-    if (isTarget){
-        color = R.color.black
-    }
-
-    fab.drawable.mutate().setTint(ContextCompat.getColor(context, color))
-}*/

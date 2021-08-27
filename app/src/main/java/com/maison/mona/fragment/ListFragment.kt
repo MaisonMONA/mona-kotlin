@@ -13,17 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.maison.mona.R
 import com.maison.mona.adapters.ListAdapter
+import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentListBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.maison.mona.data.SaveSharedPreference
 import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
-import kotlin.collections.ArrayList
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.sqrt
@@ -321,38 +320,15 @@ class ListFragment : Fragment() {
         categoryMap["*"] = mutableListOf()
 
         for(item in list){
-            if(item.artists.isNullOrEmpty()){
-                categoryMap["*"]!!.add(item)
-            }else {
-                for(artist in item.artists!!){
-                    //Because we might have a name == ""
-                    if(artist.name.isNotBlank()) {
-                        if (!categoryMap.contains(artist.name)) {
-                            categoryMap[artist.name] = mutableListOf()
-                        }
-
-                        categoryMap[artist.name]?.add(item)
-                    }
-                }
-            }
+            addListArtistMap(item, categoryMap)
         }
-       // val sortedCategoryMap = categoryMap.toSortedMap(compareBy<String>{unaccent(it).first().toUpperCase()});
+
         val sortedCategoryMap = categoryMap.toSortedMap()
         //Create the list of items
         val sortedList = mutableListOf<Any>()
 
-        for((k,v) in sortedCategoryMap){
-            if(k != "*"){
-                sortedList.add(k)
-
-                val vSort: List<Oeuvre> = if(filter == "A-Z"){
-                    v.sortedWith(compareBy(Oeuvre::title))
-                }else{
-                    v.sortedWith(compareBy(Oeuvre::distance))
-                }
-
-                sortedList.addAll(vSort)
-            }
+        for((key,value) in sortedCategoryMap){
+            createListArtistItem(key, value, sortedList)
         }
 
         if(sortedCategoryMap["*"]?.isNotEmpty()!!){
@@ -361,7 +337,34 @@ class ListFragment : Fragment() {
         }
         return sortedList
     }
+    private fun createListArtistItem(key: String, value: MutableList<Oeuvre>, sortedList:  MutableList<Any>){
+        if(key != "*"){
+            sortedList.add(key)
 
+            val vSort: List<Oeuvre> = if(filter == "A-Z"){
+                value.sortedWith(compareBy(Oeuvre::title))
+            }else{
+                value.sortedWith(compareBy(Oeuvre::distance))
+            }
+            sortedList.addAll(vSort)
+        }
+    }
+    private fun addListArtistMap(item: Oeuvre, categoryMap: MutableMap<String,MutableList<Oeuvre>>){
+        if(item.artists.isNullOrEmpty()){
+            categoryMap["*"]!!.add(item)
+        }else {
+            for(artist in item.artists!!){
+                //Because we might have a name == ""
+                if(artist.name.isNotBlank()) {
+                    if (!categoryMap.contains(artist.name)) {
+                        categoryMap[artist.name] = mutableListOf()
+                    }
+
+                    categoryMap[artist.name]?.add(item)
+                }
+            }
+        }
+    }
     //Adds the header at the right position in the list
     private fun addBoroughtHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
         //Find the list of all categories(names, borought ...)
@@ -401,40 +404,45 @@ class ListFragment : Fragment() {
 
     //Adds the header at the right position in the list
     fun addCategoriesHeaders(list: MutableList<Oeuvre>,filter: String): List<Any>{
-        //Find the list of all categories(names, borought ...)
         val categoryMap: MutableMap<String,MutableList<Oeuvre>> = mutableMapOf()
         categoryMap["*"] = mutableListOf()
         for(item in list){
-            if(item.category == null || item.category!!.fr.isEmpty()){
-                categoryMap["*"]!!.add(item)
-            }else {
-                if (!categoryMap.contains(item.category!!.fr)) {
-                    categoryMap[item.category!!.fr] = mutableListOf()
-                }
-                categoryMap[item.category!!.fr]?.add(item)
-            }
-
+            addListCategoryMap(item, categoryMap)
         }
         val sortedCategoryMap = categoryMap.toSortedMap()
         //Create the list of items
         val sortedList = mutableListOf<Any>()
-        for((k,v) in sortedCategoryMap){
-            if(k != "*"){
-                sortedList.add(k)
-
-                val vSort: List<Oeuvre> = if(filter == "A-Z"){
-                    v.sortedWith(compareBy(Oeuvre::title))
-                }else{
-                    v.sortedWith(compareBy(Oeuvre::distance))
-                }
-                sortedList.addAll(vSort)
-            }
+        for((key,value) in sortedCategoryMap){
+            createListItem(key, value, sortedList)
         }
         if(sortedCategoryMap["*"]?.isNotEmpty()!!){
             sortedList.add("* Pas de catégorie *")
             sortedCategoryMap["*"]?.let { sortedList.addAll(it) }
         }
         return sortedList
+    }
+
+    private fun createListItem(key: String, value: MutableList<Oeuvre>, sortedList:  MutableList<Any>){
+        if(key != "*"){
+            sortedList.add(key)
+
+            val vSort: List<Oeuvre> = if(filter == "A-Z"){
+                value.sortedWith(compareBy(Oeuvre::title))
+            }else{
+                value.sortedWith(compareBy(Oeuvre::distance))
+            }
+            sortedList.addAll(vSort)
+        }
+    }
+    private fun addListCategoryMap(item: Oeuvre, categoryMap: MutableMap<String,MutableList<Oeuvre>>){
+        if(item.category == null || item.category!!.fr.isEmpty()){
+            categoryMap["*"]!!.add(item)
+        }else {
+            if (!categoryMap.contains(item.category!!.fr)) {
+                categoryMap[item.category!!.fr] = mutableListOf()
+            }
+            categoryMap[item.category!!.fr]?.add(item)
+        }
     }
 
     private fun unaccent(src: String): String {

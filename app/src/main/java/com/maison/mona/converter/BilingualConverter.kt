@@ -1,9 +1,9 @@
 package com.maison.mona.converter
 
 import androidx.room.TypeConverter
-import com.maison.mona.entity.Bilingual
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.maison.mona.entity.Bilingual
 
 class BilingualConverter {
 
@@ -14,7 +14,7 @@ class BilingualConverter {
     }
 
     @TypeConverter
-    fun toJson(bilingual: Bilingual?): String? {
+    fun toJson(bilingual: Bilingual? = Bilingual("","")): String? {
         val type = object: TypeToken<Bilingual?>() {}.type
         return Gson().toJson(bilingual, type)
     }

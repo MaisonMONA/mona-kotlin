@@ -117,4 +117,11 @@
 
     <!-- Badge Detail -->
     <string name="badge_detail_count">%1$d / %2$d </string>
+    <string name="oeuvre_du_jour">L\'œuvre du jour</string>
+    <string name="odj_logo">odj_logo</string>
+    <string name="redirection_carte">redirection_carte</string>
+    <string name="ajoute_cible_a_la_carte">Ajoute cible a la carte</string>
+    <string name="prendre_la_photo">Prendre la photo</string>
+    <string name="loeuvre_du_jour">L\'œuvre du jour</string>
+    <string name="minimap_logo">minimap logo</string>
 </resources>

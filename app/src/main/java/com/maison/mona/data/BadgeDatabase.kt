@@ -123,7 +123,6 @@ abstract class BadgeDatabase : RoomDatabase() {
                     .build()
 
                 INSTANCE = instance
-                // return instance
                 instance
             }
         }

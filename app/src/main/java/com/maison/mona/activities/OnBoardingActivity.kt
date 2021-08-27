@@ -13,9 +13,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.google.android.material.tabs.TabLayout
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
-import com.google.android.material.tabs.TabLayout
 
 private const val NUM_PAGES = 7
 
@@ -71,15 +71,6 @@ class OnBoardingActivity : AppCompatActivity() {
                 // Code goes here
             }
         })
-        /*
-        skip?.setOnClickListener { finishOnBoarding() }
-        next?.setOnClickListener {
-            if(pager!!.currentItem < NUM_PAGES)
-                pager!!.currentItem = pager!!.currentItem + 1}
-        previous?.setOnClickListener {
-            if(pager!!.currentItem > 0)
-                pager!!.currentItem = pager!!.currentItem - 1}
-         */
         indicator?.setupWithViewPager(pager)
     }
 

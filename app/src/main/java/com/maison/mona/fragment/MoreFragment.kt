@@ -15,16 +15,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
 import com.maison.mona.activities.LoginActivity
-import com.maison.mona.activities.MyGlobals
-import com.maison.mona.data.*
+import com.maison.mona.data.OeuvreDatabase
+import com.maison.mona.data.OeuvreRepository
+import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentMoreBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.task.SaveOeuvre
 import com.maison.mona.viewmodels.BadgeViewModel
 import com.maison.mona.viewmodels.OeuvreViewModel
-import org.json.JSONObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class MoreFragment : Fragment(){
 
@@ -49,17 +50,7 @@ class MoreFragment : Fragment(){
 
 
         mSwitch.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
-            if (mSwitch.isChecked) {
-                MyGlobals(requireContext()).setOnlineMode()
-
-                if (SaveSharedPreference.isOnline(requireContext()))
-                    updateInfoOnline()
-            } else {
-                MyGlobals(requireContext()).setOnlineMode()
-
-                if (SaveSharedPreference.isOnline(requireContext()))
-                    updateInfoOnline()
-            }
+            updateInfoOnline()
         }
 
         binding.apply {
