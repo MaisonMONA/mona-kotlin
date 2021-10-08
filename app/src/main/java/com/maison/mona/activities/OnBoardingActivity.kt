@@ -17,7 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
 
-private const val NUM_PAGES = 7
+private const val NUM_PAGES = 11
 
 class OnBoardingActivity : AppCompatActivity() {
     private var pager: ViewPager? = null
@@ -49,7 +49,7 @@ class OnBoardingActivity : AppCompatActivity() {
         pager?.addOnPageChangeListener(object : OnPageChangeListener {
             // This method will be invoked when a new page becomes selected.
             override fun onPageSelected(position: Int) {
-                if(position == 6){
+                if(position == 10){
                     end?.visibility = View.VISIBLE
                 }else{
                     end?.visibility = View.INVISIBLE
