@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -42,12 +41,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //Check if user has current session via SharedPreferences
-        if (SaveSharedPreference.getToken(this).isEmpty()){
-            Log.d("Mode","Login")
-            val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(myIntent)
-        } else if(SaveSharedPreference.firstTime(applicationContext)) {
-            val intent = Intent(applicationContext, OnBoardingActivity::class.java)
+        if(SaveSharedPreference.firstTime(applicationContext)) {
+            val intent = Intent(applicationContext, SplashActivity::class.java)
             startActivity(intent)
         }else {
             /*
@@ -68,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     // Send to PermissionsDeniedActivity
-                    val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
+                    val intent = Intent(this, SplashActivity::class.java).apply {
                     }
                     startActivity(intent)
                 } else {
@@ -128,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     // Permissions denied
                     // Send to PermissionsDeniedActivity
-                    val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
+                    val intent = Intent(this, SplashActivity::class.java).apply {
                     }
                     startActivity(intent)
                 }
