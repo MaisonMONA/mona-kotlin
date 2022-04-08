@@ -12,7 +12,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.*
 import com.maison.mona.entity.Oeuvre
-import com.maison.mona.task.ArtworksTask
 import com.maison.mona.task.PlacesTask
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -56,6 +55,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                             val oeuvreList = getOeuvreList()
                             oeuvreDao.insertAll(oeuvreList)
                         }catch (e: IOException){
+                            e.printStackTrace()
                             Log.d("Save","erreur database")
                         }
                     }else{
@@ -78,12 +78,15 @@ abstract class OeuvreDatabase : RoomDatabase() {
             //API call to server to get all artworks and places
             //We combine the 2 in one lists
 
-            val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
+            //val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
+
+           // Log.d("Database", "Nb Artworks: $nbArtworks")
+
+            //Temporary fix to be able to import the json without problem
+            val artworksJson = getJsonDataFromAsset(mContext!!, "artworks.json")
 
             val oeuvreArray = JSONArray(artworksJson)
             val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
-
-            Log.d("Database", "Nb Artworks: $nbArtworks")
 
             val placeJson = PlacesTask(lastUpdate).execute().get()
 
@@ -92,9 +95,9 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             Log.d("Database", "Nb Lieu: ${placeArray.length()}")
 
-            for(i in 0 until nbArtworks){
+           for(i in 0 until nbArtworks){
                 articleArray.put(oeuvreArray.get(i))
-            }
+           }
 
             for(i in 0 until placeArray.length()){
                 articleArray.put(placeArray.get(i))
@@ -190,4 +193,16 @@ val MIGRATION_0_1 = object : Migration(0,1){
         database.execSQL("ALTER TABLE artwork_table ADD COLUMN idServer INT")
         database.execSQL("ALTER TABLE artwork_table ADD COLUMN type TEXT")
     }
+}
+
+fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+    val jsonString: String?
+    try {
+        jsonString = context.assets?.open(fileName)
+            ?.bufferedReader().use { it?.readText() }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        return null
+    }
+    return jsonString
 }
