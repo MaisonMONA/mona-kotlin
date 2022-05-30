@@ -30,3 +30,21 @@ Télécharger le plug-in de Sonarlint et Spotbug dans les plug-ins d’androïde
 S’il y a une version créée un APK et le mettre dans le dossier APK, cela permettra de débugger certains comportements plus facilement.
 Il est fortement recommandé de télécharger un émulateur et aussi tester sur son appareil physique.
 prendre connaissance du schéma de la structure du code.
+
+Procédure de déploiement google play
+
+Vérifier si le code se déploie dans un emulateur ou un appareil physique
+Si c'est pour déployer en production, faire une pull request sur le master
+S'il y a un développeur actif, le développeur doit approuver la pull request
+Ensuite, vérifier le numéro de version dans le build.gradle:app la valeur, version code. On peut aussi changer le versionName pour augmenter la version sur google play.
+Après cliquer en haut sur build
+cliquer sur Generate signed bundle APK
+Choisir Android App bundle et cliquer sur next
+Remplir les champs, Module: mona.app, le password et alias username: key_MONA motdepasse: mtl2019UdeM
+Build variants: release
+Attendre que le APK se génère
+Trouver le APK dans le dossier, normalement Android studio sort un pop up lorsque c'est généré et propose d'ouvrir le dossier contenant le apk.
+aller sur google console
+Pour les tests internes aller dans son onglet et créér une version, suivre les étapes à l'écran
+Pour la production aller dans son onglet et créer une version, toujours bon d'ajouter une description et de mettre à jour le versionName pour la production.
+la plupart
