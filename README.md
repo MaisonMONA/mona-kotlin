@@ -33,18 +33,18 @@ prendre connaissance du schéma de la structure du code.
 
 Procédure de déploiement google play
 
-Vérifier si le code se déploie dans un emulateur ou un appareil physique
-Si c'est pour déployer en production, faire une pull request sur le master
-S'il y a un développeur actif, le développeur doit approuver la pull request
-Ensuite, vérifier le numéro de version dans le build.gradle:app la valeur, version code. On peut aussi changer le versionName pour augmenter la version sur google play.
-Après cliquer en haut sur build
-cliquer sur Generate signed bundle APK
-Choisir Android App bundle et cliquer sur next
-Remplir les champs, Module: mona.app, le password et alias username: key_MONA motdepasse: mtl2019UdeM
-Build variants: release
-Attendre que le APK se génère
-Trouver le APK dans le dossier, normalement Android studio sort un pop up lorsque c'est généré et propose d'ouvrir le dossier contenant le apk.
-aller sur google console
-Pour les tests internes aller dans son onglet et créér une version, suivre les étapes à l'écran
-Pour la production aller dans son onglet et créer une version, toujours bon d'ajouter une description et de mettre à jour le versionName pour la production.
-la plupart
+0) Vérifier si le code se déploie dans un emulateur ou un appareil physique.
+1) Si c'est pour déployer en production, faire une pull request sur le master.
+2) S'il y a un développeur actif, le développeur doit approuver la pull request.
+3) Ensuite, vérifier le numéro de version dans le build.gradle:app la valeur, version code. On peut aussi changer le versionName pour augmenter la version sur google play.
+4) Après cliquer en haut sur build.
+5) Cliquer sur Generate signed bundle APK.
+6) Choisir Android App bundle et cliquer sur next.
+7) Remplir les champs, Module: mona.app, le password et alias username: key_MONA motdepasse: mtl2019UdeM.
+8) Build variants: release.
+9) Attendre que le APK se génère
+10) Trouver le APK dans le dossier, normalement Android studio sort un pop up lorsque c'est généré et propose d'ouvrir le dossier contenant le apk.
+aller sur google console.
+11) Pour les tests internes aller dans son onglet et créér une version, suivre les étapes à l'écran.
+12) Pour la production aller dans son onglet et créer une version, toujours bon d'ajouter une description et de mettre à jour le versionName pour la production.
+
