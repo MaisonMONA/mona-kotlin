@@ -52,8 +52,8 @@ abstract class OeuvreDatabase : RoomDatabase() {
                         try{
                             Log.d("Save","oeuvre accede database")
 
-                            val oeuvreList = getOeuvreList()
-                            oeuvreDao.insertAll(oeuvreList)
+//                            val oeuvreList = getOeuvreList()
+                           // oeuvreDao.insertAll(oeuvreList)
                         }catch (e: IOException){
                             e.printStackTrace()
                             Log.d("Save","erreur database")

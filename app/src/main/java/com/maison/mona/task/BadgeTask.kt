@@ -17,6 +17,7 @@ class BadgeTask(time: String) : AsyncTask<Void, Void, String>(){
     override fun doInBackground(vararg params: Void?): String? {
         val client = OkHttpClient()
         val request = Request.Builder()
+
             .url("https://picasso.iro.umontreal.ca/~mona/api/badges")
             .build()
 

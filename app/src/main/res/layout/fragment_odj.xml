@@ -32,8 +32,8 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="106dp"
+                android:layout_height="103dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:contentDescription="@string/minimap_logo"
@@ -44,13 +44,13 @@
             <TextView
                 android:id="@+id/odj_name"
                 style="@style/TextAppearance.Mona.Odj.Fragment"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
+                android:layout_width="269dp"
+                android:layout_height="86dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_small"
                 android:gravity="start"
-                android:text="@string/loeuvre_du_jour"
+                android:text="@string/decouverte_du_jour"
                 android:textSize="35sp" />
 
         </LinearLayout>

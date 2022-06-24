@@ -54,6 +54,7 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
 
         var url = ""
         when(params[4]){
+
             "artwork"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/artworks"
             "place"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/places"
         }
