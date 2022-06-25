@@ -20,6 +20,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 import java.sql.Timestamp
 
@@ -52,8 +53,10 @@ abstract class OeuvreDatabase : RoomDatabase() {
                         try{
                             Log.d("Save","oeuvre accede database")
 
-//                            val oeuvreList = getOeuvreList()
-                           // oeuvreDao.insertAll(oeuvreList)
+
+
+                            val oeuvreList = getOeuvreList()
+                            oeuvreDao.insertAll(oeuvreList)
                         }catch (e: IOException){
                             e.printStackTrace()
                             Log.d("Save","erreur database")
@@ -89,21 +92,30 @@ abstract class OeuvreDatabase : RoomDatabase() {
             val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
 
             val placeJson = PlacesTask(lastUpdate).execute().get()
+//            val placeArray = JSONArray(placeJson)
+            val temp = JSONObject(placeJson)
+            val tempArray = temp.toJSONArray(temp.names())
 
-            val placeArray = JSONArray(placeJson)
+
+            //val heritageJson = HeritagesTask(lastUpdate).execute().get()
+            //val heritagesArray = JSONArray(heritageJson)
+
             val articleArray = JSONArray()
 
-            Log.d("Database", "Nb Lieu: ${placeArray.length()}")
+            //Log.d("Database", "Nb Lieu: ${placeArray.length()}")
+
 
            for(i in 0 until nbArtworks){
                 articleArray.put(oeuvreArray.get(i))
+
            }
 
-            for(i in 0 until placeArray.length()){
-                articleArray.put(placeArray.get(i))
-            }
+            for(i in 0 until tempArray.length()){
+                articleArray.put(tempArray.get(i))
+          }
 
             Log.d("Database", "Total: ${articleArray.length()}")
+            //Log.d("patrimoine", "patrimoine: ${heritagesArray.length()}")
             //Moshi is a library with built in type adapters to ease data parsing such as our case.
             //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
             val moshi = Moshi.Builder()
@@ -121,6 +133,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                 var index = 1
 
                 for(oeuvre: Oeuvre in changedList) {
+
                     if(index++ <= nbArtworks){
                         oeuvre.type = "artwork"
                         oeuvre.idServer = idOeuvre++
