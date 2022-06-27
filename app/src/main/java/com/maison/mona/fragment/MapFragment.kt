@@ -177,10 +177,14 @@ class MapFragment : Fragment() {
 
         addOeuvre(null, "place")
         addOeuvre(null, "artwork")
+        //(null, "patrimoine")
+        addOeuvre(3, "patrimoine")
         addOeuvre(3, "place")
         addOeuvre(3, "artwork")
+        //(2, "patrimoine")
         addOeuvre(2, "place")
         addOeuvre(2, "artwork")
+       // addOeuvre(1, "patrimoine")
         addOeuvre(1, "place")
         addOeuvre(1, "artwork")
     }
@@ -249,6 +253,29 @@ class MapFragment : Fragment() {
                 addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                 true
             }
+
+/*
+            R.id.patrimoine_noncollected -> {
+
+                map.overlays.clear()
+                addOeuvre(null, "patrimoine")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                true
+            }
+            R.id.patrimoine_targetted -> {
+                map.overlays.clear()
+                addOeuvre(1, "patrimoine")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                true
+            }
+            R.id.patrimoine_collected -> {
+                map.overlays.clear()
+                addOeuvre(2, "patrimoine")
+                addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
+                true
+            }
+
+ */
             R.id.map_geo -> {
                 if(pinSet){
                     map.overlays.remove(pinLoc)
@@ -281,7 +308,17 @@ class MapFragment : Fragment() {
                 else -> R.drawable.pin_lieu_normal
             }
         }
+        /*else if(type == "patrimoine"){
+            return when(state){
+                null -> R.drawable.pin_patrimoine_normal
+                1 -> R.drawable.pin_patrimoine_target
+                2, 3 -> R.drawable.pin_patrimoine_collected
+                else -> R.drawable.pin_patrimoine_normal
+            }
+        }
 
+
+         */
         return  R.drawable.pin_lieu_normal
     }
 

@@ -91,10 +91,12 @@ abstract class OeuvreDatabase : RoomDatabase() {
             val oeuvreArray = JSONArray(artworksJson)
             val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
 
-            val placeJson = PlacesTask(lastUpdate).execute().get()
-//            val placeArray = JSONArray(placeJson)
-            val temp = JSONObject(placeJson)
-            val tempArray = temp.toJSONArray(temp.names())
+            //val placeJson = PlacesTask(lastUpdate).execute().get()
+           // val placeArray = JSONArray(placeJson)
+            val placeJson = getJsonDataFromAsset(mContext!!, "places.json")
+            val placeArray = JSONArray(placeJson)
+           // val temp = JSONObject(placeJson)
+            //val tempArray = temp.toJSONArray(temp.names())
 
 
             //val heritageJson = HeritagesTask(lastUpdate).execute().get()
@@ -102,7 +104,9 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             val articleArray = JSONArray()
 
-            //Log.d("Database", "Nb Lieu: ${placeArray.length()}")
+            Log.d("Database", "Nb Arts: ${nbArtworks}")
+
+            Log.d("Database", "Nb Lieu: ${placeArray.length()}")
 
 
            for(i in 0 until nbArtworks){
@@ -110,10 +114,15 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
            }
 
+            for(i in 0 until placeArray.length()){
+                articleArray.put(placeArray.get(i))
+
+            }
+/*
             for(i in 0 until tempArray.length()){
                 articleArray.put(tempArray.get(i))
           }
-
+*/
             Log.d("Database", "Total: ${articleArray.length()}")
             //Log.d("patrimoine", "patrimoine: ${heritagesArray.length()}")
             //Moshi is a library with built in type adapters to ease data parsing such as our case.
