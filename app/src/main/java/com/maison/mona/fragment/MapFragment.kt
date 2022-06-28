@@ -177,14 +177,14 @@ class MapFragment : Fragment() {
 
         addOeuvre(null, "place")
         addOeuvre(null, "artwork")
-        //(null, "patrimoine")
+        addOeuvre(null, "patrimoine")
         addOeuvre(3, "patrimoine")
         addOeuvre(3, "place")
         addOeuvre(3, "artwork")
-        //(2, "patrimoine")
+        addOeuvre(2, "patrimoine")
         addOeuvre(2, "place")
         addOeuvre(2, "artwork")
-       // addOeuvre(1, "patrimoine")
+        addOeuvre(1, "patrimoine")
         addOeuvre(1, "place")
         addOeuvre(1, "artwork")
     }
@@ -254,7 +254,7 @@ class MapFragment : Fragment() {
                 true
             }
 
-/*
+
             R.id.patrimoine_noncollected -> {
 
                 map.overlays.clear()
@@ -275,7 +275,7 @@ class MapFragment : Fragment() {
                 true
             }
 
- */
+
             R.id.map_geo -> {
                 if(pinSet){
                     map.overlays.remove(pinLoc)
@@ -308,7 +308,7 @@ class MapFragment : Fragment() {
                 else -> R.drawable.pin_lieu_normal
             }
         }
-        /*else if(type == "patrimoine"){
+        else if(type == "patrimoine"){
             return when(state){
                 null -> R.drawable.pin_patrimoine_normal
                 1 -> R.drawable.pin_patrimoine_target
@@ -318,7 +318,7 @@ class MapFragment : Fragment() {
         }
 
 
-         */
+
         return  R.drawable.pin_lieu_normal
     }
 

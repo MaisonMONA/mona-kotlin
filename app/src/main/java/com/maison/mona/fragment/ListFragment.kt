@@ -43,12 +43,14 @@ class ListFragment : Fragment() {
 
     private var iconsStates = arrayListOf(
         arrayListOf(true, true, true),//Oeuvre
-        arrayListOf(true, true, true) //Lieu
+        arrayListOf(true, true, true), //Lieu
+        arrayListOf(true, true, true) //patrimoine
     )
 
     private var iconsStatesBack = arrayListOf(
         arrayListOf(true, true, true),//Oeuvre
-        arrayListOf(true, true, true) //Lieu
+        arrayListOf(true, true, true), //Lieu
+        arrayListOf(true, true, true)//patrimoine
     )
 
     private var categoryIndex: Int = 0
@@ -499,7 +501,10 @@ class ListFragment : Fragment() {
                                     listDrawer.findViewById(R.id.oeuvre_collected)),
                 listOf<ImageView>(  listDrawer.findViewById(R.id.lieu_normal),
                                     listDrawer.findViewById(R.id.lieu_targetted),
-                                    listDrawer.findViewById(R.id.lieu_collected))
+                                    listDrawer.findViewById(R.id.lieu_collected)),
+                listOf<ImageView>(  listDrawer.findViewById(R.id.patrimoine_normal),
+                                    listDrawer.findViewById(R.id.patrimoine_targetted),
+                                    listDrawer.findViewById(R.id.patrimoine_collected))
             )
             icons.forEachIndexed{i,row ->
                 row.forEachIndexed{ j, _ ->

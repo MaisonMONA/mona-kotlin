@@ -73,6 +73,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
             var id = 1
             var idOeuvre = 1
             var idPlace  = 1
+            var idPatrimoine = 1
             //localhost:8000/api/lastUpdatedPlaces?date=2015-12-19 17:36:22.444
 
             val lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
@@ -92,21 +93,22 @@ abstract class OeuvreDatabase : RoomDatabase() {
             val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
 
             //val placeJson = PlacesTask(lastUpdate).execute().get()
-           // val placeArray = JSONArray(placeJson)
+            //val placeArray = JSONArray(placeJson)
             val placeJson = getJsonDataFromAsset(mContext!!, "places.json")
             val placeArray = JSONArray(placeJson)
+            val nbPlaces = placeArray.length()
            // val temp = JSONObject(placeJson)
             //val tempArray = temp.toJSONArray(temp.names())
 
 
-            //val heritageJson = HeritagesTask(lastUpdate).execute().get()
-            //val heritagesArray = JSONArray(heritageJson)
+            val heritageJson = getJsonDataFromAsset(mContext!!, "patrimoine.json")
+            val heritagesArray = JSONArray(heritageJson)
 
             val articleArray = JSONArray()
 
             Log.d("Database", "Nb Arts: ${nbArtworks}")
 
-            Log.d("Database", "Nb Lieu: ${placeArray.length()}")
+            Log.d("Database", "Nb Lieu: ${nbPlaces}")
 
 
            for(i in 0 until nbArtworks){
@@ -114,17 +116,17 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
            }
 
-            for(i in 0 until placeArray.length()){
+            for(i in 0 until nbPlaces){
                 articleArray.put(placeArray.get(i))
 
             }
-/*
-            for(i in 0 until tempArray.length()){
-                articleArray.put(tempArray.get(i))
+
+            for(i in 0 until heritagesArray.length()){
+                articleArray.put(heritagesArray.get(i))
           }
-*/
+
             Log.d("Database", "Total: ${articleArray.length()}")
-            //Log.d("patrimoine", "patrimoine: ${heritagesArray.length()}")
+            Log.d("patrimoine", "patrimoine: ${heritagesArray.length()}")
             //Moshi is a library with built in type adapters to ease data parsing such as our case.
             //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
             val moshi = Moshi.Builder()
@@ -139,17 +141,19 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             val changedList = oeuvreList?.toMutableList()
             if (changedList != null) {
-                var index = 1
+                var indexArt = 1
+                var indexPlace = 1
 
                 for(oeuvre: Oeuvre in changedList) {
 
-                    if(index++ <= nbArtworks){
+                    if(indexArt++ <= nbArtworks){
                         oeuvre.type = "artwork"
                         oeuvre.idServer = idOeuvre++
-                    }else{
+                    }else if(indexPlace++ <= nbPlaces){
                         oeuvre.type = "place"
                         oeuvre.idServer = idPlace++
-                    }
+                    }else
+                        oeuvre.type = "patrimoine"
 
                     oeuvre.id = id++
                 }
