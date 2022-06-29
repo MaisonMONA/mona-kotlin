@@ -85,22 +85,30 @@ class OeuvreItemMapFragment : Fragment() {
     }
 
     //TO DO
-    fun getDrawable(state: Int?, type: String?): Int{
-        if(type == "artwork"){
-            return when(state){
+    fun getDrawable(state: Int?, type: String?): Int {
+        if (type == "artwork") {
+            return when (state) {
                 null -> R.drawable.pin_oeuvre_normal
                 1 -> R.drawable.pin_oeuvre_target
                 2, 3 -> R.drawable.pin_oeuvre_collected
                 else -> R.drawable.pin_oeuvre_normal
             }
-        }else if(type == "place"){
-            return when(state){
+        } else if (type == "place") {
+            return when (state) {
                 null -> R.drawable.pin_lieu_normal
                 1 -> R.drawable.pin_lieu_target
                 2, 3 -> R.drawable.pin_lieu_collected
                 else -> R.drawable.pin_lieu_normal
             }
+        } else if (type == "patrimoine") {
+            return when (state) {
+                null -> R.drawable.pin_patrimoine_normal
+                1 -> R.drawable.pin_patrimoine_target
+                2, 3 -> R.drawable.pin_patrimoine_collected
+                else -> R.drawable.pin_patrimoine_normal
+            }
         }
-        return  R.drawable.pin_lieu_normal
-    }
+
+            return R.drawable.pin_patrimoine_normal
+        }
 }
