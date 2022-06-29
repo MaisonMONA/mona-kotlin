@@ -160,7 +160,13 @@ class ListFragment : Fragment() {
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
             })
-        } else{//Empty
+        } else if((iconsStates[2][0] or iconsStates[2][2] or iconsStates[2][1])) {//Only patrimoine
+            oeuvreViewModel.patrimoineList.observe(viewLifecycleOwner, { patrimoinelist ->
+                filteredList = filterStateList(patrimoinelist)
+                sortedList = filterList(filteredList, category, filter)
+                adapter.submitList(sortedList, category, userLocation)
+            })
+        }else{//Empty
             filteredList = listOf()
             adapter.submitList(sortedList,category,userLocation)
         }
@@ -206,13 +212,22 @@ class ListFragment : Fragment() {
             filteredList = filteredList.filter { (it.type != "artwork") || (it.state != 2)}
 
         if(!(iconsStates[1][0]))
-            filteredList = filteredList.filter { (it.type != "place") || (it.state != null)}
+            filteredList = filteredList.filter { (it.type != "lieu") || (it.state != null)}
 
         if(!(iconsStates[1][1]))
-            filteredList = filteredList.filter { (it.type != "place") || (it.state != 1)}
+            filteredList = filteredList.filter { (it.type != "lieu") || (it.state != 1)}
 
         if(!(iconsStates[1][2]))
-            filteredList = filteredList.filter { (it.type != "place") || (it.state != 2)}
+            filteredList = filteredList.filter { (it.type != "lieu") || (it.state != 2)}
+
+        if(!(iconsStates[2][0]))
+            filteredList = filteredList.filter { (it.type != "patrimoine") || (it.state != null)}
+
+        if(!(iconsStates[2][2]))
+            filteredList = filteredList.filter { (it.type != "patrimoine") || (it.state != 2)}
+
+        if(!(iconsStates[2][1]))
+            filteredList = filteredList.filter { (it.type != "patrimoine") || (it.state != 1)}
 
         return filteredList
     }
