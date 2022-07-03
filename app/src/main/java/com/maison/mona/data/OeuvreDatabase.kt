@@ -12,7 +12,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.*
 import com.maison.mona.entity.Oeuvre
-import com.maison.mona.task.PlacesTask
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -20,7 +19,6 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.IOException
 import java.sql.Timestamp
 
@@ -101,8 +99,9 @@ abstract class OeuvreDatabase : RoomDatabase() {
             //val tempArray = temp.toJSONArray(temp.names())
 
 
-            val heritageJson = getJsonDataFromAsset(mContext!!, "patrimoine.json")
-            val heritagesArray = JSONArray(heritageJson)
+            val patrimoineJson = getJsonDataFromAsset(mContext!!, "patrimoine.json")
+            val patrimoineArray = JSONArray(patrimoineJson)
+            val nbPatrimoine = patrimoineArray.length()
 
             val articleArray = JSONArray()
 
@@ -110,8 +109,11 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             Log.d("Database", "Nb Lieu: ${nbPlaces}")
 
+            Log.d("Database", "Nb Patrimoine: ${nbPatrimoine}")
 
-           for(i in 0 until nbArtworks){
+
+
+            for(i in 0 until nbArtworks){
                 articleArray.put(oeuvreArray.get(i))
 
            }
@@ -121,12 +123,12 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             }
 
-            for(i in 0 until heritagesArray.length()){
-                articleArray.put(heritagesArray.get(i))
+            for(i in 0 until nbPatrimoine){
+                articleArray.put(patrimoineArray.get(i))
           }
 
             Log.d("Database", "Total: ${articleArray.length()}")
-            Log.d("patrimoine", "patrimoine: ${heritagesArray.length()}")
+
             //Moshi is a library with built in type adapters to ease data parsing such as our case.
             //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
             val moshi = Moshi.Builder()
@@ -143,7 +145,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
             if (changedList != null) {
                 var indexArt = 1
                 var indexPlace = 1
-
+                var indexPatrimoine = 1
                 for(oeuvre: Oeuvre in changedList) {
 
                     if(indexArt++ <= nbArtworks){
@@ -152,9 +154,10 @@ abstract class OeuvreDatabase : RoomDatabase() {
                     }else if(indexPlace++ <= nbPlaces){
                         oeuvre.type = "place"
                         oeuvre.idServer = idPlace++
-                    }else
+                    }else if(indexPatrimoine++ <= nbPatrimoine) {
                         oeuvre.type = "patrimoine"
-
+                        oeuvre.idServer = idPatrimoine++
+                    }
                     oeuvre.id = id++
                 }
             }
