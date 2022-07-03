@@ -44,8 +44,8 @@
             <TextView
                 android:id="@+id/odj_name"
                 style="@style/TextAppearance.Mona.Odj.Fragment"
-                android:layout_width="269dp"
-                android:layout_height="86dp"
+                android:layout_width="236dp"
+                android:layout_height="82dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_small"
