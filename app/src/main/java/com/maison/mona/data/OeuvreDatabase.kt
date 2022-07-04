@@ -22,7 +22,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-@Database(entities = [Oeuvre::class], version = 1, exportSchema = false)
+@Database(entities = [Oeuvre::class], version = 4, exportSchema = false)
 @TypeConverters(
     ArtistConverter::class,
     BilingualConverter::class,
@@ -208,6 +208,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                 )
                     .addMigrations(MIGRATION_0_1)
                     .addCallback(OeuvreDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration()
                     .build()
 
                 INSTANCE = instance

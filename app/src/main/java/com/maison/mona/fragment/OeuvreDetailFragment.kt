@@ -53,8 +53,17 @@ class OeuvreDetailFragment : Fragment() {
         oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
         ).get(OeuvreDetailViewModel::class.java)
 
+        var layout = ""
+        val patrimoine = if (oeuvreDetailViewModel.oeuvre?.status !== null){
+            layout = ""
+
+        }else{
+            layout = "fragment_oeuvre_item"
+        }
+
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
+
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
             //empty callback bc of the viewmodel delay to get the artwork
@@ -144,10 +153,13 @@ class OeuvreDetailFragment : Fragment() {
         val arrayParameters = arrayOf(
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
-            oeuvreDetailViewModel.oeuvre?.produced_at,
+            oeuvreDetailViewModel.getDate(),
+            //oeuvreDetailViewModel.oeuvre?.produced_end,
             oeuvreDetailViewModel.getDimensions(),
-            oeuvreDetailViewModel.oeuvre?.category?.fr,
-            oeuvreDetailViewModel.oeuvre?.subcategory?.fr,
+            oeuvreDetailViewModel.getSousUsageCategory(),
+           // oeuvreDetailViewModel.oeuvre?.category?.fr,
+            // oeuvreDetailViewModel.oeuvre?.subcategory?.fr,
+            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),
             oeuvreDetailViewModel.getMaterials(),
             oeuvreDetailViewModel.getTechniques()
         )
@@ -155,6 +167,7 @@ class OeuvreDetailFragment : Fragment() {
             view.findViewById(R.id.oeuvre_name),
             view.findViewById(R.id.oeuvre_artist),
             view.findViewById(R.id.oeuvre_date),
+            //view.findViewById(R.id.produce_end),
             view.findViewById(R.id.oeuvre_dimensions),
             view.findViewById(R.id.oeuvre_category),
             view.findViewById(R.id.oeuvre_subcategory),

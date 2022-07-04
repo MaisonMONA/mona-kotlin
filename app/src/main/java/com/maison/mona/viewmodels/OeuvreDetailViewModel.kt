@@ -84,12 +84,67 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return artistString
     }
 
+    fun getDate() : String ?{
+        val date_at = oeuvre?.produced_at
+        val date_end = oeuvre?.produced_end
+
+        if(date_at == date_end || date_end== null){
+            return date_at
+        }else
+            return "$date_at,$date_end"
+    }
+
+    //Function used for sous-usages for Patrimoine or category for Artworks
+    fun getSousUsageCategory() : String{
+
+        val category = oeuvre?.category?.fr
+
+        if(category != null){
+            return category
+        }
+        var sousUsagesString = ""
+        val array = oeuvre?.sousUsages
+
+        if (array != null) {
+            for (element in array){
+                sousUsagesString += "\n" + element
+
+            }
+        }
+
+        return sousUsagesString
+    }
+
+    // Borough and Territory for Patrimoine and Subcategory for Artworks
+    fun getBoroughTerritorySubcategory() : String{
+
+        var subcategory = oeuvre?.subcategory?.fr
+
+        if(subcategory !== null){
+            return subcategory
+        }
+        var borough = oeuvre?.borough
+
+        if(borough == ""){
+            return oeuvre?.territory+""
+        }
+
+        var boroughTerritory = borough +", "+oeuvre?.territory
+
+        return boroughTerritory
+    }
+
     //Parsing through dimensions
     fun getDimensions() : String{
         val dimensions: MutableList<Int> = ArrayList()
         var dimensionsString = ""
         var metric = ""
         val array = oeuvre?.dimension
+        val statusPatrimoine = oeuvre?.status // if it's Patrimoine we store the status
+
+        if (statusPatrimoine !== null) {
+            return statusPatrimoine // if it's Patrimoine we return status instead of dimensions
+        }
 
         //We suppose array is not empty
         array?.let {
@@ -128,6 +183,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun getMaterials() : String{
+
+        var description = oeuvre?.description
+        var synthesis = oeuvre?.synthesis
+
+        if (description !== null || synthesis !== null){
+            return "voir plus..."
+        }
         var materialsString = ""
         val array = oeuvre?.materials
 

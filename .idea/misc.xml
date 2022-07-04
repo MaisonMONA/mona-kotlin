@@ -115,18 +115,22 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_badge.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_onboarding.xml" value="0.1" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_permissions_denied.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_onboarding.xml" value="0.12" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_permissions_denied.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_register.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_collection.xml" value="0.15670289855072464" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_item_map.xml" value="0.1" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_list.xml" value="0.13269927536231885" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_item_rating.xml" value="0.15670289855072464" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_list.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_map.xml" value="0.13269927536231885" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_more.xml" value="0.13269927536231885" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_odj.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_oeuvre_item.xml" value="0.42604298356510745" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragmentscreenslidepage.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragmentscreenslidepage10.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/list_menu_drawer.xml" value="0.13269927536231885" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/recyclerview_oeuvre.xml" value="0.15670289855072464" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/menu/map_menu.xml" value="0.17552083333333332" />
       </map>
     </option>

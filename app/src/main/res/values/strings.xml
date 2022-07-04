@@ -127,6 +127,6 @@
     <string name="prendre_la_photo">Prendre la photo</string>
     <string name="decouverte_du_jour">Découverte du jour</string>
     <string name="minimap_logo">minimap logo</string>
-
+    <string name="voir_plus"><u>voir plus...</u></string>
 
 </resources>
