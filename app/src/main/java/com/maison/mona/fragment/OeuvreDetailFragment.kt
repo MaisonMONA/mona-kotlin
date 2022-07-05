@@ -154,20 +154,16 @@ class OeuvreDetailFragment : Fragment() {
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
             oeuvreDetailViewModel.getDate(),
-            //oeuvreDetailViewModel.oeuvre?.produced_end,
-            oeuvreDetailViewModel.getDimensions(),
-            oeuvreDetailViewModel.getSousUsageCategory(),
-           // oeuvreDetailViewModel.oeuvre?.category?.fr,
-            // oeuvreDetailViewModel.oeuvre?.subcategory?.fr,
-            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),
-            oeuvreDetailViewModel.getMaterials(),
+            oeuvreDetailViewModel.getDimensions(), //status
+            oeuvreDetailViewModel.getSousUsageCategory(),//sous-usages
+            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),//borough territoru
+            oeuvreDetailViewModel.getMaterials(), //adresses
             oeuvreDetailViewModel.getTechniques()
         )
         val arrayViews = arrayOf(
             view.findViewById(R.id.oeuvre_name),
             view.findViewById(R.id.oeuvre_artist),
             view.findViewById(R.id.oeuvre_date),
-            //view.findViewById(R.id.produce_end),
             view.findViewById(R.id.oeuvre_dimensions),
             view.findViewById(R.id.oeuvre_category),
             view.findViewById(R.id.oeuvre_subcategory),

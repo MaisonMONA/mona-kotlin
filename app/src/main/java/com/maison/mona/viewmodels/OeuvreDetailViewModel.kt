@@ -107,7 +107,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
         if (array != null) {
             for (element in array){
-                sousUsagesString += "\n" + element
+                sousUsagesString += element
 
             }
         }
@@ -128,10 +128,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         if(borough == ""){
             return oeuvre?.territory+""
         }
-
-        var boroughTerritory = borough +", "+oeuvre?.territory
-
-        return boroughTerritory
+        return borough +", "+oeuvre?.territory
     }
 
     //Parsing through dimensions
@@ -182,14 +179,18 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return dimensionsString
     }
 
-    fun getMaterials() : String{
+    fun getMaterials() : String? {
 
-        var description = oeuvre?.description
-        var synthesis = oeuvre?.synthesis
+        var adresses = oeuvre?.addresses
+        var adressesString =""
 
-        if (description !== null || synthesis !== null){
-            return "voir plus..."
+        if(adresses != null) {
+            for (element in adresses) {
+                adressesString += element
+            }
+            return adressesString
         }
+
         var materialsString = ""
         val array = oeuvre?.materials
 
@@ -209,7 +210,16 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return materialsString
     }
 
+    //description and synthesis
     fun getTechniques() : String{
+
+        var description = oeuvre?.description
+        var synthesis = oeuvre?.synthesis
+
+        if (description !== null || synthesis !== null){
+            return description +"\n"+ synthesis
+        }
+
         var techniquesString = ""
         val array = oeuvre?.techniques
 
