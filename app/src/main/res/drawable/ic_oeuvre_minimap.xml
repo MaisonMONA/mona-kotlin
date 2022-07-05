@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/bluePowder"/>
+
+    <item
+        android:strokeWidth="2"
+        android:strokeColor="#ffffff"
+        android:width="65dp"
+        android:height="65dp"
+        android:drawable="@drawable/carte_blanc"
+        />
+
+</layer-list>

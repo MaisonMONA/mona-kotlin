@@ -74,7 +74,9 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable-mdpi/tab_selector.xml" value="0.1045" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/badge_icon_art_decoratif_color.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/badge_icon_quantite_10_color.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_carte.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_detail_back.xml" value="0.1275" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_launcher_mona_background.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_list_lieu.xml" value="0.1275" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_list_lieu_collected.xml" value="0.1275" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_list_lieu_targeted.xml" value="0.1" />
@@ -88,6 +90,8 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_odj_cible.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_odj_photo.xml" value="0.1045" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_oeuvre_detail_background.xml" value="0.1045" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_oeuvre_minimap.xml" value="0.137" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/ic_oeuvre_photo.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/more_ic_about.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/more_ic_how_it_works.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/more_ic_rss_feed.xml" value="0.1" />
@@ -112,6 +116,7 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/shape_badge_popup.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/shape_circle.xml" value="0.1045" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/shape_rounded_corners.xml" value="0.1045" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/splash_screen.xml" value="0.128" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_badge.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -125,8 +130,8 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_list.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_map.xml" value="0.13269927536231885" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_more.xml" value="0.13269927536231885" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_odj.xml" value="0.1" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_oeuvre_item.xml" value="0.3820861678004535" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_odj.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_oeuvre_item.xml" value="0.22" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragmentscreenslidepage.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragmentscreenslidepage10.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/list_menu_drawer.xml" value="0.13269927536231885" />

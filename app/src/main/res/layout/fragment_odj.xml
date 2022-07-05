@@ -189,8 +189,8 @@
 
                 <ImageView
                     android:id="@+id/odj_carte"
-                    android:layout_width="405dp"
-                    android:layout_height="143dp"
+                    android:layout_width="415dp"
+                    android:layout_height="196dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="34dp"
                     android:contentDescription="@string/redirection_carte"
