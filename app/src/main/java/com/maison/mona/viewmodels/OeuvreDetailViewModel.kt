@@ -125,7 +125,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
         var borough = oeuvre?.borough
 
-        if(borough == ""){
+        if(borough == null || borough == null){
+            borough = ""
+
+        }
+
+        if(borough == "" || borough == null){
             return oeuvre?.territory+""
         }
         return borough +", "+oeuvre?.territory
@@ -215,6 +220,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
         var description = oeuvre?.description
         var synthesis = oeuvre?.synthesis
+
 
         if (description !== null || synthesis !== null){
             return description +"\n"+ synthesis
