@@ -19,8 +19,8 @@ android {
         applicationId "com.maison.mona"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 36
-        versionName "1.6.2"
+        versionCode 42
+        versionName "2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
     }
