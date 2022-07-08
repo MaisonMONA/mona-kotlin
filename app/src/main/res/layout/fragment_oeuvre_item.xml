@@ -80,7 +80,8 @@
                             android:layout_height="91dp"
                             android:layout_marginHorizontal="@dimen/item_button_horizontal_margin"
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
-                            android:background="@drawable/ic_oeuvre_minimap"
+                            android:background="@drawable/ic_map_blanc"
+                            android:foregroundTint="#2AFFFFFF"
                             android:onClick="@{() -> callback.openMap(viewModel.oeuvre)}"
                             app:isGone="@{viewModel.isCollected}" />
 
@@ -273,6 +274,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/oeuvre_rating"
                     tools:text="Commentaire: Cette oeuvre me fait chier en esti. Calisse qu'elle est pas belle" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="97dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="327dp"
+                    android:layout_marginBottom="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/oeuvre_artist"
+                    app:layout_constraintEnd_toEndOf="@+id/oeuvre_artist"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/oeuvre_name"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@drawable/horizontal" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
