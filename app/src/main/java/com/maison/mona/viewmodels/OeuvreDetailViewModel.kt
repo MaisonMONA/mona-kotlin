@@ -193,7 +193,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
             for (element in adresses) {
                 adressesString += element
             }
-            return adressesString
+            return adressesString + "\n"
         }
 
         var materialsString = ""
