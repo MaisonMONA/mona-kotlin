@@ -125,12 +125,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
         var borough = oeuvre?.borough
 
-        if(borough == null || borough == null){
+        if(borough == null){
             borough = ""
 
         }
 
-        if(borough == "" || borough == null){
+        if(borough == ""){
             return oeuvre?.territory+""
         }
         return borough +", "+oeuvre?.territory
@@ -225,6 +225,9 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         if (description !== null || synthesis !== null){
             return description +"\n"+ synthesis
         }
+
+        description = ""
+        synthesis = ""
 
         var techniquesString = ""
         val array = oeuvre?.techniques
