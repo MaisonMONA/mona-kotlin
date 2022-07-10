@@ -23,7 +23,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-@Database(entities = [Badge::class], version = 1, exportSchema = false)
+@Database(entities = [Badge::class], version = 4, exportSchema = false)
 @TypeConverters(
     BadgeRequiredArgsConverter::class,
     BadgeOptArgsConverter::class
@@ -120,6 +120,7 @@ abstract class BadgeDatabase : RoomDatabase() {
                     "badges-database"
                 )
                     .addCallback(BadgeDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration()
                     .build()
 
                 INSTANCE = instance

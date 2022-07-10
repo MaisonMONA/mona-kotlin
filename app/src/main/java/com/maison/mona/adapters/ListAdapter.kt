@@ -109,17 +109,25 @@ class ListAdapter internal constructor(
 
             if(element.type == "place")
                 holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_targeted)
+            if(element.type == "patrimoine")
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_patrimoine_targeted)
+
         }else if(element.state == 2 || element.state == 3){
             if(element.type == "artwork")
                 holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre_collected)
 
             if(element.type == "place")
                 holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu_collected)
+            if(element.type == "patrimoine")
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_patrimoine_collected)
+
         }else{
             if(element.type == "artwork"){
                 holder.itemView.circleImage.setImageResource(R.drawable.ic_list_oeuvre)
             }else if(element.type == "place"){
                 holder.itemView.circleImage.setImageResource(R.drawable.ic_list_lieu)
+            }else if(element.type == "patrimoine") {
+                holder.itemView.circleImage.setImageResource(R.drawable.ic_list_patrimoine)
             }
         }
     }

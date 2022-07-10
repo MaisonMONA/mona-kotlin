@@ -66,6 +66,28 @@
                 </menu>
             </item>
 
+            <item android:id="@+id/patrimoine_sort"
+                android:title="@string/patrimoine_sort"
+                android:orderInCategory="100">
+
+                <menu>
+                    <item android:id="@+id/patrimoine_noncollected"
+                        android:title="@string/sort_patrimoine_noncollected"
+                        android:icon="@drawable/pin_patrimoine_normal"
+                        android:orderInCategory="200"/>
+
+                    <item android:id="@+id/patrimoine_targetted"
+                        android:title="@string/sort_patrimoine_target"
+                        android:icon="@drawable/pin_patrimoine_target"
+                        android:orderInCategory="200"/>
+
+                    <item android:id="@+id/patrimoine_collected"
+                        android:title="@string/sort_patrimoine_collected"
+                        android:icon="@drawable/pin_patrimoine_collected"
+                        android:orderInCategory="200"/>
+                </menu>
+            </item>
+
         </menu>
     </item>
 

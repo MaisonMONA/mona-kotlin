@@ -24,16 +24,16 @@
 
         <LinearLayout
             android:id="@+id/odj_top"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="413dp"
+            android:layout_height="139dp"
+            android:layout_marginTop="36dp"
             android:layoutAnimation="@anim/layout_animation_slide_from_bottom"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="106dp"
+                android:layout_height="103dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:contentDescription="@string/minimap_logo"
@@ -44,17 +44,18 @@
             <TextView
                 android:id="@+id/odj_name"
                 style="@style/TextAppearance.Mona.Odj.Fragment"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
+                android:layout_width="236dp"
+                android:layout_height="82dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_small"
                 android:gravity="start"
-                android:text="@string/loeuvre_du_jour"
+                android:text="@string/decouverte_du_jour"
                 android:textSize="35sp" />
 
         </LinearLayout>
-            <androidx.core.widget.NestedScrollView
+
+        <androidx.core.widget.NestedScrollView
                 android:id="@+id/oeuvre_scrollview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,17 +149,19 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/odj_dimensions"
                     tools:text="Murales" />
 
                 <LinearLayout
                     android:id="@+id/odj_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_width="412dp"
+                    android:layout_height="110dp"
+                    android:layout_marginTop="24dp"
                     android:gravity="center"
                     android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/odj_category"
                     tools:visibility="visible">
@@ -174,7 +177,7 @@
                         tools:text="Hans Schleeh" />
 
                     <ImageButton
-                        android:layout_width="160dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="105dp"
                         android:layout_marginEnd="@dimen/margin_small"
                         android:background="@drawable/ic_odj_cible"
@@ -186,26 +189,31 @@
 
                 <ImageView
                     android:id="@+id/odj_carte"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="415dp"
+                    android:layout_height="196dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="34dp"
                     android:contentDescription="@string/redirection_carte"
                     android:onClick="@{()-> callback.openMap(viewModel.oeuvre)}"
                     android:scaleType="center"
                     android:src="@drawable/ic_odj_carte"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/odj_layout" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/odj_carte" />
+                    app:layout_constraintTop_toBottomOf="@+id/odj_layout"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <Space
+                    android:layout_width="395dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:layout_editor_absoluteY="415dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <LinearLayout
+            <LinearLayout
                         android:id="@+id/odj_constraint_layout_anim2"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"

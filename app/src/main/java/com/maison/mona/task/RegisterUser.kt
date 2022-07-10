@@ -15,6 +15,7 @@ class RegisterUser : AsyncTask<String, String, String?>() {
             .add("password_confirmation", params[2])
             .build()
         val request = Request.Builder()
+
             .url("https://picasso.iro.umontreal.ca/~mona/api/register")
             .post(formBody)
             .build()

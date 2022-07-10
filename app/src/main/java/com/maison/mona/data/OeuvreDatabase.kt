@@ -12,8 +12,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.maison.mona.activities.MyGlobals
 import com.maison.mona.converter.*
 import com.maison.mona.entity.Oeuvre
-import com.maison.mona.task.ArtworksTask
-import com.maison.mona.task.PlacesTask
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -24,7 +22,7 @@ import org.json.JSONArray
 import java.io.IOException
 import java.sql.Timestamp
 
-@Database(entities = [Oeuvre::class], version = 1, exportSchema = false)
+@Database(entities = [Oeuvre::class], version = 4, exportSchema = false)
 @TypeConverters(
     ArtistConverter::class,
     BilingualConverter::class,
@@ -53,9 +51,12 @@ abstract class OeuvreDatabase : RoomDatabase() {
                         try{
                             Log.d("Save","oeuvre accede database")
 
+
+
                             val oeuvreList = getOeuvreList()
                             oeuvreDao.insertAll(oeuvreList)
                         }catch (e: IOException){
+                            e.printStackTrace()
                             Log.d("Save","erreur database")
                         }
                     }else{
@@ -70,6 +71,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
             var id = 1
             var idOeuvre = 1
             var idPlace  = 1
+            var idPatrimoine = 1
             //localhost:8000/api/lastUpdatedPlaces?date=2015-12-19 17:36:22.444
 
             val lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
@@ -78,29 +80,55 @@ abstract class OeuvreDatabase : RoomDatabase() {
             //API call to server to get all artworks and places
             //We combine the 2 in one lists
 
-            val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
+            //val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
+
+           // Log.d("Database", "Nb Artworks: $nbArtworks")
+
+            //Temporary fix to be able to import the json without problem
+            val artworksJson = getJsonDataFromAsset(mContext!!, "artworks.json")
 
             val oeuvreArray = JSONArray(artworksJson)
             val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
 
-            Log.d("Database", "Nb Artworks: $nbArtworks")
-
-            val placeJson = PlacesTask(lastUpdate).execute().get()
-
+            //val placeJson = PlacesTask(lastUpdate).execute().get()
+            //val placeArray = JSONArray(placeJson)
+            val placeJson = getJsonDataFromAsset(mContext!!, "places.json")
             val placeArray = JSONArray(placeJson)
+            val nbPlaces = placeArray.length()
+           // val temp = JSONObject(placeJson)
+            //val tempArray = temp.toJSONArray(temp.names())
+
+
+            val patrimoineJson = getJsonDataFromAsset(mContext!!, "patrimoine.json")
+            val patrimoineArray = JSONArray(patrimoineJson)
+            val nbPatrimoine = patrimoineArray.length()
+
             val articleArray = JSONArray()
 
-            Log.d("Database", "Nb Lieu: ${placeArray.length()}")
+            Log.d("Database", "Nb Arts: ${nbArtworks}")
+
+            Log.d("Database", "Nb Lieu: ${nbPlaces}")
+
+            Log.d("Database", "Nb Patrimoine: ${nbPatrimoine}")
+
+
 
             for(i in 0 until nbArtworks){
                 articleArray.put(oeuvreArray.get(i))
+
+           }
+
+            for(i in 0 until nbPlaces){
+                articleArray.put(placeArray.get(i))
+
             }
 
-            for(i in 0 until placeArray.length()){
-                articleArray.put(placeArray.get(i))
-            }
+            for(i in 0 until nbPatrimoine){
+                articleArray.put(patrimoineArray.get(i))
+          }
 
             Log.d("Database", "Total: ${articleArray.length()}")
+
             //Moshi is a library with built in type adapters to ease data parsing such as our case.
             //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
             val moshi = Moshi.Builder()
@@ -115,17 +143,21 @@ abstract class OeuvreDatabase : RoomDatabase() {
 
             val changedList = oeuvreList?.toMutableList()
             if (changedList != null) {
-                var index = 1
-
+                var indexArt = 1
+                var indexPlace = 1
+                var indexPatrimoine = 1
                 for(oeuvre: Oeuvre in changedList) {
-                    if(index++ <= nbArtworks){
+
+                    if(indexArt++ <= nbArtworks){
                         oeuvre.type = "artwork"
                         oeuvre.idServer = idOeuvre++
-                    }else{
+                    }else if(indexPlace++ <= nbPlaces){
                         oeuvre.type = "place"
                         oeuvre.idServer = idPlace++
+                    }else if(indexPatrimoine++ <= nbPatrimoine) {
+                        oeuvre.type = "patrimoine"
+                        oeuvre.idServer = idPatrimoine++
                     }
-
                     oeuvre.id = id++
                 }
             }
@@ -176,6 +208,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
                 )
                     .addMigrations(MIGRATION_0_1)
                     .addCallback(OeuvreDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration()
                     .build()
 
                 INSTANCE = instance
@@ -190,4 +223,16 @@ val MIGRATION_0_1 = object : Migration(0,1){
         database.execSQL("ALTER TABLE artwork_table ADD COLUMN idServer INT")
         database.execSQL("ALTER TABLE artwork_table ADD COLUMN type TEXT")
     }
+}
+
+fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+    val jsonString: String?
+    try {
+        jsonString = context.assets?.open(fileName)
+            ?.bufferedReader().use { it?.readText() }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        return null
+    }
+    return jsonString
 }

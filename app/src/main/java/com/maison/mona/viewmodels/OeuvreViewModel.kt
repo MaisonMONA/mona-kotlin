@@ -27,6 +27,8 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
     val oeuvreTList: LiveData<List<Oeuvre>>
     //List of Lieu
     val lieuList: LiveData<List<Oeuvre>>
+    //List of Patrimoine
+    val patrimoineList: LiveData<List<Oeuvre>>
 
     val collectedList: LiveData<List<Oeuvre>>
 
@@ -42,6 +44,7 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
         oeuvreList = repository.oeuvreList
         oeuvreTList = repository.getType("artwork")
         lieuList = repository.getType("place")
+        patrimoineList = repository.getType("patrimoine")
 
         collectedList = repository.getAllCollected(2)
     }

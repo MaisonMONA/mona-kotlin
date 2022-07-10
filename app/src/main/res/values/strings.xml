@@ -58,6 +58,7 @@
     <string name="sort_menu">Options de tri</string>
     <string name="oeuvre_sort">Trier les oeuvres</string>
     <string name="lieu_sort">Trier les lieux</string>
+    <string name="patrimoine_sort"> Trier les patrimoines</string>
 
     <string name="sort_oeuvre_noncollected">Trier par oeuvres non collectionnées</string>
     <string name="sort_oeuvre_target">Trier par oeuvres ciblées</string>
@@ -65,7 +66,9 @@
     <string name="sort_lieu_noncollected">Trier par lieux non collectionnés</string>
     <string name="sort_lieu_target">Trier par lieux ciblés</string>
     <string name="sort_lieu_collected">Trier par lieux collectionnés</string>
-
+    <string name="sort_patrimoine_noncollected">Trier par patrimoine non collectionnés</string>
+    <string name="sort_patrimoine_target">Trier par patrimoine ciblés</string>
+    <string name="sort_patrimoine_collected">Trier par lieux collectionnés</string>
     <!-- List sorting options -->
     <string name="featured_list">En vedette</string>
 
@@ -122,6 +125,8 @@
     <string name="redirection_carte">redirection_carte</string>
     <string name="ajoute_cible_a_la_carte">Ajoute cible a la carte</string>
     <string name="prendre_la_photo">Prendre la photo</string>
-    <string name="loeuvre_du_jour">L\'œuvre du jour</string>
+    <string name="decouverte_du_jour">Découverte du jour</string>
     <string name="minimap_logo">minimap logo</string>
+    <string name="voir_plus"><u>voir plus...</u></string>
+
 </resources>

@@ -20,6 +20,21 @@ data class Oeuvre(
     var title: String?,
 
     var produced_at: String?,
+    var produced_end: String?, //momo
+    var source: String?, //momo
+    var borough: String?,
+    var territory: String?, //momo
+    //var area: String?,
+    var synthesis: String?, //momo
+    var description: String?, //momo
+    var status: String?, //momo
+    var id_rpcq: Int?, //momo
+
+    @TypeConverters(DimensionConverter::class) //momo
+    @field:Json(name = "addresses") var addresses: List<Any>?,
+
+    @TypeConverters(DimensionConverter::class) //momo
+    @field:Json(name = "sous-usages") var sousUsages: List<Any>?,
 
     @TypeConverters(BilingualConverter::class)
     @field:Json(name = "category") var category: Bilingual?,
@@ -39,7 +54,7 @@ data class Oeuvre(
     @TypeConverters(ArtistConverter::class)
     @field:Json(name = "artists") var artists: List<Artist>?,
 
-    var borough: String?,
+
 
     @TypeConverters(LocationConverter::class)
     @field:Json(name = "location") var location: Location?,
