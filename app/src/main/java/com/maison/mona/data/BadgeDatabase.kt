@@ -72,7 +72,7 @@ abstract class BadgeDatabase : RoomDatabase() {
                 return mutableListOf()
             }
 
-            badgesJson = badgesJson.subSequence(8, 18524).toString()
+            badgesJson = badgesJson.subSequence(8, 18382).toString()
 
             val badgesArray = JSONArray(badgesJson)
 
