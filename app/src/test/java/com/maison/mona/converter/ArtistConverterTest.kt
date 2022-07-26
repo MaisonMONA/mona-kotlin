@@ -14,8 +14,8 @@ import org.skyscreamer.jsonassert.JSONCompareMode
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockKExtension::class)
 internal class ArtistConverterTest {
-    private val artistTest1 = createArtist(1,"bidon", "b",true)
-    private val artistTest2 = createArtist(2, "test", "t", false)
+    private val artistTest1 = createArtist(1,"bidon", "b",1)
+    private val artistTest2 = createArtist(2, "test", "t", 0)
     private val artistTestList = listOf(artistTest1,artistTest2)
     private val jsonArtistList = JSONArray("[{\"id\": 1, \"name\":\"bidon\", \"alias\":\"b\", \"collective\": true},{\"id\": 2, \"name\":\"test\", \"alias\":\"t\", \"collective\": false}]")
     private val artistConverterSpy = spyk(ArtistConverter())
@@ -24,7 +24,7 @@ internal class ArtistConverterTest {
         id: Int = 0,
         name: String = "",
         alias: String = "",
-        collective: Boolean
+        collective: Number
     ) = Artist(
         id = id,
         name = name,
@@ -35,8 +35,8 @@ internal class ArtistConverterTest {
     fun toArtists() {
         val artistListConverterTest = artistConverterSpy.toArtists(jsonArtistList.toString())
         artistListConverterTest.shouldContainExactly(
-            Artist(1,"bidon", "b",true),
-            Artist(2, "test", "t", false)
+            Artist(1,"bidon", "b",1),
+            Artist(2, "test", "t", 0)
         )
     }
 

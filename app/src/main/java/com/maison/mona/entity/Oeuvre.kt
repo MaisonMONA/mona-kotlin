@@ -30,6 +30,7 @@ data class Oeuvre(
     var status: String?, //momo
     var id_rpcq: Int?, //momo
 
+
     @TypeConverters(DimensionConverter::class) //momo
     @field:Json(name = "addresses") var addresses: List<Any>?,
 
