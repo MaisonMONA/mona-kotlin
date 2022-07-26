@@ -8,5 +8,5 @@ data class Artist(
     var id: Int,
     var name: String,
     var alias: String,
-    var collective: Boolean
+    var collective: Boolean,
 ) : Serializable
