@@ -128,5 +128,7 @@
     <string name="decouverte_du_jour">Découverte du jour</string>
     <string name="minimap_logo">minimap logo</string>
     <string name="voir_plus"><u>voir plus...</u></string>
+    <string name="DDJ">Découverte</string>
+    <string name="Autre">Autre</string>
 
 </resources>

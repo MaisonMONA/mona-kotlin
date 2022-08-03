@@ -53,15 +53,6 @@ class OeuvreDetailFragment : Fragment() {
         oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
         ).get(OeuvreDetailViewModel::class.java)
 
-        var layout = ""
-        val patrimoine = if (oeuvreDetailViewModel.oeuvre?.status !== null){
-            layout = ""
-
-        }else{
-            layout = "fragment_oeuvre_item"
-        }
-
-
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
 
             inflater, R.layout.fragment_oeuvre_item, container, false
@@ -154,10 +145,10 @@ class OeuvreDetailFragment : Fragment() {
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
             oeuvreDetailViewModel.getDate(),
-            oeuvreDetailViewModel.getDimensions(), //status
-            oeuvreDetailViewModel.getSousUsageCategory(),//sous-usages
-            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),//borough territoru
-            oeuvreDetailViewModel.getMaterials(), //adresses
+            oeuvreDetailViewModel.getDimensionsOrStatus(),
+            oeuvreDetailViewModel.getSousUsageOrCategory(),
+            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),
+            oeuvreDetailViewModel.getMaterialsOrAdresses(),
             oeuvreDetailViewModel.getTechniques()
         )
         val arrayViews = arrayOf(
@@ -229,9 +220,7 @@ class OeuvreDetailFragment : Fragment() {
 
     interface Callback {
         fun updateTarget(oeuvre:Oeuvre)
-
         fun openMap(oeuvre:Oeuvre)
-
         fun captureOeuvre(oeuvre: Oeuvre)
     }
 }

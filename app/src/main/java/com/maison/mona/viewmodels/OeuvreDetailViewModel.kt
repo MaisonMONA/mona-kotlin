@@ -95,7 +95,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     //Function used for sous-usages for Patrimoine or category for Artworks
-    fun getSousUsageCategory() : String{
+    fun getSousUsageOrCategory() : String{
 
         val category = oeuvre?.category?.fr
 
@@ -126,7 +126,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var borough = oeuvre?.borough
 
         if(borough == null){
-            borough = ""
+            return ""
 
         }
 
@@ -137,7 +137,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     //Parsing through dimensions
-    fun getDimensions() : String{
+    fun getDimensionsOrStatus() : String{
         val dimensions: MutableList<Int> = ArrayList()
         var dimensionsString = ""
         var metric = ""
@@ -184,7 +184,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return dimensionsString
     }
 
-    fun getMaterials() : String? {
+    fun getMaterialsOrAdresses() : String? {
 
         var adresses = oeuvre?.addresses
         var adressesString =""
@@ -222,12 +222,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var synthesis = oeuvre?.synthesis
 
 
-        if (description !== null || synthesis !== null){
+        if (description !== null && synthesis !== null){
             return description +"\n"+ synthesis
         }
 
-        description = ""
-        synthesis = ""
+        if (description !== null) {
+            return description
+        }
 
         var techniquesString = ""
         val array = oeuvre?.techniques
