@@ -20,21 +20,21 @@ data class Oeuvre(
     var title: String?,
 
     var produced_at: String?,
-    var produced_end: String?, //momo
-    var source: String?, //momo
+    var produced_end: String?,
+    var source: String?,
     var borough: String?,
-    var territory: String?, //momo
+    var territory: String?,
     //var area: String?,
-    var synthesis: String?, //momo
-    var description: String?, //momo
-    var status: String?, //momo
-    var id_rpcq: Int?, //momo
+    var synthesis: String?,
+    var description: String?,
+    var status: String?,
+    var id_rpcq: Int?,
 
 
-    @TypeConverters(DimensionConverter::class) //momo
+    @TypeConverters(AdressesConverter::class)
     @field:Json(name = "addresses") var addresses: List<Any>?,
 
-    @TypeConverters(DimensionConverter::class) //momo
+    @TypeConverters(SousUsagesConverter::class)
     @field:Json(name = "sous-usages") var sousUsages: List<Any>?,
 
     @TypeConverters(BilingualConverter::class)
