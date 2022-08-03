@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 class SousUsagesConverter{
 
     @TypeConverter
-    fun toDimension(json: String?): List<Any>? {
+    fun toSousUsages(json: String?): List<Any>? {
     val type = object : TypeToken<List<Any>?>() {}.type ?: return null
     return Gson().fromJson(json, type)
     }
