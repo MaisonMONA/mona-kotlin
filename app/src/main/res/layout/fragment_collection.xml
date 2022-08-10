@@ -167,26 +167,39 @@
         android:background="@color/bluePowder"
         android:orientation="horizontal">
 
-        <TextView
+
+        <LinearLayout
             android:id="@+id/votre_collection"
-            android:layout_width="110dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="10sp"
-            android:layout_marginTop="10sp"
-            android:layout_marginEnd="10sp"
-            android:layout_marginBottom="10sp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_corner"
-            android:gravity="center_horizontal"
-            android:text="Votre collection"
-            android:textSize="18dp" />
+            android:layout_width="198dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="384dp"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_margin="10sp"
+                android:layout_marginStart="0sp"
+                android:layout_marginTop="0sp"
+                android:layout_marginEnd="0sp"
+                android:layout_marginBottom="0sp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner"
+                android:gravity="center_horizontal"
+                android:text="Votre collection"
+                android:textSize="18dp" />
+        </LinearLayout>
 
 
         <LinearLayout
             android:id="@+id/collection_badge_top"
             android:layout_width="198dp"
             android:layout_height="45dp"
+            android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="384dp"
             android:orientation="horizontal">
@@ -197,12 +210,15 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_margin="10sp"
+                android:layout_marginStart="0sp"
+                android:layout_marginTop="0sp"
+                android:layout_marginEnd="0sp"
+                android:layout_marginBottom="0sp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_corner"
                 android:gravity="center_horizontal"
                 android:text="Badges"
-                android:textSize="18dp"
-                />
+                android:textSize="18dp" />
         </LinearLayout>
     </LinearLayout>
 
