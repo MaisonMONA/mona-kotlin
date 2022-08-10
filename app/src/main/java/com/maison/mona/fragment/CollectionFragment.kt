@@ -67,8 +67,8 @@ class CollectionFragment : Fragment() {
             })
 
             //badge_button = binding.badgeButton
-            //badgeTop = binding.collectionBadgeTop
-            badgeBottom = binding.collectionBadgeBottom
+            badgeTop = binding.collectionBadgeTop
+            //badgeBottom = binding.collectionBadgeBottom
             badgeCardview = binding.collectionCardviewBadge
 
 
