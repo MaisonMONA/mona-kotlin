@@ -43,15 +43,15 @@ class MoreFragment : Fragment(){
         val binding = FragmentMoreBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        mSwitch = binding.moreOnlineSwitch
+        //mSwitch = binding.moreOnlineSwitch
 
-        if(SaveSharedPreference.isOnline(requireContext()))
+        /*if(SaveSharedPreference.isOnline(requireContext()))
             mSwitch.isChecked = false
 
 
         mSwitch.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             updateInfoOnline()
-        }
+        }*/
 
         binding.apply {
             //Affecting the username
@@ -104,10 +104,10 @@ class MoreFragment : Fragment(){
                 findNavController().navigate(action)
             }
 
-            signOutButton.setOnClickListener {
+            /*signOutButton.setOnClickListener {
                 val myIntent = Intent(requireActivity(), LoginActivity::class.java)
                 startActivity(myIntent)
-            }
+            }*/
         }
 
         return binding.root

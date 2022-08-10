@@ -120,6 +120,7 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/pin_patrimoine_collected.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/pin_patrimoine_normal.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/pin_patrimoine_target.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/rounded_corner.xml" value="0.3625" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/shape_badge_popup.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/shape_circle.xml" value="0.1045" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/drawable/shape_rounded_corners.xml" value="0.1045" />
@@ -127,7 +128,7 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_badge.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_onboarding.xml" value="0.12" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_onboarding.xml" value="0.22" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_permissions_denied.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_register.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/activity_splash.xml" value="0.1" />
@@ -142,8 +143,9 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_map.xml" value="0.13269927536231885" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_more.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_more_text.xml" value="0.10643115942028986" />
-        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_odj.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_odj.xml" value="0.18" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_oeuvre_item.xml" value="0.1" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_oeuvre_item_duplicata.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragment_view_pager.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragmentscreenslidepage.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/fragmentscreenslidepage10.xml" value="0.1" />
@@ -162,6 +164,7 @@
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/recyclerview_header.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/recyclerview_oeuvre.xml" value="0.15670289855072464" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/roundcorner.xml" value="0.1381340579710145" />
+        <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/layout/test.xml" value="0.1" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/menu/bottom_nav_menu.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/menu/list_menu.xml" value="0.14629629629629629" />
         <entry key="..\:/Users/mn444/StudioProjects/mona-kotlin/app/src/main/res/menu/map_menu.xml" value="0.17552083333333332" />

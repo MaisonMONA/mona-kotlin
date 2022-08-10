@@ -27,10 +27,12 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.maison.mona.R
 import com.maison.mona.databinding.FragmentOeuvreItemBinding
+import com.maison.mona.databinding.FragmentOeuvreItemDuplicataBindingImpl
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
+import kotlinx.android.synthetic.main.fragment_collection.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -50,13 +52,31 @@ class OeuvreDetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
+
+        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application,
+            safeArgs.itemSelected.id)
         ).get(OeuvreDetailViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
-
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
+
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
+
+                when (val count = collected.filter { it.state == 2 || it.state == 3 }.size) {
+                    0 -> {
+                        //collection_count.text = "0"
+                    }
+                    1 -> {
+                        //collection_count.text = "1"
+                    }
+                    else -> {
+                        val artworksString = getString(R.string.more_user_artworks_count, count)
+                        //collection_count.text = artworksString
+                    }
+                }
+            })
+
             //empty callback bc of the viewmodel delay to get the artwork
             callback = object : Callback {
                 override fun updateTarget(oeuvre: Oeuvre) {
@@ -95,6 +115,8 @@ class OeuvreDetailFragment : Fragment() {
 
         return binding.root
     }
+
+
 
     private fun getProperCallback(fab: FloatingActionButton): Callback{
         return object : Callback {

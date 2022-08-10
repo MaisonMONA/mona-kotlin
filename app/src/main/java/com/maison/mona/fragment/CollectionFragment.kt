@@ -1,5 +1,6 @@
 package com.maison.mona.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -11,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.maison.mona.R
 import com.maison.mona.activities.BadgeActivity
 import com.maison.mona.adapters.CollectionAdapter
 import com.maison.mona.databinding.FragmentCollectionBinding
@@ -24,6 +26,7 @@ class CollectionFragment : Fragment() {
     private var badgeBottom: LinearLayout? = null
     private var badgeCardview: CardView? = null
 
+    @SuppressLint("StringFormatInvalid")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,34 +35,53 @@ class CollectionFragment : Fragment() {
         val binding = FragmentCollectionBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val recyclerView = binding.collectionRecyclerview
+        binding.apply {
+            val recyclerView = binding.collectionRecyclerview
 
-        val adapter = CollectionAdapter(
-            context,
-            findNavController()
-        )
+            val adapter = CollectionAdapter(
+                context,
+                findNavController()
+            )
 
-        recyclerView.adapter = adapter
+            recyclerView.adapter = adapter
 
-        //on observe les oeuvres en state 2 (collectionnees) ou 3 (collectionnes mais hors ligne)
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { oeuvreList ->
-            val sortedOeuvres = oeuvreList.filter { (it.state == 2 || it.state == 3) }
-            adapter.submitList(sortedOeuvres)
-        })
+            //on observe les oeuvres en state 2 (collectionnees) ou 3 (collectionnes mais hors ligne)
+            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { oeuvreList ->
+                val sortedOeuvres = oeuvreList.filter { (it.state == 2 || it.state == 3) }
+                adapter.submitList(sortedOeuvres)
+            })
 
-        //badge_button = binding.badgeButton
-        badgeTop = binding.collectionBadgeTop
-        badgeBottom = binding.collectionBadgeBottom
-        badgeCardview = binding.collectionCardviewBadge
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
+
+                when (val count = collected.filter { it.state == 2 || it.state == 3 }.size) {
+                    0 -> {
+                        collectionCount.text = "0"
+                    }
+                    1 -> {
+                        collectionCount.text = "1"
+                    }
+                    else -> {
+                        collectionCount.text = count.toString()
+                    }
+                }
+            })
+
+            //badge_button = binding.badgeButton
+            //badgeTop = binding.collectionBadgeTop
+            badgeBottom = binding.collectionBadgeBottom
+            badgeCardview = binding.collectionCardviewBadge
 
 
-        val transition = AutoTransition()
-        transition.duration = 500
+            val transition = AutoTransition()
+            transition.duration = 500
 
-        badgeTop?.setOnClickListener {
-            val intent = Intent(context, BadgeActivity::class.java)
-            startActivity(intent)
+            badgeTop?.setOnClickListener {
+                val intent = Intent(context, BadgeActivity::class.java)
+                startActivity(intent)
+            }
+
         }
+
 
         return binding.root
     }

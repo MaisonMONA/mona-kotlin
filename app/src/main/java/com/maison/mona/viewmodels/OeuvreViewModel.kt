@@ -32,6 +32,7 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
 
     val collectedList: LiveData<List<Oeuvre>>
 
+
     init {
         // Gets reference to OeuvreDao from OeuvreDatabase to construct
         // the correct OeuvreRepository.
@@ -54,6 +55,7 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
             repository.updateRating(id, rating, comment, state, date)
         }
     }
+
 
     fun updatePath(id: Int, path: String?){
         viewModelScope.launch(Dispatchers.IO) {

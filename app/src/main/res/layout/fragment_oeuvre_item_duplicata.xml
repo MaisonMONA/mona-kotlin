@@ -70,7 +70,7 @@
                             android:layout_height="94dp"
                             android:layout_marginHorizontal="@dimen/item_button_horizontal_margin"
                             android:layout_marginVertical="@dimen/item_button_vertical_margin"
-                            android:background="@drawable/ic_oeuvre_photo"
+                            android:background="@drawable/ic_list_patrimoine_collected"
                             android:onClick="@{() -> callback.captureOeuvre(viewModel.oeuvre)}"
                             app:isGone="@{viewModel.isCollected}" />
 
@@ -289,6 +289,7 @@
                     android:layout_marginBottom="5dp"
                     android:background="#F5F7F8"
                     android:backgroundTint="@color/bluePowder"
+                    android:foreground="@drawable/horizontal"
                     app:layout_constraintBottom_toBottomOf="@+id/oeuvre_artist"
                     app:layout_constraintEnd_toEndOf="@+id/oeuvre_artist"
                     app:layout_constraintHorizontal_bias="0.0"

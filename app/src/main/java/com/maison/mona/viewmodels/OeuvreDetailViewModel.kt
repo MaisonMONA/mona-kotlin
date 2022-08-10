@@ -41,6 +41,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
     }
 
+
     fun isCollected(): Boolean{
         var artworkCollected = false
 
@@ -62,6 +63,8 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
         return artworkTarget
     }
+
+
 
     fun getArtists() : String{
         var artistString = ""

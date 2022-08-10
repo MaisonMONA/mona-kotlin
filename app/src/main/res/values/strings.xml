@@ -30,6 +30,8 @@
     <string name="more_user_artworks_count">%1$d œuvres collectionnées </string>
     <string name="more_user_badges_count">%1$d badges débloqués </string>
 
+    <string name="collection_count"> œuvres collectionnées </string>
+
     <string name="MapTiler">MapTiler</string>
     <string name="PNG">.png</string>
     <string name="slash">/</string>
@@ -130,5 +132,6 @@
     <string name="voir_plus"><u>voir plus...</u></string>
     <string name="DDJ">Découverte</string>
     <string name="Autre">Autre</string>
+    <string name="oeuvres_collectionnees">œuvres collectionnées</string>
 
 </resources>
