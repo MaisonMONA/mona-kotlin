@@ -52,7 +52,7 @@ class OeuvreViewModel(application: Application) : AndroidViewModel(application) 
 
     fun updateRating(id: Int, rating: Float?, comment: String?, state: Int?, date: String?){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateRating(id, rating, comment, state, date)
+            repository.updateRating(id, rating, "Commentaire: $comment", state, date)
         }
     }
 

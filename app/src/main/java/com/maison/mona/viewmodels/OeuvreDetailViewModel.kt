@@ -253,7 +253,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun getCaptureDateMessage(): String{
-        return "Cette oeuvre a été collectionnée le " + oeuvre?.date_photo
+        return "Date de création: " + oeuvre?.date_photo
     }
 
     fun isOeuvreSent(): Boolean? {
