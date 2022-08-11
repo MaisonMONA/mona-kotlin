@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:scrollbarDefaultDelayBeforeFade="200"
         tools:context=".activities.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -58,9 +59,10 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="478dp"
                         android:layout_alignBottom="@id/oeuvre_image"
                         android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="22dp"
                         android:gravity="center|bottom"
                         android:orientation="horizontal">
 
@@ -113,7 +115,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/margin_normal">
+                >
 
                 <TextView
                     android:id="@+id/oeuvre_name"
@@ -121,9 +123,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginTop="50dp"
                     android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_marginBottom="1dp"
                     android:text="@{viewModel.oeuvre.title}"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Affinités" />
@@ -207,11 +214,11 @@
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     android:layout_marginEnd="@dimen/margin_small"
+                    android:lineSpacingExtra="10sp"
                     android:text="@{viewModel.materialsOrAdresses}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/oeuvre_subcategory"
-                    android:lineSpacingExtra="10sp"
                     tools:text="Granit, Cuivre" />
 
                 <TextView
@@ -222,8 +229,8 @@
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@{viewModel.techniques}"
                     android:lineSpacingExtra="10sp"
+                    android:text="@{viewModel.techniques}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/oeuvre_materials"
@@ -246,22 +253,6 @@
                     app:layout_constraintTop_toBottomOf="@id/oeuvre_techniques"
                     tools:text="Cette oeuvre a été capturé le 23-09-2019" />
 
-                <RatingBar
-                    android:id="@+id/oeuvre_rating"
-                    style="@style/RatingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:isIndicator="true"
-                    android:rating="@{viewModel.oeuvre.rating}"
-                    app:isVisible="@{viewModel.isCollected}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_capture_date"
-                    tools:rating="3.5" />
-
                 <TextView
                     android:id="@+id/plant_description"
                     style="@style/TextAppearance.Mona.Item.Opinion.Text"
@@ -276,25 +267,38 @@
                     app:isVisible="@{viewModel.isCollected}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/oeuvre_rating"
+                    app:layout_constraintTop_toBottomOf="@+id/oeuvre_capture_date"
                     tools:text="Commentaire: Cette oeuvre me fait chier en esti. Calisse qu'elle est pas belle" />
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="100dp"
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="80dp"
                     android:layout_height="4dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="327dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="#F5F7F8"
-                    android:backgroundTint="@color/bluePowder"
-                    app:layout_constraintBottom_toBottomOf="@+id/oeuvre_artist"
-                    app:layout_constraintEnd_toEndOf="@+id/oeuvre_artist"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@color/bluePowder"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/oeuvre_name"
-                    app:layout_constraintVertical_bias="0.54" />
+                    app:layout_constraintTop_toBottomOf="@+id/oeuvre_name"></LinearLayout>
+
+                <RatingBar
+                    android:id="@+id/oeuvre_rating"
+                    style="@style/RatingBar"
+                    android:layout_width="234dp"
+                    android:layout_height="54dp"
+                    android:layout_marginBottom="24dp"
+                    android:isIndicator="true"
+                    android:rating="@{viewModel.oeuvre.rating}"
+                    app:isVisible="@{viewModel.isCollected}"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.847"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:rating="3.5"
+                    tools:visibility="visible" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
