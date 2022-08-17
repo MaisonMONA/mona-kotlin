@@ -14,7 +14,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
+import com.maison.mona.activities.BadgeActivity
 import com.maison.mona.activities.LoginActivity
+import com.maison.mona.activities.OnBoardingActivity
 import com.maison.mona.data.OeuvreDatabase
 import com.maison.mona.data.OeuvreRepository
 import com.maison.mona.data.SaveSharedPreference
@@ -89,9 +91,14 @@ class MoreFragment : Fragment(){
                 }
             })*/
 
-            howItWorksButton.setOnClickListener{
+            /*howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
                 findNavController().navigate(action)
+            }*/
+
+            howItWorksButton.setOnClickListener{
+                val intent = Intent(context, OnBoardingActivity::class.java)
+                startActivity(intent)
             }
 
             aboutButton.setOnClickListener {

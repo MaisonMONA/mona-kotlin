@@ -21,14 +21,15 @@
             app:tabGravity="center"
             />
     </androidx.viewpager.widget.ViewPager>
-    <Button
-        android:id="@+id/end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Terminer Tutoriel"
-        android:layout_marginTop="550dp"
-        android:layout_centerHorizontal="true">
 
-    </Button>
+        <Button
+            android:id="@+id/end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="550dp"
+            android:text="Terminer Tutoriel">
+
+        </Button>
 </RelativeLayout>
 </LinearLayout>
