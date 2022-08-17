@@ -123,14 +123,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="60dp"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:layout_marginBottom="1dp"
                     android:text="@{viewModel.oeuvre.title}"
                     android:textStyle="bold|italic"
                     app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Affinités" />
@@ -287,18 +287,26 @@
                 <RatingBar
                     android:id="@+id/oeuvre_rating"
                     style="@style/RatingBar"
-                    android:layout_width="234dp"
+                    android:layout_width="238dp"
                     android:layout_height="54dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="40dp"
                     android:isIndicator="true"
                     android:rating="@{viewModel.oeuvre.rating}"
                     app:isVisible="@{viewModel.isCollected}"
                     app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.847"
+                    app:layout_constraintHorizontal_bias="0.953"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:rating="3.5"
                     tools:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="9dp"
+                    android:layout_height="9dp"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteX="128dp"
+                    tools:layout_editor_absoluteY="77dp"></LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
