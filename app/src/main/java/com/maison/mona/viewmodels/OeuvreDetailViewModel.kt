@@ -108,6 +108,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var sousUsagesString = ""
         val array = oeuvre?.sousUsages
 
+
         if (array != null) {
             for (element in array){
                 sousUsagesString += element
