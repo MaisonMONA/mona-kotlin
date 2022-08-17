@@ -78,7 +78,7 @@
             <TextView
                 android:id="@+id/collection_oeuvre"
                 style="@style/TextAppearance.Mona.Odj.Fragment"
-                android:layout_width="202dp"
+                android:layout_width="207dp"
                 android:layout_height="111dp"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="15dp"
@@ -168,7 +168,7 @@
         android:orientation="horizontal">
 
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/votre_collection"
             android:layout_width="198dp"
             android:layout_height="45dp"
@@ -192,12 +192,12 @@
                 android:gravity="center_horizontal"
                 android:text="Votre collection"
                 android:textSize="18dp" />
-        </LinearLayout>
+        </LinearLayout>-->
 
 
         <LinearLayout
             android:id="@+id/collection_badge_top"
-            android:layout_width="198dp"
+            android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"

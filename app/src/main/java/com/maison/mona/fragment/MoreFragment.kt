@@ -57,7 +57,7 @@ class MoreFragment : Fragment(){
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
 
-            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
+           /* oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
 
                 when (val count = collected.filter { it.state == 2 || it.state == 3 }.size) {
                     0 -> {
@@ -87,7 +87,7 @@ class MoreFragment : Fragment(){
                         moreUserBadges.text = badgesString
                     }
                 }
-            })
+            })*/
 
             howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")

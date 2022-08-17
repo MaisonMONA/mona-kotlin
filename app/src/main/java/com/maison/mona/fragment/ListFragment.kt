@@ -529,6 +529,7 @@ class ListFragment : Fragment() {
             //Send the information from the filters when we close the popup
             val filterButton = listDrawer.findViewById<Button>(R.id.filterButton)
             val radioGroup = listDrawer.findViewById<RadioGroup>(R.id.radio_group)
+            val sipnner = listDrawer.findViewById<Spinner>(R.id.category_spinner)
             radioGroup.check(R.id.radio_alphabet)
             this.filterIndex = R.id.radio_alphabet
             //When we click the filter button
@@ -537,11 +538,14 @@ class ListFragment : Fragment() {
                 val idCurrent  = radioGroup.checkedRadioButtonId
                 this.filterIndex = idCurrent
                 var radioValue = "None"
+
                 if(idCurrent != -1){//Not needed, just in case
                     val radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
                     radioValue = radioButton.text.toString()
+
                     Log.d("Popup", radioValue)
                 }
+
                 //Get Spinner value
                 val spinnerValue = categorySpinner.selectedItem.toString()
                 this.categoryIndex = categorySpinner.selectedItemPosition
