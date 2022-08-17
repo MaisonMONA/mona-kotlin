@@ -51,16 +51,13 @@
             android:text="0"
             android:textSize="55sp" />
 
-        <LinearLayout
-            android:layout_width="291dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+
 
             <TextView
                 android:id="@+id/collection_oeuvre"
                 style="@style/TextAppearance.Mona.Odj.Fragment"
                 android:layout_width="147dp"
-                android:layout_height="142dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="15dp"
                 android:layout_marginStart="@dimen/margin_small"
@@ -68,18 +65,17 @@
                 android:text="@string/badges_debloques"
                 android:textSize="20sp" />
 
-        </LinearLayout>
+
 
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="411dp"
-        android:layout_height="775dp"
+        android:layout_width="match_parent"
+        android:layout_height="800dp"
         android:orientation="vertical"
         android:translationY="56dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="137dp">
+        tools:ignore="MissingConstraints">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/badge_recyclerview"
