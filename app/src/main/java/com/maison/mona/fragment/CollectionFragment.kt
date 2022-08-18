@@ -63,6 +63,7 @@ class CollectionFragment : Fragment() {
                     }
                     else -> {
                         collectionCount.text = count.toString()
+                        collectionMessage.text = "Votre collection"
                     }
                 }
             })
