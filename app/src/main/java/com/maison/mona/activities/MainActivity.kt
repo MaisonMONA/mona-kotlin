@@ -5,13 +5,18 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
+import androidx.fragment.app.viewModels
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.viewmodels.OeuvreDetailViewModel
+import com.maison.mona.viewmodels.OeuvreViewModel
 import org.osmdroid.views.MapView
 
 /*
@@ -30,6 +35,9 @@ class MainActivity : AppCompatActivity() {
 
     //For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
+    private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
+
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1

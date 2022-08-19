@@ -14,6 +14,11 @@ import java.lang.Double.parseDouble
 //View Model for the single artwork displayed on the UI to bind properly
 class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int): AndroidViewModel(application){
 
+    var isArt = false;
+    var isPlaces = false;
+    var isHeritages = false;
+
+
     private val repository: OeuvreRepository
     var oeuvre: Oeuvre? = null
     init {
@@ -84,6 +89,9 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
             }
         }
 
+        isArt = true;
+        isPlaces = false;
+        isHeritages = false;
         return artistString
     }
 
@@ -111,10 +119,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
         if (array != null) {
             for (element in array){
-                sousUsagesString += element
+                sousUsagesString += "\n" + element
 
             }
         }
+        isArt = false;
+        isPlaces = false;
+        isHeritages = true;
 
         return sousUsagesString
     }
@@ -259,6 +270,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
     fun isOeuvreSent(): Boolean? {
         return if (oeuvre != null) oeuvre?.isSent else false
+    }
+
+    fun getTypeOfContent(): String{
+        if(isHeritages){ Log.d("color bar ", "heritages") ; isHeritages = false;return "heritages"}
+        else if (isArt){Log.d("color bar ", "art"); isArt = false;return "art"}
+        else Log.d("color bar ", "places"); isPlaces = false; return "places"
     }
 
 }

@@ -3,6 +3,8 @@ package com.maison.mona.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -17,7 +19,9 @@ import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.ViewCompat.setBackground
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.ViewBindingAdapter.setBackground
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +37,7 @@ import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
 import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -85,6 +90,7 @@ class OeuvreDetailFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
 
             if(oeuvreDetailViewModel.oeuvre?.title == null){
+
                 mHandler.postDelayed({
                     viewModel = oeuvreDetailViewModel
                     Log.d("OEUVRES","associe2")
@@ -147,6 +153,20 @@ class OeuvreDetailFragment : Fragment() {
         //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
         Log.d("Save","Photo path: " +  oeuvreDetailViewModel.oeuvre?.photo_path)
 
+
+        /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
+            Log.d("color bar ", "heritages")
+            colorBar.background.setColorFilter(Color.parseColor("#FE7E61"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "art"){
+            Log.d("color bar ", "art")
+            colorBar.background.setColorFilter(Color.parseColor("#FFFFD450"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "places"){
+            Log.d("color bar ", "places")
+            colorBar.background.setColorFilter(Color.parseColor("#FFB965ED"), PorterDuff.Mode.MULTIPLY)
+        }*/
+
+
+        //repository = OeuvreRepository(oeuvreDao)
         val arrayParameters = arrayOf(
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
@@ -169,9 +189,10 @@ class OeuvreDetailFragment : Fragment() {
         )
 
         for((i, param) in arrayParameters.withIndex()){
-            if(param == null || param == ""){
+            if(param == "" || param == null){
                 Log.d("Param ", "Param vide: $i")
                 Log.d("Param", param.toString())
+                //arrayViews[i].visibility = View.INVISIBLE
             }else{
                 Log.d("Param", "Parametre non vide:$param")
                 arrayViews[i].visibility = View.VISIBLE
