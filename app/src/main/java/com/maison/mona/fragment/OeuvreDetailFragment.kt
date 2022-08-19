@@ -189,6 +189,17 @@ class OeuvreDetailFragment : Fragment() {
         )
 
         for((i, param) in arrayParameters.withIndex()){
+
+            /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
+            Log.d("color bar ", "heritages")
+            colorBar.background.setColorFilter(Color.parseColor("#FE7E61"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "art"){
+            Log.d("color bar ", "art")
+            colorBar.background.setColorFilter(Color.parseColor("#FFFFD450"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "places"){
+            Log.d("color bar ", "places")
+            colorBar.background.setColorFilter(Color.parseColor("#FFB965ED"), PorterDuff.Mode.MULTIPLY)
+        }*/
             if(param == "" || param == null){
                 Log.d("Param ", "Param vide: $i")
                 Log.d("Param", param.toString())
@@ -249,5 +260,6 @@ class OeuvreDetailFragment : Fragment() {
         fun updateTarget(oeuvre:Oeuvre)
         fun openMap(oeuvre:Oeuvre)
         fun captureOeuvre(oeuvre: Oeuvre)
+
     }
 }
