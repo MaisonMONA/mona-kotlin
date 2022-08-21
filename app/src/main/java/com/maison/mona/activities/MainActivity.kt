@@ -70,11 +70,13 @@ class MainActivity : AppCompatActivity() {
             // Ask for permissions
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
                 // Even if we want to show request rationale, we send the user to PermissionsDeniedActivity
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                     // Send to PermissionsDeniedActivity
                     val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
                     }
@@ -83,7 +85,8 @@ class MainActivity : AppCompatActivity() {
                     // Request permissions
                     ActivityCompat.requestPermissions(this, arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA),
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION
                     )
                 }

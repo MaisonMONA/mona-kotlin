@@ -123,17 +123,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="44dp"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:layout_marginBottom="1dp"
                     android:text="@{viewModel.oeuvre.title}"
                     android:textStyle="bold|italic"
-                    app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Affinités" />
+                    tools:text="Affinitésssssssssssssssssssssss" />
 
                 <TextView
                     android:id="@+id/oeuvre_artist"
@@ -272,7 +271,7 @@
 
                 <TextView
                     android:id="@+id/colorBar"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="4dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="6dp"
@@ -288,9 +287,8 @@
                 <RatingBar
                     android:id="@+id/oeuvre_rating"
                     style="@style/RatingBar"
-                    android:layout_width="238dp"
-                    android:layout_height="54dp"
-                    android:layout_marginBottom="40dp"
+                    android:layout_width="232dp"
+                    android:layout_height="43dp"
                     android:isIndicator="true"
                     android:rating="@{viewModel.oeuvre.rating}"
                     app:isVisible="@{viewModel.isCollected}"

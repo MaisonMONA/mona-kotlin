@@ -3,8 +3,6 @@ package com.maison.mona.fragment
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -19,9 +17,7 @@ import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.ViewCompat.setBackground
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.adapters.ViewBindingAdapter.setBackground
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -31,13 +27,10 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.maison.mona.R
 import com.maison.mona.databinding.FragmentOeuvreItemBinding
-import com.maison.mona.databinding.FragmentOeuvreItemDuplicataBindingImpl
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
-import kotlinx.android.synthetic.main.fragment_collection.*
-import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

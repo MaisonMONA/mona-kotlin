@@ -40,6 +40,10 @@ class PermissionsDeniedActivity : AppCompatActivity() {
                 ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 // Permission is not granted
@@ -51,13 +55,18 @@ class PermissionsDeniedActivity : AppCompatActivity() {
                     ActivityCompat.shouldShowRequestPermissionRationale(
                         this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )||
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.CAMERA
                     )
                 ) {
                     // Request the permission.
                     ActivityCompat.requestPermissions(
                         this, arrayOf(
                             Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
                         ),
                         MY_PERMISSIONS_REQUEST_FINE_LOCATION_AND_WRITE_EXTERNAL
                     )
@@ -73,6 +82,7 @@ class PermissionsDeniedActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_FINE_LOCATION_AND_WRITE_EXTERNAL ->{
                 // If request is cancelled, the result arrays are empty.
