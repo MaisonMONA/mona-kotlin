@@ -169,6 +169,7 @@
                     tools:visibility="visible">
 
                     <ImageButton
+                        android:id="@+id/captureodj"
                         android:layout_width="160dp"
                         android:layout_height="105dp"
                         android:layout_marginEnd="@dimen/margin_small"

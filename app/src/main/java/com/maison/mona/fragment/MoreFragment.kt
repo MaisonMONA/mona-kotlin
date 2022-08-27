@@ -1,8 +1,11 @@
 package com.maison.mona.fragment
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -111,10 +114,22 @@ class MoreFragment : Fragment(){
                 findNavController().navigate(action)
             }
 
-            /*signOutButton.setOnClickListener {
-                val myIntent = Intent(requireActivity(), LoginActivity::class.java)
-                startActivity(myIntent)
-            }*/
+            reglages.setOnClickListener {
+
+                val packageName = "com.maison.mona"
+                try {
+                    //Open the specific App Info page:
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.parse("package:$packageName")
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    //e.printStackTrace();
+
+                    //Open the generic Apps page:
+                    val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+                    startActivity(intent)
+                }
+            }
         }
 
         return binding.root

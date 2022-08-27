@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, OnBoardingActivity::class.java)
             startActivity(intent)
         }else {
+
             /*
 
             We must check that all permissions are granted before using the app
