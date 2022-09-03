@@ -20,6 +20,57 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
+        android:id="@+id/odj_top"
+        android:layout_width="match_parent"
+        android:layout_height="158dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="36dp"
+        android:background="@color/bluePowder"
+        android:layoutAnimation="@anim/layout_animation_slide_from_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="67dp"
+            android:layout_height="88dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:contentDescription="@string/Collection"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:src="@drawable/collection_active" />
+
+        <TextView
+            android:id="@+id/badges_count"
+            style="@style/TextAppearance.Mona.Odj.Fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="0"
+            android:textSize="55sp" />
+
+
+
+            <TextView
+                android:id="@+id/collection_oeuvre"
+                style="@style/TextAppearance.Mona.Odj.Fragment"
+                android:layout_width="147dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:layout_marginStart="@dimen/margin_small"
+                android:gravity="center_vertical"
+                android:text="@string/badges_debloques"
+                android:textSize="20sp" />
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="800dp"
         android:orientation="vertical"
@@ -30,10 +81,11 @@
             android:id="@+id/badge_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="?attr/actionBarSize"
             android:background="@color/offWhite"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2"
-            android:layout_marginBottom="?attr/actionBarSize"
             tools:listitem="@layout/badge_recyclerview_header" />
 
     </LinearLayout>

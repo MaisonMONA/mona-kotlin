@@ -14,6 +14,11 @@ import java.lang.Double.parseDouble
 //View Model for the single artwork displayed on the UI to bind properly
 class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int): AndroidViewModel(application){
 
+    var isArt = false;
+    var isPlaces = false;
+    var isHeritages = false;
+
+
     private val repository: OeuvreRepository
     var oeuvre: Oeuvre? = null
     init {
@@ -41,6 +46,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
     }
 
+
     fun isCollected(): Boolean{
         var artworkCollected = false
 
@@ -63,6 +69,8 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return artworkTarget
     }
 
+
+
     fun getArtists() : String{
         var artistString = ""
 
@@ -81,6 +89,9 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
             }
         }
 
+        isArt = true;
+        isPlaces = false;
+        isHeritages = false;
         return artistString
     }
 
@@ -95,7 +106,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     //Function used for sous-usages for Patrimoine or category for Artworks
-    fun getSousUsageCategory() : String{
+    fun getSousUsageOrCategory() : String{
 
         val category = oeuvre?.category?.fr
 
@@ -105,12 +116,16 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var sousUsagesString = ""
         val array = oeuvre?.sousUsages
 
+
         if (array != null) {
             for (element in array){
-                sousUsagesString += element
+                sousUsagesString += "\n" + element
 
             }
         }
+        isArt = false;
+        isPlaces = false;
+        isHeritages = true;
 
         return sousUsagesString
     }
@@ -126,7 +141,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var borough = oeuvre?.borough
 
         if(borough == null){
-            borough = ""
+            return ""
 
         }
 
@@ -137,7 +152,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     //Parsing through dimensions
-    fun getDimensions() : String{
+    fun getDimensionsOrStatus() : String{
         val dimensions: MutableList<Int> = ArrayList()
         var dimensionsString = ""
         var metric = ""
@@ -184,7 +199,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return dimensionsString
     }
 
-    fun getMaterials() : String? {
+    fun getMaterialsOrAdresses() : String? {
 
         var adresses = oeuvre?.addresses
         var adressesString =""
@@ -222,12 +237,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         var synthesis = oeuvre?.synthesis
 
 
-        if (description !== null || synthesis !== null){
+        if (description !== null && synthesis !== null){
             return description +"\n"+ synthesis
         }
 
-        description = ""
-        synthesis = ""
+        if (description !== null) {
+            return description
+        }
 
         var techniquesString = ""
         val array = oeuvre?.techniques
@@ -249,11 +265,17 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun getCaptureDateMessage(): String{
-        return "Cette oeuvre a été collectionnée le " + oeuvre?.date_photo
+        return "Date de création: " + oeuvre?.date_photo
     }
 
     fun isOeuvreSent(): Boolean? {
         return if (oeuvre != null) oeuvre?.isSent else false
+    }
+
+    fun getTypeOfContent(): String{
+        if(isHeritages){ Log.d("color bar ", "heritages") ; isHeritages = false;return "heritages"}
+        else if (isArt){Log.d("color bar ", "art"); isArt = false;return "art"}
+        else Log.d("color bar ", "places"); isPlaces = false; return "places"
     }
 
 }

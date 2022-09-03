@@ -1,8 +1,11 @@
 package com.maison.mona.fragment
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +17,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
+import com.maison.mona.activities.BadgeActivity
 import com.maison.mona.activities.LoginActivity
+import com.maison.mona.activities.OnBoardingActivity
+import com.maison.mona.activities.Tutoriel
 import com.maison.mona.data.OeuvreDatabase
 import com.maison.mona.data.OeuvreRepository
 import com.maison.mona.data.SaveSharedPreference
@@ -43,21 +49,21 @@ class MoreFragment : Fragment(){
         val binding = FragmentMoreBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        mSwitch = binding.moreOnlineSwitch
+        //mSwitch = binding.moreOnlineSwitch
 
-        if(SaveSharedPreference.isOnline(requireContext()))
+        /*if(SaveSharedPreference.isOnline(requireContext()))
             mSwitch.isChecked = false
 
 
         mSwitch.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             updateInfoOnline()
-        }
+        }*/
 
         binding.apply {
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
 
-            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
+           /* oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
 
                 when (val count = collected.filter { it.state == 2 || it.state == 3 }.size) {
                     0 -> {
@@ -87,11 +93,16 @@ class MoreFragment : Fragment(){
                         moreUserBadges.text = badgesString
                     }
                 }
-            })
+            })*/
 
-            howItWorksButton.setOnClickListener{
+            /*howItWorksButton.setOnClickListener{
                 val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
                 findNavController().navigate(action)
+            }*/
+
+            howItWorksButton.setOnClickListener{
+                val intent = Intent(context, Tutoriel::class.java)
+                startActivity(intent)
             }
 
             aboutButton.setOnClickListener {
@@ -104,9 +115,21 @@ class MoreFragment : Fragment(){
                 findNavController().navigate(action)
             }
 
-            signOutButton.setOnClickListener {
-                val myIntent = Intent(requireActivity(), LoginActivity::class.java)
-                startActivity(myIntent)
+            reglages.setOnClickListener {
+
+                val packageName = "com.maison.mona"
+                try {
+                    //Open the specific App Info page:
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.parse("package:$packageName")
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    //e.printStackTrace();
+
+                    //Open the generic Apps page:
+                    val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+                    startActivity(intent)
+                }
             }
         }
 

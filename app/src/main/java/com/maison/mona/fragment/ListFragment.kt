@@ -21,6 +21,7 @@ import com.maison.mona.data.SaveSharedPreference
 import com.maison.mona.databinding.FragmentListBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreViewModel
+import kotlinx.android.synthetic.main.list_menu_drawer.*
 import org.osmdroid.util.GeoPoint
 import java.text.Normalizer
 import kotlin.math.asin
@@ -529,6 +530,22 @@ class ListFragment : Fragment() {
             //Send the information from the filters when we close the popup
             val filterButton = listDrawer.findViewById<Button>(R.id.filterButton)
             val radioGroup = listDrawer.findViewById<RadioGroup>(R.id.radio_group)
+            val spinner = listDrawer.findViewById<Spinner>(R.id.category_spinner)
+            val affichage = listDrawer.findViewById<TextView>(R.id.affichage)
+            val radioDistance = listDrawer.findViewById<RadioButton>(R.id.radio_distance)
+            val radioAlphabet = listDrawer.findViewById<RadioButton>(R.id.radio_alphabet)
+
+            // To handle the visibility for the filter for the list of sorted by ....
+            radioDistance.setOnClickListener{
+                spinner.setVisibility(View.INVISIBLE);
+                affichage.setVisibility(View.INVISIBLE);
+            }
+
+            radioAlphabet.setOnClickListener{
+                spinner.setVisibility(View.VISIBLE);
+                affichage.setVisibility(View.VISIBLE);
+            }
+
             radioGroup.check(R.id.radio_alphabet)
             this.filterIndex = R.id.radio_alphabet
             //When we click the filter button
@@ -537,11 +554,14 @@ class ListFragment : Fragment() {
                 val idCurrent  = radioGroup.checkedRadioButtonId
                 this.filterIndex = idCurrent
                 var radioValue = "None"
+
                 if(idCurrent != -1){//Not needed, just in case
                     val radioButton = radioGroup.findViewById<RadioButton>(idCurrent)
                     radioValue = radioButton.text.toString()
+
                     Log.d("Popup", radioValue)
                 }
+
                 //Get Spinner value
                 val spinnerValue = categorySpinner.selectedItem.toString()
                 this.categoryIndex = categorySpinner.selectedItemPosition

@@ -22,6 +22,8 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSecondaryVariant">
 
+
+
         <LinearLayout
             android:id="@+id/odj_top"
             android:layout_width="413dp"
@@ -128,7 +130,7 @@
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:gravity="start"
-                    android:text="@{viewModel.dimensions}"
+                    android:text="@{viewModel.dimensionsOrStatus}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -167,6 +169,7 @@
                     tools:visibility="visible">
 
                     <ImageButton
+                        android:id="@+id/captureodj"
                         android:layout_width="160dp"
                         android:layout_height="105dp"
                         android:layout_marginEnd="@dimen/margin_small"

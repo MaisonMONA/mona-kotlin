@@ -73,7 +73,7 @@
     <style name="TextAppearance.Mona.Item.Title.Text" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="fontFamily">@font/gotham_book</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textSize">@dimen/item_title_size</item>
+        <item name="android:textSize">25dp</item>
     </style>
 
     <style name="TextAppearance.Mona.Item.Artist.Text" parent="TextAppearance.MaterialComponents.Headline5">

@@ -5,13 +5,18 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil.setContentView
+import androidx.fragment.app.viewModels
 import com.maison.mona.R
 import com.maison.mona.data.SaveSharedPreference
+import com.maison.mona.viewmodels.OeuvreDetailViewModel
+import com.maison.mona.viewmodels.OeuvreViewModel
 import org.osmdroid.views.MapView
 
 /*
@@ -30,6 +35,9 @@ class MainActivity : AppCompatActivity() {
 
     //For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
+    private val oeuvreViewModel: OeuvreViewModel by viewModels()
+    private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
+
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION: Int = 1
@@ -50,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, OnBoardingActivity::class.java)
             startActivity(intent)
         }else {
+
             /*
 
             We must check that all permissions are granted before using the app
@@ -62,11 +71,13 @@ class MainActivity : AppCompatActivity() {
             // Ask for permissions
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
                 // Even if we want to show request rationale, we send the user to PermissionsDeniedActivity
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                     // Send to PermissionsDeniedActivity
                     val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
                     }
@@ -75,7 +86,8 @@ class MainActivity : AppCompatActivity() {
                     // Request permissions
                     ActivityCompat.requestPermissions(this, arrayOf(
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA),
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION
                     )
                 }
@@ -86,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     this,
                     R.layout.activity_main
                 )
+
             }
         }
     }

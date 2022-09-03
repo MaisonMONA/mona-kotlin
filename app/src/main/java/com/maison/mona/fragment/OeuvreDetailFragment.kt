@@ -31,6 +31,7 @@ import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
+import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -50,22 +51,15 @@ class OeuvreDetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
+
+        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application,
+            safeArgs.itemSelected.id)
         ).get(OeuvreDetailViewModel::class.java)
 
-        var layout = ""
-        val patrimoine = if (oeuvreDetailViewModel.oeuvre?.status !== null){
-            layout = ""
-
-        }else{
-            layout = "fragment_oeuvre_item"
-        }
-
-
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
-
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
+
             //empty callback bc of the viewmodel delay to get the artwork
             callback = object : Callback {
                 override fun updateTarget(oeuvre: Oeuvre) {
@@ -80,6 +74,7 @@ class OeuvreDetailFragment : Fragment() {
                 }
             }
 
+
             val mHandler = Handler()
             mHandler.postDelayed({
                 viewModel = oeuvreDetailViewModel //TODO Call fait a la BD, envoie au viewModel. Mais arrive pas a trouver l'oeuvre donc on met le delai
@@ -90,6 +85,7 @@ class OeuvreDetailFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
 
             if(oeuvreDetailViewModel.oeuvre?.title == null){
+
                 mHandler.postDelayed({
                     viewModel = oeuvreDetailViewModel
                     Log.d("OEUVRES","associe2")
@@ -104,6 +100,8 @@ class OeuvreDetailFragment : Fragment() {
 
         return binding.root
     }
+
+
 
     private fun getProperCallback(fab: FloatingActionButton): Callback{
         return object : Callback {
@@ -150,14 +148,29 @@ class OeuvreDetailFragment : Fragment() {
         //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
         Log.d("Save","Photo path: " +  oeuvreDetailViewModel.oeuvre?.photo_path)
 
+        appbar.getLayoutTransition().setAnimateParentHierarchy(false);
+
+        /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
+            Log.d("color bar ", "heritages")
+            colorBar.background.setColorFilter(Color.parseColor("#FE7E61"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "art"){
+            Log.d("color bar ", "art")
+            colorBar.background.setColorFilter(Color.parseColor("#FFFFD450"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "places"){
+            Log.d("color bar ", "places")
+            colorBar.background.setColorFilter(Color.parseColor("#FFB965ED"), PorterDuff.Mode.MULTIPLY)
+        }*/
+
+
+        //repository = OeuvreRepository(oeuvreDao)
         val arrayParameters = arrayOf(
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
             oeuvreDetailViewModel.getDate(),
-            oeuvreDetailViewModel.getDimensions(), //status
-            oeuvreDetailViewModel.getSousUsageCategory(),//sous-usages
-            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),//borough territoru
-            oeuvreDetailViewModel.getMaterials(), //adresses
+            oeuvreDetailViewModel.getDimensionsOrStatus(),
+            oeuvreDetailViewModel.getSousUsageOrCategory(),
+            oeuvreDetailViewModel.getBoroughTerritorySubcategory(),
+            oeuvreDetailViewModel.getMaterialsOrAdresses(),
             oeuvreDetailViewModel.getTechniques()
         )
         val arrayViews = arrayOf(
@@ -172,9 +185,21 @@ class OeuvreDetailFragment : Fragment() {
         )
 
         for((i, param) in arrayParameters.withIndex()){
-            if(param == null || param == ""){
+
+            /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
+            Log.d("color bar ", "heritages")
+            colorBar.background.setColorFilter(Color.parseColor("#FE7E61"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "art"){
+            Log.d("color bar ", "art")
+            colorBar.background.setColorFilter(Color.parseColor("#FFFFD450"), PorterDuff.Mode.MULTIPLY)
+        }else if (oeuvreDetailViewModel.getTypeOfContent() == "places"){
+            Log.d("color bar ", "places")
+            colorBar.background.setColorFilter(Color.parseColor("#FFB965ED"), PorterDuff.Mode.MULTIPLY)
+        }*/
+            if(param == "" || param == null){
                 Log.d("Param ", "Param vide: $i")
                 Log.d("Param", param.toString())
+                //arrayViews[i].visibility = View.INVISIBLE
             }else{
                 Log.d("Param", "Parametre non vide:$param")
                 arrayViews[i].visibility = View.VISIBLE
@@ -229,9 +254,8 @@ class OeuvreDetailFragment : Fragment() {
 
     interface Callback {
         fun updateTarget(oeuvre:Oeuvre)
-
         fun openMap(oeuvre:Oeuvre)
-
         fun captureOeuvre(oeuvre: Oeuvre)
+
     }
 }
