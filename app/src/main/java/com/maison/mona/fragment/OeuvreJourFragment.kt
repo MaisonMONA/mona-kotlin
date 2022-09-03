@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
@@ -30,6 +31,8 @@ import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
+import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.fragment_odj.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -162,6 +165,11 @@ class OeuvreJourFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
+
+        odj_cardview.getLayoutTransition().setAnimateParentHierarchy(false);
     }
 
     @SuppressLint("SimpleDateFormat")

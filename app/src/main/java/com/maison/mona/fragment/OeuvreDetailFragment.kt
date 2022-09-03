@@ -31,6 +31,7 @@ import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
+import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -72,6 +73,7 @@ class OeuvreDetailFragment : Fragment() {
                     //do nothing
                 }
             }
+
 
             val mHandler = Handler()
             mHandler.postDelayed({
@@ -146,6 +148,7 @@ class OeuvreDetailFragment : Fragment() {
         //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
         Log.d("Save","Photo path: " +  oeuvreDetailViewModel.oeuvre?.photo_path)
 
+        appbar.getLayoutTransition().setAnimateParentHierarchy(false);
 
         /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
             Log.d("color bar ", "heritages")

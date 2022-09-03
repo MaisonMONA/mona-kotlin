@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.transition.AutoTransition
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.annotation.Nullable
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +19,8 @@ import com.maison.mona.activities.BadgeActivity
 import com.maison.mona.adapters.CollectionAdapter
 import com.maison.mona.databinding.FragmentCollectionBinding
 import com.maison.mona.viewmodels.OeuvreViewModel
+import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.fragment_oeuvre_item.*
 
 class CollectionFragment : Fragment() {
 
@@ -86,5 +90,10 @@ class CollectionFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
+
+        collection_cardview_badge.getLayoutTransition().setAnimateParentHierarchy(false);
     }
 }
