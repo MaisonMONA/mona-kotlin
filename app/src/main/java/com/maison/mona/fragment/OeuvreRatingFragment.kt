@@ -135,7 +135,7 @@ class OeuvreRatingFragment : Fragment() {
                     popup.onAttach(requireContext())
                     popup.createPopUpsBadges(view, findNavController(), newBadge)
 
-                    fragmentManager?.executePendingTransactions()
+                    this.childFragmentManager.executePendingTransactions()
 
                 }
             }, 500L)
