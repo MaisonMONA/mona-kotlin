@@ -287,8 +287,8 @@
                 <RatingBar
                     android:id="@+id/oeuvre_rating"
                     style="@style/RatingBar"
-                    android:layout_width="232dp"
-                    android:layout_height="43dp"
+                    android:layout_width="241dp"
+                    android:layout_height="44dp"
                     android:isIndicator="true"
                     android:rating="@{viewModel.oeuvre.rating}"
                     app:isVisible="@{viewModel.isCollected}"
