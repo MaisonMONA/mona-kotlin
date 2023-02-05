@@ -56,10 +56,8 @@ class ListFragment : Fragment() {
 
     private var categoryIndex: Int = 0
     private var filterIndex: Int = 0
-
     private var category: String = "Titres"
     private var filter: String = "A-Z"
-
     private var fromButton = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +72,6 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("Liste", "On Create")
         if(this.layout == null){
             val binding = FragmentListBinding.inflate(inflater, container, false)
             context ?: return binding.root
@@ -142,32 +139,32 @@ class ListFragment : Fragment() {
         //Gets the location of the user
         userLocation = SaveSharedPreference.getGeoLoc(context)
 
-        if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])
-            && (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])){//Oeuvre and Lieu
-            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { oeuvrelist ->
+        if ((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2]) &&
+            (iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {  // Oeuvre and Lieu
+            oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner) { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
-            })
-        }else if((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])){//Only oeuvre
-            oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner, { oeuvrelist ->
+            }
+        } else if ((iconsStates[0][0] or iconsStates[0][1] or iconsStates[0][2])) {  // Only oeuvre
+            oeuvreViewModel.oeuvreTList.observe(viewLifecycleOwner) { oeuvrelist ->
                 filteredList = filterStateList(oeuvrelist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
-            })
-        } else if((iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {//Only lieu
-            oeuvreViewModel.lieuList.observe(viewLifecycleOwner, { lieulist ->
+            }
+        } else if ((iconsStates[1][0] or iconsStates[1][1] or iconsStates[1][2])) {  // Only lieu
+            oeuvreViewModel.lieuList.observe(viewLifecycleOwner) { lieulist ->
                 filteredList = filterStateList(lieulist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList,category,userLocation)
-            })
-        } else if((iconsStates[2][0] or iconsStates[2][2] or iconsStates[2][1])) {//Only patrimoine
-            oeuvreViewModel.patrimoineList.observe(viewLifecycleOwner, { patrimoinelist ->
+            }
+        } else if ((iconsStates[2][0] or iconsStates[2][2] or iconsStates[2][1])) {  // Only patrimoine
+            oeuvreViewModel.patrimoineList.observe(viewLifecycleOwner) { patrimoinelist ->
                 filteredList = filterStateList(patrimoinelist)
                 sortedList = filterList(filteredList, category, filter)
                 adapter.submitList(sortedList, category, userLocation)
-            })
-        }else{//Empty
+            }
+        } else {  // Empty
             filteredList = listOf()
             adapter.submitList(sortedList,category,userLocation)
         }
@@ -266,7 +263,6 @@ class ListFragment : Fragment() {
                 sortedList = currentList
             }
         }
-        Log.d("Popup", "Liste length: " + sortedList.size)
         return sortedList
     }
 

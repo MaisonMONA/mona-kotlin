@@ -41,7 +41,7 @@ class OnBoardingActivity : AppCompatActivity() {
         )
         pager?.adapter = pagerAdapter
 
-        //The end button
+        // The end button
         end?.visibility = View.INVISIBLE
         end?.setOnClickListener { finishOnBoarding() }
 
@@ -49,9 +49,9 @@ class OnBoardingActivity : AppCompatActivity() {
         pager?.addOnPageChangeListener(object : OnPageChangeListener {
             // This method will be invoked when a new page becomes selected.
             override fun onPageSelected(position: Int) {
-                if(position == 10){
+                if (position == 10) {
                     end?.visibility = View.VISIBLE
-                }else{
+                } else {
                     end?.visibility = View.INVISIBLE
                 }
             }

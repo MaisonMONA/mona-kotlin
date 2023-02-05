@@ -26,6 +26,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
+import com.maison.mona.data.OeuvreDatabase
 import com.maison.mona.databinding.FragmentOdjBinding
 import com.maison.mona.entity.Oeuvre
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
@@ -61,27 +62,22 @@ class OeuvreJourFragment : Fragment() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-
-        //Artwork of the way is represented by the id of the artwork that
-        //represents the the current day of the year
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        //Artwork of the day is represented by the id of the artwork that
+        //represents the current day of the year
         val calendar = Calendar.getInstance()
-        oeuvreId = calendar[Calendar.DAY_OF_YEAR] * (calendar[Calendar.MONTH] / 2)
 
-        //Select a random artwork from those the user didn't collect yet
+        // Building the Int seed for Random as {DAY OF YEAR}{YEAR} so it is unique
+        val random = kotlin.random.Random(calendar[Calendar.DAY_OF_YEAR] * 10000 + calendar[Calendar.YEAR])
+        oeuvreId = (random.nextInt() % OeuvreDatabase.nbOeuvres) + 1  // Limit the ID to [1; nbOeuvres[
 
+        // Obtain the artwork associated with `oeuvreId`
         oeuvreDetailViewModel = ViewModelProviders.of(
             this,
-            OeuvreDetailViewModelFactory(requireActivity().application,
-                oeuvreId
-            )
+            OeuvreDetailViewModelFactory(requireActivity().application, oeuvreId)
         ).get(OeuvreDetailViewModel::class.java)
 
-        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(
-            inflater, R.layout.fragment_odj, container, false
-        ).apply{
+        val binding = DataBindingUtil.inflate<FragmentOdjBinding>(inflater, R.layout.fragment_odj, container, false).apply {
             viewModel = oeuvreDetailViewModel
             lifecycleOwner = viewLifecycleOwner
 
@@ -97,14 +93,14 @@ class OeuvreJourFragment : Fragment() {
 
                 override fun updateOeuvre(oeuvre: Oeuvre) {
                     oeuvre.let {
-                        if(oeuvre.state == null){
+                        if (oeuvre.state == null) {
                             oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
-                            Toast.makeText(requireActivity(), oeuvre.title+" ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), "${oeuvre.title} ciblé", Toast.LENGTH_LONG).show()
                         }
 
-                        if(oeuvre.state == 1){ //from target to non target
+                        if (oeuvre.state == 1) { //from target to non target
                             oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
-                            Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(), "${oeuvre.title} n'est plus ciblé", Toast.LENGTH_LONG).show()
                         }
                     }
                 }

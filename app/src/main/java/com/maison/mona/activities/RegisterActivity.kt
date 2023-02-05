@@ -49,7 +49,7 @@ class RegisterActivity : AppCompatActivity() {
                 if (reader.has(TOKEN)) {
                     saveSharedPreferences(mUsername, reader)
                     val intent = Intent(applicationContext, MainActivity::class.java)
-                    intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yess!")
+                    intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yess!")  // TODO: delete this line maybe?
                     startActivity(intent)
                 }
                 if (reader.has(ERRORS)) {
@@ -65,7 +65,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveSharedPreferences(mUsername: TextView?, reader: JSONObject){
+    private fun saveSharedPreferences(mUsername: TextView?, reader: JSONObject) {
         val token = reader.getString(TOKEN)
         val username = mUsername?.text.toString()
         SaveSharedPreference.setToken(this, token)

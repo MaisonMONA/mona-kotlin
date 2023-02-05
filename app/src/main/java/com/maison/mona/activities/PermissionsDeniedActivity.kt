@@ -14,8 +14,8 @@ class PermissionsDeniedActivity : AppCompatActivity() {
 
     private companion object {
         private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION_AND_WRITE_EXTERNAL : Int = 0
-        //private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL : Int = 1
-        //private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION : Int = 2
+//        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL : Int = 1
+//        private const val MY_PERMISSIONS_REQUEST_FINE_LOCATION : Int = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,47 +23,28 @@ class PermissionsDeniedActivity : AppCompatActivity() {
         setContentView(R.layout.activity_permissions_denied)
         btn_try_again_request_permissions_id.setOnClickListener {
             /*
-
-            We must check that all permissions are granted before using the app
-            1. Write external storage
-            2. Fine location
-
+             *  We must check that all permissions are granted before using the app
+             *  1. Write external storage
+             * 2. Fine location
              */
 
             // One or both of the two required permissions are missing:
             // Ask for permissions
 
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
                 // Don't show explanation
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )||
-                    ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.CAMERA
-                    )
-                ) {
-                    // Request the permission.
+                //      ???????????????? mais pourquoi ??
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+
                     ActivityCompat.requestPermissions(
-                        this, arrayOf(
+                        this,
+                        arrayOf(
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.CAMERA
@@ -72,11 +53,8 @@ class PermissionsDeniedActivity : AppCompatActivity() {
                     )
                 }
             } else {
-                // Permissions are all granted
-                // Go to MainActivity
-                val intent = Intent(this, MainActivity::class.java).apply {
-                }
-                startActivity(intent)
+                // Permissions are all granted, go to MainActivity
+                startActivity(Intent(this, MainActivity::class.java))
             }
         }
     }
@@ -84,18 +62,13 @@ class PermissionsDeniedActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_FINE_LOCATION_AND_WRITE_EXTERNAL ->{
+            MY_PERMISSIONS_REQUEST_FINE_LOCATION_AND_WRITE_EXTERNAL -> {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    // All permissions were granted
-                    // Send to MainActivity
-                    val intent = Intent(this, MainActivity::class.java).apply {
-
-                    }
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // All permissions were granted, send to MainActivity
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }
-                //else { permission denied, just ignore }
             }
 
             // Add other 'when' lines to check for other

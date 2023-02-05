@@ -7,7 +7,7 @@
     <item
         android:width="@dimen/item_background_logo_width"
         android:height="@dimen/item_background_logo_height"
-        android:drawable="@drawable/logo"
+        android:drawable="@drawable/mona_logo_blanc"
         android:gravity="center" />
 
 </layer-list>

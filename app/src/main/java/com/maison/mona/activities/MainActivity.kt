@@ -33,7 +33,7 @@ import org.osmdroid.views.MapView
 
 class MainActivity : AppCompatActivity() {
 
-    //For the map fragment, map view has to be implemented in it's respecting activity
+    // For the map fragment, map view has to be implemented in it's respecting activity
     private var mMap: MapView? = null
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
     private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
@@ -46,59 +46,78 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
 
-        //Check if user has current session via SharedPreferences
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        // Check if user has current session via SharedPreferences
         if (SaveSharedPreference.getToken(this).isEmpty()){
-            Log.d("Mode","Login")
-            val myIntent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(myIntent)
-        } else if(SaveSharedPreference.firstTime(applicationContext)) {
-            val intent = Intent(applicationContext, OnBoardingActivity::class.java)
-            startActivity(intent)
-        }else {
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+        } else if (SaveSharedPreference.firstTime(applicationContext)) {
+            startActivity(Intent(applicationContext, OnBoardingActivity::class.java))
+        } else {
+            /**
+             * We must check that all permissions are granted before using the app
+             *  1. Write external storage
+             *  2. Fine location
+             **/
 
-            /*
-
-            We must check that all permissions are granted before using the app
-            1. Write external storage
-            2. Fine location
-
-            */
-
-            // One or both of the two required permissions are missing:
-            // Ask for permissions
-
+            // If one or both of the two required permissions are missing ask for permissions
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
                 // Even if we want to show request rationale, we send the user to PermissionsDeniedActivity
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                    // Send to PermissionsDeniedActivity
-                    val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
-                    }
-                    startActivity(intent)
+
+                    startActivity(Intent(this, PermissionsDeniedActivity::class.java))
+
                 } else {
                     // Request permissions
-                    ActivityCompat.requestPermissions(this, arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA),
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                        ),
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION
                     )
                 }
-            }else {
-                // Both permissions are granted:
-                // Setup Main Activity
-                setContentView(
-                    this,
-                    R.layout.activity_main
-                )
+            } else {
+                // Both permissions are granted, setup Main Activity
+                setContentView(R.layout.activity_main)
+            }
+        }
+    }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION -> {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // Both permissions are granted:
+                    // Setup Main Activity
+                    setContentView(R.layout.activity_main)
+
+                    //Collecting Artworks
+                    //TODO: permission for internet
+                    //TODO: Parse all data and create a DB for it?
+                    //Note that the Toolbar defined in the layout has the id "my_toolbar"
+                } else {
+                    // Permissions denied
+                    // Send to PermissionsDeniedActivity
+                    startActivity(Intent(this, PermissionsDeniedActivity::class.java))
+                }
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
             }
         }
     }
@@ -114,44 +133,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
+        // this will refresh the osmdroid configuration on resuming.
+        // if you make changes to the configuration, use
+        // SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // Configuration.getInstance().save(this, prefs);
         mMap?.onPause() //needed for compass, my location overlays, v6.0.0 and up
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_AND_FINE_LOCATION ->{
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults.isNotEmpty() && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    // Both permissions are granted:
-                    // Setup Main Activity
-                    setContentView(this,
-                        R.layout.activity_main
-                    )
-
-                    //Collecting Artworks
-                    //TODO: permission for internet
-                    //TODO: Parse all data and create a DB for it?
-                    //Note that the Toolbar defined in the layout has the id "my_toolbar"
-                } else {
-                    // Permissions denied
-                    // Send to PermissionsDeniedActivity
-                    val intent = Intent(this, PermissionsDeniedActivity::class.java).apply {
-                    }
-                    startActivity(intent)
-                }
-                return
-            }
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
-            else -> {
-                // Ignore all other requests.
-            }
-        }
     }
 }

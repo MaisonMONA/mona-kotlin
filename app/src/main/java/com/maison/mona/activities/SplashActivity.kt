@@ -23,22 +23,20 @@ class SplashActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        //Set the internet Mode
+        // Set the internet Mode
         oeuvreViewModel = ViewModelProvider(this).get(OeuvreViewModel::class.java)
         badgeViewModel = ViewModelProvider(this).get(BadgeViewModel::class.java)
 
         startActivity(Intent(this, MainActivity::class.java))
 
-        //va chercher les oeuvres
-        oeuvreViewModel.oeuvreList.observe(this, { oeuvreList ->
-            if(oeuvreList.isNotEmpty()){
-                //va chercher les badges
-                badgeViewModel.badgesList.observe(this, {
-                    startActivity(Intent(this,
-                        MainActivity::class.java))
-                })
+        // Va chercher les oeuvres
+        oeuvreViewModel.oeuvreList.observe(this) { oeuvreList ->
+            if (oeuvreList.isNotEmpty()) {
+                // Va chercher les badges
+                badgeViewModel.badgesList.observe(this) {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
             }
-        })
+        }
     }
-
 }

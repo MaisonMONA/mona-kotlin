@@ -18,13 +18,7 @@ class ArtworksTask(time: String) : AsyncTask<Void, Void, String>() {
 
         val client = OkHttpClient()
         val request = Request.Builder()
-
-           // .url("https://picasso.iro.umontreal.ca/~mona/api/lastUpdatedArtworks?date="+this.time)
-            //.url("https://picasso.iro.umontreal.ca/~mona/api/artworks?page="+time)
-                //momo
-            .url("https://picasso.iro.umontreal.ca/~mona/api/artworks?paginate=100&page=1"+time)
-            //.url("https://picasso.iro.umontreal.ca/~mona/api/places")
-
+            .url("https://picasso.iro.umontreal.ca/~mona/api/artworks?paginate=100&page=1$time")
             .build()
 
 

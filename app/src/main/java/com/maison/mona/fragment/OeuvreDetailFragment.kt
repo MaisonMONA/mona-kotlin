@@ -39,12 +39,12 @@ import java.util.*
 
 class OeuvreDetailFragment : Fragment() {
 
-    //View Models
+    // View Models
     private val oeuvreViewModel: OeuvreViewModel by viewModels()
     private lateinit var oeuvreDetailViewModel: OeuvreDetailViewModel
     private val safeArgs : OeuvreDetailFragmentArgs by navArgs()
 
-    //Photo Attributes
+    // Photo Attributes
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
 
@@ -52,43 +52,44 @@ class OeuvreDetailFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        oeuvreDetailViewModel = ViewModelProvider(this, OeuvreDetailViewModelFactory(requireActivity().application,
-            safeArgs.itemSelected.id)
+        oeuvreDetailViewModel = ViewModelProvider(
+            this,
+            OeuvreDetailViewModelFactory(
+                requireActivity().application,
+                safeArgs.itemSelected.id
+            )
         ).get(OeuvreDetailViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
 
-            //empty callback bc of the viewmodel delay to get the artwork
-            callback = object : Callback {
-                override fun updateTarget(oeuvre: Oeuvre) {
-                    //do nothing
-                }
 
-                override fun captureOeuvre(oeuvre: Oeuvre) {//Photo problem
-                    Log.d("OEUVRES", "la cça touche")
-                }
-                override fun openMap(oeuvre: Oeuvre) {
-                    //do nothing
-                }
-            }
+
+            //empty callback bc of the viewmodel delay to get the artwork
+//            callback = object : Callback {
+//                override fun updateTarget(oeuvre: Oeuvre) { /* Do nothing */ }
+//
+//                override fun openMap(oeuvre: Oeuvre) { /* Do nothing */ }
+//
+//                override fun captureOeuvre(oeuvre: Oeuvre) {  // Photo problem
+//                    Log.d("OEUVRES", "là ça touche")
+//                }
+//            }
 
 
             val mHandler = Handler()
             mHandler.postDelayed({
                 viewModel = oeuvreDetailViewModel //TODO Call fait a la BD, envoie au viewModel. Mais arrive pas a trouver l'oeuvre donc on met le delai
-                Log.d("OEUVRES","associe")
                 callback = getProperCallback(fab)
-            }, 1000L)
+            }, 0L)
 
             lifecycleOwner = viewLifecycleOwner
 
-            if(oeuvreDetailViewModel.oeuvre?.title == null){
-
+            // In case fetching the data failed, set a timeout and try again
+            if (oeuvreDetailViewModel.oeuvre?.title == null) {
                 mHandler.postDelayed({
                     viewModel = oeuvreDetailViewModel
-                    Log.d("OEUVRES","associe2")
                     callback = getProperCallback(fab)
                 }, 3000L)
             }
@@ -108,27 +109,28 @@ class OeuvreDetailFragment : Fragment() {
             override fun updateTarget(oeuvre: Oeuvre) {
                 oeuvre.let {
                     //Set state depending on current state of artwork
-                    //from non target to target
-                    if(oeuvre.state == null){
 
+                    if (oeuvre.state == null) {  // from non target to target
+                        // Change color of the target button icon to black
                         fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.black))
 
-                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+                        findNavController().popBackStack(R.id.fragmentViewPager_dest, false)
 
-                        oeuvreDetailViewModel.updateTarget(oeuvre.id,1)
+                        oeuvreDetailViewModel.updateTarget(oeuvre.id, 1)
 
-                        Toast.makeText(requireActivity(), oeuvre.title + " ciblé", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireActivity(), "${oeuvre.title} ciblé", Toast.LENGTH_LONG).show()
                     }
-                    //from target to non target
-                    if(oeuvre.state == 1){ //from target to non target
 
+                    if (oeuvre.state == 1) {  // From target to non target
+                        // Change color of the target button icon to white
                         fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
 
-                        findNavController().popBackStack(R.id.fragmentViewPager_dest,false)
+                        // Line below commented: do not hide artwork page after untargeting!
+                        // findNavController().popBackStack(R.id.fragmentViewPager_dest, false)
 
-                        oeuvreDetailViewModel.updateTarget(oeuvre.id,null)
+                        oeuvreDetailViewModel.updateTarget(oeuvre.id, null)
 
-                        Toast.makeText(requireActivity(), oeuvre.title+" n'est plus ciblé", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireActivity(), "${oeuvre.title} n'est plus ciblé", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -150,19 +152,6 @@ class OeuvreDetailFragment : Fragment() {
 
         appbar.getLayoutTransition().setAnimateParentHierarchy(false);
 
-        /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
-            Log.d("color bar ", "heritages")
-            colorBar.background.setColorFilter(Color.parseColor("#FE7E61"), PorterDuff.Mode.MULTIPLY)
-        }else if (oeuvreDetailViewModel.getTypeOfContent() == "art"){
-            Log.d("color bar ", "art")
-            colorBar.background.setColorFilter(Color.parseColor("#FFFFD450"), PorterDuff.Mode.MULTIPLY)
-        }else if (oeuvreDetailViewModel.getTypeOfContent() == "places"){
-            Log.d("color bar ", "places")
-            colorBar.background.setColorFilter(Color.parseColor("#FFB965ED"), PorterDuff.Mode.MULTIPLY)
-        }*/
-
-
-        //repository = OeuvreRepository(oeuvreDao)
         val arrayParameters = arrayOf(
             oeuvreDetailViewModel.oeuvre?.title,
             oeuvreDetailViewModel.getArtists(),
@@ -173,6 +162,7 @@ class OeuvreDetailFragment : Fragment() {
             oeuvreDetailViewModel.getMaterialsOrAdresses(),
             oeuvreDetailViewModel.getTechniques()
         )
+
         val arrayViews = arrayOf(
             view.findViewById(R.id.oeuvre_name),
             view.findViewById(R.id.oeuvre_artist),
@@ -184,23 +174,11 @@ class OeuvreDetailFragment : Fragment() {
             view.findViewById<TextView>(R.id.oeuvre_techniques)
         )
 
-        for((i, param) in arrayParameters.withIndex()){
-
-            /*if (oeuvreDetailViewModel.getTypeOfContent() == "heritages"){
-            Log.d("color bar ", "heritages")
-            colorBar.background.setColorFilter(Color.parseColor("#FE7E61"), PorterDuff.Mode.MULTIPLY)
-        }else if (oeuvreDetailViewModel.getTypeOfContent() == "art"){
-            Log.d("color bar ", "art")
-            colorBar.background.setColorFilter(Color.parseColor("#FFFFD450"), PorterDuff.Mode.MULTIPLY)
-        }else if (oeuvreDetailViewModel.getTypeOfContent() == "places"){
-            Log.d("color bar ", "places")
-            colorBar.background.setColorFilter(Color.parseColor("#FFB965ED"), PorterDuff.Mode.MULTIPLY)
-        }*/
-            if(param == "" || param == null){
+        for ((i, param) in arrayParameters.withIndex()) {
+            if (param == "" || param == null) {
                 Log.d("Param ", "Param vide: $i")
                 Log.d("Param", param.toString())
-                //arrayViews[i].visibility = View.INVISIBLE
-            }else{
+            } else {
                 Log.d("Param", "Parametre non vide:$param")
                 arrayViews[i].visibility = View.VISIBLE
             }

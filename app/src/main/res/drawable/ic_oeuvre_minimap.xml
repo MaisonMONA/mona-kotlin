@@ -10,7 +10,7 @@
         android:strokeColor="#ffffff"
         android:width="65dp"
         android:height="65dp"
-        android:drawable="@drawable/carte_blanc"
+        android:drawable="@drawable/ic_detail_back"
         />
 
 </layer-list>

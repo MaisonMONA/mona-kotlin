@@ -34,9 +34,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
 
     private fun getOeuvre(){
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("OEUVRES", "oeuvre dans detailviewmodel avant")
             oeuvre = repository.getArticleById(oeuvreId)
-            Log.d("OEUVRES", "oeuvre dans oeuvredetailviewmodel : " + oeuvre?.title.toString())
         }
     }
 

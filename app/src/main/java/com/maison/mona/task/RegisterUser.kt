@@ -9,16 +9,18 @@ import java.io.IOException
 class RegisterUser : AsyncTask<String, String, String?>() {
     override fun doInBackground(vararg params: String): String? {
         val client = OkHttpClient()
+
         val formBody = FormBody.Builder()
             .add("username", params[0])
             .add("password", params[1])
             .add("password_confirmation", params[2])
             .build()
-        val request = Request.Builder()
 
+        val request = Request.Builder()
             .url("https://picasso.iro.umontreal.ca/~mona/api/register")
             .post(formBody)
             .build()
+
         return try {
             val response = client.newCall(request).execute()
             response.body!!.string()

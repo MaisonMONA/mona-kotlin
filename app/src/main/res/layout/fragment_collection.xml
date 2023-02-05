@@ -59,7 +59,7 @@
             android:contentDescription="@string/Collection"
             android:scaleX="1"
             android:scaleY="1"
-            android:src="@drawable/collection_active" />
+            android:src="@drawable/badge_icon_art_decoratif_color" />
 
         <TextView
             android:id="@+id/collection_count"

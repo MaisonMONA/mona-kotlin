@@ -28,14 +28,67 @@ import java.sql.Timestamp
     BilingualConverter::class,
     BilingualListConverter::class,
     DimensionConverter::class,
-    LocationConverter::class)
+    LocationConverter::class
+)
 abstract class OeuvreDatabase : RoomDatabase() {
-
     abstract fun oeuvreDAO(): OeuvreDAO
 
-    private class OeuvreDatabaseCallback(
-        private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
+    // getDatabase returns the singleton. It'll create the database the first
+    // time it's accessed, using Room's database builder to create a RoomDatabase
+    // object in the application context from the WordRoomDatabase class and
+    // names it "word_database".
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        @Volatile private var INSTANCE: OeuvreDatabase? = null
+        @SuppressLint("StaticFieldLeak")
+        private var mContext: Context? = null
+
+
+        public val nbOeuvres = 1
+        public val nbLieux = 1
+        public val nbPatrimoines = 1
+
+        fun getInstance(): OeuvreDatabase? {
+            return INSTANCE
+        }
+
+        fun getDatabase(context: Context, scope: CoroutineScope): OeuvreDatabase {
+            mContext = context
+            return INSTANCE ?: synchronized(this) {  // Create INSTANCE if not existing yet
+                Log.d("SAVE", "oeuvre get database")
+
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    OeuvreDatabase::class.java,
+                    "artwork-database"
+                ).addMigrations(MIGRATION_0_1)
+                 .addCallback(OeuvreDatabaseCallback(scope))
+                 .fallbackToDestructiveMigration()
+                 .build()
+
+                INSTANCE = instance
+
+                instance
+            }
+        }
+    }
+
+    private class OeuvreDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+
+            INSTANCE?.let { database ->
+                scope.launch {
+                    val artworkDAO = database.oeuvreDAO()
+
+                    try {
+                        artworkDAO.insertAll(getOeuvreList())
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
 
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
@@ -44,22 +97,19 @@ abstract class OeuvreDatabase : RoomDatabase() {
                 scope.launch {
                     val oeuvreDao = database.oeuvreDAO()
 
-                    //If not connected
+                    // If not connected
                     Log.d("Save", "Online initial: " + SaveSharedPreference.isOnline(mContext).toString())
-                    if( SaveSharedPreference.isOnline(mContext)//In online mode
-                        && MyGlobals(mContext!!).isNetworkConnected()){//and actually connected
-                        try{
-                            Log.d("Save","oeuvre accede database")
 
-
-
-                            val oeuvreList = getOeuvreList()
-                            oeuvreDao.insertAll(oeuvreList)
-                        }catch (e: IOException){
+                    // Check if online and actually connected
+                    if (SaveSharedPreference.isOnline(mContext) && MyGlobals(mContext!!).isNetworkConnected()) {
+                        try {
+                            Log.d("Save", "oeuvre accede database")
+                            oeuvreDao.insertAll(getOeuvreList())
+                        } catch (e: IOException) {
                             e.printStackTrace()
-                            Log.d("Save","erreur database")
+                            Log.d("Save", "erreur database")
                         }
-                    }else{
+                    } else {
                         SaveSharedPreference.setOnline(mContext,false)
                     }
                 }
@@ -75,149 +125,94 @@ abstract class OeuvreDatabase : RoomDatabase() {
             //localhost:8000/api/lastUpdatedPlaces?date=2015-12-19 17:36:22.444
 
             val lastUpdate = SaveSharedPreference.getLastUpdate(mContext)
-            Log.d("Database: ", "Last update: $lastUpdate")
-            //Manually fill in the maximum number of pages
-            //API call to server to get all artworks and places
-            //We combine the 2 in one lists
+            Log.d("Database", "Last update=[$lastUpdate]")
+            // Manually fill in the maximum number of pages
+            // API call to server to get all artworks and places
+            // We combine the 3 in one lists
 
-            //val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
+            // val artworksJson: String = ArtworksTask(lastUpdate).execute().get() ?: return mutableListOf()
 
-           // Log.d("Database", "Nb Artworks: $nbArtworks")
+            // Log.d("Database", "Nb Artworks: $nbArtworks")
 
-            //Temporary fix to be able to import the json without problem
-            val artworksJson = getJsonDataFromAsset(mContext!!, "artworks.json")
+            // Temporary fix to be able to import the json without problem
+            val oeuvreArray = JSONArray(getJsonDataFromAsset(mContext!!, "artworks.json"))
+            val placeArray = JSONArray(getJsonDataFromAsset(mContext!!, "places.json"))
+            val patrimoineArray = JSONArray(getJsonDataFromAsset(mContext!!, "patrimoine.json"))
 
-            val oeuvreArray = JSONArray(artworksJson)
-            val nbArtworks = oeuvreArray.length()//Stores the value for the amount of Artworks
-
-            //val placeJson = PlacesTask(lastUpdate).execute().get()
-            //val placeArray = JSONArray(placeJson)
-            val placeJson = getJsonDataFromAsset(mContext!!, "places.json")
-            val placeArray = JSONArray(placeJson)
+            val nbArtworks = oeuvreArray.length()
             val nbPlaces = placeArray.length()
-           // val temp = JSONObject(placeJson)
-            //val tempArray = temp.toJSONArray(temp.names())
-
-
-            val patrimoineJson = getJsonDataFromAsset(mContext!!, "patrimoine.json")
-            val patrimoineArray = JSONArray(patrimoineJson)
             val nbPatrimoine = patrimoineArray.length()
 
             val articleArray = JSONArray()
 
             Log.d("Database", "Nb Arts: ${nbArtworks}")
-
             Log.d("Database", "Nb Lieu: ${nbPlaces}")
-
             Log.d("Database", "Nb Patrimoine: ${nbPatrimoine}")
 
 
-
-            for(i in 0 until nbArtworks){
+            for (i in 0 until nbArtworks) {
                 articleArray.put(oeuvreArray.get(i))
-
-           }
-
-            for(i in 0 until nbPlaces){
-                articleArray.put(placeArray.get(i))
-
             }
 
-            for(i in 0 until nbPatrimoine){
+            for(i in 0 until nbPlaces) {
+                articleArray.put(placeArray.get(i))
+            }
+
+            for(i in 0 until nbPatrimoine) {
                 articleArray.put(patrimoineArray.get(i))
-          }
+            }
 
             Log.d("Database", "Total: ${articleArray.length()}")
 
-            //Moshi is a library with built in type adapters to ease data parsing such as our case.
-            //For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
+            // Moshi is a library with built in type adapters to ease data parsing such as our case.
+            // For every artwork, it creates an artwork instance and copies the right keys from the json artwork into the instance artwork
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
 
-            //Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
-            //efficiently loops through automatically with its adapter
+            // Since we have more than one artwork, we want to create a list of all objects of type artwork to which Moshi
+            // efficiently loops through automatically with its adapter
             val type = Types.newParameterizedType(List::class.java, Oeuvre::class.java)
             val adapter: JsonAdapter<List<Oeuvre>> = moshi.adapter(type)
             val oeuvreList: List<Oeuvre>? = adapter.fromJson(articleArray.toString())
 
-            val changedList = oeuvreList?.toMutableList()
+            val changedList: MutableList<Oeuvre>? = oeuvreList?.toMutableList()
             if (changedList != null) {
                 var indexArt = 1
                 var indexPlace = 1
                 var indexPatrimoine = 1
-                for(oeuvre: Oeuvre in changedList) {
-
-                    if(indexArt++ <= nbArtworks){
+                for (oeuvre: Oeuvre in changedList) {
+                    if (indexArt++ <= nbArtworks) {
                         oeuvre.type = "artwork"
                         oeuvre.idServer = idOeuvre++
-                    }else if(indexPlace++ <= nbPlaces){
+                    } else if (indexPlace++ <= nbPlaces) {
                         oeuvre.type = "place"
                         oeuvre.idServer = idPlace++
-                    }else if(indexPatrimoine++ <= nbPatrimoine) {
+                    } else if (indexPatrimoine++ <= nbPatrimoine) {
                         oeuvre.type = "patrimoine"
                         oeuvre.idServer = idPatrimoine++
                     }
+
                     oeuvre.id = id++
                 }
             }
 
-            finalList.let{
+            finalList.let {
                 changedList?.let(finalList::addAll)
             }
 
             val currentTime = Timestamp(System.currentTimeMillis())
 
-            Log.d("Database",currentTime.toString())
-
+            Log.d("Database", currentTime.toString())
             SaveSharedPreference.setLastUpdate(mContext, currentTime.toString())
+
             return finalList
         }
     }
-
-    //getDatabase returns the singleton. It'll create the database the first
-// time it's accessed, using Room's database builder to create a RoomDatabase
-// object in the application context from the WordRoomDatabase class and
-// names it "word_database".
-    companion object {
-
-        @SuppressLint("StaticFieldLeak")
-        @Volatile
-        private var INSTANCE: OeuvreDatabase? = null
-        @SuppressLint("StaticFieldLeak")
-        private var mContext: Context? = null
-
-        fun getInstance(): OeuvreDatabase? {
-            return INSTANCE
-        }
-
-        fun getDatabase(
-            context: Context,
-            scope: CoroutineScope
-        ): OeuvreDatabase {
-            mContext = context
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
-            return INSTANCE ?: synchronized(this) {
-                Log.d("SAVE", "oeuvre get database")
-
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    OeuvreDatabase::class.java,
-                    "artwork-database"
-                )
-                    .addMigrations(MIGRATION_0_1)
-                    .addCallback(OeuvreDatabaseCallback(scope))
-                    .fallbackToDestructiveMigration()
-                    .build()
-
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }
-//Migration Manuel
+
+
+// Migration Manuel
 val MIGRATION_0_1 = object : Migration(0,1){
     override fun migrate(database: SupportSQLiteDatabase){
         database.execSQL("ALTER TABLE artwork_table ADD COLUMN idServer INT")
@@ -226,13 +221,10 @@ val MIGRATION_0_1 = object : Migration(0,1){
 }
 
 fun getJsonDataFromAsset(context: Context, fileName: String): String? {
-    val jsonString: String?
-    try {
-        jsonString = context.assets?.open(fileName)
-            ?.bufferedReader().use { it?.readText() }
+    return try {
+        context.assets?.open(fileName)?.bufferedReader().use { it?.readText() }
     } catch (e: IOException) {
         e.printStackTrace()
-        return null
+        null
     }
-    return jsonString
 }

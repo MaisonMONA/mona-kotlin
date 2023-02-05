@@ -39,9 +39,10 @@ class LoginActivity : AppCompatActivity() {
                     mUsername?.text.toString(),
                     mPassword?.text.toString()
                 )
+
                 @Suppress("DEPRECATION") val response = loginUser.get()
                 println(response)
-                if(response == null){
+                if (response == null){
                     mErrorMessage?.setText(R.string.login_connexion_error_message)
                     mErrorMessage?.visibility = View.VISIBLE
                 } else {
@@ -49,10 +50,7 @@ class LoginActivity : AppCompatActivity() {
 
                     if (reader.has("token")) {
                         saveSharedPreferences(mUsername, reader)
-
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Yes!")
-                        startActivity(intent)
+                        startActivity(Intent(applicationContext, MainActivity::class.java))
                     } else {
                         mErrorMessage?.setText(R.string.login_error_message)
                         mErrorMessage?.visibility = View.VISIBLE
@@ -66,9 +64,9 @@ class LoginActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
         mRegister?.setOnClickListener {
-            val myIntent = Intent(this@LoginActivity, RegisterActivity::class.java)
-            startActivity(myIntent)
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
     }
     private fun saveSharedPreferences(mUsername: TextView?, reader: JSONObject){
