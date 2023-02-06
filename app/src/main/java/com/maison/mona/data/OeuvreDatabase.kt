@@ -44,9 +44,22 @@ abstract class OeuvreDatabase : RoomDatabase() {
         private var mContext: Context? = null
 
 
-        public val nbOeuvres = 1
-        public val nbLieux = 1
-        public val nbPatrimoines = 1
+        private var nbOeuvres = -1
+
+        fun getNbOeuvres(): Int {
+            /**
+             *  Gets the size of the database for Artworks. Initializes
+             *  the ArtworkList if not initialized yet.
+             *  @return: Int, the amount of artworks in the DB
+             */
+            return when (nbOeuvres) {
+                -1 -> {
+                    OeuvreDatabaseCallback.getOeuvreList()  // Read DB if not done yet
+                    nbOeuvres
+                }
+                else -> nbOeuvres
+            }
+        }
 
         fun getInstance(): OeuvreDatabase? {
             return INSTANCE
@@ -90,33 +103,8 @@ abstract class OeuvreDatabase : RoomDatabase() {
             }
         }
 
-        override fun onOpen(db: SupportSQLiteDatabase) {
-            super.onOpen(db)
-
-            INSTANCE?.let { database ->
-                scope.launch {
-                    val oeuvreDao = database.oeuvreDAO()
-
-                    // If not connected
-                    Log.d("Save", "Online initial: " + SaveSharedPreference.isOnline(mContext).toString())
-
-                    // Check if online and actually connected
-                    if (SaveSharedPreference.isOnline(mContext) && MyGlobals(mContext!!).isNetworkConnected()) {
-                        try {
-                            Log.d("Save", "oeuvre accede database")
-                            oeuvreDao.insertAll(getOeuvreList())
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                            Log.d("Save", "erreur database")
-                        }
-                    } else {
-                        SaveSharedPreference.setOnline(mContext,false)
-                    }
-                }
-            }
-        }
-
-        fun getOeuvreList(): List<Oeuvre> {
+        companion object {
+            fun getOeuvreList(): List<Oeuvre> {
             val finalList : MutableList<Oeuvre> = mutableListOf()
             var id = 1
             var idOeuvre = 1
@@ -149,6 +137,7 @@ abstract class OeuvreDatabase : RoomDatabase() {
             Log.d("Database", "Nb Lieu: ${nbPlaces}")
             Log.d("Database", "Nb Patrimoine: ${nbPatrimoine}")
 
+            nbOeuvres = nbArtworks
 
             for (i in 0 until nbArtworks) {
                 articleArray.put(oeuvreArray.get(i))
@@ -207,6 +196,33 @@ abstract class OeuvreDatabase : RoomDatabase() {
             SaveSharedPreference.setLastUpdate(mContext, currentTime.toString())
 
             return finalList
+        }
+        }
+
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+
+            INSTANCE?.let { database ->
+                scope.launch {
+                    val oeuvreDao = database.oeuvreDAO()
+
+                    // If not connected
+                    Log.d("Save", "Online initial: " + SaveSharedPreference.isOnline(mContext).toString())
+
+                    // Check if online and actually connected
+                    if (SaveSharedPreference.isOnline(mContext) && MyGlobals(mContext!!).isNetworkConnected()) {
+                        try {
+                            Log.d("Save", "oeuvre accede database")
+                            oeuvreDao.insertAll(getOeuvreList())
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            Log.d("Save", "erreur database")
+                        }
+                    } else {
+                        SaveSharedPreference.setOnline(mContext,false)
+                    }
+                }
+            }
         }
     }
 }

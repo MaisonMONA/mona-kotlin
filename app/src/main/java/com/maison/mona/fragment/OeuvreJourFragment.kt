@@ -24,6 +24,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.maison.mona.R
 import com.maison.mona.data.OeuvreDatabase
@@ -38,6 +39,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.measureTimeMillis
 
 //a clean
 class OeuvreJourFragment : Fragment() {
@@ -67,15 +69,17 @@ class OeuvreJourFragment : Fragment() {
         //represents the current day of the year
         val calendar = Calendar.getInstance()
 
-        // Building the Int seed for Random as {DAY OF YEAR}{YEAR} so it is unique
+        // Building the seed for Random as an Int {DAY OF YEAR}{YEAR} so it is unique
         val random = kotlin.random.Random(calendar[Calendar.DAY_OF_YEAR] * 10000 + calendar[Calendar.YEAR])
-        oeuvreId = (random.nextInt() % OeuvreDatabase.nbOeuvres) + 1  // Limit the ID to [1; nbOeuvres[
+        oeuvreId = random.nextInt(from=1, until=OeuvreDatabase.getNbOeuvres())
+
 
         // Obtain the artwork associated with `oeuvreId`
         oeuvreDetailViewModel = ViewModelProviders.of(
             this,
             OeuvreDetailViewModelFactory(requireActivity().application, oeuvreId)
         ).get(OeuvreDetailViewModel::class.java)
+
 
         val binding = DataBindingUtil.inflate<FragmentOdjBinding>(inflater, R.layout.fragment_odj, container, false).apply {
             viewModel = oeuvreDetailViewModel

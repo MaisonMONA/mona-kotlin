@@ -139,10 +139,10 @@ class MoreFragment : Fragment(){
     private fun updateInfoOnline(){
         val oeuvreViewModel: OeuvreViewModel by viewModels()
 
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { itemlist ->
+        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner) { itemlist ->
             val sortedList = itemlist.filter{it.state == 3}
             update(sortedList)
-        })
+        }
     }
 
     private fun update(list: List<Oeuvre>){
