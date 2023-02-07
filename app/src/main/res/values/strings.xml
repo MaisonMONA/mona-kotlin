@@ -124,7 +124,7 @@
     <string name="badge_detail_count">%1$d / %2$d </string>
     <string name="oeuvre_du_jour">L\'œuvre du jour</string>
     <string name="odj_logo">odj_logo</string>
-    <string name="redirection_carte">redirection_carte</string>
+    <string name="redirection_carte">Voir sur la carte</string>
     <string name="ajoute_cible_a_la_carte">Ajoute cible a la carte</string>
     <string name="prendre_la_photo">Prendre la photo</string>
     <string name="decouverte_du_jour">Découverte du jour</string>
@@ -134,5 +134,6 @@
     <string name="Autre">Autre</string>
     <string name="oeuvres_collectionnees">œuvres collectionnées</string>
     <string name="badges_debloques">Badges débloqués</string>
+    <string name="takephoto">Prendre en photo</string>
 
 </resources>

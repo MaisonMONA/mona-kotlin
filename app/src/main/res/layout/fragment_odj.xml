@@ -183,11 +183,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="105dp"
                         android:layout_marginEnd="@dimen/margin_small"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
                         android:background="@drawable/ic_odj_cible"
                         android:onClick="@{()-> callback.updateOeuvre(viewModel.oeuvre)}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        tools:text="Hans Schleeh" />
+                        tools:text="Hans Schleeh"
+                        android:contentDescription="@string/takephoto"/>
                 </LinearLayout>
 
                 <ImageView

@@ -118,16 +118,15 @@ class OeuvreJourFragment : Fragment() {
         val transition = AutoTransition()
         transition.duration = 1000
 
+        // Apply transition to display artwork of the day
         odjBottom?.setOnClickListener {
-            if(odjTop?.visibility == View.GONE){
+            if (odjTop?.visibility == View.GONE) {
                 TransitionManager.beginDelayedTransition(odjCardview, transition)
                 odjTop?.visibility = View.VISIBLE
-                Log.d("ODJ", "ça ouvre")
             }
         }
 
-        val mHandler = Handler()
-        mHandler.postDelayed({
+        Handler().postDelayed({
             odjBottom?.callOnClick()
         }, 1500L)
 
@@ -137,38 +136,38 @@ class OeuvreJourFragment : Fragment() {
     }
 
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    context?.let {
-                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-                        onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
-                            oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-                            Log.d("Save", "Current: $currentPhotoPath")
-                            val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
-                            findNavController().navigate(action)
-                        }
-                    }
+        // Ensure that there's a camera activity to handle the intent
+        takePictureIntent.resolveActivity(requireActivity().packageManager)
 
+        // Create the File where the photo should go
+        val photoFile: File? = try {
+            val imgFile = createImageFile()
+            imgFile
+        } catch (ex: IOException) {
+            // Error occurred while creating the File
+            null
+        }
+
+        // Continue only if the file was successfully created
+        if (photoFile != null) {
+            context?.let {
+                val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+
+                onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
+                    oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
+                    Log.d("Save", "Current: $currentPhotoPath")
+                    val action = HomeViewPagerFragmentDirections.odjToRating(oeuvre,currentPhotoPath)
+                    findNavController().navigate(action)
                 }
             }
         }
     }
 
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
-
         odj_cardview.getLayoutTransition().setAnimateParentHierarchy(false);
     }
 
@@ -179,9 +178,9 @@ class OeuvreJourFragment : Fragment() {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
         return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
+            "JPEG_${timeStamp}_", // file name
+            ".jpg",               // file extension
+            storageDir            // directory
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
