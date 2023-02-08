@@ -22,18 +22,16 @@ class CollectionAdapter internal constructor(
         private var TYPE_OEUVRE = 0
     }
 
-    inner class OeuvreViewHolder(
-        private val binding: RecyclerviewCollectionOeuvreBinding
-    ) : BaseViewHolder<Oeuvre>(binding.root) {
+    inner class OeuvreViewHolder(private val binding: RecyclerviewCollectionOeuvreBinding) : BaseViewHolder<Oeuvre>(binding.root) {
         init {
             binding.setClickListener {
-                val oeuvre = binding.oeuvre
-                oeuvre?.let {
+                binding.oeuvre?.let {
                     val action = HomeViewPagerFragmentDirections.homeToOeuvre(it)
                     navController.navigate(action)
                 }
             }
         }
+
         override fun bind(item: Oeuvre) {
             binding.apply {
                 oeuvre = item
@@ -50,16 +48,14 @@ class CollectionAdapter internal constructor(
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
-
     }
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-        val element = itemList[position]
         when (holder) {
-            is OeuvreViewHolder -> holder.bind(element as Oeuvre)
+            is OeuvreViewHolder -> holder.bind(itemList[position] as Oeuvre)
             else -> throw IllegalArgumentException()
         }
     }
-    
+
     internal fun submitList(items: List<Any>) {
         //Initially, sort the list alphabetically
         //https://stackoverflow.com/questions/37259159/sort-collection-by-multiple-fields-in-kotlin

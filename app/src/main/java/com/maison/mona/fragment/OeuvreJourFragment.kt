@@ -143,11 +143,9 @@ class OeuvreJourFragment : Fragment() {
 
         // Create the File where the photo should go
         val photoFile: File? = try {
-            val imgFile = createImageFile()
-            imgFile
+            createImageFile()
         } catch (ex: IOException) {
-            // Error occurred while creating the File
-            null
+            null  // Error occurred while creating the File
         }
 
         // Continue only if the file was successfully created

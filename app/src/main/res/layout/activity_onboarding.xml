@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="550dp"
-            android:text="Terminer Tutoriel">
+            android:text="@string/end_tutorial">
 
         </Button>
 </RelativeLayout>

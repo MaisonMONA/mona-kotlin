@@ -71,7 +71,6 @@ class MapFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
                 for (location in locationResult.locations){
-                    Log.d("UPDATES", location.toString())
                     val geoPoint = GeoPoint(location.latitude, location.longitude)
 
                     if(!pinSet) {
@@ -138,8 +137,8 @@ class MapFragment : Fragment() {
                     mapController.setCenter(geoPoint)
                     pinSet = true
 
-                    oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { list ->
-                        for(oeuvre in list) {
+                    oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner) { list ->
+                        for (oeuvre in list) {
                             val distance = distance(
                                 geoPoint.latitude,
                                 geoPoint.longitude,
@@ -156,7 +155,7 @@ class MapFragment : Fragment() {
                         for(oeuvre in threeList){
                             Log.d("MAPMAP", oeuvre.title.toString() + " à " + oeuvre.distance?.times(1000)?.toInt().toString() + " m")
                         }
-                    })
+                    }
                 }
 
                 pinConfirm.setNegativeButton(R.string.No) { _, _ -> }
@@ -217,6 +216,7 @@ class MapFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            // Oeuvre cases
             R.id.oeuvre_noncollected -> {
                 map.overlays.clear()
                 addOeuvre(null, "artwork")
@@ -235,6 +235,8 @@ class MapFragment : Fragment() {
                 addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                 true
             }
+
+            // Lieu cases
             R.id.lieu_noncollected -> {
                 map.overlays.clear()
                 addOeuvre(null, "place")
@@ -254,7 +256,7 @@ class MapFragment : Fragment() {
                 true
             }
 
-
+            // Patrimoine cases
             R.id.patrimoine_noncollected -> {
 
                 map.overlays.clear()
@@ -275,7 +277,6 @@ class MapFragment : Fragment() {
                 true
             }
 
-
             R.id.map_geo -> {
                 if(pinSet){
                     map.overlays.remove(pinLoc)
@@ -284,7 +285,6 @@ class MapFragment : Fragment() {
                     addUser(coord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
                     SaveSharedPreference.setGeoLoc(context, coord)
                 }
-                Log.d("UPDATES", "recentre")
                 mapController.setCenter(coord)
                 true
             }
@@ -292,39 +292,40 @@ class MapFragment : Fragment() {
         }
     }
 
-    fun getDrawable(state: Int?, type: String?): Int{
-        if(type == "artwork"){
-            return when(state){
-                null -> R.drawable.pin_oeuvre_normal
-                1 -> R.drawable.pin_oeuvre_target
-                2, 3 -> R.drawable.pin_oeuvre_collected
-                else -> R.drawable.pin_oeuvre_normal
+    fun getDrawable(state: Int?, type: String?): Int {
+        return when (type) {
+            "artwork" -> {
+                when(state) {
+                    null -> R.drawable.pin_oeuvre_normal
+                    1 -> R.drawable.pin_oeuvre_target
+                    2, 3 -> R.drawable.pin_oeuvre_collected
+                    else -> R.drawable.pin_oeuvre_normal
+                }
             }
-        }else if(type == "place"){
-            return when(state){
-                null -> R.drawable.pin_lieu_normal
-                1 -> R.drawable.pin_lieu_target
-                2, 3 -> R.drawable.pin_lieu_collected
-                else -> R.drawable.pin_lieu_normal
+            "places" -> {
+                when (state) {
+                    null -> R.drawable.pin_lieu_normal
+                    1 -> R.drawable.pin_lieu_target
+                    2, 3 -> R.drawable.pin_lieu_collected
+                    else -> R.drawable.pin_lieu_normal
+                }
             }
+            "patrimoine" -> {
+                when (state) {
+                    null -> R.drawable.pin_patrimoine_normal
+                    1 -> R.drawable.pin_patrimoine_target
+                    2, 3 -> R.drawable.pin_patrimoine_collected
+                    else -> R.drawable.pin_patrimoine_normal
+                }
+            }
+            else -> R.drawable.pin_lieu_normal
         }
-        else if(type == "patrimoine"){
-            return when(state){
-                null -> R.drawable.pin_patrimoine_normal
-                1 -> R.drawable.pin_patrimoine_target
-                2, 3 -> R.drawable.pin_patrimoine_collected
-                else -> R.drawable.pin_patrimoine_normal
-            }
-        }
-
-
-
-        return  R.drawable.pin_lieu_normal
     }
 
     private fun addOeuvre(state: Int?, type: String) {
-        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner, { oeuvreList ->
+        oeuvreViewModel.oeuvreList.observe(viewLifecycleOwner) { oeuvreList ->
             val items = ArrayList<OverlayItem>()
+
             for (oeuvre in oeuvreList) {
                 if (oeuvre.state == state && oeuvre.type == type) {
                     val itemLatitude = oeuvre.location!!.lat
@@ -351,9 +352,7 @@ class MapFragment : Fragment() {
 
                     override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
                         val oeuvreId = item.snippet.toInt()
-                        val arrayId = oeuvreId - 1
-                        val oeuvre = oeuvreList[arrayId]
-                        val action = HomeViewPagerFragmentDirections.homeToOeuvre(oeuvre)
+                        val action = HomeViewPagerFragmentDirections.homeToOeuvre(oeuvreList[oeuvreId - 1])
                         findNavController().navigate(action)
                         return true
                     }
@@ -362,10 +361,10 @@ class MapFragment : Fragment() {
             )
 
             map.overlays.add(overlayObject)
-        })
+        }
     }
 
-    fun addUser(location: GeoPoint, pin: Drawable?, new_pin: Boolean) {
+    fun addUser(location: GeoPoint, pin: Drawable?, newPin: Boolean) {
         //your items
         val userItems = ArrayList<OverlayItem>()
 
@@ -394,7 +393,7 @@ class MapFragment : Fragment() {
             this.requireContext()
         )
 
-        if(new_pin){
+        if (newPin) {
             pinLoc = userObject
         } else {
             pinUser = userObject
@@ -403,16 +402,11 @@ class MapFragment : Fragment() {
         map.overlays.add(userObject)
     }
 
-    fun distance(
-        fromLat: Double,
-        fromLon: Double,
-        toLat: Double,
-        toLon: Double
-    ): Double {
+    fun distance(fromLat: Double, fromLon: Double, toLat: Double, toLon: Double): Double {
         val p = 0.017453292519943295    // Math.PI / 180
         val a = 0.5 - cos((toLat - fromLat) * p) /2 +
-                cos(fromLat * p) * cos(toLat * p) *
-                (1 - cos((toLon - fromLon) * p))/2
+                      cos(fromLat * p) * cos(toLat * p) *
+                      (1 - cos((toLon - fromLon) * p)) / 2
 
         return 12742 * asin(sqrt(a)) // 2 * R; R = 6371 km
     }

@@ -21,7 +21,7 @@
     <string name="LieuRating">Notez ce lieu</string>
 
     <!-- MORE FRAGMENT -->
-    <string name="about">À-propos</string>
+    <string name="about">À propos</string>
     <string name="sign_out">Se déconnecter</string>
     <string name="how_it_works">Comment ça marche ?</string>
     <string name="who_are_we">Qui sommes-nous?</string>
@@ -135,5 +135,8 @@
     <string name="oeuvres_collectionnees">œuvres collectionnées</string>
     <string name="badges_debloques">Badges débloqués</string>
     <string name="takephoto">Prendre en photo</string>
+    <string name="end_tutorial">Terminer le tutoriel</string>
+    <string name="no_picture_yet">Vous n\'avez encore photographié aucun contenu</string>
+    <string name="badges">Badges</string>
 
 </resources>

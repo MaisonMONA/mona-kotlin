@@ -48,10 +48,7 @@ class OeuvreDetailFragment : Fragment() {
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var currentPhotoPath: String
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         oeuvreDetailViewModel = ViewModelProvider(
             this,
             OeuvreDetailViewModelFactory(
@@ -63,21 +60,6 @@ class OeuvreDetailFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
             inflater, R.layout.fragment_oeuvre_item, container, false
         ).apply {
-
-
-
-            //empty callback bc of the viewmodel delay to get the artwork
-//            callback = object : Callback {
-//                override fun updateTarget(oeuvre: Oeuvre) { /* Do nothing */ }
-//
-//                override fun openMap(oeuvre: Oeuvre) { /* Do nothing */ }
-//
-//                override fun captureOeuvre(oeuvre: Oeuvre) {  // Photo problem
-//                    Log.d("OEUVRES", "là ça touche")
-//                }
-//            }
-
-
             val mHandler = Handler()
             mHandler.postDelayed({
                 viewModel = oeuvreDetailViewModel //TODO Call fait a la BD, envoie au viewModel. Mais arrive pas a trouver l'oeuvre donc on met le delai
@@ -186,31 +168,31 @@ class OeuvreDetailFragment : Fragment() {
     }
 
     private fun dispatchTakePictureIntent(oeuvre: Oeuvre) {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    context?.let {
-                        val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-                        onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
-                            oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
-                            Log.d("Save", "Current: $currentPhotoPath")
-                            val action = OeuvreDetailFragmentDirections.itemToRating(oeuvre,currentPhotoPath)
-                            findNavController().navigate(action)
-                        }
-                    }
+        // Ensure that there's a camera activity to handle the intent
+        takePictureIntent.resolveActivity(requireActivity().packageManager)
 
+        // Create the File where the photo should go
+        val photoFile: File? = try {
+            createImageFile()
+        } catch (ex: IOException) {
+            println("================== ERROR WHEN CREATING IMGFILE")
+            null  // Error occurred while creating the File
+        }
+
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+            context?.let {
+                val photoURI: Uri = FileProvider.getUriForFile(it, "com.maison.android.fileprovider", photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+
+                onActivityResult(REQUEST_TAKE_PHOTO, Activity.RESULT_OK, takePictureIntent).let {
+                    oeuvreViewModel.updatePath(oeuvre.id, currentPhotoPath)
+                    Log.d("Save", "Current: $currentPhotoPath")
+                    val action = OeuvreDetailFragmentDirections.itemToRating(oeuvre,currentPhotoPath)
+                    findNavController().navigate(action)
                 }
             }
         }

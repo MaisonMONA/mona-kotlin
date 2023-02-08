@@ -107,8 +107,8 @@ class OeuvreItemMapFragment : Fragment() {
                 2, 3 -> R.drawable.pin_patrimoine_collected
                 else -> R.drawable.pin_patrimoine_normal
             }
-        }
-
+        } else {
             return R.drawable.pin_patrimoine_normal
         }
+    }
 }

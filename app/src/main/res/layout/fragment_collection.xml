@@ -8,36 +8,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/offWhite">
 
-    <!--LinearLayout
-        android:id="@+id/odj_top"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_marginTop="60dp"
-        android:layoutAnimation="@anim/layout_animation_slide_from_bottom">
-
-        <ImageView
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:src="@mipmap/ic_collection_logo"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:scaleX="1"
-            android:scaleY="1"
-            android:layout_gravity="center_vertical"/>
-
-        <TextView
-            android:id="@+id/odj_name"
-            style="@style/TextAppearance.Mona.Odj.Fragment"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:textSize="35sp"
-            android:gravity="start"
-            android:layout_gravity="center_vertical"
-            android:text="Votre Collection"/>
-
-    </LinearLayout-->
-
     <LinearLayout
         android:id="@+id/odj_top"
         android:layout_width="match_parent"
@@ -86,10 +56,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/oeuvres_collectionnees"
                 android:textSize="20sp" />
-
         </LinearLayout>
-
-
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
@@ -104,17 +71,16 @@
         android:visibility="visible"
         app:cardCornerRadius="20dp"
         app:motionInterpolator="linear">
-
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collection_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="491dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="240dp"
-        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_marginBottom="0dp"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
         android:scrollbarSize="8dp"
@@ -127,37 +93,7 @@
         tools:context="com.maison.mona.activities.MainActivity"
         tools:listitem="@layout/recyclerview_collection_oeuvre" />
 
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-               android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-            android:layout_marginTop="240dp"
-                android:orientation="horizontal">
-
-
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/Badge"
-                    android:textSize="35sp"
-                    style="@style/TextAppearance.Mona.Settings"/>
-
-            </LinearLayout>
-
-
-
-    </LinearLayout>-->
-
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:layout_alignParentStart="true"
@@ -166,34 +102,6 @@
         android:layout_marginTop="150dp"
         android:background="@color/bluePowder"
         android:orientation="horizontal">
-
-
-        <!--<LinearLayout
-            android:id="@+id/votre_collection"
-            android:layout_width="198dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="384dp"
-            android:orientation="horizontal">
-
-            <TextView
-
-                android:layout_width="110dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_margin="10sp"
-                android:layout_marginStart="0sp"
-                android:layout_marginTop="0sp"
-                android:layout_marginEnd="0sp"
-                android:layout_marginBottom="0sp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_corner"
-                android:gravity="center_horizontal"
-                android:text="Votre collection"
-                android:textSize="18dp" />
-        </LinearLayout>-->
-
 
         <LinearLayout
             android:id="@+id/collection_badge_top"
@@ -206,7 +114,7 @@
 
             <TextView
                 android:id="@+id/badges"
-                android:layout_width="110dp"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_margin="10sp"
@@ -217,8 +125,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/rounded_corner"
                 android:gravity="center_horizontal"
-                android:text="Badges"
-                android:textSize="18dp" />
+                android:text="@string/badges"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -233,10 +141,8 @@
         android:layout_marginTop="200dp"
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="386dp"
-        android:text="Vous n'avez encore photographié aucun contenu"
+        android:text="@string/no_picture_yet"
         android:textSize="25sp"
         android:textStyle="bold"
         tools:text="Vous n'avez encore photographié aucun contenu" />
-
-
 </RelativeLayout>

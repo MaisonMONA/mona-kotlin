@@ -27,7 +27,7 @@ class MyGlobals(var mContext: Context) {
     }
 
     // There are no active networks.
-    fun isNetworkConnected(): Boolean{
+    fun isNetworkConnected(): Boolean {
         val cm = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val ni = cm.activeNetworkInfo
         return ni != null

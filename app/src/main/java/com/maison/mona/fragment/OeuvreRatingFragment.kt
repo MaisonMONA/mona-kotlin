@@ -56,9 +56,9 @@ class OeuvreRatingFragment : Fragment() {
             val itemComment = view.findViewById<TextView>(R.id.comment)
             val comment = itemComment.text.toString()
 
-            val state: Int = if(SaveSharedPreference.isOnline(requireContext())){
+            val state = if (SaveSharedPreference.isOnline(requireContext())) {
                 2
-            }else{
+            } else {
                 3
             }
 
@@ -70,8 +70,8 @@ class OeuvreRatingFragment : Fragment() {
 
             Toast.makeText(requireActivity(), "Oeuvre #$oeuvreId ajoutée", Toast.LENGTH_LONG).show()
 
-            //Save the informations in the database
-            if(SaveSharedPreference.isOnline(requireContext())) {//Must be online
+            // Save the informations in the database
+            if (SaveSharedPreference.isOnline(requireContext())) {  // Must be online
                 val sendOeuvre = activity?.let { it1 -> SaveOeuvre(it1) }
 
                 sendOeuvre?.execute(
@@ -95,35 +95,38 @@ class OeuvreRatingFragment : Fragment() {
                 }
             }
 
-            oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
-                badgeViewModel.badgesList.observe(viewLifecycleOwner, { badgeList ->
-                    for(badge in badgeList){
-                        if(!badge.isCollected){
+            oeuvreViewModel.collectedList.observe(viewLifecycleOwner) { collected ->
+                badgeViewModel.badgesList.observe(viewLifecycleOwner) { badgeList ->
+                    for (badge in badgeList) {
+                        if (!badge.isCollected) {
                             val args = badge.optional_args!!
-                            if(args.contains("borough")) {
-                                if (collected.filter { args.contains(it.borough.toString()) }.size == badge.goal) {
+
+                            if (args.contains("borough")) {
+                                if (collected.count { args.contains(it.borough.toString()) } == badge.goal) {
                                     addBadge(badge)
-                                } else if(args.contains("Rivière-des-Prairies")){
-                                    if(collected.filter { it.borough?.contains("Rivière-des-Prairies")!! }.size == badge.goal){
-                                        addBadge(badge)
-                                    }
+                                } else if (args.contains("Rivière-des-Prairies") &&
+                                           collected.count { it.borough?.contains("Rivière-des-Prairies") == true } == badge.goal) {
+                                    // DO NOT remove the `== true` part, it ensures the variable is not null!!
+                                    addBadge(badge)
                                 }
-                            } else if(collected.size == badge.goal && args.length < 3){
+                            } else if (collected.size == badge.goal && args.length < 3) {
                                 addBadge(badge)
-                            } else if(args.contains("category")){
-                                if(collected.filter { args.contains(it.category?.en.toString())}.size == badge.goal || collected.filter { args.contains(it.category?.fr.toString())}.size == badge.goal){
+                            } else if (args.contains("category")) {
+                                if (collected.filter { args.contains(it.category?.en.toString())}.size == badge.goal || collected.filter { args.contains(it.category?.fr.toString())}.size == badge.goal){
                                     addBadge(badge)
                                 }
-                            } else if(args.contains("collection")){
+                            } else if (args.contains("collection")) {
                                 val collection = "Université de Montréal"
-                                if(safeArgs.oeuvre.collection == collection && collected.filter { it.collection == collection }.size == badge.goal){
+                                if (safeArgs.oeuvre.collection == collection && collected.filter { it.collection == collection }.size == badge.goal) {
                                     addBadge(badge)
                                 }
                             }
                         }
                     }
-                })
-            })
+
+
+                }
+            }
 
             val mHandler = Handler()
             mHandler.postDelayed({

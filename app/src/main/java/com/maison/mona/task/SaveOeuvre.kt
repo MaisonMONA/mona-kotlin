@@ -52,16 +52,15 @@ class SaveOeuvre(val context: Context) : AsyncTask<String, String, String>() {
             Log.d(saveOeuvre, "Probleme connexion")
         }
 
-        var url = ""
-        when(params[4]){
-
+        var url = "https://picasso.iro.umontreal.ca/~mona/api/user/artworks"
+        when (params[4]) {
             "artwork"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/artworks"
             "place"-> url = "https://picasso.iro.umontreal.ca/~mona/api/user/places"
         }
 
         val formBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("api_token", SaveSharedPreference.getToken(context))//Get user token
+                .addFormDataPart("api_token", SaveSharedPreference.getToken(context))
                 .addFormDataPart("id", params[0])
                 .addFormDataPart("rating", params[1])
                 .addFormDataPart("comment", comment)
