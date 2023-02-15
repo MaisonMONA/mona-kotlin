@@ -44,6 +44,10 @@ class MapFragment : Fragment() {
     private lateinit var mapController: IMapController
     private val ZOOM_LEVEL = 17.0
 
+    private var userLocation: GeoPoint? = null
+    private var userZoomLevel: Double? = null
+    private val MIN_ZOOM_LEVEL = 3.5
+
     private lateinit var userObject: ItemizedIconOverlay<OverlayItem>
     private var pinSet = false
     private var pinLoc: ItemizedIconOverlay<OverlayItem>? = null
@@ -58,8 +62,6 @@ class MapFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-    private var userLocation: GeoPoint? = null
-    private var userZoomLevel: Double? = null;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +114,7 @@ class MapFragment : Fragment() {
 
         mapController.setZoom(userZoomLevel ?: ZOOM_LEVEL)
         mapController.setCenter(userLocation ?: initCoord)
+        map.minZoomLevel = MIN_ZOOM_LEVEL
 
         // Updates his or her location
         startLocationUpdates()

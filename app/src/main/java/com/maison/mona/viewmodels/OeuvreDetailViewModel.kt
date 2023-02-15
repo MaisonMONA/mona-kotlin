@@ -1,7 +1,6 @@
 package com.maison.mona.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.maison.mona.data.OeuvreDatabase
@@ -13,9 +12,9 @@ import java.lang.Double.parseDouble
 
 //View Model for the single artwork displayed on the UI to bind properly
 class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int): AndroidViewModel(application) {
-    var isArt = false;
-    var isPlaces = false;
-    var isHeritages = false;
+    private var isArt = false;
+    private var isPlaces = false;
+    private var isHeritages = false;
 
     private val repository: OeuvreRepository
     var oeuvre: Oeuvre? = null
@@ -74,14 +73,14 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return artistString
     }
 
-    fun getDate() : String ?{
-        val date_at = oeuvre?.produced_at
-        val date_end = oeuvre?.produced_end
+    fun getDate() : String ? {
+        val dateAt = oeuvre?.produced_at
+        val dateEnd = oeuvre?.produced_end
 
-        if(date_at == date_end || date_end== null){
-            return date_at
-        }else
-            return "$date_at,$date_end"
+        return if (dateAt == dateEnd || dateEnd == null) {
+            dateAt
+        } else
+            "$dateAt, $dateEnd"
     }
 
     //Function used for sous-usages for Patrimoine or category for Artworks
@@ -131,7 +130,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     //Parsing through dimensions
-    fun getDimensionsOrStatus() : String{
+    fun getDimensionsOrStatus() : String {
         val dimensions: MutableList<Int> = ArrayList()
         var dimensionsString = ""
         var metric = ""
@@ -155,22 +154,21 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
                     numeric = false
                 }
 
-                if (numeric){
-                    val num = parseDouble(element.toString()).toInt()
-                    dimensions.add(num)
-                }else{
+                if (numeric) {
+                    dimensions.add(parseDouble(element.toString()).toInt())
+                } else {
                     metric += element.toString()
                 }
             }
 
-            //Form final string of dimensions well formed
-            for (dim in dimensions){
-                dimensionsString += if (dimensions.last() != dim){
-                    val temp = "$dim x "
-                    temp
+            // Form final string of dimensions well formed
+            for ((i, dim) in dimensions.withIndex()) {
+                dimensionsString += "$dim "
+
+                if ((i + 1) == dimensions.size) {
+                    dimensionsString += "x "
                 } else {
-                    val temp = "$dim $metric"
-                    temp
+                    dimensionsString += metric
                 }
             }
         }
@@ -178,10 +176,10 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return dimensionsString
     }
 
-    fun getMaterialsOrAdresses() : String? {
+    fun getMaterialsOrAdresses() : String {
 
-        var adresses = oeuvre?.addresses
-        var adressesString =""
+        val adresses = oeuvre?.addresses
+        var adressesString = ""
 
         if(adresses != null) {
             for (element in adresses) {
@@ -194,14 +192,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         val array = oeuvre?.materials
 
         array?.let {
-            for (element in array){
-                //If last element of array we dont put a comma and vice versa
-                materialsString += if(array.last().fr != element.fr){
-                    val temp = element.fr + ", "
-                    temp
-                } else {
-                    val temp = element.fr
-                    temp
+            for ((i, element) in array.withIndex()) {
+                materialsString += element.fr
+
+                // Adding comma unless it's the last element
+                if ((i + 1) != array.size) {
+                    materialsString += ", "
                 }
             }
         }
@@ -210,14 +206,13 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     //description and synthesis
-    fun getTechniques() : String{
-
-        var description = oeuvre?.description
-        var synthesis = oeuvre?.synthesis
+    fun getTechniques() : String {
+        val description = oeuvre?.description
+        val synthesis = oeuvre?.synthesis
 
 
         if (description !== null && synthesis !== null){
-            return description +"\n"+ synthesis
+            return description + "\n" + synthesis
         }
 
         if (description !== null) {
@@ -228,14 +223,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         val array = oeuvre?.techniques
 
         array?.let {
-            for (element in array){
-                //If last element of array we dont put a comma and vice versa
-                techniquesString += if(array.last().fr != element.fr){
-                    val temp = element.fr + ", "
-                    temp
-                } else {
-                    val temp = element.fr
-                    temp
+            for ((i, element) in array.withIndex()) {
+                techniquesString += element.fr
+
+                // Adding comma unless it's the last element
+                if ((i + 1) != array.size) {
+                    techniquesString += ", "
                 }
             }
         }
@@ -243,13 +236,14 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         return techniquesString
     }
 
+
     fun getCaptureDateMessage(): String{
         return "Date de création: " + oeuvre?.date_photo
     }
 
-    fun isOeuvreSent(): Boolean? {
-        return if (oeuvre != null) oeuvre?.isSent else false
-    }
+
+    fun isOeuvreSent(): Boolean = oeuvre?.isSent ?: false
+
 
     fun getTypeOfContent(): String{
         if (isHeritages) {
