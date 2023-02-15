@@ -12,12 +12,10 @@ import kotlinx.coroutines.launch
 import java.lang.Double.parseDouble
 
 //View Model for the single artwork displayed on the UI to bind properly
-class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int): AndroidViewModel(application){
-
+class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int): AndroidViewModel(application) {
     var isArt = false;
     var isPlaces = false;
     var isHeritages = false;
-
 
     private val repository: OeuvreRepository
     var oeuvre: Oeuvre? = null
@@ -38,38 +36,21 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         }
     }
 
-    fun updateTarget(oeuvreId: Int, target: Int?){
+
+    fun updateTarget(oeuvreId: Int, target: Int?) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateTarget(oeuvreId,target)
         }
     }
 
 
-    fun isCollected(): Boolean{
-        var artworkCollected = false
-
-        //State check to see if artwork is collected
-        if(oeuvre?.state == 2){
-            artworkCollected = true
-        }
-
-        return artworkCollected
-    }
-
-    fun isTarget(): Boolean{
-        var artworkTarget = false
-
-        //State checuk to see if artwork is collected
-        if(oeuvre?.state == 1){
-            artworkTarget = true
-        }
-
-        return artworkTarget
-    }
+    fun isCollected(): Boolean = oeuvre?.state == 2
 
 
+    fun isTarget(): Boolean = oeuvre?.state == 1
 
-    fun getArtists() : String{
+
+    fun getArtists() : String {
         var artistString = ""
 
         val array = oeuvre?.artists
@@ -271,9 +252,16 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
     }
 
     fun getTypeOfContent(): String{
-        if(isHeritages){ Log.d("color bar ", "heritages") ; isHeritages = false;return "heritages"}
-        else if (isArt){Log.d("color bar ", "art"); isArt = false;return "art"}
-        else Log.d("color bar ", "places"); isPlaces = false; return "places"
+        if (isHeritages) {
+            isHeritages = false
+            return "heritages"
+        } else if (isArt) {
+            isArt = false
+            return "art"
+        } else {
+            isPlaces = false
+            return "places"
+        }
     }
 
 }

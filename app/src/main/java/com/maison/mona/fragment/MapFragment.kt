@@ -25,6 +25,7 @@ import com.maison.mona.viewmodels.OeuvreViewModel
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener
@@ -57,6 +58,9 @@ class MapFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
+    private var userLocation: GeoPoint? = null
+    private var userZoomLevel: Double? = null;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,36 +88,32 @@ class MapFragment : Fragment() {
                 }
             }
         }
-        locationRequest = LocationRequest.create()?.apply {
+        locationRequest = LocationRequest.create().apply {
             interval = 1000
             fastestInterval = 500
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }!!
+        }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentMapBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
         map = binding.mainMap
         map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
         map.setMultiTouchControls(true)
-        map.setBuiltInZoomControls(false)
+        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
 
         mapController = map.controller
-        mapController.setZoom(ZOOM_LEVEL)
 
         initCoord = SaveSharedPreference.getGeoLoc(context)
         coord = initCoord
         addUser(initCoord, ContextCompat.getDrawable(requireContext(), R.drawable.pin_localisation_user), false)
-        mapController.setCenter(initCoord)
 
-        //Updates his or her location
+        mapController.setZoom(userZoomLevel ?: ZOOM_LEVEL)
+        mapController.setCenter(userLocation ?: initCoord)
+
+        // Updates his or her location
         startLocationUpdates()
 
         val touchOverlay = object: Overlay(){
@@ -122,14 +122,14 @@ class MapFragment : Fragment() {
                 proj.fromPixels(e!!.x.toInt(), e.y.toInt()) as GeoPoint
                 val geoPoint = proj.fromPixels(e.x.toInt(), e.y.toInt()) as GeoPoint
 
-                val pinConfirm = AlertDialog.Builder(context, R.style.locationPinTheme)
-                pinConfirm.setTitle(R.string.pinDialogAlertTitle)
-                pinConfirm.setMessage(R.string.pinDialogAlertMessage)
+                val pinConfirmDialog = AlertDialog.Builder(context, R.style.locationPinTheme)
+                pinConfirmDialog.setTitle(R.string.pinDialogAlertTitle)
+                pinConfirmDialog.setMessage(R.string.pinDialogAlertMessage)
 
-                pinConfirm.setPositiveButton(R.string.Yes) { _, _ ->
+                pinConfirmDialog.setPositiveButton(R.string.Yes) { _, _ ->
                     SaveSharedPreference.setGeoLoc(context, geoPoint)
 
-                    if(pinSet){
+                    if (pinSet) {
                         map.overlays.remove(pinLoc)
                     }
 
@@ -152,15 +152,15 @@ class MapFragment : Fragment() {
 
                         val threeList = mutableListOf(sortedList[0], sortedList[1], sortedList[2])
 
-                        for(oeuvre in threeList){
+                        for (oeuvre in threeList) {
                             Log.d("MAPMAP", oeuvre.title.toString() + " à " + oeuvre.distance?.times(1000)?.toInt().toString() + " m")
                         }
                     }
                 }
 
-                pinConfirm.setNegativeButton(R.string.No) { _, _ -> }
+                pinConfirmDialog.setNegativeButton(R.string.No) { _, _ -> }
 
-                val alert = pinConfirm.create()
+                val alert = pinConfirmDialog.create()
                 alert.show()
 
                 return super.onLongPress(e, mapView)
@@ -328,11 +328,10 @@ class MapFragment : Fragment() {
 
             for (oeuvre in oeuvreList) {
                 if (oeuvre.state == state && oeuvre.type == type) {
-                    val itemLatitude = oeuvre.location!!.lat
-                    val itemLongitude = oeuvre.location!!.lng
+                    val itemLatitude: Double = oeuvre.location!!.lat
+                    val itemLongitude: Double = oeuvre.location!!.lng
                     val oeuvreLocation = GeoPoint(itemLatitude, itemLongitude)
-                    val overlayItem =
-                        OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvreLocation)
+                    val overlayItem = OverlayItem(oeuvre.title, oeuvre.id.toString(), oeuvreLocation)
 
                     val pinIconId = getDrawable(state, oeuvre.type)
                     val markerDrawable = ContextCompat.getDrawable(this.requireContext(), pinIconId)
@@ -353,6 +352,13 @@ class MapFragment : Fragment() {
                     override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
                         val oeuvreId = item.snippet.toInt()
                         val action = HomeViewPagerFragmentDirections.homeToOeuvre(oeuvreList[oeuvreId - 1])
+
+                        // Saving new center of screen when opening OeuvreItem
+                        val screenCenterX = resources.displayMetrics.widthPixels / 2
+                        val screenCenterY = resources.displayMetrics.heightPixels / 2
+                        userLocation = map.projection.fromPixels(screenCenterX, screenCenterY) as GeoPoint
+                        userZoomLevel = map.zoomLevelDouble
+
                         findNavController().navigate(action)
                         return true
                     }

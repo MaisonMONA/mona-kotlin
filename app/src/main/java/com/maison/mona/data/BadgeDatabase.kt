@@ -51,7 +51,7 @@ abstract class BadgeDatabase : RoomDatabase() {
                             val badgesList = getBadgesList()
                             badgesDao.insertAll(badgesList)
 
-                            Log.d("SAVE", "fin onOpen" + badgesList.toString())
+//                            Log.d("SAVE", "fin onOpen" + badgesList.toString())
                         }catch (e: IOException){
                             Log.d("Save","erreur database")
                         }

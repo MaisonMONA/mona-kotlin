@@ -15,6 +15,7 @@ import com.maison.mona.databinding.FragmentItemMapBinding
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
@@ -32,11 +33,7 @@ class OeuvreItemMapFragment : Fragment() {
             .load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentItemMapBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
@@ -45,7 +42,7 @@ class OeuvreItemMapFragment : Fragment() {
         mMap.setTileSource(TileSourceFactory.MAPNIK)
 
         mMap.setMultiTouchControls(true)
-        mMap.setBuiltInZoomControls(false)
+        mMap.zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
 
         mapController = mMap.controller
         mapController.setZoom(ZOOM_LEVEL)
