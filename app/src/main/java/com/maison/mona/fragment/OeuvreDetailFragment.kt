@@ -1,5 +1,6 @@
 package com.maison.mona.fragment
 
+
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -7,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
@@ -28,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.maison.mona.R
 import com.maison.mona.databinding.FragmentOeuvreItemBinding
 import com.maison.mona.entity.Oeuvre
+import com.maison.mona.fragment.MapFragment
 import com.maison.mona.viewmodels.OeuvreDetailViewModel
 import com.maison.mona.viewmodels.OeuvreDetailViewModelFactory
 import com.maison.mona.viewmodels.OeuvreViewModel
@@ -36,6 +38,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class OeuvreDetailFragment : Fragment() {
 
@@ -49,31 +52,23 @@ class OeuvreDetailFragment : Fragment() {
     private lateinit var currentPhotoPath: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        // Obtain the artwork associated with `safeArgs.itemSelected.id`
         oeuvreDetailViewModel = ViewModelProvider(
             this,
-            OeuvreDetailViewModelFactory(
-                requireActivity().application,
-                safeArgs.itemSelected.id
-            )
+            OeuvreDetailViewModelFactory(requireActivity().application, safeArgs.itemSelected.id)
         ).get(OeuvreDetailViewModel::class.java)
 
-        val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(
-            inflater, R.layout.fragment_oeuvre_item, container, false
-        ).apply {
-            val mHandler = Handler()
-            mHandler.postDelayed({
-                viewModel = oeuvreDetailViewModel //TODO Call fait a la BD, envoie au viewModel. Mais arrive pas a trouver l'oeuvre donc on met le delai
-                callback = getProperCallback(fab)
-            }, 0L)
-
+        val binding = DataBindingUtil.inflate<FragmentOeuvreItemBinding>(inflater, R.layout.fragment_oeuvre_item, container, false).apply {
+            viewModel = oeuvreDetailViewModel
             lifecycleOwner = viewLifecycleOwner
+            callback = getProperCallback(fab)
 
-            // In case fetching the data failed, set a timeout and try again
-            if (oeuvreDetailViewModel.oeuvre?.title == null) {
-                mHandler.postDelayed({
+            // If fetching the data failed, set a tiny timeout and try again
+            while (oeuvreDetailViewModel.oeuvre?.title == null) {
+                Handler(Looper.getMainLooper()).postDelayed({
                     viewModel = oeuvreDetailViewModel
                     callback = getProperCallback(fab)
-                }, 3000L)
+                }, 30L)
             }
 
             toolbar.setNavigationOnClickListener { view ->
@@ -83,7 +78,6 @@ class OeuvreDetailFragment : Fragment() {
 
         return binding.root
     }
-
 
 
     private fun getProperCallback(fab: FloatingActionButton): Callback{
@@ -107,7 +101,7 @@ class OeuvreDetailFragment : Fragment() {
                         // Change color of the target button icon to white
                         fab.drawable.mutate().setTint(ContextCompat.getColor(requireContext(), R.color.white))
 
-                        // Line below commented: do not hide artwork page after untargeting!
+                        // Line below is commented: do not hide artwork page after untargeting!
                         // findNavController().popBackStack(R.id.fragmentViewPager_dest, false)
 
                         oeuvreDetailViewModel.updateTarget(oeuvre.id, null)
@@ -128,7 +122,7 @@ class OeuvreDetailFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //Check if there is empty parameters in the oeuvre. Remove the textView if its empty
         Log.d("Save","Photo path: " +  oeuvreDetailViewModel.oeuvre?.photo_path)
 
@@ -157,11 +151,7 @@ class OeuvreDetailFragment : Fragment() {
         )
 
         for ((i, param) in arrayParameters.withIndex()) {
-            if (param == "" || param == null) {
-                Log.d("Param ", "Param vide: $i")
-                Log.d("Param", param.toString())
-            } else {
-                Log.d("Param", "Parametre non vide:$param")
+            if (param != null && param != "") {
                 arrayViews[i].visibility = View.VISIBLE
             }
         }
