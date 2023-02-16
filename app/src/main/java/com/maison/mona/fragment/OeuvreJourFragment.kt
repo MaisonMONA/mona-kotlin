@@ -184,4 +184,12 @@ class OeuvreJourFragment : Fragment() {
             currentPhotoPath = absolutePath
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

@@ -96,4 +96,12 @@ class CollectionFragment : Fragment() {
 
         collection_cardview_badge.getLayoutTransition().setAnimateParentHierarchy(false);
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

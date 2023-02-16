@@ -116,4 +116,12 @@ class PopUpManagerFragment : Fragment(){
             else -> R.drawable.badge_icon_verdun_color
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

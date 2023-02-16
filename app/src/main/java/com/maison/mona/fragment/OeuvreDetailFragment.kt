@@ -208,4 +208,12 @@ class OeuvreDetailFragment : Fragment() {
         fun captureOeuvre(oeuvre: Oeuvre)
 
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

@@ -24,4 +24,12 @@ class MoreTextFragment : Fragment(){
 
         return binding.root
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

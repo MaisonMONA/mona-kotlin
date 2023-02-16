@@ -29,7 +29,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         getOeuvre()
     }
 
-    private fun getOeuvre(){
+    private fun getOeuvre() {
         viewModelScope.launch(Dispatchers.IO) {
             oeuvre = repository.getArticleById(oeuvreId)
         }
@@ -55,14 +55,12 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         val array = oeuvre?.artists
 
         array?.let {
-            for (element in array){
-                //If last element of array we dont put a comma and vice versa
-                artistString += if(array.last().name != element.name){
-                    val temp = element.name + ", "
-                    temp
-                } else {
-                    val temp = element.name
-                    temp
+            for ((i, element) in array.withIndex()) {
+                artistString += element.name
+
+                //If last element of array we don't put a comma and vice versa
+                if ((i + 1) != array.size) {
+                    artistString += ", "
                 }
             }
         }
@@ -145,7 +143,7 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
         array?.let {
             //We iterate through to find out whats a number and what is the metric
             //Since data on the server is not formed properly
-            for (element in array){
+            for (element in array) {
                 var numeric = true
 
                 try {

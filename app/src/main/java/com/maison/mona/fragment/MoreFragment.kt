@@ -49,56 +49,9 @@ class MoreFragment : Fragment(){
         val binding = FragmentMoreBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        //mSwitch = binding.moreOnlineSwitch
-
-        /*if(SaveSharedPreference.isOnline(requireContext()))
-            mSwitch.isChecked = false
-
-
-        mSwitch.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
-            updateInfoOnline()
-        }*/
-
         binding.apply {
             //Affecting the username
             username.text = SaveSharedPreference.getUsername(context)
-
-           /* oeuvreViewModel.collectedList.observe(viewLifecycleOwner, { collected ->
-
-                when (val count = collected.filter { it.state == 2 || it.state == 3 }.size) {
-                    0 -> {
-                        moreUserArtworks.text = "Aucune œuvre collectionnée"
-                    }
-                    1 -> {
-                        moreUserArtworks.text = "1 œuvre collectionnée"
-                    }
-                    else -> {
-                        val artworksString = getString(R.string.more_user_artworks_count, count)
-                        moreUserArtworks.text = artworksString
-                    }
-                }
-            })
-
-            badgeViewModel.badgesList.observe(viewLifecycleOwner, { collected ->
-
-                when (val count = collected.filter { it.isCollected }.size) {
-                    0 -> {
-                        moreUserBadges.text = "Aucun badge débloqué"
-                    }
-                    1 -> {
-                        moreUserBadges.text = "1 badge débloqué"
-                    }
-                    else -> {
-                        val badgesString = getString(R.string.more_user_badges_count, count)
-                        moreUserBadges.text = badgesString
-                    }
-                }
-            })*/
-
-            /*howItWorksButton.setOnClickListener{
-                val action = HomeViewPagerFragmentDirections.homeToText("CommentCaMarche.md")
-                findNavController().navigate(action)
-            }*/
 
             howItWorksButton.setOnClickListener{
                 val intent = Intent(context, Tutoriel::class.java)
@@ -179,5 +132,13 @@ class MoreFragment : Fragment(){
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 }

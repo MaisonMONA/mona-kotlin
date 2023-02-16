@@ -170,4 +170,12 @@ class BadgeDetailFragment(badge: Badge?): Fragment(R.layout.badge_detail) {
             view.findViewById<ImageView>(R.id.badge_detail_image).setImageResource(imageNotCollected)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+        override fun onPause() {
+        super.onPause()
+    }
 }

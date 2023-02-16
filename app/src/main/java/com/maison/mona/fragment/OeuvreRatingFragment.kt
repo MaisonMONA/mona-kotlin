@@ -156,4 +156,12 @@ class OeuvreRatingFragment : Fragment() {
         val date = Date()
         return dateFormat.format(date)
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

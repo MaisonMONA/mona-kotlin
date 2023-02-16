@@ -24,8 +24,8 @@ fun bindIsVisible(view: View, isGone: Boolean) {
 }
 
 @BindingAdapter("imagePath")
-fun loadImage(view: ImageView, photo_path: String?) {
+fun loadImage(view: ImageView, photoPath: String?) {
     Glide.with(view.context)
-        .load(photo_path)
+        .load(photoPath)
         .into(view)
 }
