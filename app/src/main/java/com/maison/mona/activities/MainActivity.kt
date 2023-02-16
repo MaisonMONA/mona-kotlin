@@ -60,9 +60,10 @@ class MainActivity : AppCompatActivity() {
              * We must check that all permissions are granted before using the app
              *  1. Write external storage
              *  2. Fine location
+             *  3. Camera access
              **/
 
-            // If one or both of the two required permissions are missing ask for permissions
+            // If one or both of the 3 required permissions are missing, ask for permissions
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -73,7 +74,6 @@ class MainActivity : AppCompatActivity() {
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
 
                     startActivity(Intent(this, PermissionsDeniedActivity::class.java))
-
                 } else {
                     // Request permissions
                     ActivityCompat.requestPermissions(

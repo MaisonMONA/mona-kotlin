@@ -166,9 +166,9 @@ class OeuvreDetailViewModel(application: Application, private var oeuvreId: Int)
                 dimensionsString += "$dim "
 
                 if ((i + 1) == dimensions.size) {
-                    dimensionsString += "x "
-                } else {
                     dimensionsString += metric
+                } else {
+                    dimensionsString += "× "
                 }
             }
         }
