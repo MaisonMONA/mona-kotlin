@@ -195,9 +195,7 @@ class OeuvreDetailFragment : Fragment() {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
 
-        return File(storageDir,
-            "JPEG_${timeStamp}_.jpg"
-        ).apply{
+        return File(storageDir, "JPEG_${timeStamp}_.jpg").apply {
             currentPhotoPath = absolutePath
         }
     }
