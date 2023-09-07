@@ -1,3 +1,5 @@
+L'application est passée sur ionic (voir repo [mona-mobile](https://github.com/MaisonMONA/mona-mobile)) au printemps 2023, archivage du repo en septembre 2023.
+
 # Latest MONA 1.0 ALPHA Version:
 
 Initial internal app launch for testing within a specific range of people. Mona is a Kotlin 
